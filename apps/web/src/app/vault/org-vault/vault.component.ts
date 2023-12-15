@@ -133,7 +133,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     FeatureFlag.BulkCollectionAccess,
     false,
   );
-  protected flexibleCollectionsEnabled: boolean;
+  protected flexibleCollectionsV1Enabled: boolean;
 
   private searchText$ = new Subject<string>();
   private refresh$ = new BehaviorSubject<void>(null);
@@ -174,6 +174,11 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.platformUtilsService.isSelfHost()
         ? "trashCleanupWarningSelfHosted"
         : "trashCleanupWarning",
+    );
+
+    this.flexibleCollectionsV1Enabled = await this.configService.getFeatureFlag(
+      FeatureFlag.FlexibleCollectionsV1,
+      false,
     );
 
     const filter$ = this.routedVaultFilterService.filter$;
@@ -275,14 +280,28 @@ export class VaultComponent implements OnInit, OnDestroy {
     const allCiphers$ = organization$.pipe(
       concatMap(async (organization) => {
         let ciphers;
-        if (organization.canEditAnyCollection) {
-          ciphers = await this.cipherService.getAllFromApiForOrganization(organization.id);
+
+        if (this.flexibleCollectionsV1Enabled) {
+          // Flexible collections V1 logic.
+          // If the user can access all ciphers for the organization then fetch them ALL.
+          if (organization.allowAdminAccessToAllCollectionItems) {
+            ciphers = await this.cipherService.getAllFromApiForOrganization(organization.id);
+          } else {
+            // Otherwise, only fetch ciphers they have access to (includes unassigned for admins).
+            ciphers = await this.cipherService.getManyFromApiForOrganization(organization.id);
+          }
         } else {
-          ciphers = (await this.cipherService.getAllDecrypted()).filter(
-            (c) => c.organizationId === organization.id,
-          );
+          // Pre-flexible collections logic, to be removed after flexible collections is fully released
+          if (organization.canEditAnyCollection) {
+            ciphers = await this.cipherService.getAllFromApiForOrganization(organization.id);
+          } else {
+            ciphers = (await this.cipherService.getAllDecrypted()).filter(
+              (c) => c.organizationId === organization.id,
+            );
+          }
         }
-        await this.searchService.indexCiphers(ciphers, organization.id);
+
+        this.searchService.indexCiphers(ciphers, organization.id);
         return ciphers;
       }),
     );
