@@ -329,6 +329,13 @@ export class VaultComponent implements OnInit, OnDestroy {
       }),
     );
 
+    const allCipherMap$ = allCiphers$.pipe(
+      map((ciphers) => {
+        return Object.fromEntries(ciphers.map((c) => [c.id, c]));
+      }),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
+
     const ciphers$ = combineLatest([allCiphers$, filter$, this.currentSearchText$]).pipe(
       filter(([ciphers, filter]) => ciphers != undefined && filter != undefined),
       concatMap(async ([ciphers, filter, searchText]) => {
@@ -446,19 +453,28 @@ export class VaultComponent implements OnInit, OnDestroy {
           if (!cipherId) {
             return;
           }
-          if (
-            // Handle users with implicit collection access since they use the admin endpoint
-            organization.canUseAdminCollections ||
-            (await this.cipherService.get(cipherId)) != null
-          ) {
-            this.editCipherId(cipherId);
+
+          let canEditCipher: boolean;
+
+          if (this.flexibleCollectionsV1Enabled) {
+            canEditCipher =
+              organization.canEditAllCiphers(true) ||
+              (await firstValueFrom(allCipherMap$))[cipherId] != undefined;
+          } else {
+            canEditCipher =
+              organization.canUseAdminCollections ||
+              (await this.cipherService.get(cipherId)) != null;
+          }
+
+          if (canEditCipher) {
+            await this.editCipherId(cipherId);
           } else {
             this.platformUtilsService.showToast(
               "error",
               this.i18nService.t("errorOccurred"),
               this.i18nService.t("unknownCipher"),
             );
-            this.router.navigate([], {
+            await this.router.navigate([], {
               queryParams: { cipherId: null, itemId: null },
               queryParamsHandling: "merge",
             });
