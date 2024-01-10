@@ -134,6 +134,7 @@ import { AttachmentResponse } from "../vault/models/response/attachment.response
 import { CipherResponse } from "../vault/models/response/cipher.response";
 import {
   CollectionAccessDetailsResponse,
+  CollectionDetailsResponse,
   CollectionResponse,
 } from "../vault/models/response/collection.response";
 import { SyncResponse } from "../vault/models/response/sync.response";
@@ -775,7 +776,7 @@ export class ApiService implements ApiServiceAbstraction {
   async postCollection(
     organizationId: string,
     request: CollectionRequest,
-  ): Promise<CollectionResponse> {
+  ): Promise<CollectionDetailsResponse> {
     const r = await this.send(
       "POST",
       "/organizations/" + organizationId + "/collections",
@@ -783,14 +784,14 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true,
     );
-    return new CollectionResponse(r);
+    return new CollectionDetailsResponse(r);
   }
 
   async putCollection(
     organizationId: string,
     id: string,
     request: CollectionRequest,
-  ): Promise<CollectionResponse> {
+  ): Promise<CollectionDetailsResponse> {
     const r = await this.send(
       "PUT",
       "/organizations/" + organizationId + "/collections/" + id,
@@ -798,7 +799,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true,
     );
-    return new CollectionResponse(r);
+    return new CollectionDetailsResponse(r);
   }
 
   async putCollectionUsers(

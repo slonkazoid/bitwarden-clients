@@ -123,6 +123,7 @@ import { AttachmentResponse } from "../vault/models/response/attachment.response
 import { CipherResponse } from "../vault/models/response/cipher.response";
 import {
   CollectionAccessDetailsResponse,
+  CollectionDetailsResponse,
   CollectionResponse,
 } from "../vault/models/response/collection.response";
 import { SyncResponse } from "../vault/models/response/sync.response";
@@ -279,7 +280,7 @@ export abstract class ApiService {
   postCollection: (
     organizationId: string,
     request: CollectionRequest,
-  ) => Promise<CollectionResponse>;
+  ) => Promise<CollectionDetailsResponse>;
   putCollectionUsers: (
     organizationId: string,
     id: string,
@@ -289,7 +290,7 @@ export abstract class ApiService {
     organizationId: string,
     id: string,
     request: CollectionRequest,
-  ) => Promise<CollectionResponse>;
+  ) => Promise<CollectionDetailsResponse>;
   deleteCollection: (organizationId: string, id: string) => Promise<any>;
   deleteManyCollections: (organizationId: string, collectionIds: string[]) => Promise<any>;
   deleteCollectionUser: (
