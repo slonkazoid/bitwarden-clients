@@ -402,6 +402,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         return (
           (filter.collectionId === Unassigned && !organization.canUseAdminCollections) ||
           (!organization.allowAdminAccessToAllCollectionItems &&
+            !organization.canEditAllCiphers(this.flexibleCollectionsV1Enabled) &&
             collection != undefined &&
             !collection.node.assigned)
         );
