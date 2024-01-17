@@ -20,13 +20,13 @@
     "lib": ["es2020", "dom"],
     "paths": {
       "@bitwarden/common/*": ["../common/src/*"],
-      "@bitwarden/angular/*": ["../angular/src/*"]
-    }
+      "@bitwarden/angular/*": ["../angular/src/*"],
+    },
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+    "strictTemplates": true,
+  },
 }

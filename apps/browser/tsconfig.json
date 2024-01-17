@@ -21,13 +21,13 @@
       "@bitwarden/importer/core": ["../../libs/importer/src"],
       "@bitwarden/importer/ui": ["../../libs/importer/src/components"],
       "@bitwarden/platform": ["../../libs/platform/src"],
-      "@bitwarden/vault": ["../../libs/vault/src"]
+      "@bitwarden/vault": ["../../libs/vault/src"],
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
-    "preserveWhitespaces": true
+    "preserveWhitespaces": true,
   },
-  "include": ["src", "../../libs/common/src/platform/services/**/*.worker.ts"]
+  "include": ["src", "../../libs/common/src/platform/services/**/*.worker.ts"],
 }

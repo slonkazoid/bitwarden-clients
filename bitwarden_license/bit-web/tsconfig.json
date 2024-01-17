@@ -11,8 +11,8 @@
       "@bitwarden/exporter/*": ["../../libs/exporter/src/*"],
       "@bitwarden/platform": ["../../libs/platform/src"],
       "@bitwarden/vault": ["../../libs/vault/src"],
-      "@bitwarden/web-vault/*": ["../../apps/web/src/*"]
-    }
+      "@bitwarden/web-vault/*": ["../../apps/web/src/*"],
+    },
   },
-  "include": ["src/**/*.stories.ts"]
+  "include": ["src/**/*.stories.ts"],
 }

@@ -17,18 +17,18 @@
       "@bitwarden/importer/ui": ["../../libs/importer/src/components"],
       "@bitwarden/platform": ["../../libs/platform/src"],
       "@bitwarden/vault": ["../../libs/vault/src"],
-      "@bitwarden/web-vault/*": ["src/*"]
-    }
+      "@bitwarden/web-vault/*": ["src/*"],
+    },
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
-    "preserveWhitespaces": true
+    "preserveWhitespaces": true,
   },
   "files": ["src/polyfills.ts", "src/main.ts", "../../bitwarden_license/bit-web/src/main.ts"],
   "include": [
     "src/connectors/*.ts",
     "src/**/*.stories.ts",
     "src/**/*.spec.ts",
-    "../../libs/common/src/platform/services/**/*.worker.ts"
-  ]
+    "../../libs/common/src/platform/services/**/*.worker.ts",
+  ],
 }

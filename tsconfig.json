@@ -28,15 +28,15 @@
       "@bitwarden/platform": ["./libs/platform/src"],
       "@bitwarden/node/*": ["./libs/node/src/*"],
       "@bitwarden/web-vault/*": ["./apps/web/src/*"],
-      "@bitwarden/vault": ["./libs/vault/src"]
+      "@bitwarden/vault": ["./libs/vault/src"],
     },
     "plugins": [
       {
-        "transform": "typescript-transform-paths"
-      }
+        "transform": "typescript-transform-paths",
+      },
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
   },
   "include": ["apps/web/src/**/*", "libs/*/src/**/*", "bitwarden_license/bit-web/src/**/*"],
-  "exclude": ["apps/web/src/**/*.spec.ts", "libs/*/src/**/*.spec.ts", "**/*.spec-util.ts"]
+  "exclude": ["apps/web/src/**/*.spec.ts", "libs/*/src/**/*.spec.ts", "**/*.spec-util.ts"],
 }
