@@ -7,6 +7,35 @@ import { TokenService } from "../../auth/abstractions/token.service";
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { StateService } from "../../platform/abstractions/state.service";
+import {
+  ActiveUserState,
+  KeyDefinition,
+  StateProvider,
+  VAULT_TIMEOUT_SETTINGS_DISK,
+  VAULT_TIMEOUT_SETTINGS_MEMORY,
+} from "../../platform/state";
+
+/**
+ * Settings use disk storage and local storage on web so settings can persist after logout.
+ */
+const VAULT_TIMEOUT_ACTION = new KeyDefinition<VaultTimeoutAction>(
+  VAULT_TIMEOUT_SETTINGS_DISK,
+  "vaultTimeoutAction",
+  {
+    deserializer: (vaultTimeoutAction) => vaultTimeoutAction,
+  },
+);
+const VAULT_TIMEOUT = new KeyDefinition<number>(VAULT_TIMEOUT_SETTINGS_DISK, "vaultTimeout", {
+  deserializer: (vaultTimeout) => vaultTimeout,
+});
+
+const EVER_BEEN_UNLOCKED = new KeyDefinition<boolean>(
+  VAULT_TIMEOUT_SETTINGS_MEMORY,
+  "everBeenUnlocked",
+  {
+    deserializer: (everBeenUnlocked) => everBeenUnlocked,
+  },
+);
 
 /**
  * - DISABLED: No Pin set
@@ -16,12 +45,23 @@ import { StateService } from "../../platform/abstractions/state.service";
 export type PinLockType = "DISABLED" | "PERSISTANT" | "TRANSIENT";
 
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
+  private vaultTimeoutActionState: ActiveUserState<VaultTimeoutAction>;
+  // vaultTimeoutAction$: Observable<VaultTimeoutAction>;
+
+  private vaultTimeoutState: ActiveUserState<number>;
+  private everBeenUnlockedState: ActiveUserState<boolean>;
+
   constructor(
     private cryptoService: CryptoService,
     private tokenService: TokenService,
     private policyService: PolicyService,
     private stateService: StateService,
-  ) {}
+    private stateProvider: StateProvider,
+  ) {
+    this.vaultTimeoutActionState = this.stateProvider.getActive(VAULT_TIMEOUT_ACTION);
+    this.vaultTimeoutState = this.stateProvider.getActive(VAULT_TIMEOUT);
+    this.everBeenUnlockedState = this.stateProvider.getActive(EVER_BEEN_UNLOCKED);
+  }
 
   async setVaultTimeoutOptions(timeout: number, action: VaultTimeoutAction): Promise<void> {
     // We swap these tokens from being on disk for lock actions, and in memory for logout actions
