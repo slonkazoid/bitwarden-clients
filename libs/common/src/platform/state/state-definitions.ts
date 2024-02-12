@@ -49,3 +49,8 @@ export const SYNC_STATE = new StateDefinition("sync", "disk", { web: "memory" })
 export const VAULT_SETTINGS_DISK = new StateDefinition("vaultSettings", "disk", {
   web: "disk-local",
 });
+
+export const VAULT_TIMEOUT_SETTINGS_DISK = new StateDefinition("vaultSettings", "disk", {
+  web: "disk-local",
+});
+export const VAULT_TIMEOUT_SETTINGS_MEMORY = new StateDefinition("vaultSettings", "memory");
