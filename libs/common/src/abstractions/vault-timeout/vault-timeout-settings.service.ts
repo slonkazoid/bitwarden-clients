@@ -24,19 +24,21 @@ export abstract class VaultTimeoutSettingsService {
   availableVaultTimeoutActions$: (userId?: string) => Observable<VaultTimeoutAction[]>;
 
   /**
-   * Get the current vault timeout action for the user. This is not the same as the current state, it is
+   * Determine the current vault timeout action for the user. This is not the same as the current state, it is
    * calculated based on the current state, the user's policy, and the user's available unlock methods.
    */
-  getVaultTimeout: (userId?: string) => Promise<number>;
+  determineVaultTimeout: (userId?: string) => Promise<number>;
 
   /**
-   * Observe the vault timeout action for the user. This is calculated based on users preferred lock action saved in the state,
+   * Determine the vault timeout action for the user. This is calculated based on users preferred lock action saved in the state,
    * the user's policy, and the user's available unlock methods.
    *
    * **NOTE:** This observable is not yet connected to the state service, so it will not update when the state changes
    * @param userId The user id to check. If not provided, the current user is used
    */
-  vaultTimeoutAction$: (userId?: string) => Observable<VaultTimeoutAction>;
+  determineVaultTimeoutAction$: (userId?: string) => Observable<VaultTimeoutAction>;
+
+  determineVaultTimeoutAction: (userId?: string) => Promise<VaultTimeoutAction>;
 
   /**
    * Has the user enabled unlock with Pin.

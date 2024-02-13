@@ -2522,6 +2522,7 @@ export class StateService<
   }
 
   async getVaultTimeoutAction(options?: StorageOptions): Promise<string> {
+    // TODO: handle transition away from globals in migration to state provider.
     const accountVaultTimeoutAction = (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
     )?.settings?.vaultTimeoutAction;

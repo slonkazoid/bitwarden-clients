@@ -107,7 +107,7 @@ describe("VaultTimeoutSettingsService", () => {
           );
           stateService.getVaultTimeoutAction.mockResolvedValue(userPreference);
 
-          const result = await firstValueFrom(service.vaultTimeoutAction$());
+          const result = await firstValueFrom(service.determineVaultTimeoutAction$());
 
           expect(result).toBe(expected);
         },
@@ -137,7 +137,7 @@ describe("VaultTimeoutSettingsService", () => {
           );
           stateService.getVaultTimeoutAction.mockResolvedValue(userPreference);
 
-          const result = await firstValueFrom(service.vaultTimeoutAction$());
+          const result = await firstValueFrom(service.determineVaultTimeoutAction$());
 
           expect(result).toBe(expected);
         },
