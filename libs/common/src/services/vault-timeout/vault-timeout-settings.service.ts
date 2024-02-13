@@ -1,4 +1,4 @@
-import { defer } from "rxjs";
+import { Observable, defer, firstValueFrom } from "rxjs";
 
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
@@ -14,6 +14,7 @@ import {
   VAULT_TIMEOUT_SETTINGS_DISK,
   VAULT_TIMEOUT_SETTINGS_MEMORY,
 } from "../../platform/state";
+import { UserId } from "../../types/guid";
 
 /**
  * Settings use disk storage and local storage on web so settings can persist after logout.
@@ -46,10 +47,13 @@ export type PinLockType = "DISABLED" | "PERSISTANT" | "TRANSIENT";
 
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
   private vaultTimeoutActionState: ActiveUserState<VaultTimeoutAction>;
-  // vaultTimeoutAction$: Observable<VaultTimeoutAction>;
+  vaultTimeoutAction$: Observable<VaultTimeoutAction>;
 
   private vaultTimeoutState: ActiveUserState<number>;
+  vaultTimeout$: Observable<number>;
+
   private everBeenUnlockedState: ActiveUserState<boolean>;
+  everBeenUnlocked$: Observable<boolean>;
 
   constructor(
     private cryptoService: CryptoService,
@@ -59,8 +63,61 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     private stateProvider: StateProvider,
   ) {
     this.vaultTimeoutActionState = this.stateProvider.getActive(VAULT_TIMEOUT_ACTION);
+    this.vaultTimeoutAction$ = this.vaultTimeoutActionState.state$;
+
     this.vaultTimeoutState = this.stateProvider.getActive(VAULT_TIMEOUT);
+    this.vaultTimeout$ = this.vaultTimeoutState.state$;
+
     this.everBeenUnlockedState = this.stateProvider.getActive(EVER_BEEN_UNLOCKED);
+    this.everBeenUnlocked$ = this.everBeenUnlockedState.state$;
+  }
+
+  getVaultTimeoutActionByUserId$(userId: UserId) {
+    return this.stateProvider.getUser(userId, VAULT_TIMEOUT_ACTION).state$;
+  }
+
+  getVaultTimeoutAction(userId?: UserId): Promise<VaultTimeoutAction> {
+    if (userId) {
+      return firstValueFrom(this.getVaultTimeoutActionByUserId$(userId));
+    }
+
+    return firstValueFrom(this.vaultTimeoutAction$);
+  }
+
+  async setVaultTimeoutAction(value: VaultTimeoutAction): Promise<void> {
+    await this.vaultTimeoutActionState.update((_) => value);
+  }
+
+  getVaultTimeoutByUserId$(userId: UserId) {
+    return this.stateProvider.getUser(userId, VAULT_TIMEOUT).state$;
+  }
+
+  getVaultTimeout(userId?: UserId): Promise<number> {
+    if (userId) {
+      return firstValueFrom(this.getVaultTimeoutByUserId$(userId));
+    }
+
+    return firstValueFrom(this.vaultTimeout$);
+  }
+
+  async setVaultTimeout(value: number): Promise<void> {
+    await this.vaultTimeoutState.update((_) => value);
+  }
+
+  getEverBeenUnlockedByUserId$(userId: UserId) {
+    return this.stateProvider.getUser(userId, EVER_BEEN_UNLOCKED).state$;
+  }
+
+  getEverBeenUnlocked(userId?: UserId): Promise<boolean> {
+    if (userId) {
+      return firstValueFrom(this.getEverBeenUnlockedByUserId$(userId));
+    }
+
+    return firstValueFrom(this.everBeenUnlocked$);
+  }
+
+  async setEverBeenUnlocked(value: boolean): Promise<void> {
+    await this.everBeenUnlockedState.update((_) => value);
   }
 
   async setVaultTimeoutOptions(timeout: number, action: VaultTimeoutAction): Promise<void> {
