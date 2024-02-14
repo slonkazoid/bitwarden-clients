@@ -1,8 +1,20 @@
-import { Observable, defer, firstValueFrom } from "rxjs";
+import {
+  Observable,
+  combineLatest,
+  defer,
+  distinctUntilChanged,
+  filter,
+  firstValueFrom,
+  from,
+  map,
+  shareReplay,
+  switchMap,
+} from "rxjs";
 
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "../../admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "../../admin-console/enums";
+import { Policy } from "../../admin-console/models/domain/policy";
 import { TokenService } from "../../auth/abstractions/token.service";
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
@@ -46,8 +58,20 @@ const EVER_BEEN_UNLOCKED = new KeyDefinition<boolean>(
 export type PinLockType = "DISABLED" | "PERSISTANT" | "TRANSIENT";
 
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
+  private maxVaultTimeoutPolicy$: Observable<Policy> = this.policyService.policies$.pipe(
+    // convert the policies to a single policy stream
+    map((policies: Policy[]) =>
+      policies.find((policy: Policy) => policy.type === PolicyType.MaximumVaultTimeout),
+    ),
+    // Only emit if the policy goes from undefined to defined or if the relevant policy data changes.
+    filter((policy) => policy !== undefined && policy !== null),
+    distinctUntilChanged(
+      (prev, curr) => prev.enabled === curr.enabled && prev.data?.action === curr.data?.action,
+    ),
+  );
+
   private vaultTimeoutActionState: ActiveUserState<VaultTimeoutAction>;
-  vaultTimeoutAction$: Observable<VaultTimeoutAction>;
+  vaultTimeoutAction$: Observable<VaultTimeoutAction | null>;
 
   private vaultTimeoutState: ActiveUserState<number>;
   vaultTimeout$: Observable<number>;
@@ -63,25 +87,42 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     private stateProvider: StateProvider,
   ) {
     this.vaultTimeoutActionState = this.stateProvider.getActive(VAULT_TIMEOUT_ACTION);
-    this.vaultTimeoutAction$ = this.vaultTimeoutActionState.state$;
+    this.vaultTimeoutAction$ = combineLatest([
+      this.vaultTimeoutActionState.state$,
+      this.maxVaultTimeoutPolicy$,
+    ]).pipe(
+      switchMap(([vaultTimeoutAction, _]) => {
+        return from(this.determinePolicyCompliantVaultTimeoutAction(vaultTimeoutAction));
+      }),
+      // TODO: error handling via catchError?
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
 
     this.vaultTimeoutState = this.stateProvider.getActive(VAULT_TIMEOUT);
-    this.vaultTimeout$ = this.vaultTimeoutState.state$;
+    this.vaultTimeout$ = combineLatest([
+      this.vaultTimeoutState.state$,
+      this.maxVaultTimeoutPolicy$,
+    ]).pipe(
+      switchMap(([vaultTimeout, _]) => {
+        return from(this.determinePolicyCompliantVaultTimeout(vaultTimeout));
+      }),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
 
     this.everBeenUnlockedState = this.stateProvider.getActive(EVER_BEEN_UNLOCKED);
     this.everBeenUnlocked$ = this.everBeenUnlockedState.state$;
   }
 
   getVaultTimeoutActionByUserId$(userId: UserId) {
-    return this.stateProvider.getUser(userId, VAULT_TIMEOUT_ACTION).state$;
-  }
-
-  getVaultTimeoutAction(userId?: UserId): Promise<VaultTimeoutAction> {
-    if (userId) {
-      return firstValueFrom(this.getVaultTimeoutActionByUserId$(userId));
-    }
-
-    return firstValueFrom(this.vaultTimeoutAction$);
+    return combineLatest([
+      this.stateProvider.getUser(userId, VAULT_TIMEOUT_ACTION).state$,
+      this.maxVaultTimeoutPolicy$,
+    ]).pipe(
+      switchMap(([vaultTimeoutAction, _]) => {
+        return from(this.determinePolicyCompliantVaultTimeoutAction(vaultTimeoutAction, userId));
+      }),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
   }
 
   async setVaultTimeoutAction(value: VaultTimeoutAction): Promise<void> {
@@ -89,15 +130,15 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   }
 
   getVaultTimeoutByUserId$(userId: UserId) {
-    return this.stateProvider.getUser(userId, VAULT_TIMEOUT).state$;
-  }
-
-  getVaultTimeout(userId?: UserId): Promise<number> {
-    if (userId) {
-      return firstValueFrom(this.getVaultTimeoutByUserId$(userId));
-    }
-
-    return firstValueFrom(this.vaultTimeout$);
+    return combineLatest([
+      this.stateProvider.getUser(userId, VAULT_TIMEOUT).state$,
+      this.maxVaultTimeoutPolicy$,
+    ]).pipe(
+      switchMap(([vaultTimeout, _]) => {
+        return from(this.determinePolicyCompliantVaultTimeout(vaultTimeout, userId));
+      }),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
   }
 
   async setVaultTimeout(value: number): Promise<void> {
@@ -174,9 +215,15 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     return await this.stateService.getBiometricUnlock({ userId });
   }
 
-  async determineVaultTimeout(userId?: string): Promise<number> {
-    const currentVaultTimeout = await this.stateService.getVaultTimeout({ userId });
+  async clear(userId?: string): Promise<void> {
+    await this.stateService.setEverBeenUnlocked(false, { userId: userId });
+    await this.cryptoService.clearPinKeys(userId);
+  }
 
+  private async determinePolicyCompliantVaultTimeout(
+    currentVaultTimeout: number,
+    userId?: string,
+  ): Promise<number> {
     if (
       await this.policyService.policyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)
     ) {
@@ -194,32 +241,21 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
         policyCompliantTimeout = maximumTimeoutPolicy[0].data.minutes;
       }
 
-      // TODO @jlf0dev: Can we move this somwhere else? Maybe add it to the initialization process?
-      // ( Apparently I'm the one that reviewed the original PR that added this :) )
-      // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-      if (currentVaultTimeout !== policyCompliantTimeout) {
-        await this.stateService.setVaultTimeout(policyCompliantTimeout, { userId });
-      }
-
       return policyCompliantTimeout;
     }
 
+    // no policy applies so return the current timeout
     return currentVaultTimeout;
   }
 
-  determineVaultTimeoutAction$(userId?: string) {
-    return defer(() => this.determineVaultTimeoutAction(userId));
-  }
-
-  async determineVaultTimeoutAction(userId?: string): Promise<VaultTimeoutAction> {
+  private async determinePolicyCompliantVaultTimeoutAction(
+    currentVaultTimeoutAction: VaultTimeoutAction | null,
+    userId?: string,
+  ): Promise<VaultTimeoutAction> {
     const availableVaultTimeoutActions = await this.getAvailableVaultTimeoutActions();
     if (availableVaultTimeoutActions.length === 1) {
       return availableVaultTimeoutActions[0];
     }
-
-    const currentVaultTimeoutAction = await this.stateService.getVaultTimeoutAction({
-      userId: userId,
-    });
 
     if (
       await this.policyService.policyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)
@@ -229,22 +265,19 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
         userId,
       );
       const policyDefinedAction = maximumTimeoutPolicy[0].data.action;
-      // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-      if (policyDefinedAction && currentVaultTimeoutAction !== policyDefinedAction) {
-        await this.stateService.setVaultTimeoutAction(policyDefinedAction, { userId: userId });
-      }
+
       if (policyDefinedAction && availableVaultTimeoutActions.includes(policyDefinedAction)) {
         return policyDefinedAction;
       }
     }
+
+    // No policy applies, use the current timeout action or default based on master password
 
     if (currentVaultTimeoutAction == null) {
       // Depends on whether or not the user has a master password
       const defaultTimeoutAction = (await this.userHasMasterPassword(userId))
         ? VaultTimeoutAction.Lock
         : VaultTimeoutAction.LogOut;
-      // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-      await this.stateService.setVaultTimeoutAction(defaultTimeoutAction, { userId: userId });
       return defaultTimeoutAction;
     }
 
@@ -266,11 +299,6 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     }
 
     return availableActions;
-  }
-
-  async clear(userId?: string): Promise<void> {
-    await this.stateService.setEverBeenUnlocked(false, { userId: userId });
-    await this.cryptoService.clearPinKeys(userId);
   }
 
   private async userHasMasterPassword(userId: string): Promise<boolean> {
