@@ -18,6 +18,7 @@ import { Policy } from "../../admin-console/models/domain/policy";
 import { TokenService } from "../../auth/abstractions/token.service";
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
+import { LogService } from "../../platform/abstractions/log.service";
 import { StateService } from "../../platform/abstractions/state.service";
 import {
   ActiveUserState,
@@ -85,6 +86,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     private policyService: PolicyService,
     private stateService: StateService,
     private stateProvider: StateProvider,
+    private logService: LogService,
   ) {
     this.vaultTimeoutActionState = this.stateProvider.getActive(VAULT_TIMEOUT_ACTION);
     this.vaultTimeoutAction$ = combineLatest([

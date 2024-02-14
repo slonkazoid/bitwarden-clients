@@ -12,6 +12,8 @@ import { EncString } from "../../platform/models/domain/enc-string";
 
 import { VaultTimeoutSettingsService } from "./vault-timeout-settings.service";
 
+// TODO: update tests
+
 describe("VaultTimeoutSettingsService", () => {
   let cryptoService: MockProxy<CryptoService>;
   let tokenService: MockProxy<TokenService>;
