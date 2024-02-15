@@ -515,7 +515,6 @@ import { ModalService } from "./modal.service";
         PolicyServiceAbstraction,
         StateServiceAbstraction,
         StateProvider,
-        LogService,
       ],
     },
     {

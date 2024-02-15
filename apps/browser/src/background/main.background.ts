@@ -567,7 +567,6 @@ export default class MainBackground {
       this.policyService,
       this.stateService,
       this.stateProvider,
-      this.logService,
     );
 
     this.pinCryptoService = new PinCryptoService(
