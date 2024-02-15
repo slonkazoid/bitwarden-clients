@@ -4,7 +4,6 @@ import { LogService } from "../platform/abstractions/log.service";
 import { AbstractStorageService } from "../platform/abstractions/storage.service";
 
 import { MigrationBuilder } from "./migration-builder";
-import { MigrationHelper } from "./migration-helper";
 import { EverHadUserKeyMigrator } from "./migrations/10-move-ever-had-user-key-to-state-providers";
 import { OrganizationKeyMigrator } from "./migrations/11-move-org-keys-to-state-providers";
 import { MoveEnvironmentStateToProviders } from "./migrations/12-move-environment-state-to-providers";
@@ -13,6 +12,10 @@ import { MoveBiometricClientKeyHalfToStateProviders } from "./migrations/14-move
 import { FolderMigrator } from "./migrations/15-move-folder-state-to-state-provider";
 import { LastSyncMigrator } from "./migrations/16-move-last-sync-to-state-provider";
 import { EnablePasskeysMigrator } from "./migrations/17-move-enable-passkeys-to-state-providers";
+import { AutofillSettingsKeyMigrator } from "./migrations/18-move-autofill-settings-to-state-providers";
+import { RequirePasswordOnStartMigrator } from "./migrations/19-migrate-require-password-on-start";
+import { PrivateKeyMigrator } from "./migrations/20-move-private-key-to-state-providers";
+import { CollectionMigrator } from "./migrations/21-move-collections-state-to-state-provider";
 import { FixPremiumMigrator } from "./migrations/3-fix-premium";
 import { RemoveEverBeenUnlockedMigrator } from "./migrations/4-remove-ever-been-unlocked";
 import { AddKeyTypeToOrgKeysMigrator } from "./migrations/5-add-key-type-to-org-keys";
@@ -23,24 +26,11 @@ import { MoveBrowserSettingsToGlobal } from "./migrations/9-move-browser-setting
 import { MinVersionMigrator } from "./migrations/min-version";
 
 export const MIN_VERSION = 2;
-export const CURRENT_VERSION = 17;
+export const CURRENT_VERSION = 21;
 export type MinVersion = typeof MIN_VERSION;
 
-export async function migrate(
-  storageService: AbstractStorageService,
-  logService: LogService,
-): Promise<void> {
-  const migrationHelper = new MigrationHelper(
-    await currentVersion(storageService, logService),
-    storageService,
-    logService,
-  );
-  if (migrationHelper.currentVersion < 0) {
-    // Cannot determine state, assuming empty so we don't repeatedly apply a migration.
-    await storageService.save("stateVersion", CURRENT_VERSION);
-    return;
-  }
-  await MigrationBuilder.create()
+export function createMigrationBuilder() {
+  return MigrationBuilder.create()
     .with(MinVersionMigrator)
     .with(FixPremiumMigrator, 2, 3)
     .with(RemoveEverBeenUnlockedMigrator, 3, 4)
@@ -56,9 +46,11 @@ export async function migrate(
     .with(MoveBiometricClientKeyHalfToStateProviders, 13, 14)
     .with(FolderMigrator, 14, 15)
     .with(LastSyncMigrator, 15, 16)
-    .with(EnablePasskeysMigrator, 16, CURRENT_VERSION)
-
-    .migrate(migrationHelper);
+    .with(EnablePasskeysMigrator, 16, 17)
+    .with(AutofillSettingsKeyMigrator, 17, 18)
+    .with(RequirePasswordOnStartMigrator, 18, 19)
+    .with(PrivateKeyMigrator, 19, 20)
+    .with(CollectionMigrator, 20, CURRENT_VERSION);
 }
 
 export async function currentVersion(

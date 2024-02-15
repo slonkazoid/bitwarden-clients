@@ -54,3 +54,11 @@ export const VAULT_TIMEOUT_SETTINGS_DISK = new StateDefinition("vaultSettings", 
   web: "disk-local",
 });
 export const VAULT_TIMEOUT_SETTINGS_MEMORY = new StateDefinition("vaultSettings", "memory");
+
+export const COLLECTION_DATA = new StateDefinition("collection", "disk", {
+  web: "memory",
+});
+export const AUTOFILL_SETTINGS_DISK = new StateDefinition("autofillSettings", "disk");
+export const AUTOFILL_SETTINGS_DISK_LOCAL = new StateDefinition("autofillSettingsLocal", "disk", {
+  web: "disk-local",
+});

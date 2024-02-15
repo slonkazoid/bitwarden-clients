@@ -4043,6 +4043,12 @@
   "ssoHandOff": {
     "message": "You may now close this tab and continue in the extension."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "You successfully logged in"
+  },
+  "thisWindowWillCloseIn5Seconds": {
+    "message": "This window will automatically close in 5 seconds"
+  },
   "includeAllTeamsFeatures": {
     "message": "All Teams features, plus:"
   },
@@ -5928,13 +5934,13 @@
     }
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
-    "message": "Launch DUO and follow the steps to finish logging in."
+    "message": "Launch Duo and follow the steps to finish logging in."
   },
   "duoRequiredByOrgForAccount": {
-    "message": "DUO two-step login is required for your account."
+    "message": "Duo two-step login is required for your account."
   },
   "launchDuo": {
-    "message": "Launch DUO"
+    "message": "Launch Duo"
   },
   "turnOn": {
     "message": "Turn on"

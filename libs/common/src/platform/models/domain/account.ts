@@ -22,10 +22,8 @@ import { DeepJsonify } from "../../../types/deep-jsonify";
 import { MasterKey, UserKey } from "../../../types/key";
 import { UriMatchType } from "../../../vault/enums";
 import { CipherData } from "../../../vault/models/data/cipher.data";
-import { CollectionData } from "../../../vault/models/data/collection.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { CipherView } from "../../../vault/models/view/cipher.view";
-import { CollectionView } from "../../../vault/models/view/collection.view";
 import { AddEditCipherInfo } from "../../../vault/types/add-edit-cipher-info";
 import { KdfType } from "../../enums";
 import { Utils } from "../../misc/utils";
@@ -73,7 +71,7 @@ export class EncryptionPair<TEncrypted, TDecrypted> {
 }
 
 export class DataEncryptionPair<TEncrypted, TDecrypted> {
-  encrypted?: { [id: string]: TEncrypted };
+  encrypted?: Record<string, TEncrypted>;
   decrypted?: TDecrypted[];
 }
 
@@ -92,10 +90,6 @@ export class AccountData {
   folders? = new TemporaryDataEncryption<FolderData>();
   localData?: any;
   sends?: DataEncryptionPair<SendData, SendView> = new DataEncryptionPair<SendData, SendView>();
-  collections?: DataEncryptionPair<CollectionData, CollectionView> = new DataEncryptionPair<
-    CollectionData,
-    CollectionView
-  >();
   policies?: DataEncryptionPair<PolicyData, Policy> = new DataEncryptionPair<PolicyData, Policy>();
   passwordGenerationHistory?: EncryptionPair<
     GeneratedPasswordHistory[],
@@ -125,7 +119,6 @@ export class AccountKeys {
   masterKey?: MasterKey;
   masterKeyEncryptedUserKey?: string;
   deviceKey?: ReturnType<SymmetricCryptoKey["toJSON"]>;
-  privateKey?: EncryptionPair<string, Uint8Array> = new EncryptionPair<string, Uint8Array>();
   publicKey?: Uint8Array;
   apiKeyClientSecret?: string;
 
@@ -163,9 +156,6 @@ export class AccountKeys {
         obj?.cryptoSymmetricKey,
         SymmetricCryptoKey.fromJSON,
       ),
-      privateKey: EncryptionPair.fromJSON<string, Uint8Array>(obj?.privateKey, (decObj: string) =>
-        Utils.fromByteStringToArray(decObj),
-      ),
       publicKey: Utils.fromByteStringToArray(obj?.publicKey),
     });
   }
@@ -191,8 +181,6 @@ export class AccountProfile {
   name?: string;
   email?: string;
   emailVerified?: boolean;
-  entityId?: string;
-  entityType?: string;
   everBeenUnlocked?: boolean;
   forceSetPasswordReason?: ForceSetPasswordReason;
   hasPremiumPersonally?: boolean;
@@ -216,20 +204,16 @@ export class AccountProfile {
 
 export class AccountSettings {
   autoConfirmFingerPrints?: boolean;
-  autoFillOnPageLoadDefault?: boolean;
   biometricUnlock?: boolean;
   clearClipboard?: number;
   collapsedGroupings?: string[];
   defaultUriMatch?: UriMatchType;
   disableAutoBiometricsPrompt?: boolean;
-  disableAutoTotpCopy?: boolean;
   disableBadgeCounter?: boolean;
   disableGa?: boolean;
-  dismissedAutoFillOnPageLoadCallout?: boolean;
   dontShowCardsCurrentTab?: boolean;
   dontShowIdentitiesCurrentTab?: boolean;
   enableAlwaysOnTop?: boolean;
-  enableAutoFillOnPageLoad?: boolean;
   enableBiometric?: boolean;
   enableFullWidth?: boolean;
   equivalentDomains?: any;
@@ -246,7 +230,6 @@ export class AccountSettings {
   serverConfig?: ServerConfigData;
   approveLoginRequests?: boolean;
   avatarColor?: string;
-  activateAutoFillOnPageLoadFromPolicy?: boolean;
   smOnboardingTasks?: Record<string, Record<string, boolean>>;
   trustDeviceChoiceForDecryption?: boolean;
   biometricPromptCancelled?: boolean;
