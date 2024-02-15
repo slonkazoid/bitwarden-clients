@@ -24,23 +24,26 @@ export abstract class VaultTimeoutSettingsService {
    */
   availableVaultTimeoutActions$: (userId?: string) => Observable<VaultTimeoutAction[]>;
 
-  // TODO: replace commented out methods with new public observable properties and methods.
   /**
-   * Determine the current vault timeout action for the user. This is not the same as the current state, it is
-   * calculated based on the current state, the user's policy, and the user's available unlock methods.
+   * Returns the currently configured vault timeout, a policy compliant vault timeout if applicable, or null for the active user.
    */
-  // determineVaultTimeout: (userId?: string) => Promise<number>;
+  vaultTimeout$: Observable<number | null>;
 
   /**
-   * Determine the vault timeout action for the user. This is calculated based on users preferred lock action saved in the state,
-   * the user's policy, and the user's available unlock methods.
-   *
-   * **NOTE:** This observable is not yet connected to the state service, so it will not update when the state changes
-   * @param userId The user id to check. If not provided, the current user is used
+   * Returns the currently configured vault timeout, a policy compliant vault timeout if applicable, or null for the given user id.
    */
-  // determineVaultTimeoutAction$: (userId?: string) => Observable<VaultTimeoutAction>;
+  getVaultTimeoutByUserId$: (userId: string) => Observable<number | null>;
 
-  // determinePolicyCompliantVaultTimeoutAction: (userId?: string) => Promise<VaultTimeoutAction>;
+  /**
+   * Returns the currently configured vault timeout action, a policy compliant vault timeout action if applicable, or null for the active user.
+   */
+  vaultTimeoutAction$: Observable<VaultTimeoutAction>;
+
+  /**
+   * Returns the currently configured vault timeout action, a policy compliant vault timeout action if applicable, or null for the given user id.
+   */
+
+  getVaultTimeoutActionByUserId$: (userId: string) => Observable<VaultTimeoutAction>;
 
   /**
    * Has the user enabled unlock with Pin.

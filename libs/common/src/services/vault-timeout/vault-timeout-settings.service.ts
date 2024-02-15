@@ -74,7 +74,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   vaultTimeoutAction$: Observable<VaultTimeoutAction | null>;
 
   private vaultTimeoutState: ActiveUserState<number>;
-  vaultTimeout$: Observable<number>;
+  vaultTimeout$: Observable<number | null>;
 
   private everBeenUnlockedState: ActiveUserState<boolean>;
   everBeenUnlocked$: Observable<boolean>;
