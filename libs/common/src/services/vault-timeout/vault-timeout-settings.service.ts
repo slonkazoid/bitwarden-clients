@@ -156,8 +156,12 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     return firstValueFrom(this.everBeenUnlocked$);
   }
 
-  // TODO: figure out set method which takes userId
-  async setEverBeenUnlocked(value: boolean): Promise<void> {
+  async setEverBeenUnlocked(value: boolean, userId?: UserId): Promise<void> {
+    if (userId) {
+      await this.stateProvider.setUserState(EVER_BEEN_UNLOCKED, value, userId);
+      return;
+    }
+
     await this.everBeenUnlockedState.update((_) => value);
   }
 
@@ -216,7 +220,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
   }
 
   async clear(userId?: UserId): Promise<void> {
-    await this.stateService.setEverBeenUnlocked(false, { userId: userId });
+    await this.setEverBeenUnlocked(false, userId);
     await this.cryptoService.clearPinKeys(userId);
   }
 
