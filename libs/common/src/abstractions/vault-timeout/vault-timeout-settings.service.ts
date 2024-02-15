@@ -2,6 +2,7 @@ import { Observable } from "rxjs";
 
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { PinLockType } from "../../services/vault-timeout/vault-timeout-settings.service";
+import { UserId } from "../../types/guid";
 
 export abstract class VaultTimeoutSettingsService {
   /**
@@ -55,5 +56,5 @@ export abstract class VaultTimeoutSettingsService {
    */
   isBiometricLockSet: (userId?: string) => Promise<boolean>;
 
-  clear: (userId?: string) => Promise<void>;
+  clear: (userId?: UserId) => Promise<void>;
 }
