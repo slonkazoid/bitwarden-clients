@@ -90,6 +90,10 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     this.everBeenUnlocked$ = this.everBeenUnlockedState.state$;
   }
 
+  private async getVaultTimeoutAction(): Promise<VaultTimeoutAction> {
+    return await firstValueFrom(this.vaultTimeoutActionState.state$);
+  }
+
   getVaultTimeoutActionByUserId$(userId: UserId) {
     return combineLatest([
       this.stateProvider.getUser(userId, VAULT_TIMEOUT_ACTION).state$,
@@ -151,9 +155,9 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
     const clientId = await this.tokenService.getClientId();
     const clientSecret = await this.tokenService.getClientSecret();
 
-    await this.stateService.setVaultTimeout(timeout);
+    await this.setVaultTimeout(timeout);
 
-    const currentAction = await this.stateService.getVaultTimeoutAction();
+    const currentAction = await this.getVaultTimeoutAction();
     if (
       (timeout != null || timeout === 0) &&
       action === VaultTimeoutAction.LogOut &&
@@ -163,7 +167,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
       await this.tokenService.clearToken();
     }
 
-    await this.stateService.setVaultTimeoutAction(action);
+    await this.setVaultTimeoutAction(action);
 
     await this.tokenService.setToken(token);
     await this.tokenService.setRefreshToken(refreshToken);
