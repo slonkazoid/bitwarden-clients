@@ -19,36 +19,14 @@ import { TokenService } from "../../auth/abstractions/token.service";
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { StateService } from "../../platform/abstractions/state.service";
-import {
-  ActiveUserState,
-  KeyDefinition,
-  StateProvider,
-  VAULT_TIMEOUT_SETTINGS_DISK,
-  VAULT_TIMEOUT_SETTINGS_MEMORY,
-} from "../../platform/state";
+import { ActiveUserState, StateProvider } from "../../platform/state";
 import { UserId } from "../../types/guid";
 
-/**
- * Settings use disk storage and local storage on web so settings can persist after logout.
- */
-const VAULT_TIMEOUT_ACTION = new KeyDefinition<VaultTimeoutAction>(
-  VAULT_TIMEOUT_SETTINGS_DISK,
-  "vaultTimeoutAction",
-  {
-    deserializer: (vaultTimeoutAction) => vaultTimeoutAction,
-  },
-);
-const VAULT_TIMEOUT = new KeyDefinition<number>(VAULT_TIMEOUT_SETTINGS_DISK, "vaultTimeout", {
-  deserializer: (vaultTimeout) => vaultTimeout,
-});
-
-const EVER_BEEN_UNLOCKED = new KeyDefinition<boolean>(
-  VAULT_TIMEOUT_SETTINGS_MEMORY,
-  "everBeenUnlocked",
-  {
-    deserializer: (everBeenUnlocked) => everBeenUnlocked,
-  },
-);
+import {
+  EVER_BEEN_UNLOCKED,
+  VAULT_TIMEOUT,
+  VAULT_TIMEOUT_ACTION,
+} from "./vault-timeout-settings.state";
 
 /**
  * - DISABLED: No Pin set
