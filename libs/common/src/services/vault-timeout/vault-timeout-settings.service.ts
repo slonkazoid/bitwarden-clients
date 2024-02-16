@@ -2,11 +2,8 @@ import {
   Observable,
   combineLatest,
   defer,
-  distinctUntilChanged,
-  filter,
   firstValueFrom,
   from,
-  map,
   shareReplay,
   switchMap,
 } from "rxjs";
@@ -36,17 +33,16 @@ import {
 export type PinLockType = "DISABLED" | "PERSISTANT" | "TRANSIENT";
 
 export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceAbstraction {
-  private maxVaultTimeoutPolicy$: Observable<Policy> = this.policyService.policies$.pipe(
-    // convert the policies to a single policy stream
-    map((policies: Policy[]) =>
-      policies.find((policy: Policy) => policy.type === PolicyType.MaximumVaultTimeout),
-    ),
-    // Only emit if the policy goes from undefined to defined or if the relevant policy data changes.
-    filter((policy) => policy !== undefined && policy !== null),
-    distinctUntilChanged(
-      (prev, curr) => prev.enabled === curr.enabled && prev.data?.action === curr.data?.action,
-    ),
+  private maxVaultTimeoutPolicy$: Observable<Policy | undefined> = this.policyService.get$(
+    PolicyType.MaximumVaultTimeout,
   );
+  // TODO: test if this is necessary or not
+  // .pipe(
+  //   // Only emit if the relevant policy data changes.
+  //   distinctUntilChanged(
+  //     (prev, curr) => prev.enabled === curr.enabled && prev.data?.action === curr.data?.action,
+  //   ),
+  // );
 
   private vaultTimeoutActionState: ActiveUserState<VaultTimeoutAction>;
   vaultTimeoutAction$: Observable<VaultTimeoutAction | null>;
@@ -69,9 +65,22 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
       this.vaultTimeoutActionState.state$,
       this.maxVaultTimeoutPolicy$,
     ]).pipe(
-      switchMap(([vaultTimeoutAction, _]) => {
-        return from(this.determinePolicyCompliantVaultTimeoutAction(vaultTimeoutAction));
+      switchMap(([vaultTimeoutAction, maxVaultTimeoutPolicy]) => {
+        return from(
+          this.determinePolicyCompliantVaultTimeoutAction(
+            vaultTimeoutAction,
+            maxVaultTimeoutPolicy,
+          ),
+        );
       }),
+      // tap(async (policyCompliantAction) => {
+      //   const currentTimeoutAction = await firstValueFrom(this.vaultTimeoutActionState.state$);
+
+      //   // If the policy compliant action is different from the current action, update the state
+      //   if (policyCompliantAction !== currentTimeoutAction) {
+      //     await this.vaultTimeoutActionState.update((_) => policyCompliantAction);
+      //   }
+      // }),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
@@ -80,8 +89,8 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
       this.vaultTimeoutState.state$,
       this.maxVaultTimeoutPolicy$,
     ]).pipe(
-      switchMap(([vaultTimeout, _]) => {
-        return from(this.determinePolicyCompliantVaultTimeout(vaultTimeout));
+      switchMap(([vaultTimeout, maxVaultTimeoutPolicy]) => {
+        return from(this.determinePolicyCompliantVaultTimeout(vaultTimeout, maxVaultTimeoutPolicy));
       }),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
@@ -99,8 +108,14 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
       this.stateProvider.getUser(userId, VAULT_TIMEOUT_ACTION).state$,
       this.maxVaultTimeoutPolicy$,
     ]).pipe(
-      switchMap(([vaultTimeoutAction, _]) => {
-        return from(this.determinePolicyCompliantVaultTimeoutAction(vaultTimeoutAction, userId));
+      switchMap(([vaultTimeoutAction, maxVaultTimeoutPolicy]) => {
+        return from(
+          this.determinePolicyCompliantVaultTimeoutAction(
+            vaultTimeoutAction,
+            maxVaultTimeoutPolicy,
+            userId,
+          ),
+        );
       }),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
@@ -115,8 +130,10 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
       this.stateProvider.getUser(userId, VAULT_TIMEOUT).state$,
       this.maxVaultTimeoutPolicy$,
     ]).pipe(
-      switchMap(([vaultTimeout, _]) => {
-        return from(this.determinePolicyCompliantVaultTimeout(vaultTimeout, userId));
+      switchMap(([vaultTimeout, maxVaultTimeoutPolicy]) => {
+        return from(
+          this.determinePolicyCompliantVaultTimeout(vaultTimeout, maxVaultTimeoutPolicy, userId),
+        );
       }),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
@@ -208,23 +225,15 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
   private async determinePolicyCompliantVaultTimeout(
     currentVaultTimeout: number,
+    maxTimeoutPolicy: Policy | undefined,
     userId?: string,
   ): Promise<number> {
-    if (
-      await this.policyService.policyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)
-    ) {
-      const maximumTimeoutPolicy = await this.policyService.getAll(
-        PolicyType.MaximumVaultTimeout,
-        userId,
-      );
+    if (maxTimeoutPolicy !== undefined) {
       // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
-      let policyCompliantTimeout = Math.min(
-        currentVaultTimeout,
-        maximumTimeoutPolicy[0].data.minutes,
-      );
+      let policyCompliantTimeout = Math.min(currentVaultTimeout, maxTimeoutPolicy.data.minutes);
 
       if (currentVaultTimeout == null || policyCompliantTimeout < 0) {
-        policyCompliantTimeout = maximumTimeoutPolicy[0].data.minutes;
+        policyCompliantTimeout = maxTimeoutPolicy.data.minutes;
       }
 
       return policyCompliantTimeout;
@@ -236,6 +245,7 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
 
   private async determinePolicyCompliantVaultTimeoutAction(
     currentVaultTimeoutAction: VaultTimeoutAction | null,
+    maxTimeoutPolicy: Policy | undefined,
     userId?: string,
   ): Promise<VaultTimeoutAction> {
     const availableVaultTimeoutActions = await this.getAvailableVaultTimeoutActions();
@@ -243,14 +253,8 @@ export class VaultTimeoutSettingsService implements VaultTimeoutSettingsServiceA
       return availableVaultTimeoutActions[0];
     }
 
-    if (
-      await this.policyService.policyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)
-    ) {
-      const maximumTimeoutPolicy = await this.policyService.getAll(
-        PolicyType.MaximumVaultTimeout,
-        userId,
-      );
-      const policyDefinedAction = maximumTimeoutPolicy[0].data.action;
+    if (maxTimeoutPolicy !== undefined) {
+      const policyDefinedAction = maxTimeoutPolicy.data.action;
 
       if (policyDefinedAction && availableVaultTimeoutActions.includes(policyDefinedAction)) {
         return policyDefinedAction;
