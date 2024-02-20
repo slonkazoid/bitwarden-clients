@@ -372,24 +372,6 @@ export class StateService<
     );
   }
 
-  async getBiometricAwaitingAcceptance(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.biometricAwaitingAcceptance ?? false
-    );
-  }
-
-  async setBiometricAwaitingAcceptance(value: boolean, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    globals.biometricAwaitingAcceptance = value;
-    await this.saveGlobals(
-      globals,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
   async getBiometricFingerprintValidated(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
@@ -402,23 +384,6 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskOptions()),
     );
     globals.biometricFingerprintValidated = value;
-    await this.saveGlobals(
-      globals,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
-  async getBiometricText(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.biometricText;
-  }
-
-  async setBiometricText(value: string, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    globals.biometricText = value;
     await this.saveGlobals(
       globals,
       this.reconcileOptions(options, await this.defaultOnDiskOptions()),
@@ -524,23 +489,6 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
     account.settings.clearClipboard = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-  }
-
-  async getCollapsedGroupings(options?: StorageOptions): Promise<string[]> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.settings?.collapsedGroupings;
-  }
-
-  async setCollapsedGroupings(value: string[], options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-    account.settings.collapsedGroupings = value;
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
@@ -1989,23 +1937,6 @@ export class StateService<
     );
   }
 
-  async getNoAutoPromptBiometricsText(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.noAutoPromptBiometricsText;
-  }
-
-  async setNoAutoPromptBiometricsText(value: string, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    globals.noAutoPromptBiometricsText = value;
-    await this.saveGlobals(
-      globals,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
   async getOpenAtLogin(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
@@ -2304,10 +2235,14 @@ export class StateService<
     const accountVaultTimeoutAction = (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
     )?.settings?.vaultTimeoutAction;
-    const globalVaultTimeoutAction = (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.vaultTimeoutAction;
-    return accountVaultTimeoutAction ?? globalVaultTimeoutAction;
+    return (
+      accountVaultTimeoutAction ??
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
+        )
+      )?.vaultTimeoutAction
+    );
   }
 
   async setVaultTimeoutAction(value: string, options?: StorageOptions): Promise<void> {
