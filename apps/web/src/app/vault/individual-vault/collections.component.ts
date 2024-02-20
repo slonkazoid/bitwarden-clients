@@ -28,6 +28,9 @@ export class CollectionsComponent extends BaseCollectionsComponent implements On
   }
 
   check(c: CollectionView, select?: boolean) {
+    if (c.readOnly) {
+      return;
+    }
     (c as any).checked = select == null ? !(c as any).checked : select;
   }
 

@@ -688,6 +688,15 @@ export class VaultComponent implements OnInit, OnDestroy {
         (c) => !c.readOnly && c.id != Unassigned,
       );
     }
+    collections = collections.sort((a, b) => {
+      if (a.readOnly == null && b.readOnly) {
+        return -1;
+      } else if (a.readOnly && b.readOnly == null) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
     const [modal] = await this.modalService.openViewRef(
       CollectionsComponent,
       this.collectionsModalRef,
