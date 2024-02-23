@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import {
   PinCryptoServiceAbstraction,
   PinCryptoService,
@@ -54,6 +56,7 @@ import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/pla
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/platform/abstractions/file-upload/file-upload.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -63,6 +66,10 @@ import {
   ObservableStorageService,
 } from "@bitwarden/common/platform/abstractions/storage.service";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/platform/abstractions/system.service";
+import {
+  BiometricStateService,
+  DefaultBiometricStateService,
+} from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
@@ -72,6 +79,7 @@ import { ContainerService } from "@bitwarden/common/platform/services/container.
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/multithread-encrypt.service.implementation";
 import { FileUploadService } from "@bitwarden/common/platform/services/file-upload/file-upload.service";
+import { KeyGenerationService } from "@bitwarden/common/platform/services/key-generation.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationBuilderService } from "@bitwarden/common/platform/services/migration-builder.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
@@ -180,7 +188,6 @@ import BrowserMessagingPrivateModeBackgroundService from "../platform/services/b
 import BrowserMessagingService from "../platform/services/browser-messaging.service";
 import BrowserPlatformUtilsService from "../platform/services/browser-platform-utils.service";
 import { BrowserStateService } from "../platform/services/browser-state.service";
-import { KeyGenerationService } from "../platform/services/key-generation.service";
 import { LocalBackedSessionStorageService } from "../platform/services/local-backed-session-storage.service";
 import { BackgroundDerivedStateProvider } from "../platform/state/background-derived-state.provider";
 import { BackgroundMemoryStorageService } from "../platform/storage/background-memory-storage.service";
@@ -207,6 +214,7 @@ export default class MainBackground {
   i18nService: I18nServiceAbstraction;
   platformUtilsService: PlatformUtilsServiceAbstraction;
   logService: LogServiceAbstraction;
+  keyGenerationService: KeyGenerationServiceAbstraction;
   cryptoService: CryptoServiceAbstraction;
   cryptoFunctionService: CryptoFunctionServiceAbstraction;
   tokenService: TokenServiceAbstraction;
@@ -278,6 +286,7 @@ export default class MainBackground {
   individualVaultExportService: IndividualVaultExportServiceAbstraction;
   organizationVaultExportService: OrganizationVaultExportServiceAbstraction;
   vaultSettingsService: VaultSettingsServiceAbstraction;
+  biometricStateService: BiometricStateService;
 
   // Passed to the popup for Safari to workaround issues with theming, downloading, etc.
   backgroundWindow = window;
@@ -319,28 +328,29 @@ export default class MainBackground {
       }
     };
 
-    const logoutCallback = async (expired: boolean, userId?: string) =>
+    const logoutCallback = async (expired: boolean, userId?: UserId) =>
       await this.logout(expired, userId);
 
     this.messagingService = this.popupOnlyContext
       ? new BrowserMessagingPrivateModeBackgroundService()
       : new BrowserMessagingService();
     this.logService = new ConsoleLogService(false);
-    this.cryptoFunctionService = new WebCryptoFunctionService(window);
+    this.cryptoFunctionService = new WebCryptoFunctionService(self);
+    this.keyGenerationService = new KeyGenerationService(this.cryptoFunctionService);
     this.storageService = new BrowserLocalStorageService();
     this.secureStorageService = new BrowserLocalStorageService();
     this.memoryStorageService =
       BrowserApi.manifestVersion === 3
         ? new LocalBackedSessionStorageService(
             new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, false),
-            new KeyGenerationService(this.cryptoFunctionService),
+            this.keyGenerationService,
           )
         : new MemoryStorageService();
     this.memoryStorageForStateProviders =
       BrowserApi.manifestVersion === 3
         ? new LocalBackedSessionStorageService(
             new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, false),
-            new KeyGenerationService(this.cryptoFunctionService),
+            this.keyGenerationService,
           )
         : new BackgroundMemoryStorageService();
     this.globalStateProvider = new DefaultGlobalStateProvider(
@@ -383,6 +393,7 @@ export default class MainBackground {
       this.stateProvider,
       this.accountService,
     );
+    this.biometricStateService = new DefaultBiometricStateService(this.stateProvider);
 
     const migrationRunner = new MigrationRunner(
       this.storageService,
@@ -426,6 +437,7 @@ export default class MainBackground {
     );
     this.i18nService = new BrowserI18nService(BrowserApi.getUILanguage(), this.stateService);
     this.cryptoService = new BrowserCryptoService(
+      this.keyGenerationService,
       this.cryptoFunctionService,
       this.encryptService,
       this.platformUtilsService,
@@ -478,7 +490,7 @@ export default class MainBackground {
       this.tokenService,
       this.logService,
       this.organizationService,
-      this.cryptoFunctionService,
+      this.keyGenerationService,
       logoutCallback,
     );
 
@@ -506,6 +518,7 @@ export default class MainBackground {
 
     this.devicesApiService = new DevicesApiServiceImplementation(this.apiService);
     this.deviceTrustCryptoService = new DeviceTrustCryptoService(
+      this.keyGenerationService,
       this.cryptoFunctionService,
       this.cryptoService,
       this.encryptService,
@@ -636,7 +649,7 @@ export default class MainBackground {
     this.sendService = new BrowserSendService(
       this.cryptoService,
       this.i18nService,
-      this.cryptoFunctionService,
+      this.keyGenerationService,
       this.stateService,
     );
     this.sendApiService = new SendApiService(
@@ -757,7 +770,7 @@ export default class MainBackground {
         this.platformUtilsService.isSafari() ||
         this.platformUtilsService.isFirefox() ||
         this.platformUtilsService.isOpera();
-      BrowserApi.reloadExtension(forceWindowReload ? window : null);
+      BrowserApi.reloadExtension(forceWindowReload ? self : null);
       return Promise.resolve();
     };
 
@@ -766,6 +779,7 @@ export default class MainBackground {
       this.platformUtilsService,
       systemUtilsServiceReloadCallback,
       this.stateService,
+      this.autofillSettingsService,
       this.vaultTimeoutSettingsService,
     );
 
@@ -815,6 +829,7 @@ export default class MainBackground {
       this.folderService,
       this.stateService,
       this.environmentService,
+      this.logService,
     );
     this.overlayBackground = new OverlayBackground(
       this.cipherService,
@@ -1037,7 +1052,9 @@ export default class MainBackground {
     }
   }
 
-  async logout(expired: boolean, userId?: string) {
+  async logout(expired: boolean, userId?: UserId) {
+    userId ??= (await firstValueFrom(this.accountService.activeAccount$))?.id;
+
     await this.eventUploadService.uploadEvents(userId);
 
     await Promise.all([
@@ -1052,6 +1069,7 @@ export default class MainBackground {
       this.vaultTimeoutSettingsService.clear(userId),
       this.keyConnectorService.clear(),
       this.vaultFilterService.clear(),
+      this.biometricStateService.logout(userId),
       // We intentionally do not clear the autofillSettingsService
     ]);
 

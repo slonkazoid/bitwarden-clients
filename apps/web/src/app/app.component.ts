@@ -20,7 +20,9 @@ import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.se
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -82,6 +84,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private keyConnectorService: KeyConnectorService,
     private configService: ConfigServiceAbstraction,
     private dialogService: DialogService,
+    private biometricStateService: BiometricStateService,
   ) {}
 
   ngOnInit() {
@@ -204,11 +207,6 @@ export class AppComponent implements OnDestroy, OnInit {
           case "showToast":
             this.showToast(message);
             break;
-          case "setFullWidth":
-            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this.setFullWidth();
-            break;
           case "convertAccountToKeyConnector":
             // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -240,10 +238,6 @@ export class AppComponent implements OnDestroy, OnInit {
       new DisableSendPolicy(),
       new SendOptionsPolicy(),
     ]);
-
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.setFullWidth();
   }
 
   ngOnDestroy() {
@@ -265,6 +259,7 @@ export class AppComponent implements OnDestroy, OnInit {
       this.policyService.clear(userId),
       this.passwordGenerationService.clear(),
       this.keyConnectorService.clear(),
+      this.biometricStateService.logout(userId as UserId),
     ]);
 
     this.searchService.clearIndex();
@@ -350,15 +345,6 @@ export class AppComponent implements OnDestroy, OnInit {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.notificationsService.reconnectFromActivity();
-    }
-  }
-
-  private async setFullWidth() {
-    const enableFullWidth = await this.stateService.getEnableFullWidth();
-    if (enableFullWidth) {
-      document.body.classList.add("full-width");
-    } else {
-      document.body.classList.remove("full-width");
     }
   }
 }

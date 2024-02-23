@@ -22,6 +22,7 @@ export const ACCOUNT_MEMORY = new StateDefinition("account", "memory");
 export const BILLING_BANNERS_DISK = new StateDefinition("billingBanners", "disk");
 
 export const CRYPTO_DISK = new StateDefinition("crypto", "disk");
+export const CRYPTO_MEMORY = new StateDefinition("crypto", "memory");
 
 export const SSO_DISK = new StateDefinition("ssoLogin", "disk");
 
@@ -59,5 +60,14 @@ export const AUTOFILL_SETTINGS_DISK_LOCAL = new StateDefinition("autofillSetting
 });
 
 export const VAULT_FILTER_DISK = new StateDefinition("vaultFilter", "disk", {
+  web: "disk-local",
+});
+
+export const NEW_WEB_LAYOUT_BANNER_DISK = new StateDefinition("newWebLayoutBanner", "disk", {
+  web: "disk-local",
+});
+
+// Secrets Manager
+export const SM_ONBOARDING_DISK = new StateDefinition("smOnboarding", "disk", {
   web: "disk-local",
 });
