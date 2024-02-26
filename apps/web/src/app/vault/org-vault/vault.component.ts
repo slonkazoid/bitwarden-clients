@@ -137,6 +137,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected showCollectionAccessRestricted: boolean;
   protected currentSearchText$: Observable<string>;
   protected editableCollections$: Observable<CollectionView[]>;
+  protected allCollectionsWithoutUnassigned$: Observable<CollectionAdminView[]>;
   protected showBulkEditCollectionAccess$ = this.configService.getFeatureFlag$(
     FeatureFlag.BulkCollectionAccess,
     false,
@@ -253,7 +254,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     this.currentSearchText$ = this.route.queryParams.pipe(map((queryParams) => queryParams.search));
 
-    const allCollectionsWithoutUnassigned$ = combineLatest([
+    this.allCollectionsWithoutUnassigned$ = combineLatest([
       organizationId$.pipe(switchMap((orgId) => this.collectionAdminService.getAll(orgId))),
       defer(() => this.collectionService.getAllDecrypted()),
     ]).pipe(
@@ -276,7 +277,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
-    this.editableCollections$ = allCollectionsWithoutUnassigned$.pipe(
+    this.editableCollections$ = this.allCollectionsWithoutUnassigned$.pipe(
       map((collections) => {
         // Users that can edit all ciphers can implicitly edit all collections
         if (this.organization.canEditAllCiphers(this.flexibleCollectionsV1Enabled)) {
@@ -287,7 +288,10 @@ export class VaultComponent implements OnInit, OnDestroy {
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
-    const allCollections$ = combineLatest([organizationId$, allCollectionsWithoutUnassigned$]).pipe(
+    const allCollections$ = combineLatest([
+      organizationId$,
+      this.allCollectionsWithoutUnassigned$,
+    ]).pipe(
       map(([organizationId, allCollections]) => {
         const noneCollection = new CollectionAdminView();
         noneCollection.name = this.i18nService.t("unassigned");
@@ -680,7 +684,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     if (this.flexibleCollectionsV1Enabled) {
       // V1 limits admins to only adding items to collections they have access to.
-      collections = await firstValueFrom(this.editableCollections$);
+      collections = await firstValueFrom(this.allCollectionsWithoutUnassigned$);
     } else {
       collections = (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
         (c) => !c.readOnly && c.id != Unassigned,
@@ -699,6 +703,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       CollectionsComponent,
       this.collectionsModalRef,
       (comp) => {
+        comp.flexibleCollectionsV1Enabled = this.flexibleCollectionsV1Enabled;
         comp.collectionIds = cipher.collectionIds;
         comp.collections = collections;
         comp.organization = this.organization;

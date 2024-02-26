@@ -40,7 +40,9 @@
                   [(ngModel)]="$any(c).checked"
                   name="Collection[{{ i }}].Checked"
                   appStopProp
-                  [disabled]="c.readOnly"
+                  [disabled]="
+                    !organization?.canEditAllCiphers(flexibleCollectionsV1Enabled) && c.readOnly
+                  "
                 />
               </td>
               <td>

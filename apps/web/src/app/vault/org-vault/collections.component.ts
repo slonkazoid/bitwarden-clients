@@ -55,7 +55,7 @@ export class CollectionsComponent extends BaseCollectionsComponent {
   }
 
   protected saveCollections() {
-    if (this.organization.canEditAnyCollection) {
+    if (this.organization.canEditAllCiphers(this.flexibleCollectionsV1Enabled)) {
       const request = new CipherCollectionsRequest(this.cipherDomain.collectionIds);
       return this.apiService.putCipherCollectionsAdmin(this.cipherId, request);
     } else {

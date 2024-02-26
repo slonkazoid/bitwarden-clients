@@ -28,7 +28,7 @@ export class CollectionsComponent extends BaseCollectionsComponent implements On
   }
 
   check(c: CollectionView, select?: boolean) {
-    if (c.readOnly) {
+    if (!this.organization?.canEditAllCiphers(this.flexibleCollectionsV1Enabled) && c.readOnly) {
       return;
     }
     (c as any).checked = select == null ? !(c as any).checked : select;

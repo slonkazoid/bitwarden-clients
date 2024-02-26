@@ -1,5 +1,6 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -19,6 +20,8 @@ export class CollectionsComponent implements OnInit {
   cipher: CipherView;
   collectionIds: string[];
   collections: CollectionView[] = [];
+  organization: Organization;
+  flexibleCollectionsV1Enabled: boolean;
 
   protected cipherDomain: Cipher;
 
@@ -52,7 +55,16 @@ export class CollectionsComponent implements OnInit {
 
   async submit() {
     const selectedCollectionIds = this.collections
-      .filter((c) => !!(c as any).checked)
+      .filter((c) => {
+        if (
+          this.organization?.allowAdminAccessToAllCollectionItems &&
+          this.organization?.canEditAnyCollection
+        ) {
+          return !!(c as any).checked;
+        } else {
+          return !!(c as any).checked && c.readOnly == null;
+        }
+      })
       .map((c) => c.id);
     if (!this.allowSelectNone && selectedCollectionIds.length === 0) {
       this.platformUtilsService.showToast(
