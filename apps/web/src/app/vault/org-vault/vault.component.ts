@@ -684,21 +684,32 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     if (this.flexibleCollectionsV1Enabled) {
       // V1 limits admins to only adding items to collections they have access to.
-      collections = await firstValueFrom(this.allCollectionsWithoutUnassigned$);
+      collections = await firstValueFrom(
+        this.allCollectionsWithoutUnassigned$.pipe(
+          map((c) => {
+            return c.sort((a, b) => {
+              if (
+                a.canEditItems(this.organization, true) &&
+                !b.canEditItems(this.organization, true)
+              ) {
+                return -1;
+              } else if (
+                !a.canEditItems(this.organization, true) &&
+                b.canEditItems(this.organization, true)
+              ) {
+                return 1;
+              } else {
+                return a.name.localeCompare(b.name);
+              }
+            });
+          }),
+        ),
+      );
     } else {
       collections = (await firstValueFrom(this.vaultFilterService.filteredCollections$)).filter(
         (c) => !c.readOnly && c.id != Unassigned,
       );
     }
-    collections = collections.sort((a, b) => {
-      if (a.readOnly == null && b.readOnly) {
-        return -1;
-      } else if (a.readOnly && b.readOnly == null) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
     const [modal] = await this.modalService.openViewRef(
       CollectionsComponent,
       this.collectionsModalRef,
