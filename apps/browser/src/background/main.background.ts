@@ -5,6 +5,8 @@ import {
   PinCryptoService,
   LoginStrategyServiceAbstraction,
   LoginStrategyService,
+  AuthRequestServiceAbstraction,
+  AuthRequestService,
 } from "@bitwarden/auth/common";
 import { AvatarUpdateService as AvatarUpdateServiceAbstraction } from "@bitwarden/common/abstractions/account/avatar-update.service";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
@@ -22,7 +24,6 @@ import { ProviderService as ProviderServiceAbstraction } from "@bitwarden/common
 import { PolicyApiService } from "@bitwarden/common/admin-console/services/policy/policy-api.service";
 import { ProviderService } from "@bitwarden/common/admin-console/services/provider.service";
 import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
-import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-crypto.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
@@ -35,7 +36,6 @@ import { UserVerificationService as UserVerificationServiceAbstraction } from "@
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
-import { AuthRequestCryptoServiceImplementation } from "@bitwarden/common/auth/services/auth-request-crypto.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { DeviceTrustCryptoService } from "@bitwarden/common/auth/services/device-trust-crypto.service.implementation";
 import { DevicesServiceImplementation } from "@bitwarden/common/auth/services/devices/devices.service.implementation";
@@ -49,6 +49,10 @@ import {
   AutofillSettingsServiceAbstraction,
   AutofillSettingsService,
 } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import {
+  BadgeSettingsServiceAbstraction,
+  BadgeSettingsService,
+} from "@bitwarden/common/autofill/services/badge-settings.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config-api.service.abstraction";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -243,6 +247,7 @@ export default class MainBackground {
   notificationsService: NotificationsServiceAbstraction;
   stateService: StateServiceAbstraction;
   autofillSettingsService: AutofillSettingsServiceAbstraction;
+  badgeSettingsService: BadgeSettingsServiceAbstraction;
   systemService: SystemServiceAbstraction;
   eventCollectionService: EventCollectionServiceAbstraction;
   eventUploadService: EventUploadServiceAbstraction;
@@ -274,7 +279,7 @@ export default class MainBackground {
   devicesApiService: DevicesApiServiceAbstraction;
   devicesService: DevicesServiceAbstraction;
   deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction;
-  authRequestCryptoService: AuthRequestCryptoServiceAbstraction;
+  authRequestService: AuthRequestServiceAbstraction;
   accountService: AccountServiceAbstraction;
   globalStateProvider: GlobalStateProvider;
   pinCryptoService: PinCryptoServiceAbstraction;
@@ -473,11 +478,16 @@ export default class MainBackground {
       this.stateService,
       this.stateProvider,
     );
-    this.policyService = new BrowserPolicyService(this.stateService, this.organizationService);
+    this.policyService = new BrowserPolicyService(
+      this.stateService,
+      this.stateProvider,
+      this.organizationService,
+    );
     this.autofillSettingsService = new AutofillSettingsService(
       this.stateProvider,
       this.policyService,
     );
+    this.badgeSettingsService = new BadgeSettingsService(this.stateProvider);
     this.policyApiService = new PolicyApiService(
       this.policyService,
       this.apiService,
@@ -531,7 +541,12 @@ export default class MainBackground {
 
     this.devicesService = new DevicesServiceImplementation(this.devicesApiService);
 
-    this.authRequestCryptoService = new AuthRequestCryptoServiceImplementation(this.cryptoService);
+    this.authRequestService = new AuthRequestService(
+      this.appIdService,
+      this.cryptoService,
+      this.apiService,
+      this.stateService,
+    );
 
     this.authService = new AuthService(
       backgroundMessagingService,
@@ -557,7 +572,7 @@ export default class MainBackground {
       this.passwordStrengthService,
       this.policyService,
       this.deviceTrustCryptoService,
-      this.authRequestCryptoService,
+      this.authRequestService,
     );
 
     this.userVerificationApiService = new UserVerificationApiService(this.apiService);
@@ -1070,7 +1085,10 @@ export default class MainBackground {
       this.keyConnectorService.clear(),
       this.vaultFilterService.clear(),
       this.biometricStateService.logout(userId),
-      // We intentionally do not clear the autofillSettingsService
+      /* We intentionally do not clear:
+       *  - autofillSettingsService
+       *  - badgeSettingsService
+       */
     ]);
 
     //Needs to be checked before state is cleaned

@@ -40,7 +40,6 @@ export const BIOMETRIC_SETTINGS_DISK = new StateDefinition("biometricSettings", 
 // Admin Console
 export const ORGANIZATIONS_DISK = new StateDefinition("organizations", "disk");
 export const POLICIES_DISK = new StateDefinition("policies", "disk");
-export const POLICIES_MEMORY = new StateDefinition("policies", "memory");
 export const PROVIDERS_DISK = new StateDefinition("providers", "disk");
 
 export const FOLDER_DISK = new StateDefinition("folder", "disk", { web: "memory" });
@@ -54,6 +53,9 @@ export const VAULT_SETTINGS_DISK = new StateDefinition("vaultSettings", "disk", 
 export const COLLECTION_DATA = new StateDefinition("collection", "disk", {
   web: "memory",
 });
+
+export const BADGE_SETTINGS_DISK = new StateDefinition("badgeSettings", "disk");
+
 export const AUTOFILL_SETTINGS_DISK = new StateDefinition("autofillSettings", "disk");
 export const AUTOFILL_SETTINGS_DISK_LOCAL = new StateDefinition("autofillSettingsLocal", "disk", {
   web: "disk-local",

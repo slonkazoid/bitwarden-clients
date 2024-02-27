@@ -1,6 +1,8 @@
 import { LOCALE_ID, NgModule } from "@angular/core";
 
 import {
+  AuthRequestServiceAbstraction,
+  AuthRequestService,
   PinCryptoServiceAbstraction,
   PinCryptoService,
   LoginStrategyServiceAbstraction,
@@ -47,7 +49,6 @@ import {
   InternalAccountService,
 } from "@bitwarden/common/auth/abstractions/account.service";
 import { AnonymousHubService as AnonymousHubServiceAbstraction } from "@bitwarden/common/auth/abstractions/anonymous-hub.service";
-import { AuthRequestCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth-request-crypto.service.abstraction";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
@@ -66,7 +67,6 @@ import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstract
 import { AccountApiServiceImplementation } from "@bitwarden/common/auth/services/account-api.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AnonymousHubService } from "@bitwarden/common/auth/services/anonymous-hub.service";
-import { AuthRequestCryptoServiceImplementation } from "@bitwarden/common/auth/services/auth-request-crypto.service.implementation";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { DeviceTrustCryptoService } from "@bitwarden/common/auth/services/device-trust-crypto.service.implementation";
 import { DevicesServiceImplementation } from "@bitwarden/common/auth/services/devices/devices.service.implementation";
@@ -86,6 +86,10 @@ import {
   AutofillSettingsServiceAbstraction,
   AutofillSettingsService,
 } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import {
+  BadgeSettingsServiceAbstraction,
+  BadgeSettingsService,
+} from "@bitwarden/common/autofill/services/badge-settings.service";
 import { BillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/billilng-api.service.abstraction";
 import { BillingBannerServiceAbstraction } from "@bitwarden/common/billing/abstractions/billing-banner.service.abstraction";
 import { OrganizationBillingServiceAbstraction } from "@bitwarden/common/billing/abstractions/organization-billing.service";
@@ -320,7 +324,7 @@ import { ModalService } from "./modal.service";
         PasswordStrengthServiceAbstraction,
         PolicyServiceAbstraction,
         DeviceTrustCryptoServiceAbstraction,
-        AuthRequestCryptoServiceAbstraction,
+        AuthRequestServiceAbstraction,
       ],
     },
     {
@@ -670,7 +674,7 @@ import { ModalService } from "./modal.service";
     {
       provide: PolicyServiceAbstraction,
       useClass: PolicyService,
-      deps: [StateServiceAbstraction, OrganizationServiceAbstraction],
+      deps: [StateServiceAbstraction, StateProvider, OrganizationServiceAbstraction],
     },
     {
       provide: InternalPolicyService,
@@ -845,9 +849,14 @@ import { ModalService } from "./modal.service";
       ],
     },
     {
-      provide: AuthRequestCryptoServiceAbstraction,
-      useClass: AuthRequestCryptoServiceImplementation,
-      deps: [CryptoServiceAbstraction],
+      provide: AuthRequestServiceAbstraction,
+      useClass: AuthRequestService,
+      deps: [
+        AppIdServiceAbstraction,
+        CryptoServiceAbstraction,
+        ApiServiceAbstraction,
+        StateServiceAbstraction,
+      ],
     },
     {
       provide: PinCryptoServiceAbstraction,
@@ -930,6 +939,11 @@ import { ModalService } from "./modal.service";
       provide: AutofillSettingsServiceAbstraction,
       useClass: AutofillSettingsService,
       deps: [StateProvider, PolicyServiceAbstraction],
+    },
+    {
+      provide: BadgeSettingsServiceAbstraction,
+      useClass: BadgeSettingsService,
+      deps: [StateProvider],
     },
     {
       provide: BiometricStateService,

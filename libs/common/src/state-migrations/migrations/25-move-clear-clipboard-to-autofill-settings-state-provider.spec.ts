@@ -82,7 +82,7 @@ const autofillSettingsLocalStateDefinition: {
   },
 };
 
-describe("ProviderKeysMigrator", () => {
+describe("ClearClipboardDelayMigrator", () => {
   let helper: MockProxy<MigrationHelper>;
   let sut: ClearClipboardDelayMigrator;
 
