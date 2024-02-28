@@ -438,6 +438,10 @@ export class ImportService implements ImportServiceAbstraction {
       const collectionViews: CollectionView[] = await this.collectionService.getAllDecrypted();
       const targetCollection = collectionViews.find((c) => c.id === importTarget);
 
+      if (!targetCollection) {
+        return;
+      }
+
       const noCollectionRelationShips: [number, number][] = [];
       importResult.ciphers.forEach((c, index) => {
         if (!Array.isArray(c.collectionIds) || c.collectionIds.length == 0) {
