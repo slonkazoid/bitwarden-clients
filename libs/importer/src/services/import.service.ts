@@ -338,20 +338,20 @@ export class ImportService implements ImportServiceAbstraction {
   private async handleIndividualImport(importResult: ImportResult) {
     const request = new ImportCiphersRequest();
     try {
-      for (let i = 0; i < importResult.ciphers.length; i++) {
-        const c = await this.cipherService.encrypt(importResult.ciphers[i]);
+      const cipherTasks = (importResult.ciphers ?? []).map((c) => this.cipherService.encrypt(c));
+
+      for (const c of await Promise.all(cipherTasks)) {
         request.ciphers.push(new CipherRequest(c));
       }
-      if (importResult.folders != null) {
-        for (let i = 0; i < importResult.folders.length; i++) {
-          const f = await this.folderService.encrypt(importResult.folders[i]);
-          request.folders.push(new FolderWithIdRequest(f));
-        }
+
+      const folderTasks = (importResult.folders ?? []).map((f) => this.folderService.encrypt(f));
+
+      for (const folder of await Promise.all(folderTasks)) {
+        request.folders.push(new FolderWithIdRequest(folder));
       }
-      if (importResult.folderRelationships != null) {
-        importResult.folderRelationships.forEach((r) =>
-          request.folderRelationships.push(new KvpRequest(r[0], r[1])),
-        );
+
+      for (const [key, value] of importResult.folderRelationships ?? []) {
+        request.folderRelationships.push(new KvpRequest(key, value));
       }
     } catch (error) {
       throw new Error("Unexpected error building import data: " + error.message);
@@ -362,22 +362,23 @@ export class ImportService implements ImportServiceAbstraction {
   private async handleOrganizationalImport(importResult: ImportResult, organizationId: string) {
     const request = new ImportOrganizationCiphersRequest();
     try {
-      for (let i = 0; i < importResult.ciphers.length; i++) {
-        importResult.ciphers[i].organizationId = organizationId;
-        const c = await this.cipherService.encrypt(importResult.ciphers[i]);
+      const cipherTasks = (importResult.ciphers ?? []).map((c) => this.cipherService.encrypt(c));
+
+      for (const c of await Promise.all(cipherTasks)) {
         request.ciphers.push(new CipherRequest(c));
       }
-      if (importResult.collections != null) {
-        for (let i = 0; i < importResult.collections.length; i++) {
-          importResult.collections[i].organizationId = organizationId;
-          const c = await this.collectionService.encrypt(importResult.collections[i]);
-          request.collections.push(new CollectionWithIdRequest(c));
-        }
+
+      const collectionTasks = (importResult.collections ?? []).map((c) =>
+        this.collectionService.encrypt(c),
+      );
+
+      for (const collection of await Promise.all(collectionTasks)) {
+        collection.organizationId = organizationId;
+        request.collections.push(new CollectionWithIdRequest(collection));
       }
-      if (importResult.collectionRelationships != null) {
-        importResult.collectionRelationships.forEach((r) =>
-          request.collectionRelationships.push(new KvpRequest(r[0], r[1])),
-        );
+
+      for (const [key, value] of importResult.folderRelationships ?? []) {
+        request.collectionRelationships.push(new KvpRequest(key, value));
       }
     } catch (error) {
       throw new Error("Unexpected error building import data: " + error.message);
