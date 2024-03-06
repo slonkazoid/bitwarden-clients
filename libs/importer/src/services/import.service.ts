@@ -377,7 +377,7 @@ export class ImportService implements ImportServiceAbstraction {
         request.collections.push(new CollectionWithIdRequest(collection));
       }
 
-      for (const [key, value] of importResult.folderRelationships ?? []) {
+      for (const [key, value] of importResult.collectionRelationships ?? []) {
         request.collectionRelationships.push(new KvpRequest(key, value));
       }
     } catch (error) {

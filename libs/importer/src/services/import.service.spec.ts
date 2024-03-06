@@ -13,11 +13,14 @@ import { FieldType } from "@bitwarden/common/vault/enums/field-type.enum";
 import { UriMatchType } from "@bitwarden/common/vault/enums/uri-match-type.enum";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
+import { FolderData } from "@bitwarden/common/vault/models/data/folder.data";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { Collection } from "@bitwarden/common/vault/models/domain/collection";
+import { Folder } from "@bitwarden/common/vault/models/domain/folder";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
+import { unencryptedIndividualExport } from "../../spec/test-data/bitwarden-json/unencrypted-individual.json";
 import { unencryptedOrgExport } from "../../spec/test-data/bitwarden-json/unencrypted-org.json";
 import { BitwardenPasswordProtectedImporter } from "../importers/bitwarden/bitwarden-password-protected-importer";
 import { Importer } from "../importers/importer";
@@ -93,6 +96,12 @@ const collectionData: CollectionData = {
   manage: true,
   externalId: "",
   hidePasswords: false,
+};
+
+const folderData: FolderData = {
+  id: "id",
+  name: "name",
+  revisionDate: "2024-03-02",
 };
 
 describe("ImportService", () => {
@@ -268,7 +277,7 @@ describe("ImportService", () => {
     });
   });
 
-  describe("Import", () => {
+  describe("Import organization", () => {
     let importer: Importer;
     const organizationId = Utils.newGuid();
     const password = Utils.newGuid();
@@ -288,7 +297,11 @@ describe("ImportService", () => {
       cipherService.encrypt.mockResolvedValue(new Cipher(cipherData));
       collectionService.encrypt.mockResolvedValue(new Collection(collectionData));
 
-      await importService.import(importer, unencryptedOrgExport, "1234", null, true);
+      const result = await importService.import(importer, unencryptedOrgExport, "1234", null, true);
+
+      expect(result.collectionRelationships.length).toBe(1);
+      expect(result.ciphers.length).toBe(1);
+      expect(result.collections.length).toBe(1);
     });
 
     it("Should throw error building import data on null ciphers", async () => {
@@ -310,6 +323,61 @@ describe("ImportService", () => {
         importService.import(importer, unencryptedOrgExport, "1234", null, true),
       ).rejects.toThrow(
         "Unexpected error building import data: Cannot set properties of undefined (setting 'organizationId')",
+      );
+    });
+  });
+
+  describe("Import individual vault", () => {
+    let importer: Importer;
+    const password = Utils.newGuid();
+    const promptForPassword_callback = async () => {
+      return password;
+    };
+
+    beforeEach(() => {
+      importer = importService.getImporter(
+        "bitwardenpasswordprotected",
+        promptForPassword_callback,
+        null,
+      );
+    });
+
+    it("Should work flawlessly", async () => {
+      cipherService.encrypt.mockResolvedValue(new Cipher(cipherData));
+      folderService.encrypt.mockResolvedValue(new Folder(folderData));
+
+      const result = await importService.import(
+        importer,
+        unencryptedIndividualExport,
+        null,
+        null,
+        true,
+      );
+
+      expect(result.folderRelationships.length).toBe(1);
+      expect(result.ciphers.length).toBe(2);
+      expect(result.folders.length).toBe(1);
+    });
+
+    it("Should throw error building import data on null ciphers", async () => {
+      cipherService.encrypt.mockResolvedValue(undefined);
+      folderService.encrypt.mockResolvedValue(new Folder(folderData));
+
+      await expect(
+        importService.import(importer, unencryptedIndividualExport, null, null, true),
+      ).rejects.toThrow(
+        "Unexpected error building import data: Cannot read properties of undefined (reading 'type')",
+      );
+    });
+
+    it("Should throw error building import data on null folders", async () => {
+      cipherService.encrypt.mockResolvedValue(new Cipher(cipherData));
+      folderService.encrypt.mockResolvedValue(undefined);
+
+      await expect(
+        importService.import(importer, unencryptedIndividualExport, null, null, true),
+      ).rejects.toThrow(
+        "Unexpected error building import data: Cannot read properties of undefined (reading 'name')",
       );
     });
   });
