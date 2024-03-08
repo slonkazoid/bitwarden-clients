@@ -368,12 +368,12 @@ export class ImportService implements ImportServiceAbstraction {
         request.ciphers.push(new CipherRequest(c));
       }
 
-      const collectionTasks = (importResult.collections ?? []).map((c) =>
-        this.collectionService.encrypt(c),
-      );
+      const collectionTasks = (importResult.collections ?? []).map((c) => {
+        c.organizationId = organizationId;
+        return this.collectionService.encrypt(c);
+      });
 
       for (const collection of await Promise.all(collectionTasks)) {
-        collection.organizationId = organizationId;
         request.collections.push(new CollectionWithIdRequest(collection));
       }
 

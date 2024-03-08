@@ -304,6 +304,15 @@ describe("ImportService", () => {
       expect(result.collections.length).toBe(1);
     });
 
+    it("Collections should have organizationId", async () => {
+      cipherService.encrypt.mockResolvedValue(new Cipher(cipherData));
+      collectionService.encrypt.mockResolvedValue(new Collection(collectionData));
+
+      const result = await importService.import(importer, unencryptedOrgExport, "1234", null, true);
+
+      expect(result.collections[0].organizationId).not.toBeNull();
+    });
+
     it("Should throw error building import data on null ciphers", async () => {
       cipherService.encrypt.mockResolvedValue(undefined);
       collectionService.encrypt.mockResolvedValue(new Collection(collectionData));
@@ -321,9 +330,7 @@ describe("ImportService", () => {
 
       await expect(
         importService.import(importer, unencryptedOrgExport, "1234", null, true),
-      ).rejects.toThrow(
-        "Unexpected error building import data: Cannot set properties of undefined (setting 'organizationId')",
-      );
+      ).rejects.toThrow();
     });
   });
 
