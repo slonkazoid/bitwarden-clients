@@ -174,7 +174,7 @@ describe("ImportService", () => {
     });
 
     it("empty importTarget does nothing", async () => {
-      await importService["setImportTarget"](importResult, null, "");
+      await importService["setImportTarget"](importResult, null, null);
       expect(importResult.folders.length).toBe(0);
     });
 
@@ -187,9 +187,9 @@ describe("ImportService", () => {
         Promise.resolve([mockImportTargetFolder]),
       );
 
-      await importService["setImportTarget"](importResult, null, "myImportTarget");
+      await importService["setImportTarget"](importResult, null, mockImportTargetFolder);
       expect(importResult.folders.length).toBe(1);
-      expect(importResult.folders[0].name).toBe("myImportTarget");
+      expect(importResult.folders[0]).toBe(mockImportTargetFolder);
     });
 
     const mockFolder1 = new FolderView();
@@ -207,16 +207,18 @@ describe("ImportService", () => {
         mockFolder2,
       ]);
 
-      const myImportTarget = "myImportTarget";
-
       importResult.folders.push(mockFolder1);
       importResult.folders.push(mockFolder2);
 
-      await importService["setImportTarget"](importResult, null, myImportTarget);
+      await importService["setImportTarget"](importResult, null, mockImportTargetFolder);
       expect(importResult.folders.length).toBe(3);
-      expect(importResult.folders[0].name).toBe(myImportTarget);
-      expect(importResult.folders[1].name).toBe(`${myImportTarget}/${mockFolder1.name}`);
-      expect(importResult.folders[2].name).toBe(`${myImportTarget}/${mockFolder2.name}`);
+      expect(importResult.folders[0]).toBe(mockImportTargetFolder);
+      expect(importResult.folders[1].name).toBe(
+        `${mockImportTargetFolder.name}/${mockFolder1.name}`,
+      );
+      expect(importResult.folders[2].name).toBe(
+        `${mockImportTargetFolder.name}/${mockFolder2.name}`,
+      );
     });
 
     const mockImportTargetCollection = new CollectionView();
@@ -240,9 +242,13 @@ describe("ImportService", () => {
         mockCollection1,
       ]);
 
-      await importService["setImportTarget"](importResult, organizationId, "myImportTarget");
+      await importService["setImportTarget"](
+        importResult,
+        organizationId,
+        mockImportTargetCollection,
+      );
       expect(importResult.collections.length).toBe(1);
-      expect(importResult.collections[0].name).toBe("myImportTarget");
+      expect(importResult.collections[0]).toBe(mockImportTargetCollection);
     });
 
     it("passing importTarget sets it as new root for all existing collections", async () => {
@@ -252,16 +258,42 @@ describe("ImportService", () => {
         mockCollection2,
       ]);
 
-      const myImportTarget = "myImportTarget";
-
       importResult.collections.push(mockCollection1);
       importResult.collections.push(mockCollection2);
 
-      await importService["setImportTarget"](importResult, organizationId, myImportTarget);
+      await importService["setImportTarget"](
+        importResult,
+        organizationId,
+        mockImportTargetCollection,
+      );
       expect(importResult.collections.length).toBe(3);
-      expect(importResult.collections[0].name).toBe(myImportTarget);
-      expect(importResult.collections[1].name).toBe(`${myImportTarget}/${mockCollection1.name}`);
-      expect(importResult.collections[2].name).toBe(`${myImportTarget}/${mockCollection2.name}`);
+      expect(importResult.collections[0]).toBe(mockImportTargetCollection);
+      expect(importResult.collections[1].name).toBe(
+        `${mockImportTargetCollection.name}/${mockCollection1.name}`,
+      );
+      expect(importResult.collections[2].name).toBe(
+        `${mockImportTargetCollection.name}/${mockCollection2.name}`,
+      );
+    });
+
+    it("passing importTarget as null on setImportTarget with organizationId throws error", async () => {
+      const setImportTargetMethod = importService["setImportTarget"](
+        null,
+        organizationId,
+        new Object() as FolderView,
+      );
+
+      await expect(setImportTargetMethod).rejects.toThrow("Error assigning target collection");
+    });
+
+    it("passing importTarget as null on setImportTarget throws error", async () => {
+      const setImportTargetMethod = importService["setImportTarget"](
+        null,
+        "",
+        new Object() as CollectionView,
+      );
+
+      await expect(setImportTargetMethod).rejects.toThrow("Error assigning target folder");
     });
 
     it("if no targetCollection is found, does nothing", async () => {

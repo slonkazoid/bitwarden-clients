@@ -578,6 +578,9 @@
   "access": {
     "message": "Zugriff"
   },
+  "accessLevel": {
+    "message": "Zugriffsebene"
+  },
   "loggedOut": {
     "message": "Ausgeloggt"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Anbieterportal"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

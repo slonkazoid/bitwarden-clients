@@ -578,6 +578,9 @@
   "access": {
     "message": "Prístup"
   },
+  "accessLevel": {
+    "message": "Úroveň prístupu"
+  },
   "loggedOut": {
     "message": "Odhlásený"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Portál poskytovateľa"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

@@ -578,6 +578,9 @@
   "access": {
     "message": "Käyttöoikeudet"
   },
+  "accessLevel": {
+    "message": "Käyttöoikeustaso"
+  },
   "loggedOut": {
     "message": "Kirjauduttu ulos"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Toimittajaportaali"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

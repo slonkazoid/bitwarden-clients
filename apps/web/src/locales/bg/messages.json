@@ -578,6 +578,9 @@
   "access": {
     "message": "Достъп"
   },
+  "accessLevel": {
+    "message": "Ниво на достъп"
+  },
   "loggedOut": {
     "message": "Бяхте отписани"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Портал за доставчици"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

@@ -578,6 +578,9 @@
   "access": {
     "message": "访问权限"
   },
+  "accessLevel": {
+    "message": "访问级别"
+  },
   "loggedOut": {
     "message": "已注销"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "提供商门户"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

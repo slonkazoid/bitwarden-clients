@@ -10,7 +10,6 @@ export class GlobalState {
   theme?: ThemeType = ThemeType.System;
   window?: WindowState = new WindowState();
   twoFactorToken?: string;
-  disableFavicon?: boolean;
   biometricFingerprintValidated?: boolean;
   vaultTimeout?: number;
   vaultTimeoutAction?: string;
@@ -25,7 +24,5 @@ export class GlobalState {
   enableBrowserIntegration?: boolean;
   enableBrowserIntegrationFingerprint?: boolean;
   enableDuckDuckGoBrowserIntegration?: boolean;
-  neverDomains?: { [id: string]: unknown };
-  disableContextMenuItem?: boolean;
   deepLinkRedirectUrl?: string;
 }

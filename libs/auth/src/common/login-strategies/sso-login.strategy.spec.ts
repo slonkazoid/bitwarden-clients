@@ -5,8 +5,12 @@ import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abst
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
+import { AdminAuthRequestStorable } from "@bitwarden/common/auth/models/domain/admin-auth-req-storable";
+import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
 import { IdentityTokenResponse } from "@bitwarden/common/auth/models/response/identity-token.response";
 import { IUserDecryptionOptionsServerResponse } from "@bitwarden/common/auth/models/response/user-decryption-options/user-decryption-options.response";
+import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -25,9 +29,6 @@ import { SsoLoginCredentials } from "../models/domain/login-credentials";
 import { identityTokenResponseFactory } from "./login.strategy.spec";
 import { SsoLoginStrategy } from "./sso-login.strategy";
 
-// TODO: Add tests for new trySetUserKeyWithApprovedAdminRequestIfExists logic
-// https://bitwarden.atlassian.net/browse/PM-3339
-
 describe("SsoLoginStrategy", () => {
   let cryptoService: MockProxy<CryptoService>;
   let apiService: MockProxy<ApiService>;
@@ -42,6 +43,7 @@ describe("SsoLoginStrategy", () => {
   let deviceTrustCryptoService: MockProxy<DeviceTrustCryptoServiceAbstraction>;
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let i18nService: MockProxy<I18nService>;
+  let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
 
   let ssoLoginStrategy: SsoLoginStrategy;
   let credentials: SsoLoginCredentials;
@@ -68,12 +70,14 @@ describe("SsoLoginStrategy", () => {
     deviceTrustCryptoService = mock<DeviceTrustCryptoServiceAbstraction>();
     authRequestService = mock<AuthRequestServiceAbstraction>();
     i18nService = mock<I18nService>();
+    billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
 
     tokenService.getTwoFactorToken.mockResolvedValue(null);
     appIdService.getAppId.mockResolvedValue(deviceId);
-    tokenService.decodeToken.mockResolvedValue({});
+    tokenService.decodeAccessToken.mockResolvedValue({});
 
     ssoLoginStrategy = new SsoLoginStrategy(
+      null,
       cryptoService,
       apiService,
       tokenService,
@@ -87,6 +91,7 @@ describe("SsoLoginStrategy", () => {
       deviceTrustCryptoService,
       authRequestService,
       i18nService,
+      billingAccountProfileStateService,
     );
     credentials = new SsoLoginCredentials(ssoCode, ssoCodeVerifier, ssoRedirectUrl, ssoOrgId);
   });
@@ -257,6 +262,114 @@ describe("SsoLoginStrategy", () => {
 
       // Assert
       expect(cryptoService.setUserKey).not.toHaveBeenCalled();
+    });
+
+    describe("AdminAuthRequest", () => {
+      let tokenResponse: IdentityTokenResponse;
+
+      beforeEach(() => {
+        tokenResponse = identityTokenResponseFactory(null, {
+          HasMasterPassword: true,
+          TrustedDeviceOption: {
+            HasAdminApproval: true,
+            HasLoginApprovingDevice: false,
+            HasManageResetPasswordPermission: false,
+            EncryptedPrivateKey: mockEncDevicePrivateKey,
+            EncryptedUserKey: mockEncUserKey,
+          },
+        });
+
+        const adminAuthRequest = {
+          id: "1",
+          privateKey: "PRIVATE" as any,
+        } as AdminAuthRequestStorable;
+        stateService.getAdminAuthRequest.mockResolvedValue(
+          new AdminAuthRequestStorable(adminAuthRequest),
+        );
+      });
+
+      it("sets the user key using master key and hash from approved admin request if exists", async () => {
+        apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+        cryptoService.hasUserKey.mockResolvedValue(true);
+        const adminAuthResponse = {
+          id: "1",
+          publicKey: "PRIVATE" as any,
+          key: "KEY" as any,
+          masterPasswordHash: "HASH" as any,
+          requestApproved: true,
+        };
+        apiService.getAuthRequest.mockResolvedValue(adminAuthResponse as AuthRequestResponse);
+
+        await ssoLoginStrategy.logIn(credentials);
+
+        expect(authRequestService.setKeysAfterDecryptingSharedMasterKeyAndHash).toHaveBeenCalled();
+        expect(deviceTrustCryptoService.decryptUserKeyWithDeviceKey).not.toHaveBeenCalled();
+      });
+
+      it("sets the user key from approved admin request if exists", async () => {
+        apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+        cryptoService.hasUserKey.mockResolvedValue(true);
+        const adminAuthResponse = {
+          id: "1",
+          publicKey: "PRIVATE" as any,
+          key: "KEY" as any,
+          requestApproved: true,
+        };
+        apiService.getAuthRequest.mockResolvedValue(adminAuthResponse as AuthRequestResponse);
+
+        await ssoLoginStrategy.logIn(credentials);
+
+        expect(authRequestService.setUserKeyAfterDecryptingSharedUserKey).toHaveBeenCalled();
+        expect(deviceTrustCryptoService.decryptUserKeyWithDeviceKey).not.toHaveBeenCalled();
+      });
+
+      it("attempts to establish a trusted device if successful", async () => {
+        apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+        cryptoService.hasUserKey.mockResolvedValue(true);
+        const adminAuthResponse = {
+          id: "1",
+          publicKey: "PRIVATE" as any,
+          key: "KEY" as any,
+          requestApproved: true,
+        };
+        apiService.getAuthRequest.mockResolvedValue(adminAuthResponse as AuthRequestResponse);
+
+        await ssoLoginStrategy.logIn(credentials);
+
+        expect(authRequestService.setUserKeyAfterDecryptingSharedUserKey).toHaveBeenCalled();
+        expect(deviceTrustCryptoService.trustDeviceIfRequired).toHaveBeenCalled();
+      });
+
+      it("clears the admin auth request if server returns a 404, meaning it was deleted", async () => {
+        apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+        apiService.getAuthRequest.mockRejectedValue(new ErrorResponse(null, 404));
+
+        await ssoLoginStrategy.logIn(credentials);
+
+        expect(stateService.setAdminAuthRequest).toHaveBeenCalledWith(null);
+        expect(
+          authRequestService.setKeysAfterDecryptingSharedMasterKeyAndHash,
+        ).not.toHaveBeenCalled();
+        expect(authRequestService.setUserKeyAfterDecryptingSharedUserKey).not.toHaveBeenCalled();
+        expect(deviceTrustCryptoService.trustDeviceIfRequired).not.toHaveBeenCalled();
+      });
+
+      it("attempts to login with a trusted device if admin auth request isn't successful", async () => {
+        apiService.postIdentityToken.mockResolvedValue(tokenResponse);
+        const adminAuthResponse = {
+          id: "1",
+          publicKey: "PRIVATE" as any,
+          key: "KEY" as any,
+          requestApproved: true,
+        };
+        apiService.getAuthRequest.mockResolvedValue(adminAuthResponse as AuthRequestResponse);
+        cryptoService.hasUserKey.mockResolvedValue(false);
+        deviceTrustCryptoService.getDeviceKey.mockResolvedValue("DEVICE_KEY" as any);
+
+        await ssoLoginStrategy.logIn(credentials);
+
+        expect(deviceTrustCryptoService.decryptUserKeyWithDeviceKey).toHaveBeenCalled();
+      });
     });
   });
 

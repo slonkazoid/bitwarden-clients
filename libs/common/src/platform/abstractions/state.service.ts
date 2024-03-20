@@ -1,13 +1,9 @@
 import { Observable } from "rxjs";
 
-import { OrganizationData } from "../../admin-console/models/data/organization.data";
-import { PolicyData } from "../../admin-console/models/data/policy.data";
-import { Policy } from "../../admin-console/models/domain/policy";
 import { AdminAuthRequestStorable } from "../../auth/models/domain/admin-auth-req-storable";
 import { ForceSetPasswordReason } from "../../auth/models/domain/force-set-password-reason";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
 import { BiometricKey } from "../../auth/types/biometric-key";
-import { EventData } from "../../models/data/event.data";
 import { WindowState } from "../../models/domain/window-state";
 import { GeneratorOptions } from "../../tools/generator/generator-options";
 import { GeneratedPasswordHistory, PasswordGeneratorOptions } from "../../tools/generator/password";
@@ -16,18 +12,13 @@ import { SendData } from "../../tools/send/models/data/send.data";
 import { SendView } from "../../tools/send/models/view/send.view";
 import { UserId } from "../../types/guid";
 import { DeviceKey, MasterKey } from "../../types/key";
-import { UriMatchType } from "../../vault/enums";
 import { CipherData } from "../../vault/models/data/cipher.data";
 import { LocalData } from "../../vault/models/data/local.data";
 import { CipherView } from "../../vault/models/view/cipher.view";
 import { AddEditCipherInfo } from "../../vault/types/add-edit-cipher-info";
-import { KdfType, ThemeType } from "../enums";
+import { KdfType } from "../enums";
 import { ServerConfigData } from "../models/data/server-config.data";
-import {
-  Account,
-  AccountDecryptionOptions,
-  AccountSettingsSettings,
-} from "../models/domain/account";
+import { Account, AccountDecryptionOptions } from "../models/domain/account";
 import { EncString } from "../models/domain/enc-string";
 import { StorageOptions } from "../models/domain/storage-options";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
@@ -59,25 +50,12 @@ export abstract class StateService<T extends Account = Account> {
   clean: (options?: StorageOptions) => Promise<UserId>;
   init: (initOptions?: InitOptions) => Promise<void>;
 
-  getAccessToken: (options?: StorageOptions) => Promise<string>;
-  setAccessToken: (value: string, options?: StorageOptions) => Promise<void>;
   getAddEditCipherInfo: (options?: StorageOptions) => Promise<AddEditCipherInfo>;
   setAddEditCipherInfo: (value: AddEditCipherInfo, options?: StorageOptions) => Promise<void>;
   getAlwaysShowDock: (options?: StorageOptions) => Promise<boolean>;
   setAlwaysShowDock: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getApiKeyClientId: (options?: StorageOptions) => Promise<string>;
-  setApiKeyClientId: (value: string, options?: StorageOptions) => Promise<void>;
-  getApiKeyClientSecret: (options?: StorageOptions) => Promise<string>;
-  setApiKeyClientSecret: (value: string, options?: StorageOptions) => Promise<void>;
-  getAutoConfirmFingerPrints: (options?: StorageOptions) => Promise<boolean>;
-  setAutoConfirmFingerprints: (value: boolean, options?: StorageOptions) => Promise<void>;
   getBiometricFingerprintValidated: (options?: StorageOptions) => Promise<boolean>;
   setBiometricFingerprintValidated: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getCanAccessPremium: (options?: StorageOptions) => Promise<boolean>;
-  getHasPremiumPersonally: (options?: StorageOptions) => Promise<boolean>;
-  setHasPremiumPersonally: (value: boolean, options?: StorageOptions) => Promise<void>;
-  setHasPremiumFromOrganization: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getHasPremiumFromOrganization: (options?: StorageOptions) => Promise<boolean>;
   getConvertAccountToKeyConnector: (options?: StorageOptions) => Promise<boolean>;
   setConvertAccountToKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
   /**
@@ -182,14 +160,6 @@ export abstract class StateService<T extends Account = Account> {
    */
   setDecryptedPinProtected: (value: EncString, options?: StorageOptions) => Promise<void>;
   /**
-   * @deprecated Do not call this, use PolicyService
-   */
-  getDecryptedPolicies: (options?: StorageOptions) => Promise<Policy[]>;
-  /**
-   * @deprecated Do not call this, use PolicyService
-   */
-  setDecryptedPolicies: (value: Policy[], options?: StorageOptions) => Promise<void>;
-  /**
    * @deprecated Do not call this directly, use SendService
    */
   getDecryptedSends: (options?: StorageOptions) => Promise<SendView[]>;
@@ -197,24 +167,8 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated Do not call this directly, use SendService
    */
   setDecryptedSends: (value: SendView[], options?: StorageOptions) => Promise<void>;
-  getDefaultUriMatch: (options?: StorageOptions) => Promise<UriMatchType>;
-  setDefaultUriMatch: (value: UriMatchType, options?: StorageOptions) => Promise<void>;
-  getDisableContextMenuItem: (options?: StorageOptions) => Promise<boolean>;
-  setDisableContextMenuItem: (value: boolean, options?: StorageOptions) => Promise<void>;
-  /**
-   * @deprecated Do not call this, use SettingsService
-   */
-  getDisableFavicon: (options?: StorageOptions) => Promise<boolean>;
-  /**
-   * @deprecated Do not call this, use SettingsService
-   */
-  setDisableFavicon: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDisableGa: (options?: StorageOptions) => Promise<boolean>;
   setDisableGa: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getDontShowCardsCurrentTab: (options?: StorageOptions) => Promise<boolean>;
-  setDontShowCardsCurrentTab: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getDontShowIdentitiesCurrentTab: (options?: StorageOptions) => Promise<boolean>;
-  setDontShowIdentitiesCurrentTab: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getDeviceKey: (options?: StorageOptions) => Promise<DeviceKey | null>;
@@ -280,17 +234,6 @@ export abstract class StateService<T extends Account = Account> {
    */
   setEncryptedPinProtected: (value: string, options?: StorageOptions) => Promise<void>;
   /**
-   * @deprecated Do not call this directly, use PolicyService
-   */
-  getEncryptedPolicies: (options?: StorageOptions) => Promise<{ [id: string]: PolicyData }>;
-  /**
-   * @deprecated Do not call this directly, use PolicyService
-   */
-  setEncryptedPolicies: (
-    value: { [id: string]: PolicyData },
-    options?: StorageOptions,
-  ) => Promise<void>;
-  /**
    * @deprecated Do not call this directly, use SendService
    */
   getEncryptedSends: (options?: StorageOptions) => Promise<{ [id: string]: SendData }>;
@@ -298,10 +241,6 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated Do not call this directly, use SendService
    */
   setEncryptedSends: (value: { [id: string]: SendData }, options?: StorageOptions) => Promise<void>;
-  getEquivalentDomains: (options?: StorageOptions) => Promise<string[][]>;
-  setEquivalentDomains: (value: string, options?: StorageOptions) => Promise<void>;
-  getEventCollection: (options?: StorageOptions) => Promise<EventData[]>;
-  setEventCollection: (value: EventData[], options?: StorageOptions) => Promise<void>;
   getEverBeenUnlocked: (options?: StorageOptions) => Promise<boolean>;
   setEverBeenUnlocked: (value: boolean, options?: StorageOptions) => Promise<void>;
   getForceSetPasswordReason: (options?: StorageOptions) => Promise<ForceSetPasswordReason>;
@@ -333,23 +272,10 @@ export abstract class StateService<T extends Account = Account> {
   setMainWindowSize: (value: number, options?: StorageOptions) => Promise<void>;
   getMinimizeOnCopyToClipboard: (options?: StorageOptions) => Promise<boolean>;
   setMinimizeOnCopyToClipboard: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getNeverDomains: (options?: StorageOptions) => Promise<{ [id: string]: unknown }>;
-  setNeverDomains: (value: { [id: string]: unknown }, options?: StorageOptions) => Promise<void>;
   getOpenAtLogin: (options?: StorageOptions) => Promise<boolean>;
   setOpenAtLogin: (value: boolean, options?: StorageOptions) => Promise<void>;
   getOrganizationInvitation: (options?: StorageOptions) => Promise<any>;
   setOrganizationInvitation: (value: any, options?: StorageOptions) => Promise<void>;
-  /**
-   * @deprecated Do not call this directly, use OrganizationService
-   */
-  getOrganizations: (options?: StorageOptions) => Promise<{ [id: string]: OrganizationData }>;
-  /**
-   * @deprecated Do not call this directly, use OrganizationService
-   */
-  setOrganizations: (
-    value: { [id: string]: OrganizationData },
-    options?: StorageOptions,
-  ) => Promise<void>;
   getPasswordGenerationOptions: (options?: StorageOptions) => Promise<PasswordGeneratorOptions>;
   setPasswordGenerationOptions: (
     value: PasswordGeneratorOptions,
@@ -370,24 +296,10 @@ export abstract class StateService<T extends Account = Account> {
    * Sets the user's Pin, encrypted by the user key
    */
   setProtectedPin: (value: string, options?: StorageOptions) => Promise<void>;
-  getRefreshToken: (options?: StorageOptions) => Promise<string>;
-  setRefreshToken: (value: string, options?: StorageOptions) => Promise<void>;
   getRememberedEmail: (options?: StorageOptions) => Promise<string>;
   setRememberedEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getSecurityStamp: (options?: StorageOptions) => Promise<string>;
   setSecurityStamp: (value: string, options?: StorageOptions) => Promise<void>;
-  /**
-   * @deprecated Do not call this directly, use SettingsService
-   */
-  getSettings: (options?: StorageOptions) => Promise<AccountSettingsSettings>;
-  /**
-   * @deprecated Do not call this directly, use SettingsService
-   */
-  setSettings: (value: AccountSettingsSettings, options?: StorageOptions) => Promise<void>;
-  getTheme: (options?: StorageOptions) => Promise<ThemeType>;
-  setTheme: (value: ThemeType, options?: StorageOptions) => Promise<void>;
-  getTwoFactorToken: (options?: StorageOptions) => Promise<string>;
-  setTwoFactorToken: (value: string, options?: StorageOptions) => Promise<void>;
   getUserId: (options?: StorageOptions) => Promise<string>;
   getUsesKeyConnector: (options?: StorageOptions) => Promise<boolean>;
   setUsesKeyConnector: (value: boolean, options?: StorageOptions) => Promise<void>;
@@ -407,9 +319,6 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated Do not call this directly, use ConfigService
    */
   setServerConfig: (value: ServerConfigData, options?: StorageOptions) => Promise<void>;
-
-  getAvatarColor: (options?: StorageOptions) => Promise<string | null | undefined>;
-  setAvatarColor: (value: string, options?: StorageOptions) => Promise<void>;
   /**
    * fetches string value of URL user tried to navigate to while unauthenticated.
    * @param options Defines the storage options for the URL; Defaults to session Storage.

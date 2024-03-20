@@ -1,5 +1,4 @@
 import { ApiService } from "../../../abstractions/api.service";
-import { SettingsService } from "../../../abstractions/settings.service";
 import { InternalOrganizationServiceAbstraction } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
 import { InternalPolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "../../../admin-console/abstractions/provider.service";
@@ -8,8 +7,11 @@ import { OrganizationData } from "../../../admin-console/models/data/organizatio
 import { PolicyData } from "../../../admin-console/models/data/policy.data";
 import { ProviderData } from "../../../admin-console/models/data/provider.data";
 import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
+import { AvatarService } from "../../../auth/abstractions/avatar.service";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
 import { ForceSetPasswordReason } from "../../../auth/models/domain/force-set-password-reason";
+import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
+import { BillingAccountProfileStateService } from "../../../billing/abstractions/account/billing-account-profile-state.service";
 import { DomainsResponse } from "../../../models/response/domains.response";
 import {
   SyncCipherNotification,
@@ -44,7 +46,7 @@ export class SyncService implements SyncServiceAbstraction {
 
   constructor(
     private apiService: ApiService,
-    private settingsService: SettingsService,
+    private domainSettingsService: DomainSettingsService,
     private folderService: InternalFolderService,
     private cipherService: CipherService,
     private cryptoService: CryptoService,
@@ -59,7 +61,9 @@ export class SyncService implements SyncServiceAbstraction {
     private folderApiService: FolderApiServiceAbstraction,
     private organizationService: InternalOrganizationServiceAbstraction,
     private sendApiService: SendApiService,
+    private avatarService: AvatarService,
     private logoutCallback: (expired: boolean) => Promise<void>,
+    private billingAccountProfileStateService: BillingAccountProfileStateService,
   ) {}
 
   async getLastSync(): Promise<Date> {
@@ -309,11 +313,14 @@ export class SyncService implements SyncServiceAbstraction {
     await this.cryptoService.setPrivateKey(response.privateKey);
     await this.cryptoService.setProviderKeys(response.providers);
     await this.cryptoService.setOrgKeys(response.organizations, response.providerOrganizations);
-    await this.stateService.setAvatarColor(response.avatarColor);
+    await this.avatarService.setAvatarColor(response.avatarColor);
     await this.stateService.setSecurityStamp(response.securityStamp);
     await this.stateService.setEmailVerified(response.emailVerified);
-    await this.stateService.setHasPremiumPersonally(response.premiumPersonally);
-    await this.stateService.setHasPremiumFromOrganization(response.premiumFromOrganization);
+
+    await this.billingAccountProfileStateService.setHasPremium(
+      response.premiumPersonally,
+      response.premiumFromOrganization,
+    );
     await this.keyConnectorService.setUsesKeyConnector(response.usesKeyConnector);
 
     await this.setForceSetPasswordReasonIfNeeded(response);
@@ -457,7 +464,7 @@ export class SyncService implements SyncServiceAbstraction {
       });
     }
 
-    return this.settingsService.setEquivalentDomains(eqDomains);
+    return this.domainSettingsService.setEquivalentDomains(eqDomains);
   }
 
   private async syncPolicies(response: PolicyResponse[]) {

@@ -578,6 +578,9 @@
   "access": {
     "message": "Accés"
   },
+  "accessLevel": {
+    "message": "Access level"
+  },
   "loggedOut": {
     "message": "Sessió tancada"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Portal del proveïdor"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

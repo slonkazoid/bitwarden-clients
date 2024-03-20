@@ -578,6 +578,9 @@
   "access": {
     "message": "Erişim"
   },
+  "accessLevel": {
+    "message": "Erişim seviyesi"
+  },
   "loggedOut": {
     "message": "Çıkış yapıldı"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Sağlayıcı Portalı"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }

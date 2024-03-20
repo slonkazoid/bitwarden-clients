@@ -578,6 +578,9 @@
   "access": {
     "message": "Доступ"
   },
+  "accessLevel": {
+    "message": "Рівень доступу"
+  },
   "loggedOut": {
     "message": "Ви вийшли"
   },
@@ -7602,5 +7605,11 @@
   },
   "providerPortal": {
     "message": "Портал провайдера"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "restrictedCollectionAccess": {
+    "message": "You cannot add yourself to collections."
   }
 }
