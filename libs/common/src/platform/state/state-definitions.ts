@@ -44,6 +44,7 @@ export const TOKEN_DISK_LOCAL = new StateDefinition("tokenDiskLocal", "disk", {
 });
 export const TOKEN_MEMORY = new StateDefinition("token", "memory");
 export const LOGIN_STRATEGY_MEMORY = new StateDefinition("loginStrategy", "memory");
+export const USER_DECRYPTION_OPTIONS_DISK = new StateDefinition("userDecryptionOptions", "disk");
 
 // Autofill
 
@@ -74,8 +75,10 @@ export const BIOMETRIC_SETTINGS_DISK = new StateDefinition("biometricSettings", 
 export const CLEAR_EVENT_DISK = new StateDefinition("clearEvent", "disk");
 export const CRYPTO_DISK = new StateDefinition("crypto", "disk");
 export const CRYPTO_MEMORY = new StateDefinition("crypto", "memory");
+export const DESKTOP_SETTINGS_DISK = new StateDefinition("desktopSettings", "disk");
 export const ENVIRONMENT_DISK = new StateDefinition("environment", "disk");
-export const THEMING_DISK = new StateDefinition("theming", "disk");
+export const ENVIRONMENT_MEMORY = new StateDefinition("environment", "memory");
+export const THEMING_DISK = new StateDefinition("theming", "disk", { web: "disk-local" });
 export const TRANSLATION_DISK = new StateDefinition("translation", "disk");
 
 // Secrets Manager
