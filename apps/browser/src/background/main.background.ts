@@ -1053,9 +1053,13 @@ export default class MainBackground {
         if (!this.isPrivateMode) {
           await this.refreshBadge();
         }
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.fullSync(true);
+
+        await this.fullSync(true);
+        await this.taskSchedulerService.setInterval(
+          () => this.fullSync(),
+          5 * 60 * 1000, // check every 5 minutes
+          ScheduledTaskNames.scheduleNextSyncTimeout,
+        );
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();
       }, 500);
@@ -1289,18 +1293,5 @@ export default class MainBackground {
     if (override || lastSyncAgo >= syncInternal) {
       await this.syncService.fullSync(override);
     }
-
-    await this.scheduleNextSync();
-  }
-
-  private async scheduleNextSync() {
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.scheduleNextSyncTimeout,
-    });
-    await this.taskSchedulerService.setTimeout(
-      () => this.fullSync(),
-      5 * 60 * 1000, // check every 5 minutes
-      ScheduledTaskNames.scheduleNextSyncTimeout,
-    );
   }
 }
