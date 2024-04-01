@@ -45,6 +45,7 @@ import { GlobalState } from "@bitwarden/common/platform/models/domain/global-sta
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
 import { SystemService } from "@bitwarden/common/platform/services/system.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
 import { GlobalStateProvider, StateProvider } from "@bitwarden/common/platform/state";
 // eslint-disable-next-line import/no-restricted-paths -- Implementation for memory storage
 import { MemoryStorageService as MemoryStorageServiceForStateProviders } from "@bitwarden/common/platform/state/storage/memory-storage.service";
@@ -168,6 +169,7 @@ const safeProviders: SafeProvider[] = [
       AutofillSettingsServiceAbstraction,
       VaultTimeoutSettingsService,
       BiometricStateService,
+      TaskSchedulerService,
     ],
   }),
   safeProvider({
@@ -246,6 +248,10 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: DesktopAutofillSettingsService,
     deps: [StateProvider],
+  }),
+  safeProvider({
+    provide: TaskSchedulerService,
+    deps: [],
   }),
 ];
 

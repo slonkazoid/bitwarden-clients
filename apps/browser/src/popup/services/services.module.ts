@@ -66,6 +66,7 @@ import { GlobalState } from "@bitwarden/common/platform/models/domain/global-sta
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
+import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/platform/services/web-crypto-function.service";
 import {
   DerivedStateProvider,
@@ -97,6 +98,7 @@ import BrowserLocalStorageService from "../../platform/services/browser-local-st
 import BrowserMessagingPrivateModePopupService from "../../platform/services/browser-messaging-private-mode-popup.service";
 import BrowserMessagingService from "../../platform/services/browser-messaging.service";
 import { BrowserStateService } from "../../platform/services/browser-state.service";
+import { BrowserTaskSchedulerService } from "../../platform/services/browser-task-scheduler.service";
 import I18nService from "../../platform/services/i18n.service";
 import { ForegroundPlatformUtilsService } from "../../platform/services/platform-utils/foreground-platform-utils.service";
 import { ForegroundDerivedStateProvider } from "../../platform/state/foreground-derived-state.provider";
@@ -463,6 +465,14 @@ const safeProviders: SafeProvider[] = [
     provide: UserNotificationSettingsServiceAbstraction,
     useClass: UserNotificationSettingsService,
     deps: [StateProvider],
+  }),
+  safeProvider({
+    provide: TaskSchedulerService,
+    useExisting: BrowserTaskSchedulerService,
+  }),
+  safeProvider({
+    provide: BrowserTaskSchedulerService,
+    deps: [LogService, StateProvider],
   }),
 ];
 

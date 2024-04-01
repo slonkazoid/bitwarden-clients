@@ -850,6 +850,7 @@ export default class MainBackground {
       this.autofillSettingsService,
       this.vaultTimeoutSettingsService,
       this.biometricStateService,
+      this.taskSchedulerService,
     );
 
     // Other fields

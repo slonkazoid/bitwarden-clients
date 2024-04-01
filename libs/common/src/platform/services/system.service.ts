@@ -9,7 +9,9 @@ import { MessagingService } from "../abstractions/messaging.service";
 import { PlatformUtilsService } from "../abstractions/platform-utils.service";
 import { StateService } from "../abstractions/state.service";
 import { SystemService as SystemServiceAbstraction } from "../abstractions/system.service";
+import { TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { BiometricStateService } from "../biometrics/biometric-state.service";
+import { ScheduledTaskNames } from "../enums/scheduled-task-name.enum";
 import { Utils } from "../misc/utils";
 
 export class SystemService implements SystemServiceAbstraction {
@@ -25,6 +27,7 @@ export class SystemService implements SystemServiceAbstraction {
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private biometricStateService: BiometricStateService,
+    private taskSchedulerService: TaskSchedulerService,
   ) {}
 
   async startProcessReload(authService: AuthService): Promise<void> {
@@ -94,25 +97,25 @@ export class SystemService implements SystemServiceAbstraction {
   }
 
   async clearClipboard(clipboardValue: string, timeoutMs: number = null): Promise<void> {
-    if (this.clearClipboardTimeout != null) {
-      clearTimeout(this.clearClipboardTimeout);
-      this.clearClipboardTimeout = null;
-    }
+    let taskTimeoutInMs = timeoutMs;
+    await this.taskSchedulerService.clearScheduledTask({
+      taskName: ScheduledTaskNames.systemClearClipboardTimeout,
+      timeoutId: this.clearClipboardTimeout,
+    });
 
     if (Utils.isNullOrWhitespace(clipboardValue)) {
       return;
     }
 
-    const clearClipboardDelay = await firstValueFrom(
-      this.autofillSettingsService.clearClipboardDelay$,
-    );
-
-    if (clearClipboardDelay == null) {
-      return;
+    if (!taskTimeoutInMs) {
+      const clearClipboardDelayInSeconds = await firstValueFrom(
+        this.autofillSettingsService.clearClipboardDelay$,
+      );
+      taskTimeoutInMs = clearClipboardDelayInSeconds ? clearClipboardDelayInSeconds * 1000 : null;
     }
 
-    if (timeoutMs == null) {
-      timeoutMs = clearClipboardDelay * 1000;
+    if (!taskTimeoutInMs) {
+      return;
     }
 
     this.clearClipboardTimeoutFunction = async () => {
@@ -122,9 +125,11 @@ export class SystemService implements SystemServiceAbstraction {
       }
     };
 
-    this.clearClipboardTimeout = setTimeout(async () => {
-      await this.clearPendingClipboard();
-    }, timeoutMs);
+    this.clearClipboardTimeout = this.taskSchedulerService.setTimeout(
+      () => this.clearPendingClipboard(),
+      taskTimeoutInMs,
+      ScheduledTaskNames.systemClearClipboardTimeout,
+    );
   }
 
   async clearPendingClipboard() {

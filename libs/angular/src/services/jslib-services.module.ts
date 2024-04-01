@@ -147,6 +147,7 @@ import { MigrationRunner } from "@bitwarden/common/platform/services/migration-r
 import { NoopNotificationsService } from "@bitwarden/common/platform/services/noop-notifications.service";
 import { StateService } from "@bitwarden/common/platform/services/state.service";
 import { StorageServiceProvider } from "@bitwarden/common/platform/services/storage-service.provider";
+import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
 import { ValidationService } from "@bitwarden/common/platform/services/validation.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/platform/services/web-crypto-function.service";
 import {
@@ -1068,6 +1069,10 @@ const safeProviders: SafeProvider[] = [
     provide: OrganizationManagementPreferencesService,
     useClass: DefaultOrganizationManagementPreferencesService,
     deps: [StateProvider],
+  }),
+  safeProvider({
+    provide: TaskSchedulerService,
+    deps: [],
   }),
 ];
 
