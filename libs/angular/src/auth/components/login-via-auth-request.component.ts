@@ -197,9 +197,10 @@ export class LoginViaAuthRequestComponent
     const derivedPublicKeyArrayBuffer = await this.cryptoFunctionService.rsaExtractPublicKey(
       adminAuthReqStorable.privateKey,
     );
-    this.fingerprintPhrase = (
-      await this.cryptoService.getFingerprint(this.email, derivedPublicKeyArrayBuffer)
-    ).join("-");
+    this.fingerprintPhrase = await this.authRequestService.getFingerprintPhrase(
+      this.email,
+      derivedPublicKeyArrayBuffer,
+    );
 
     // Request denied
     if (adminAuthReqResponse.isAnswered && !adminAuthReqResponse.requestApproved) {
@@ -241,9 +242,10 @@ export class LoginViaAuthRequestComponent
     const publicKey = Utils.fromBufferToB64(this.authRequestKeyPair.publicKey);
     const accessCode = await this.passwordGenerationService.generatePassword({ length: 25 });
 
-    this.fingerprintPhrase = (
-      await this.cryptoService.getFingerprint(this.email, this.authRequestKeyPair.publicKey)
-    ).join("-");
+    this.fingerprintPhrase = await this.authRequestService.getFingerprintPhrase(
+      this.email,
+      this.authRequestKeyPair.publicKey,
+    );
 
     this.authRequest = new CreateAuthRequest(
       this.email,
