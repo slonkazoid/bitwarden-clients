@@ -79,10 +79,10 @@ export class BrowserTaskSchedulerService
    * less than 1 minute, it will use the global setInterval. Otherwise, it will
    * create a browser extension alarm to handle the interval.
    *
-   * @param callback
-   * @param intervalInMs
-   * @param taskName
-   * @param initialDelayInMs
+   * @param callback - The function to be called at each interval.
+   * @param intervalInMs - The interval in milliseconds.
+   * @param taskName - The name of the task, used in defining the alarm.
+   * @param initialDelayInMs - The initial delay in milliseconds.
    */
   async setInterval(
     callback: () => void,
@@ -107,6 +107,13 @@ export class BrowserTaskSchedulerService
     });
   }
 
+  /**
+   * Clears a scheduled task by its task identifier. If the task identifier
+   * contains a task name, it will clear the browser extension alarm with that
+   * name.
+   *
+   * @param taskIdentifier - The task identifier containing the task name.
+   */
   async clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void> {
     void super.clearScheduledTask(taskIdentifier);
 
@@ -176,7 +183,7 @@ export class BrowserTaskSchedulerService
     }
 
     // 10 seconds after verifying the alarm state, we should treat any newly created alarms as non-recovered alarms.
-    setTimeout(() => this.recoveredAlarms.clear(), 10 * 1000);
+    globalThis.setTimeout(() => this.recoveredAlarms.clear(), 10 * 1000);
   }
 
   private async setActiveAlarm(alarm: ActiveAlarm): Promise<void> {

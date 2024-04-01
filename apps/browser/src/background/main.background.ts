@@ -1137,6 +1137,7 @@ export default class MainBackground {
     userId ??= (await firstValueFrom(this.accountService.activeAccount$))?.id;
 
     await this.eventUploadService.uploadEvents(userId as UserId);
+    await this.taskSchedulerService.clearAllScheduledTasks();
 
     await Promise.all([
       this.syncService.setLastSync(new Date(0), userId),

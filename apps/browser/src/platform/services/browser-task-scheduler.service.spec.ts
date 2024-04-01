@@ -5,6 +5,8 @@ import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-t
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
 
+import { BrowserApi } from "../browser/browser-api";
+
 import { ActiveAlarm } from "./abstractions/browser-task-scheduler.service";
 import { BrowserTaskSchedulerService } from "./browser-task-scheduler.service";
 
@@ -19,9 +21,31 @@ describe("BrowserTaskSchedulerService", () => {
   let logService: MockProxy<ConsoleLogService>;
   let stateProvider: MockProxy<StateProvider>;
   let browserTaskSchedulerService: BrowserTaskSchedulerService;
+  const eventUploadsIntervalCreateInfo = { periodInMinutes: 5, delayInMinutes: 5 };
+  const scheduleNextSyncIntervalCreateInfo = { periodInMinutes: 5, delayInMinutes: 5 };
 
   beforeEach(() => {
-    activeAlarms = [];
+    jest.useFakeTimers();
+    jest.spyOn(BrowserApi, "getAlarm").mockImplementation((alarmName) => {
+      if (alarmName === ScheduledTaskNames.scheduleNextSyncInterval) {
+        return Promise.resolve(mock<chrome.alarms.Alarm>({ name: alarmName }));
+      }
+    });
+    activeAlarms = [
+      mock<ActiveAlarm>({
+        name: ScheduledTaskNames.eventUploadsInterval,
+        createInfo: eventUploadsIntervalCreateInfo,
+      }),
+      mock<ActiveAlarm>({
+        name: ScheduledTaskNames.scheduleNextSyncInterval,
+        createInfo: scheduleNextSyncIntervalCreateInfo,
+      }),
+      mock<ActiveAlarm>({
+        name: ScheduledTaskNames.fido2ClientAbortTimeout,
+        startTime: Date.now() - 60001,
+        createInfo: { delayInMinutes: 1, periodInMinutes: undefined },
+      }),
+    ];
     logService = mock<ConsoleLogService>();
     stateProvider = mock<StateProvider>({
       getGlobal: jest.fn(() =>
@@ -35,6 +59,44 @@ describe("BrowserTaskSchedulerService", () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    jest.clearAllTimers();
+    jest.useRealTimers();
+  });
+
+  describe("verifyAlarmsState", () => {
+    it("verifies the status of potentially existing alarms referenced from state on initialization", () => {
+      expect(chrome.alarms.create).toHaveBeenCalledWith(
+        ScheduledTaskNames.eventUploadsInterval,
+        eventUploadsIntervalCreateInfo,
+        expect.any(Function),
+      );
+    });
+
+    it("skips creating an alarm if the alarm already exists", () => {
+      expect(chrome.alarms.create).not.toHaveBeenCalledWith(
+        ScheduledTaskNames.scheduleNextSyncInterval,
+        scheduleNextSyncIntervalCreateInfo,
+        expect.any(Function),
+      );
+    });
+
+    it("adds the alarm name to the set of recovered alarms if the alarm create info indicates it has expired", () => {
+      expect(
+        browserTaskSchedulerService["recoveredAlarms"].has(
+          ScheduledTaskNames.fido2ClientAbortTimeout,
+        ),
+      ).toBe(true);
+    });
+
+    it("clears the list of recovered alarms after 10 seconds", () => {
+      jest.advanceTimersByTime(10 * 1000);
+
+      expect(
+        browserTaskSchedulerService["recoveredAlarms"].has(
+          ScheduledTaskNames.fido2ClientAbortTimeout,
+        ),
+      ).toBe(false);
+    });
   });
 
   describe("setTimeout", () => {
@@ -50,7 +112,11 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), delayInMs);
-      expect(chrome.alarms.create).not.toHaveBeenCalled();
+      expect(chrome.alarms.create).not.toHaveBeenCalledWith(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        { delayInMinutes: 1 },
+        expect.any(Function),
+      );
     });
 
     it("triggers a recovered alarm immediately and skips creating the alarm", async () => {
@@ -67,7 +133,11 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(callback).toHaveBeenCalled();
-      expect(chrome.alarms.create).not.toHaveBeenCalled();
+      expect(chrome.alarms.create).not.toHaveBeenCalledWith(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        { delayInMinutes: 1 },
+        expect.any(Function),
+      );
     });
 
     it("creates a timeout alarm", async () => {
@@ -86,6 +156,37 @@ describe("BrowserTaskSchedulerService", () => {
         expect.any(Function),
       );
     });
+
+    it("skips creating a duplicate timeout alarm", async () => {
+      const callback = jest.fn();
+      const delayInMinutes = 2;
+      jest.spyOn(BrowserApi, "getAlarm").mockResolvedValue(
+        mock<chrome.alarms.Alarm>({
+          name: ScheduledTaskNames.loginStrategySessionTimeout,
+        }),
+      );
+      jest.spyOn(BrowserApi, "createAlarm");
+
+      await browserTaskSchedulerService.setTimeout(
+        callback,
+        delayInMinutes * 60 * 1000,
+        ScheduledTaskNames.loginStrategySessionTimeout,
+      );
+
+      expect(BrowserApi.createAlarm).not.toHaveBeenCalled();
+    });
+
+    it("logs a warning if a duplicate handler is registered when creating an alarm", () => {
+      const callback = jest.fn();
+      const name = ScheduledTaskNames.loginStrategySessionTimeout;
+      browserTaskSchedulerService["onAlarmHandlers"][name] = jest.fn();
+
+      browserTaskSchedulerService["registerAlarmHandler"](name, callback);
+
+      expect(logService.warning).toHaveBeenCalledWith(
+        `Alarm handler for ${name} already exists. Overwriting.`,
+      );
+    });
   });
 
   describe("setInterval", () => {
@@ -101,7 +202,11 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(globalThis.setInterval).toHaveBeenCalledWith(expect.any(Function), intervalInMs);
-      expect(chrome.alarms.create).not.toHaveBeenCalled();
+      expect(chrome.alarms.create).not.toHaveBeenCalledWith(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        { periodInMinutes: 1, delayInMinutes: 1 },
+        expect.any(Function),
+      );
     });
 
     it("triggers a recovered alarm before creating the interval alarm", async () => {
