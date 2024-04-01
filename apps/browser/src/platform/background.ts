@@ -1,7 +1,5 @@
 import MainBackground from "../background/main.background";
 
-import { onAlarmListener } from "./alarms/on-alarm-listener";
-import { registerAlarms } from "./alarms/register-alarms";
 import { BrowserApi } from "./browser/browser-api";
 import {
   contextMenusClickedListener,
@@ -17,8 +15,6 @@ import {
 if (BrowserApi.isManifestVersion(3)) {
   chrome.commands.onCommand.addListener(onCommandListener);
   chrome.runtime.onInstalled.addListener(onInstallListener);
-  chrome.alarms.onAlarm.addListener(onAlarmListener);
-  registerAlarms();
   chrome.windows.onFocusChanged.addListener(windowsOnFocusChangedListener);
   chrome.tabs.onActivated.addListener(tabsOnActivatedListener);
   chrome.tabs.onReplaced.addListener(tabsOnReplacedListener);

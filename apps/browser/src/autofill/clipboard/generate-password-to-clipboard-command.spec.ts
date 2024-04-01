@@ -1,30 +1,24 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { AutofillSettingsService } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
-import { setAlarmTime } from "../../platform/alarms/alarm-state";
 import { BrowserApi } from "../../platform/browser/browser-api";
+import { BrowserTaskSchedulerService } from "../../platform/services/browser-task-scheduler.service";
 
-import { clearClipboardAlarmName } from "./clear-clipboard";
 import { GeneratePasswordToClipboardCommand } from "./generate-password-to-clipboard-command";
-
-jest.mock("../../platform/alarms/alarm-state", () => {
-  return {
-    setAlarmTime: jest.fn(),
-  };
-});
-
-const setAlarmTimeMock = setAlarmTime as jest.Mock;
 
 describe("GeneratePasswordToClipboardCommand", () => {
   let passwordGenerationService: MockProxy<PasswordGenerationServiceAbstraction>;
   let autofillSettingsService: MockProxy<AutofillSettingsService>;
+  let browserTaskSchedulerService: MockProxy<BrowserTaskSchedulerService>;
 
   let sut: GeneratePasswordToClipboardCommand;
 
   beforeEach(() => {
     passwordGenerationService = mock<PasswordGenerationServiceAbstraction>();
+    browserTaskSchedulerService = mock<BrowserTaskSchedulerService>();
 
     passwordGenerationService.getOptions.mockResolvedValue([{ length: 8 }, {} as any]);
 
@@ -35,6 +29,7 @@ describe("GeneratePasswordToClipboardCommand", () => {
     sut = new GeneratePasswordToClipboardCommand(
       passwordGenerationService,
       autofillSettingsService,
+      browserTaskSchedulerService,
     );
   });
 
@@ -55,9 +50,12 @@ describe("GeneratePasswordToClipboardCommand", () => {
         text: "PASSWORD",
       });
 
-      expect(setAlarmTimeMock).toHaveBeenCalledTimes(1);
-
-      expect(setAlarmTimeMock).toHaveBeenCalledWith(clearClipboardAlarmName, expect.any(Number));
+      expect(browserTaskSchedulerService.setTimeout).toHaveBeenCalledTimes(1);
+      expect(browserTaskSchedulerService.setTimeout).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Number),
+        ScheduledTaskNames.clearClipboardTimeout,
+      );
     });
 
     it("does not have clear clipboard value", async () => {
@@ -71,8 +69,7 @@ describe("GeneratePasswordToClipboardCommand", () => {
         command: "copyText",
         text: "PASSWORD",
       });
-
-      expect(setAlarmTimeMock).not.toHaveBeenCalled();
+      expect(browserTaskSchedulerService.setTimeout).not.toHaveBeenCalled();
     });
   });
 });

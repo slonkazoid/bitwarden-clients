@@ -12,6 +12,7 @@ import {
   passwordGenerationServiceFactory,
   PasswordGenerationServiceInitOptions,
 } from "../../tools/background/service_factories/password-generation-service.factory";
+import { browserTaskSchedulerServiceFactory } from "../background/service-factories/browser-task-scheduler-service.factory";
 import { CachedServices } from "../background/service-factories/factory-options";
 import { logServiceFactory } from "../background/service-factories/log-service.factory";
 import { BrowserApi } from "../browser/browser-api";
@@ -102,6 +103,7 @@ const doGeneratePasswordToClipboard = async (tab: chrome.tabs.Tab): Promise<void
   const command = new GeneratePasswordToClipboardCommand(
     await passwordGenerationServiceFactory(cache, options),
     await autofillSettingsServiceFactory(cache, options),
+    await browserTaskSchedulerServiceFactory(cache, options),
   );
   // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
   // eslint-disable-next-line @typescript-eslint/no-floating-promises
