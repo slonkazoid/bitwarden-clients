@@ -749,6 +749,7 @@ export default class MainBackground {
       this.stateProvider,
       this.logService,
       this.accountService,
+      this.taskSchedulerService,
     );
     this.eventCollectionService = new EventCollectionService(
       this.cipherService,

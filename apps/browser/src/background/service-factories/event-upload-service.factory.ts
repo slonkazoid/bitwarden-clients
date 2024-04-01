@@ -17,13 +17,18 @@ import {
 } from "../../platform/background/service-factories/log-service.factory";
 import { stateProviderFactory } from "../../platform/background/service-factories/state-provider.factory";
 import { StateServiceInitOptions } from "../../platform/background/service-factories/state-service.factory";
+import {
+  taskSchedulerServiceFactory,
+  TaskSchedulerServiceInitOptions,
+} from "../../platform/background/service-factories/task-scheduler-service.factory";
 
 type EventUploadServiceOptions = FactoryOptions;
 
 export type EventUploadServiceInitOptions = EventUploadServiceOptions &
   ApiServiceInitOptions &
   StateServiceInitOptions &
-  LogServiceInitOptions;
+  LogServiceInitOptions &
+  TaskSchedulerServiceInitOptions;
 
 export function eventUploadServiceFactory(
   cache: { eventUploadService?: AbstractEventUploadService } & CachedServices,
@@ -39,6 +44,7 @@ export function eventUploadServiceFactory(
         await stateProviderFactory(cache, opts),
         await logServiceFactory(cache, opts),
         await accountServiceFactory(cache, opts),
+        await taskSchedulerServiceFactory(cache, opts),
       ),
   );
 }
