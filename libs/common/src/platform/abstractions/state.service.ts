@@ -10,7 +10,7 @@ import { UsernameGeneratorOptions } from "../../tools/generator/username";
 import { SendData } from "../../tools/send/models/data/send.data";
 import { SendView } from "../../tools/send/models/view/send.view";
 import { UserId } from "../../types/guid";
-import { DeviceKey, MasterKey } from "../../types/key";
+import { MasterKey } from "../../types/key";
 import { CipherData } from "../../vault/models/data/cipher.data";
 import { LocalData } from "../../vault/models/data/local.data";
 import { CipherView } from "../../vault/models/view/cipher.view";
@@ -50,8 +50,6 @@ export abstract class StateService<T extends Account = Account> {
 
   getAddEditCipherInfo: (options?: StorageOptions) => Promise<AddEditCipherInfo>;
   setAddEditCipherInfo: (value: AddEditCipherInfo, options?: StorageOptions) => Promise<void>;
-  getBiometricFingerprintValidated: (options?: StorageOptions) => Promise<boolean>;
-  setBiometricFingerprintValidated: (value: boolean, options?: StorageOptions) => Promise<void>;
   /**
    * Gets the user's master key
    */
@@ -161,19 +159,13 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated Do not call this directly, use SendService
    */
   setDecryptedSends: (value: SendView[], options?: StorageOptions) => Promise<void>;
-  getDisableGa: (options?: StorageOptions) => Promise<boolean>;
-  setDisableGa: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
-  getDeviceKey: (options?: StorageOptions) => Promise<DeviceKey | null>;
-  setDeviceKey: (value: DeviceKey | null, options?: StorageOptions) => Promise<void>;
   getAdminAuthRequest: (options?: StorageOptions) => Promise<AdminAuthRequestStorable | null>;
   setAdminAuthRequest: (
     adminAuthRequest: AdminAuthRequestStorable,
     options?: StorageOptions,
   ) => Promise<void>;
-  getShouldTrustDevice: (options?: StorageOptions) => Promise<boolean | null>;
-  setShouldTrustDevice: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEmail: (options?: StorageOptions) => Promise<string>;
   setEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getEmailVerified: (options?: StorageOptions) => Promise<boolean>;
@@ -220,8 +212,6 @@ export abstract class StateService<T extends Account = Account> {
     value: ForceSetPasswordReason,
     options?: StorageOptions,
   ) => Promise<void>;
-  getInstalledVersion: (options?: StorageOptions) => Promise<string>;
-  setInstalledVersion: (value: string, options?: StorageOptions) => Promise<void>;
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
   getKdfConfig: (options?: StorageOptions) => Promise<KdfConfig>;
   setKdfConfig: (kdfConfig: KdfConfig, options?: StorageOptions) => Promise<void>;

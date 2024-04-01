@@ -455,11 +455,12 @@ export class Main {
       this.cryptoFunctionService,
       this.cryptoService,
       this.encryptService,
-      this.stateService,
       this.appIdService,
       this.devicesApiService,
       this.i18nService,
       this.platformUtilsService,
+      this.stateProvider,
+      this.secureStorageService,
       this.userDecryptionOptionsService,
     );
 
@@ -503,6 +504,7 @@ export class Main {
       this.cryptoService,
       this.apiService,
       this.stateService,
+      this.tokenService,
     );
 
     this.configApiService = new ConfigApiService(this.apiService, this.tokenService);
@@ -712,12 +714,6 @@ export class Main {
     this.containerService.attachToGlobal(global);
     await this.i18nService.init();
     this.twoFactorService.init();
-
-    const installedVersion = await this.stateService.getInstalledVersion();
-    const currentVersion = await this.platformUtilsService.getApplicationVersion();
-    if (installedVersion == null || installedVersion !== currentVersion) {
-      await this.stateService.setInstalledVersion(currentVersion);
-    }
   }
 }
 
