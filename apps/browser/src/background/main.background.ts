@@ -830,6 +830,7 @@ export default class MainBackground {
       this.authService,
       this.vaultSettingsService,
       this.domainSettingsService,
+      this.taskSchedulerService,
       this.logService,
     );
 

@@ -5,6 +5,7 @@ import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
 import { ConfigService } from "../../../platform/abstractions/config/config.service";
+import { TaskSchedulerService } from "../../../platform/abstractions/task-scheduler.service";
 import { Utils } from "../../../platform/misc/utils";
 import {
   Fido2AuthenticatorError,
@@ -34,6 +35,7 @@ describe("FidoAuthenticatorService", () => {
   let authService!: MockProxy<AuthService>;
   let vaultSettingsService: MockProxy<VaultSettingsService>;
   let domainSettingsService: MockProxy<DomainSettingsService>;
+  let taskSchedulerService: MockProxy<TaskSchedulerService>;
   let client!: Fido2ClientService;
   let tab!: chrome.tabs.Tab;
 
@@ -43,6 +45,7 @@ describe("FidoAuthenticatorService", () => {
     authService = mock<AuthService>();
     vaultSettingsService = mock<VaultSettingsService>();
     domainSettingsService = mock<DomainSettingsService>();
+    taskSchedulerService = mock<TaskSchedulerService>();
 
     client = new Fido2ClientService(
       authenticator,
@@ -50,6 +53,7 @@ describe("FidoAuthenticatorService", () => {
       authService,
       vaultSettingsService,
       domainSettingsService,
+      taskSchedulerService,
     );
     configService.serverConfig$ = of({ environment: { vault: VaultUrl } } as any);
     vaultSettingsService.enablePasskeys$ = of(true);
