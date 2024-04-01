@@ -51,6 +51,7 @@ describe("BrowserTaskSchedulerService", () => {
       getGlobal: jest.fn(() =>
         mock<GlobalState<any>>({
           state$: mock<Observable<any>>(),
+          update: jest.fn((callback) => callback([], {} as any)),
         }),
       ),
     });
