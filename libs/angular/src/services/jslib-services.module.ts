@@ -720,6 +720,7 @@ const safeProviders: SafeProvider[] = [
       StateServiceAbstraction,
       AuthServiceAbstraction,
       MessagingServiceAbstraction,
+      TaskSchedulerService,
     ],
   }),
   safeProvider({

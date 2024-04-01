@@ -814,6 +814,7 @@ export default class MainBackground {
       this.stateService,
       this.authService,
       this.messagingService,
+      this.taskSchedulerService,
     );
 
     this.fido2Service = new Fido2Service();
