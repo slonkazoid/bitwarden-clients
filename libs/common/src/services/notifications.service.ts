@@ -214,7 +214,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   }
 
   private async reconnect(sync: boolean) {
-    void this.taskSchedulerService.clearScheduledTask({
+    await this.taskSchedulerService.clearScheduledTask({
       taskName: ScheduledTaskNames.notificationsReconnectTimeout,
       timeoutId: this.reconnectTimer,
     });
