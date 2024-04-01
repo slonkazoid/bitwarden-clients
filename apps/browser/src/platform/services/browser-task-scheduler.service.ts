@@ -78,7 +78,7 @@ export class BrowserTaskSchedulerService
 
     this.registerAlarmHandler(taskName, callback);
     if (this.recoveredAlarms.has(taskName)) {
-      await this.triggerRecoveredAlarm(taskName);
+      await this.triggerRecoveredAlarm(taskName, intervalInMinutes);
     }
 
     const initialDelayInMinutes = initialDelayInMs ? initialDelayInMs / 1000 / 60 : undefined;
@@ -116,7 +116,7 @@ export class BrowserTaskSchedulerService
   ): Promise<void> {
     const existingAlarm = await BrowserApi.getAlarm(name);
     if (existingAlarm) {
-      this.logService.debug(`Alarm ${name} already exists. Skipping creation.`);
+      this.logService.warning(`Alarm ${name} already exists. Skipping creation.`);
       return;
     }
 
@@ -167,19 +167,22 @@ export class BrowserTaskSchedulerService
   }
 
   private async deleteActiveAlarm(name: ScheduledTaskName): Promise<void> {
+    delete this.onAlarmHandlers[name];
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
     const filteredAlarms = activeAlarms.filter((alarm) => alarm.name !== name);
     await this.updateActiveAlarms(filteredAlarms);
-    delete this.onAlarmHandlers[name];
   }
 
   private async updateActiveAlarms(alarms: ActiveAlarm[]): Promise<void> {
     await this.activeAlarmsState.update(() => alarms);
   }
 
-  private async triggerRecoveredAlarm(name: ScheduledTaskName): Promise<void> {
+  private async triggerRecoveredAlarm(
+    name: ScheduledTaskName,
+    periodInMinutes?: number,
+  ): Promise<void> {
     this.recoveredAlarms.delete(name);
-    await this.triggerAlarm(name);
+    await this.triggerAlarm(name, periodInMinutes);
   }
 
   private setupOnAlarmListener(): void {
@@ -187,20 +190,18 @@ export class BrowserTaskSchedulerService
   }
 
   private handleOnAlarm = async (alarm: chrome.alarms.Alarm): Promise<void> => {
-    await this.triggerAlarm(alarm.name as ScheduledTaskName);
+    const { name, periodInMinutes } = alarm;
+    await this.triggerAlarm(name as ScheduledTaskName, periodInMinutes);
   };
 
-  private async triggerAlarm(name: ScheduledTaskName): Promise<void> {
+  private async triggerAlarm(name: ScheduledTaskName, periodInMinutes?: number): Promise<void> {
     const handler = this.onAlarmHandlers[name];
+    if (!periodInMinutes) {
+      await this.deleteActiveAlarm(name);
+    }
+
     if (handler) {
       handler();
     }
-
-    const alarm = await BrowserApi.getAlarm(name);
-    if (alarm?.periodInMinutes) {
-      return;
-    }
-
-    await this.deleteActiveAlarm(name);
   }
 }
