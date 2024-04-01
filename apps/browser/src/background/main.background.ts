@@ -91,6 +91,7 @@ import {
   BiometricStateService,
   DefaultBiometricStateService,
 } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
@@ -210,6 +211,7 @@ import BrowserLocalStorageService from "../platform/services/browser-local-stora
 import BrowserMessagingPrivateModeBackgroundService from "../platform/services/browser-messaging-private-mode-background.service";
 import BrowserMessagingService from "../platform/services/browser-messaging.service";
 import { BrowserStateService } from "../platform/services/browser-state.service";
+import { BrowserTaskSchedulerService } from "../platform/services/browser-task-scheduler.service";
 import I18nService from "../platform/services/i18n.service";
 import { LocalBackedSessionStorageService } from "../platform/services/local-backed-session-storage.service";
 import { BackgroundPlatformUtilsService } from "../platform/services/platform-utils/background-platform-utils.service";
@@ -309,6 +311,7 @@ export default class MainBackground {
   activeUserStateProvider: ActiveUserStateProvider;
   derivedStateProvider: DerivedStateProvider;
   stateProvider: StateProvider;
+  taskSchedulerService: BrowserTaskSchedulerService;
   fido2Service: Fido2ServiceAbstraction;
   individualVaultExportService: IndividualVaultExportServiceAbstraction;
   organizationVaultExportService: OrganizationVaultExportServiceAbstraction;
@@ -425,6 +428,10 @@ export default class MainBackground {
       this.singleUserStateProvider,
       this.globalStateProvider,
       this.derivedStateProvider,
+    );
+    this.taskSchedulerService = new BrowserTaskSchedulerService(
+      this.logService,
+      this.stateProvider,
     );
     this.environmentService = new BrowserEnvironmentService(
       this.logService,
@@ -1274,17 +1281,19 @@ export default class MainBackground {
 
     if (override || lastSyncAgo >= syncInternal) {
       await this.syncService.fullSync(override);
-      this.scheduleNextSync();
-    } else {
-      this.scheduleNextSync();
     }
+
+    await this.scheduleNextSync();
   }
 
-  private scheduleNextSync() {
-    if (this.syncTimeout) {
-      clearTimeout(this.syncTimeout);
-    }
-
-    this.syncTimeout = setTimeout(async () => await this.fullSync(), 5 * 60 * 1000); // check every 5 minutes
+  private async scheduleNextSync() {
+    await this.taskSchedulerService.clearScheduledTask({
+      taskName: ScheduledTaskNames.scheduleNextSyncTimeout,
+    });
+    await this.taskSchedulerService.setTimeout(
+      () => this.fullSync(),
+      5 * 60 * 1000, // check every 5 minutes
+      ScheduledTaskNames.scheduleNextSyncTimeout,
+    );
   }
 }
