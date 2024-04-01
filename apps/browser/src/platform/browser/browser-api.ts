@@ -592,22 +592,46 @@ export class BrowserApi {
     });
   }
 
+  /**
+   * Clears a new alarm with the given name and create info. Returns a promise
+   * that indicates when the alarm has been cleared successfully.
+   *
+   * @param alarmName - The name of the alarm to create.
+   */
   static clearAlarm(alarmName: string): Promise<boolean> {
     return new Promise((resolve) => chrome.alarms.clear(alarmName, resolve));
   }
 
+  /**
+   * Clears all alarms that have been set by the extension. Returns a promise
+   * that indicates when all alarms have been cleared successfully.
+   */
   static clearAllAlarms(): Promise<boolean> {
     return new Promise((resolve) => chrome.alarms.clearAll(resolve));
   }
 
+  /**
+   * Creates a new alarm with the given name and create info.
+   *
+   * @param name - The name of the alarm to create.
+   * @param createInfo - The creation info for the alarm.
+   */
   static createAlarm(name: string, createInfo: chrome.alarms.AlarmCreateInfo): Promise<void> {
     return new Promise((resolve) => chrome.alarms.create(name, createInfo, resolve));
   }
 
+  /**
+   * Gets the alarm with the given name.
+   *
+   * @param alarmName - The name of the alarm to get.
+   */
   static getAlarm(alarmName: string): Promise<chrome.alarms.Alarm> {
     return new Promise((resolve) => chrome.alarms.get(alarmName, resolve));
   }
 
+  /**
+   * Gets all alarms that have been set by the extension.
+   */
   static getAllAlarms(): Promise<chrome.alarms.Alarm[]> {
     return new Promise((resolve) => chrome.alarms.getAll(resolve));
   }

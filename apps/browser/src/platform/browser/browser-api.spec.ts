@@ -550,4 +550,66 @@ describe("BrowserApi", () => {
       expect(callbackMock).toHaveBeenCalled();
     });
   });
+
+  describe("clearAlarm", () => {
+    it("clears the alarm with the provided name", async () => {
+      const alarmName = "alarm-name";
+      chrome.alarms.clear = jest.fn().mockImplementation((name, callback) => callback(true));
+
+      const wasCleared = await BrowserApi.clearAlarm(alarmName);
+
+      expect(chrome.alarms.clear).toHaveBeenCalledWith(alarmName, expect.any(Function));
+      expect(wasCleared).toBe(true);
+    });
+  });
+
+  describe("clearAllAlarms", () => {
+    it("clears all alarms", async () => {
+      chrome.alarms.clearAll = jest.fn().mockImplementation((callback) => callback(true));
+
+      const wasCleared = await BrowserApi.clearAllAlarms();
+
+      expect(chrome.alarms.clearAll).toHaveBeenCalledWith(expect.any(Function));
+      expect(wasCleared).toBe(true);
+    });
+  });
+
+  describe("createAlarm", () => {
+    it("creates an alarm", async () => {
+      const alarmName = "alarm-name";
+      const alarmInfo = { when: 1000 };
+      chrome.alarms.create = jest
+        .fn()
+        .mockImplementation((_name, _createInfo, callback) => callback());
+
+      await BrowserApi.createAlarm(alarmName, alarmInfo);
+
+      expect(chrome.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo, expect.any(Function));
+    });
+  });
+
+  describe("getAlarm", () => {
+    it("gets the alarm by name", async () => {
+      const alarmName = "alarm-name";
+      const alarmMock = mock<chrome.alarms.Alarm>();
+      chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(alarmMock));
+
+      const receivedAlarm = await BrowserApi.getAlarm(alarmName);
+
+      expect(chrome.alarms.get).toHaveBeenCalledWith(alarmName, expect.any(Function));
+      expect(receivedAlarm).toBe(alarmMock);
+    });
+  });
+
+  describe("getAllAlarms", () => {
+    it("gets all registered alarms", async () => {
+      const alarms = [mock<chrome.alarms.Alarm>(), mock<chrome.alarms.Alarm>()];
+      chrome.alarms.getAll = jest.fn().mockImplementation((callback) => callback(alarms));
+
+      const receivedAlarms = await BrowserApi.getAllAlarms();
+
+      expect(chrome.alarms.getAll).toHaveBeenCalledWith(expect.any(Function));
+      expect(receivedAlarms).toBe(alarms);
+    });
+  });
 });
