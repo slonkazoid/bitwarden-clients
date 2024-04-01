@@ -87,6 +87,7 @@ export const ENVIRONMENT_DISK = new StateDefinition("environment", "disk");
 export const ENVIRONMENT_MEMORY = new StateDefinition("environment", "memory");
 export const THEMING_DISK = new StateDefinition("theming", "disk", { web: "disk-local" });
 export const TRANSLATION_DISK = new StateDefinition("translation", "disk");
+export const SCHEDULED_TASKS_DISK = new StateDefinition("scheduledTasks", "disk");
 
 // Secrets Manager
 

@@ -591,4 +591,24 @@ export class BrowserApi {
       }
     });
   }
+
+  static clearAlarm(alarmName: string): Promise<boolean> {
+    return new Promise((resolve) => chrome.alarms.clear(alarmName, resolve));
+  }
+
+  static clearAllAlarms(): Promise<boolean> {
+    return new Promise((resolve) => chrome.alarms.clearAll(resolve));
+  }
+
+  static createAlarm(name: string, createInfo: chrome.alarms.AlarmCreateInfo): Promise<void> {
+    return new Promise((resolve) => chrome.alarms.create(name, createInfo, resolve));
+  }
+
+  static getAlarm(alarmName: string): Promise<chrome.alarms.Alarm> {
+    return new Promise((resolve) => chrome.alarms.get(alarmName, resolve));
+  }
+
+  static getAllAlarms(): Promise<chrome.alarms.Alarm[]> {
+    return new Promise((resolve) => chrome.alarms.getAll(resolve));
+  }
 }
