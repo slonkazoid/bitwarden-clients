@@ -1,10 +1,10 @@
 export const ScheduledTaskNames = {
   clearClipboardTimeout: "clearClipboardTimeout",
   systemClearClipboardTimeout: "systemClearClipboardTimeout",
-  scheduleNextSyncTimeout: "scheduleNextSyncTimeout",
   loginStrategySessionTimeout: "loginStrategySessionTimeout",
   notificationsReconnectTimeout: "notificationsReconnectTimeout",
   fido2ClientAbortTimeout: "fido2ClientAbortTimeout",
+  scheduleNextSyncInterval: "scheduleNextSyncInterval",
   eventUploadsInterval: "eventUploadsInterval",
 } as const;
 

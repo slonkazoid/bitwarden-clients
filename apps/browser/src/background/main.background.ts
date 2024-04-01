@@ -1058,7 +1058,7 @@ export default class MainBackground {
         await this.taskSchedulerService.setInterval(
           () => this.fullSync(),
           5 * 60 * 1000, // check every 5 minutes
-          ScheduledTaskNames.scheduleNextSyncTimeout,
+          ScheduledTaskNames.scheduleNextSyncInterval,
         );
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();
