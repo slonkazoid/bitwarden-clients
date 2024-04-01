@@ -97,7 +97,6 @@ export class SystemService implements SystemServiceAbstraction {
   }
 
   async clearClipboard(clipboardValue: string, timeoutMs: number = null): Promise<void> {
-    let taskTimeoutInMs = timeoutMs;
     await this.taskSchedulerService.clearScheduledTask({
       taskName: ScheduledTaskNames.systemClearClipboardTimeout,
       timeoutId: this.clearClipboardTimeout,
@@ -107,6 +106,7 @@ export class SystemService implements SystemServiceAbstraction {
       return;
     }
 
+    let taskTimeoutInMs = timeoutMs;
     if (!taskTimeoutInMs) {
       const clearClipboardDelayInSeconds = await firstValueFrom(
         this.autofillSettingsService.clearClipboardDelay$,
