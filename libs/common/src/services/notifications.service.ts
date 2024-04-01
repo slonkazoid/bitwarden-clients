@@ -18,6 +18,8 @@ import { EnvironmentService } from "../platform/abstractions/environment.service
 import { LogService } from "../platform/abstractions/log.service";
 import { MessagingService } from "../platform/abstractions/messaging.service";
 import { StateService } from "../platform/abstractions/state.service";
+import { TaskSchedulerService } from "../platform/abstractions/task-scheduler.service";
+import { ScheduledTaskNames } from "../platform/enums/scheduled-task-name.enum";
 import { SyncService } from "../vault/abstractions/sync/sync.service.abstraction";
 
 export class NotificationsService implements NotificationsServiceAbstraction {
@@ -26,7 +28,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   private connected = false;
   private inited = false;
   private inactive = false;
-  private reconnectTimer: any = null;
+  private reconnectTimer: number | NodeJS.Timeout = null;
 
   constructor(
     private logService: LogService,
@@ -38,6 +40,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     private stateService: StateService,
     private authService: AuthService,
     private messagingService: MessagingService,
+    private taskSchedulerService: TaskSchedulerService,
   ) {
     this.environmentService.environment$.subscribe(() => {
       if (!this.inited) {
@@ -211,10 +214,11 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   }
 
   private async reconnect(sync: boolean) {
-    if (this.reconnectTimer != null) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
-    }
+    void this.taskSchedulerService.clearScheduledTask({
+      taskName: ScheduledTaskNames.notificationsReconnectTimeout,
+      timeoutId: this.reconnectTimer,
+    });
+
     if (this.connected || !this.inited || this.inactive) {
       return;
     }
@@ -234,7 +238,11 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     }
 
     if (!this.connected) {
-      this.reconnectTimer = setTimeout(() => this.reconnect(sync), this.random(120000, 300000));
+      this.reconnectTimer = await this.taskSchedulerService.setTimeout(
+        () => this.reconnect(sync),
+        this.random(120000, 300000),
+        ScheduledTaskNames.notificationsReconnectTimeout,
+      );
     }
   }
 
