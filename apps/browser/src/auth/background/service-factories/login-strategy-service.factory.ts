@@ -55,6 +55,10 @@ import {
   StateServiceInitOptions,
 } from "../../../platform/background/service-factories/state-service.factory";
 import {
+  taskSchedulerServiceFactory,
+  TaskSchedulerServiceInitOptions,
+} from "../../../platform/background/service-factories/task-scheduler-service.factory";
+import {
   passwordStrengthServiceFactory,
   PasswordStrengthServiceInitOptions,
 } from "../../../tools/background/service_factories/password-strength-service.factory";
@@ -99,7 +103,8 @@ export type LoginStrategyServiceInitOptions = LoginStrategyServiceFactoryOptions
   AuthRequestServiceInitOptions &
   UserDecryptionOptionsServiceInitOptions &
   GlobalStateProviderInitOptions &
-  BillingAccountProfileStateServiceInitOptions;
+  BillingAccountProfileStateServiceInitOptions &
+  TaskSchedulerServiceInitOptions;
 
 export function loginStrategyServiceFactory(
   cache: { loginStrategyService?: LoginStrategyServiceAbstraction } & CachedServices,
@@ -131,6 +136,7 @@ export function loginStrategyServiceFactory(
         await internalUserDecryptionOptionServiceFactory(cache, opts),
         await globalStateProviderFactory(cache, opts),
         await billingAccountProfileStateServiceFactory(cache, opts),
+        await taskSchedulerServiceFactory(cache, opts),
       ),
   );
 }

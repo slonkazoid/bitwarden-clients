@@ -613,6 +613,7 @@ export default class MainBackground {
       this.userDecryptionOptionsService,
       this.globalStateProvider,
       this.billingAccountProfileStateService,
+      this.taskSchedulerService,
     );
 
     this.ssoLoginService = new SsoLoginService(this.stateProvider);

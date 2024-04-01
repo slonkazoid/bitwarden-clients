@@ -4,15 +4,15 @@ import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
 import { stateProviderFactory, StateProviderInitOptions } from "./state-provider.factory";
 
-type BrowserTaskSchedulerServiceFactoryOptions = FactoryOptions;
+type TaskSchedulerServiceFactoryOptions = FactoryOptions;
 
-export type BrowserTaskSchedulerServiceInitOptions = BrowserTaskSchedulerServiceFactoryOptions &
+export type TaskSchedulerServiceInitOptions = TaskSchedulerServiceFactoryOptions &
   LogServiceInitOptions &
   StateProviderInitOptions;
 
-export function browserTaskSchedulerServiceFactory(
+export function taskSchedulerServiceFactory(
   cache: { browserTaskSchedulerService?: BrowserTaskSchedulerService } & CachedServices,
-  opts: BrowserTaskSchedulerServiceInitOptions,
+  opts: TaskSchedulerServiceInitOptions,
 ): Promise<BrowserTaskSchedulerService> {
   return factory(
     cache,

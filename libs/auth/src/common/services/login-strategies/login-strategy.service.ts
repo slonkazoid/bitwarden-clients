@@ -31,7 +31,9 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { GlobalState, GlobalStateProvider } from "@bitwarden/common/platform/state";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
@@ -63,7 +65,7 @@ import {
 const sessionTimeoutLength = 2 * 60 * 1000; // 2 minutes
 
 export class LoginStrategyService implements LoginStrategyServiceAbstraction {
-  private sessionTimeout: unknown;
+  private sessionTimeout: number | NodeJS.Timeout;
   private currentAuthnTypeState: GlobalState<AuthenticationType | null>;
   private loginStrategyCacheState: GlobalState<CacheData | null>;
   private loginStrategyCacheExpirationState: GlobalState<Date | null>;
@@ -101,6 +103,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     protected userDecryptionOptionsService: InternalUserDecryptionOptionsServiceAbstraction,
     protected stateProvider: GlobalStateProvider,
     protected billingAccountProfileStateService: BillingAccountProfileStateService,
+    protected taskSchedulerService: TaskSchedulerService,
   ) {
     this.currentAuthnTypeState = this.stateProvider.get(CURRENT_LOGIN_STRATEGY_KEY);
     this.loginStrategyCacheState = this.stateProvider.get(CACHE_KEY);
@@ -300,12 +303,19 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     await this.loginStrategyCacheExpirationState.update(
       (_) => new Date(Date.now() + sessionTimeoutLength),
     );
-    this.sessionTimeout = setTimeout(() => this.clearCache(), sessionTimeoutLength);
+    this.sessionTimeout = await this.taskSchedulerService.setTimeout(
+      () => this.clearCache(),
+      sessionTimeoutLength,
+      ScheduledTaskNames.loginStrategySessionTimeout,
+    );
   }
 
   private async clearSessionTimeout(): Promise<void> {
     await this.loginStrategyCacheExpirationState.update((_) => null);
-    this.sessionTimeout = null;
+    await this.taskSchedulerService.clearScheduledTask({
+      taskName: ScheduledTaskNames.loginStrategySessionTimeout,
+      timeoutId: this.sessionTimeout,
+    });
   }
 
   private async isSessionValid(): Promise<boolean> {
