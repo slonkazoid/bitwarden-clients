@@ -125,11 +125,11 @@ const offscreen = {
 };
 
 const alarms = {
-  clear: jest.fn(),
-  clearAll: jest.fn(),
-  create: jest.fn(),
-  get: jest.fn(),
-  getAll: jest.fn(),
+  clear: jest.fn().mockImplementation((_name, callback) => callback(true)),
+  clearAll: jest.fn().mockImplementation((callback) => callback(true)),
+  create: jest.fn().mockImplementation((_name, _createInfo, callback) => callback()),
+  get: jest.fn().mockImplementation((_name, callback) => callback(null)),
+  getAll: jest.fn().mockImplementation((callback) => callback([])),
   onAlarm: {
     addListener: jest.fn(),
     removeListener: jest.fn(),

@@ -554,7 +554,6 @@ describe("BrowserApi", () => {
   describe("clearAlarm", () => {
     it("clears the alarm with the provided name", async () => {
       const alarmName = "alarm-name";
-      chrome.alarms.clear = jest.fn().mockImplementation((name, callback) => callback(true));
 
       const wasCleared = await BrowserApi.clearAlarm(alarmName);
 
@@ -565,8 +564,6 @@ describe("BrowserApi", () => {
 
   describe("clearAllAlarms", () => {
     it("clears all alarms", async () => {
-      chrome.alarms.clearAll = jest.fn().mockImplementation((callback) => callback(true));
-
       const wasCleared = await BrowserApi.clearAllAlarms();
 
       expect(chrome.alarms.clearAll).toHaveBeenCalledWith(expect.any(Function));
@@ -578,9 +575,6 @@ describe("BrowserApi", () => {
     it("creates an alarm", async () => {
       const alarmName = "alarm-name";
       const alarmInfo = { when: 1000 };
-      chrome.alarms.create = jest
-        .fn()
-        .mockImplementation((_name, _createInfo, callback) => callback());
 
       await BrowserApi.createAlarm(alarmName, alarmInfo);
 

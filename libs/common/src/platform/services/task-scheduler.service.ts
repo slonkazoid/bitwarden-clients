@@ -17,7 +17,7 @@ export class TaskSchedulerService implements TaskSchedulerServiceInterface {
     delayInMs: number,
     _taskName?: ScheduledTaskName,
   ): Promise<number | NodeJS.Timeout> {
-    return setTimeout(() => callback(), delayInMs);
+    return globalThis.setTimeout(() => callback(), delayInMs);
   }
 
   /**
@@ -34,7 +34,7 @@ export class TaskSchedulerService implements TaskSchedulerServiceInterface {
     _taskName?: ScheduledTaskName,
     _initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout> {
-    return setInterval(() => callback(), intervalInMs);
+    return globalThis.setInterval(() => callback(), intervalInMs);
   }
 
   /**
@@ -44,11 +44,11 @@ export class TaskSchedulerService implements TaskSchedulerServiceInterface {
    */
   async clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void> {
     if (taskIdentifier.timeoutId) {
-      clearTimeout(taskIdentifier.timeoutId);
+      globalThis.clearTimeout(taskIdentifier.timeoutId);
     }
 
     if (taskIdentifier.intervalId) {
-      clearInterval(taskIdentifier.intervalId);
+      globalThis.clearInterval(taskIdentifier.intervalId);
     }
   }
 }

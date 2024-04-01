@@ -46,10 +46,19 @@ export class BrowserTaskSchedulerService
     this.verifyAlarmsState().catch((e) => this.logService.error(e));
   }
 
+  /**
+   * Sets a timeout to execute a callback after a delay. If the delay is less
+   * than 1 minute, it will use the global setTimeout. Otherwise, it will
+   * create a browser extension alarm to handle the delay.
+   *
+   * @param callback - The function to be called after the delay.
+   * @param delayInMs - The delay in milliseconds.
+   * @param taskName - The name of the task, used in defining the alarm.
+   */
   async setTimeout(
     callback: () => void,
     delayInMs: number,
-    taskName?: ScheduledTaskName,
+    taskName: ScheduledTaskName,
   ): Promise<number | NodeJS.Timeout> {
     const delayInMinutes = delayInMs / 1000 / 60;
     if (delayInMinutes < 1) {
@@ -65,10 +74,20 @@ export class BrowserTaskSchedulerService
     await this.createAlarm(taskName, { delayInMinutes });
   }
 
+  /**
+   * Sets an interval to execute a callback at each interval. If the interval is
+   * less than 1 minute, it will use the global setInterval. Otherwise, it will
+   * create a browser extension alarm to handle the interval.
+   *
+   * @param callback
+   * @param intervalInMs
+   * @param taskName
+   * @param initialDelayInMs
+   */
   async setInterval(
     callback: () => void,
     intervalInMs: number,
-    taskName?: ScheduledTaskName,
+    taskName: ScheduledTaskName,
     initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout> {
     const intervalInMinutes = intervalInMs / 1000 / 60;
@@ -169,8 +188,8 @@ export class BrowserTaskSchedulerService
   private async deleteActiveAlarm(name: ScheduledTaskName): Promise<void> {
     delete this.onAlarmHandlers[name];
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
-    const filteredAlarms = activeAlarms.filter((alarm) => alarm.name !== name);
-    await this.updateActiveAlarms(filteredAlarms);
+    const filteredAlarms = activeAlarms?.filter((alarm) => alarm.name !== name);
+    await this.updateActiveAlarms(filteredAlarms || []);
   }
 
   private async updateActiveAlarms(alarms: ActiveAlarm[]): Promise<void> {
