@@ -31,7 +31,7 @@ import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abst
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
-import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
@@ -388,7 +388,7 @@ const safeProviders: SafeProvider[] = [
       logService: LogService,
       accountService: AccountServiceAbstraction,
       environmentService: EnvironmentService,
-      tokenService: TokenService,
+      tokenService: TokenServiceAbstraction,
       migrationRunner: MigrationRunner,
     ) => {
       return new BrowserStateService(
@@ -410,7 +410,7 @@ const safeProviders: SafeProvider[] = [
       LogService,
       AccountServiceAbstraction,
       EnvironmentService,
-      TokenService,
+      TokenServiceAbstraction,
       MigrationRunner,
     ],
   }),
