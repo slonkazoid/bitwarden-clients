@@ -124,6 +124,18 @@ const offscreen = {
   },
 };
 
+const alarms = {
+  clear: jest.fn(),
+  clearAll: jest.fn(),
+  create: jest.fn(),
+  get: jest.fn(),
+  getAll: jest.fn(),
+  onAlarm: {
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  },
+};
+
 // set chrome
 global.chrome = {
   i18n,
@@ -137,4 +149,5 @@ global.chrome = {
   privacy,
   extension,
   offscreen,
+  alarms,
 } as any;
