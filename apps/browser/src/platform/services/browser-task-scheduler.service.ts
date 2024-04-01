@@ -5,7 +5,7 @@ import { TaskIdentifier } from "@bitwarden/common/platform/abstractions/task-sch
 import { ScheduledTaskName } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
 import {
-  SCHEDULED_TASKS_DISK,
+  TASK_SCHEDULER_DISK,
   GlobalState,
   KeyDefinition,
   StateProvider,
@@ -18,7 +18,7 @@ import {
   BrowserTaskSchedulerService as BrowserTaskSchedulerServiceInterface,
 } from "./abstractions/browser-task-scheduler.service";
 
-const ACTIVE_ALARMS = new KeyDefinition(SCHEDULED_TASKS_DISK, "activeAlarms", {
+const ACTIVE_ALARMS = new KeyDefinition(TASK_SCHEDULER_DISK, "activeAlarms", {
   deserializer: (value: ActiveAlarm[]) => value ?? [],
 });
 
