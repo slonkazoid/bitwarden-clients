@@ -22,6 +22,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
+import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
 import { FakeGlobalState, FakeGlobalStateProvider } from "@bitwarden/common/spec";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 
@@ -57,6 +58,7 @@ describe("LoginStrategyService", () => {
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let userDecryptionOptionsService: MockProxy<InternalUserDecryptionOptionsServiceAbstraction>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
+  let taskSchedulerService: MockProxy<TaskSchedulerService>;
 
   let stateProvider: FakeGlobalStateProvider;
   let loginStrategyCacheExpirationState: FakeGlobalState<Date | null>;
@@ -82,6 +84,7 @@ describe("LoginStrategyService", () => {
     userDecryptionOptionsService = mock<UserDecryptionOptionsService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
     stateProvider = new FakeGlobalStateProvider();
+    taskSchedulerService = mock<TaskSchedulerService>();
 
     sut = new LoginStrategyService(
       cryptoService,
@@ -104,6 +107,7 @@ describe("LoginStrategyService", () => {
       userDecryptionOptionsService,
       stateProvider,
       billingAccountProfileStateService,
+      taskSchedulerService,
     );
 
     loginStrategyCacheExpirationState = stateProvider.getFake(CACHE_EXPIRATION_KEY);
