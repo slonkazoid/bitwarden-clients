@@ -206,12 +206,22 @@ export class BrowserTaskSchedulerService
     globalThis.setTimeout(() => this.recoveredAlarms.clear(), 10 * 1000);
   }
 
+  /**
+   * Sets an active alarm in state.
+   *
+   * @param alarm - The active alarm to set.
+   */
   private async setActiveAlarm(alarm: ActiveAlarm): Promise<void> {
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
     activeAlarms.push(alarm);
     await this.updateActiveAlarms(activeAlarms);
   }
 
+  /**
+   * Deletes an active alarm from state.
+   *
+   * @param name - The name of the active alarm to delete.
+   */
   private async deleteActiveAlarm(name: ScheduledTaskName): Promise<void> {
     delete this.onAlarmHandlers[name];
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
@@ -219,10 +229,21 @@ export class BrowserTaskSchedulerService
     await this.updateActiveAlarms(filteredAlarms || []);
   }
 
+  /**
+   * Updates the active alarms state with the given alarms.
+   *
+   * @param alarms - The alarms to update the state with.
+   */
   private async updateActiveAlarms(alarms: ActiveAlarm[]): Promise<void> {
     await this.activeAlarmsState.update(() => alarms);
   }
 
+  /**
+   * Triggers a recovered alarm by deleting it from the recovered alarms set
+   *
+   * @param name - The name of the recovered alarm to trigger.
+   * @param periodInMinutes - The period in minutes of the recovered alarm.
+   */
   private async triggerRecoveredAlarm(
     name: ScheduledTaskName,
     periodInMinutes?: number,
@@ -231,15 +252,30 @@ export class BrowserTaskSchedulerService
     await this.triggerAlarm(name, periodInMinutes);
   }
 
+  /**
+   * Sets up the on alarm listener to handle alarms.
+   */
   private setupOnAlarmListener(): void {
     BrowserApi.addListener(chrome.alarms.onAlarm, this.handleOnAlarm);
   }
 
+  /**
+   * Handles on alarm events, triggering the alarm if a handler exists.
+   *
+   * @param alarm - The alarm to handle.
+   */
   private handleOnAlarm = async (alarm: chrome.alarms.Alarm): Promise<void> => {
     const { name, periodInMinutes } = alarm;
     await this.triggerAlarm(name as ScheduledTaskName, periodInMinutes);
   };
 
+  /**
+   * Triggers an alarm by calling its handler and
+   * deleting it if it is a one-time alarm.
+   *
+   * @param name - The name of the alarm to trigger.
+   * @param periodInMinutes - The period in minutes of an interval alarm.
+   */
   private async triggerAlarm(name: ScheduledTaskName, periodInMinutes?: number): Promise<void> {
     const handler = this.onAlarmHandlers[name];
     if (!periodInMinutes) {
