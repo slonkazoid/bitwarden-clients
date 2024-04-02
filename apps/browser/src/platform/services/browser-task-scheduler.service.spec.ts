@@ -1,6 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 import { Observable } from "rxjs";
 
+import { TaskIdentifier } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
@@ -249,6 +250,72 @@ describe("BrowserTaskSchedulerService", () => {
         { periodInMinutes, delayInMinutes: initialDelayInMs / 1000 / 60 },
         expect.any(Function),
       );
+    });
+  });
+
+  describe("clearScheduledTask", () => {
+    afterEach(() => {
+      chrome.alarms.clear = jest.fn().mockImplementation((_name, callback) => callback(true));
+    });
+
+    it("skips clearing the alarm if the alarm name is not provided", async () => {
+      await browserTaskSchedulerService.clearScheduledTask({
+        timeoutId: 1,
+        intervalId: 2,
+      });
+
+      expect(chrome.alarms.clear).not.toHaveBeenCalled();
+    });
+
+    it("skips deleting the active alarm if the alarm was not cleared", async () => {
+      const taskIdentifier: TaskIdentifier = { taskName: ScheduledTaskNames.eventUploadsInterval };
+      chrome.alarms.clear = jest.fn().mockImplementation((_name, callback) => callback(false));
+      jest.spyOn(browserTaskSchedulerService as any, "deleteActiveAlarm");
+
+      await browserTaskSchedulerService.clearScheduledTask(taskIdentifier);
+
+      expect(browserTaskSchedulerService["deleteActiveAlarm"]).not.toHaveBeenCalled();
+    });
+
+    it("clears a named alarm", async () => {
+      const taskIdentifier: TaskIdentifier = { taskName: ScheduledTaskNames.eventUploadsInterval };
+      jest.spyOn(browserTaskSchedulerService as any, "deleteActiveAlarm");
+
+      await browserTaskSchedulerService.clearScheduledTask(taskIdentifier);
+
+      expect(chrome.alarms.clear).toHaveBeenCalledWith(
+        ScheduledTaskNames.eventUploadsInterval,
+        expect.any(Function),
+      );
+      expect(browserTaskSchedulerService["deleteActiveAlarm"]).toHaveBeenCalledWith(
+        ScheduledTaskNames.eventUploadsInterval,
+      );
+    });
+  });
+
+  describe("clearAllScheduledTasks", () => {
+    it("clears all scheduled tasks and extension alarms", async () => {
+      jest.spyOn(BrowserApi, "clearAllAlarms");
+      jest.spyOn(browserTaskSchedulerService as any, "updateActiveAlarms");
+
+      await browserTaskSchedulerService.clearAllScheduledTasks();
+
+      expect(BrowserApi.clearAllAlarms).toHaveBeenCalled();
+      expect(browserTaskSchedulerService["updateActiveAlarms"]).toHaveBeenCalledWith([]);
+      expect(browserTaskSchedulerService["onAlarmHandlers"]).toEqual({});
+      expect(browserTaskSchedulerService["recoveredAlarms"].size).toBe(0);
+    });
+  });
+
+  describe("handleOnAlarm", () => {
+    it("triggers the alarm", async () => {
+      const alarm = mock<chrome.alarms.Alarm>({ name: ScheduledTaskNames.eventUploadsInterval });
+      const callback = jest.fn();
+      browserTaskSchedulerService["onAlarmHandlers"][alarm.name] = callback;
+
+      await browserTaskSchedulerService["handleOnAlarm"](alarm);
+
+      expect(callback).toHaveBeenCalled();
     });
   });
 });

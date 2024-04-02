@@ -129,6 +129,10 @@ export class BrowserTaskSchedulerService
     }
   }
 
+  /**
+   * Clears all scheduled tasks by clearing all browser extension
+   * alarms and resetting the active alarms state.
+   */
   async clearAllScheduledTasks(): Promise<void> {
     await BrowserApi.clearAllAlarms();
     await this.updateActiveAlarms([]);
@@ -136,6 +140,12 @@ export class BrowserTaskSchedulerService
     this.recoveredAlarms.clear();
   }
 
+  /**
+   * Creates a browser extension alarm with the given name and create info.
+   *
+   * @param name - The name of the alarm.
+   * @param createInfo - The alarm create info.
+   */
   private async createAlarm(
     name: ScheduledTaskName,
     createInfo: chrome.alarms.AlarmCreateInfo,
@@ -150,6 +160,12 @@ export class BrowserTaskSchedulerService
     await this.setActiveAlarm({ name, startTime: Date.now(), createInfo });
   }
 
+  /**
+   * Registers an alarm handler for the given name.
+   *
+   * @param name - The name of the alarm.
+   * @param handler - The alarm handler.
+   */
   private registerAlarmHandler(name: ScheduledTaskName, handler: CallableFunction): void {
     if (this.onAlarmHandlers[name]) {
       this.logService.warning(`Alarm handler for ${name} already exists. Overwriting.`);
@@ -158,6 +174,10 @@ export class BrowserTaskSchedulerService
     this.onAlarmHandlers[name] = () => handler();
   }
 
+  /**
+   * Verifies the state of the active alarms by checking if
+   * any alarms have been missed or need to be created.
+   */
   private async verifyAlarmsState(): Promise<void> {
     const currentTime = Date.now();
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
@@ -169,12 +189,12 @@ export class BrowserTaskSchedulerService
         continue;
       }
 
-      if (
-        (createInfo.when && createInfo.when < currentTime) ||
-        (!createInfo.periodInMinutes &&
-          createInfo.delayInMinutes &&
-          startTime + createInfo.delayInMinutes * 60 * 1000 < currentTime)
-      ) {
+      const shouldAlarmHaveBeenTriggered = createInfo.when && createInfo.when < currentTime;
+      const hasSetTimeoutAlarmExceededDelay =
+        !createInfo.periodInMinutes &&
+        createInfo.delayInMinutes &&
+        startTime + createInfo.delayInMinutes * 60 * 1000 < currentTime;
+      if (shouldAlarmHaveBeenTriggered || hasSetTimeoutAlarmExceededDelay) {
         this.recoveredAlarms.add(name);
         continue;
       }
