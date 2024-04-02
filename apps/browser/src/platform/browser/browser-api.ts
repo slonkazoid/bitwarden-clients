@@ -599,6 +599,10 @@ export class BrowserApi {
    * @param alarmName - The name of the alarm to create.
    */
   static clearAlarm(alarmName: string): Promise<boolean> {
+    if (typeof browser?.alarms !== "undefined") {
+      return browser.alarms.clear(alarmName);
+    }
+
     return new Promise((resolve) => chrome.alarms.clear(alarmName, resolve));
   }
 
@@ -607,6 +611,10 @@ export class BrowserApi {
    * that indicates when all alarms have been cleared successfully.
    */
   static clearAllAlarms(): Promise<boolean> {
+    if (typeof browser?.alarms !== "undefined") {
+      return browser.alarms.clearAll();
+    }
+
     return new Promise((resolve) => chrome.alarms.clearAll(resolve));
   }
 
@@ -616,7 +624,11 @@ export class BrowserApi {
    * @param name - The name of the alarm to create.
    * @param createInfo - The creation info for the alarm.
    */
-  static createAlarm(name: string, createInfo: chrome.alarms.AlarmCreateInfo): Promise<void> {
+  static async createAlarm(name: string, createInfo: chrome.alarms.AlarmCreateInfo): Promise<void> {
+    if (typeof browser?.alarms !== "undefined") {
+      return browser.alarms.create(name, createInfo);
+    }
+
     return new Promise((resolve) => chrome.alarms.create(name, createInfo, resolve));
   }
 
@@ -626,6 +638,10 @@ export class BrowserApi {
    * @param alarmName - The name of the alarm to get.
    */
   static getAlarm(alarmName: string): Promise<chrome.alarms.Alarm> {
+    if (typeof browser?.alarms !== "undefined") {
+      return browser.alarms.get(alarmName);
+    }
+
     return new Promise((resolve) => chrome.alarms.get(alarmName, resolve));
   }
 
@@ -633,6 +649,10 @@ export class BrowserApi {
    * Gets all alarms that have been set by the extension.
    */
   static getAllAlarms(): Promise<chrome.alarms.Alarm[]> {
+    if (typeof browser?.alarms !== "undefined") {
+      return browser.alarms.getAll();
+    }
+
     return new Promise((resolve) => chrome.alarms.getAll(resolve));
   }
 }
