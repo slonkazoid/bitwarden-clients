@@ -552,6 +552,21 @@ describe("BrowserApi", () => {
   });
 
   describe("clearAlarm", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      const alarmName = "alarm-name";
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          clear: jest.fn(),
+        },
+      };
+
+      await BrowserApi.clearAlarm(alarmName);
+
+      expect(browser.alarms.clear).toHaveBeenCalledWith(alarmName);
+    });
+
     it("clears the alarm with the provided name", async () => {
       const alarmName = "alarm-name";
 
@@ -563,6 +578,20 @@ describe("BrowserApi", () => {
   });
 
   describe("clearAllAlarms", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          clearAll: jest.fn(),
+        },
+      };
+
+      await BrowserApi.clearAllAlarms();
+
+      expect(browser.alarms.clearAll).toHaveBeenCalled();
+    });
+
     it("clears all alarms", async () => {
       const wasCleared = await BrowserApi.clearAllAlarms();
 
@@ -572,6 +601,22 @@ describe("BrowserApi", () => {
   });
 
   describe("createAlarm", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      const alarmName = "alarm-name";
+      const alarmInfo = { when: 1000 };
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          create: jest.fn(),
+        },
+      };
+
+      await BrowserApi.createAlarm(alarmName, alarmInfo);
+
+      expect(browser.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo);
+    });
+
     it("creates an alarm", async () => {
       const alarmName = "alarm-name";
       const alarmInfo = { when: 1000 };
@@ -583,6 +628,21 @@ describe("BrowserApi", () => {
   });
 
   describe("getAlarm", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      const alarmName = "alarm-name";
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          get: jest.fn(),
+        },
+      };
+
+      await BrowserApi.getAlarm(alarmName);
+
+      expect(browser.alarms.get).toHaveBeenCalledWith(alarmName);
+    });
+
     it("gets the alarm by name", async () => {
       const alarmName = "alarm-name";
       const alarmMock = mock<chrome.alarms.Alarm>();
@@ -596,6 +656,20 @@ describe("BrowserApi", () => {
   });
 
   describe("getAllAlarms", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          getAll: jest.fn(),
+        },
+      };
+
+      await BrowserApi.getAllAlarms();
+
+      expect(browser.alarms.getAll).toHaveBeenCalled();
+    });
+
     it("gets all registered alarms", async () => {
       const alarms = [mock<chrome.alarms.Alarm>(), mock<chrome.alarms.Alarm>()];
       chrome.alarms.getAll = jest.fn().mockImplementation((callback) => callback(alarms));
