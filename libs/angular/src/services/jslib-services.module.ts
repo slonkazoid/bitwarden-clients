@@ -1084,7 +1084,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: ErrorHandler,
     useClass: LoggingErrorHandler,
-    deps: [LogService],
+    deps: [],
   }),
   safeProvider({
     provide: TaskSchedulerService,
