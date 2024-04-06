@@ -702,9 +702,7 @@ export class Main {
       this.cipherService.clear(userId),
       this.folderService.clear(userId),
       this.collectionService.clear(userId as UserId),
-      this.policyService.clear(userId as UserId),
       this.passwordGenerationService.clear(),
-      this.providerService.save(null, userId as UserId),
     ]);
 
     await this.stateEventRunnerService.handleEvent("logout", userId as UserId);
