@@ -60,6 +60,10 @@ import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abst
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import {
+  InternalMasterPasswordServiceAbstraction,
+  MasterPasswordServiceAbstraction,
+} from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { PasswordResetEnrollmentServiceAbstraction } from "@bitwarden/common/auth/abstractions/password-reset-enrollment.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
@@ -78,6 +82,7 @@ import { DeviceTrustCryptoService } from "@bitwarden/common/auth/services/device
 import { DevicesServiceImplementation } from "@bitwarden/common/auth/services/devices/devices.service.implementation";
 import { DevicesApiServiceImplementation } from "@bitwarden/common/auth/services/devices-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
+import { MasterPasswordService } from "@bitwarden/common/auth/services/master-password/master-password.service";
 import { PasswordResetEnrollmentServiceImplementation } from "@bitwarden/common/auth/services/password-reset-enrollment.service.implementation";
 import { SsoLoginService } from "@bitwarden/common/auth/services/sso-login.service";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
@@ -360,6 +365,8 @@ const safeProviders: SafeProvider[] = [
     provide: LoginStrategyServiceAbstraction,
     useClass: LoginStrategyService,
     deps: [
+      AccountServiceAbstraction,
+      InternalMasterPasswordServiceAbstraction,
       CryptoServiceAbstraction,
       ApiServiceAbstraction,
       TokenServiceAbstraction,
@@ -406,6 +413,7 @@ const safeProviders: SafeProvider[] = [
       encryptService: EncryptService,
       fileUploadService: CipherFileUploadServiceAbstraction,
       configService: ConfigService,
+      stateProvider: StateProvider,
     ) =>
       new CipherService(
         cryptoService,
@@ -418,6 +426,7 @@ const safeProviders: SafeProvider[] = [
         encryptService,
         fileUploadService,
         configService,
+        stateProvider,
       ),
     deps: [
       CryptoServiceAbstraction,
@@ -430,6 +439,7 @@ const safeProviders: SafeProvider[] = [
       EncryptService,
       CipherFileUploadServiceAbstraction,
       ConfigService,
+      StateProvider,
     ],
   }),
   safeProvider({
@@ -439,7 +449,6 @@ const safeProviders: SafeProvider[] = [
       CryptoServiceAbstraction,
       I18nServiceAbstraction,
       CipherServiceAbstraction,
-      StateServiceAbstraction,
       StateProvider,
     ],
   }),
@@ -523,6 +532,7 @@ const safeProviders: SafeProvider[] = [
     provide: CryptoServiceAbstraction,
     useClass: CryptoService,
     deps: [
+      InternalMasterPasswordServiceAbstraction,
       KeyGenerationServiceAbstraction,
       CryptoFunctionServiceAbstraction,
       EncryptService,
@@ -589,6 +599,8 @@ const safeProviders: SafeProvider[] = [
     provide: SyncServiceAbstraction,
     useClass: SyncService,
     deps: [
+      InternalMasterPasswordServiceAbstraction,
+      AccountServiceAbstraction,
       ApiServiceAbstraction,
       DomainSettingsService,
       InternalFolderService,
@@ -628,6 +640,8 @@ const safeProviders: SafeProvider[] = [
     provide: VaultTimeoutService,
     useClass: VaultTimeoutService,
     deps: [
+      AccountServiceAbstraction,
+      InternalMasterPasswordServiceAbstraction,
       CipherServiceAbstraction,
       FolderServiceAbstraction,
       CollectionServiceAbstraction,
@@ -716,7 +730,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: SearchServiceAbstraction,
     useClass: SearchService,
-    deps: [LogService, I18nServiceAbstraction],
+    deps: [LogService, I18nServiceAbstraction, StateProvider],
   }),
   safeProvider({
     provide: NotificationsServiceAbstraction,
@@ -730,6 +744,7 @@ const safeProviders: SafeProvider[] = [
       LOGOUT_CALLBACK,
       StateServiceAbstraction,
       AuthServiceAbstraction,
+      AuthRequestServiceAbstraction,
       MessagingServiceAbstraction,
       TaskSchedulerService,
     ],
@@ -751,7 +766,7 @@ const safeProviders: SafeProvider[] = [
       ApiServiceAbstraction,
       StateProvider,
       LogService,
-      AccountServiceAbstraction,
+      AuthServiceAbstraction,
       TaskSchedulerService,
     ],
   }),
@@ -763,7 +778,7 @@ const safeProviders: SafeProvider[] = [
       StateProvider,
       OrganizationServiceAbstraction,
       EventUploadServiceAbstraction,
-      AccountServiceAbstraction,
+      AuthServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -781,9 +796,20 @@ const safeProviders: SafeProvider[] = [
     deps: [InternalPolicyService, ApiServiceAbstraction],
   }),
   safeProvider({
+    provide: InternalMasterPasswordServiceAbstraction,
+    useClass: MasterPasswordService,
+    deps: [StateProvider],
+  }),
+  safeProvider({
+    provide: MasterPasswordServiceAbstraction,
+    useExisting: InternalMasterPasswordServiceAbstraction,
+  }),
+  safeProvider({
     provide: KeyConnectorServiceAbstraction,
     useClass: KeyConnectorService,
     deps: [
+      AccountServiceAbstraction,
+      InternalMasterPasswordServiceAbstraction,
       CryptoServiceAbstraction,
       ApiServiceAbstraction,
       TokenServiceAbstraction,
@@ -800,6 +826,8 @@ const safeProviders: SafeProvider[] = [
     deps: [
       StateServiceAbstraction,
       CryptoServiceAbstraction,
+      AccountServiceAbstraction,
+      InternalMasterPasswordServiceAbstraction,
       I18nServiceAbstraction,
       UserVerificationApiServiceAbstraction,
       UserDecryptionOptionsServiceAbstraction,
@@ -943,9 +971,11 @@ const safeProviders: SafeProvider[] = [
     useClass: AuthRequestService,
     deps: [
       AppIdServiceAbstraction,
+      AccountServiceAbstraction,
+      InternalMasterPasswordServiceAbstraction,
       CryptoServiceAbstraction,
       ApiServiceAbstraction,
-      StateServiceAbstraction,
+      StateProvider,
     ],
   }),
   safeProvider({

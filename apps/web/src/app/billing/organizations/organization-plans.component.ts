@@ -47,7 +47,11 @@ interface OnSuccessArgs {
   organizationId: string;
 }
 
-const Allowed2020PlanTypes = [
+const AllowedLegacyPlanTypes = [
+  PlanType.TeamsMonthly2023,
+  PlanType.TeamsAnnually2023,
+  PlanType.EnterpriseAnnually2023,
+  PlanType.EnterpriseMonthly2023,
   PlanType.TeamsMonthly2020,
   PlanType.TeamsAnnually2020,
   PlanType.EnterpriseAnnually2020,
@@ -116,7 +120,6 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     additionalStorage: [0, [Validators.min(0), Validators.max(99)]],
     additionalSeats: [0, [Validators.min(0), Validators.max(100000)]],
     clientOwnerEmail: ["", [Validators.email]],
-    businessName: [""],
     plan: [this.plan],
     product: [this.product],
     secretsManager: this.secretsManagerSubscription,
@@ -278,7 +281,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         (!this.currentPlan || this.currentPlan.upgradeSortOrder < plan.upgradeSortOrder) &&
         (!this.hasProvider || plan.product !== ProductType.TeamsStarter) &&
         ((!this.isProviderQualifiedFor2020Plan() && this.planIsEnabled(plan)) ||
-          (this.isProviderQualifiedFor2020Plan() && Allowed2020PlanTypes.includes(plan.type))),
+          (this.isProviderQualifiedFor2020Plan() && AllowedLegacyPlanTypes.includes(plan.type))),
     );
 
     result.sort((planA, planB) => planA.displaySortOrder - planB.displaySortOrder);
@@ -293,7 +296,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         (plan) =>
           plan.product === selectedProductType &&
           ((!this.isProviderQualifiedFor2020Plan() && this.planIsEnabled(plan)) ||
-            (this.isProviderQualifiedFor2020Plan() && Allowed2020PlanTypes.includes(plan.type))),
+            (this.isProviderQualifiedFor2020Plan() && AllowedLegacyPlanTypes.includes(plan.type))),
       ) || [];
 
     result.sort((planA, planB) => planA.displaySortOrder - planB.displaySortOrder);
@@ -592,9 +595,6 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   private async updateOrganization(orgId: string) {
     const request = new OrganizationUpgradeRequest();
-    request.businessName = this.formGroup.controls.businessOwned.value
-      ? this.formGroup.controls.businessName.value
-      : null;
     request.additionalSeats = this.formGroup.controls.additionalSeats.value;
     request.additionalStorageGb = this.formGroup.controls.additionalStorage.value;
     request.premiumAccessAddon =
@@ -652,9 +652,6 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
       request.paymentToken = tokenResult[0];
       request.paymentMethodType = tokenResult[1];
-      request.businessName = this.formGroup.controls.businessOwned.value
-        ? this.formGroup.controls.businessName.value
-        : null;
       request.additionalSeats = this.formGroup.controls.additionalSeats.value;
       request.additionalStorageGb = this.formGroup.controls.additionalStorage.value;
       request.premiumAccessAddon =

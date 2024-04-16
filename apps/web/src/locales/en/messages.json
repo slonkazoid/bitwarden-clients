@@ -7501,6 +7501,9 @@
   "collectionAccessRestricted": {
     "message": "Collection access is restricted"
   },
+  "readOnlyCollectionAccess": {
+    "message": "You do not have access to manage this collection."
+  },
   "grantCollectionAccess": {
     "message": "Grant groups or members access to this collection."
   },
@@ -7602,6 +7605,9 @@
   },
   "providerPortal": {
     "message": "Provider Portal"
+  },
+  "viewCollection": {
+    "message": "View collection"
   },
   "restrictedGroupAccess": {
     "message": "You cannot add yourself to groups."
@@ -7893,5 +7899,11 @@
   },
   "machineAccountAccessUpdated": {
     "message": "Machine account access updated"
+  },
+  "unassignedItemsBanner": {
+    "message": "Notice: Unassigned organization items are no longer visible in your All Vaults view across devices and are now only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerSelfHost": {
+    "message": "Notice: On May 2, 2024, unassigned organization items will no longer be visible in your All Vaults view across devices and will only be accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
   }
 }

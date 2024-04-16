@@ -2,13 +2,16 @@ import { mock } from "jest-mock-extended";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
+import { FakeMasterPasswordService } from "@bitwarden/common/auth/services/master-password/fake-master-password.service";
 import { AuthRequestPushNotification } from "@bitwarden/common/models/response/notification.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { StateProvider } from "@bitwarden/common/platform/state";
+import { FakeAccountService, mockAccountServiceWith } from "@bitwarden/common/spec";
+import { UserId } from "@bitwarden/common/types/guid";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 
 import { AuthRequestService } from "./auth-request.service";
@@ -16,17 +19,29 @@ import { AuthRequestService } from "./auth-request.service";
 describe("AuthRequestService", () => {
   let sut: AuthRequestService;
 
+  const stateProvider = mock<StateProvider>();
+  let accountService: FakeAccountService;
+  let masterPasswordService: FakeMasterPasswordService;
   const appIdService = mock<AppIdService>();
   const cryptoService = mock<CryptoService>();
   const apiService = mock<ApiService>();
-  const stateService = mock<StateService>();
 
   let mockPrivateKey: Uint8Array;
+  const mockUserId = Utils.newGuid() as UserId;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    accountService = mockAccountServiceWith(mockUserId);
+    masterPasswordService = new FakeMasterPasswordService();
 
-    sut = new AuthRequestService(appIdService, cryptoService, apiService, stateService);
+    sut = new AuthRequestService(
+      appIdService,
+      accountService,
+      masterPasswordService,
+      cryptoService,
+      apiService,
+      stateProvider,
+    );
 
     mockPrivateKey = new Uint8Array(64);
   });
@@ -44,6 +59,31 @@ describe("AuthRequestService", () => {
       sut.sendAuthRequestPushNotification(notification);
 
       expect(spy).toHaveBeenCalledWith("PUSH_NOTIFICATION");
+    });
+  });
+
+  describe("AcceptAuthRequests", () => {
+    it("returns an error when userId isn't provided", async () => {
+      await expect(sut.getAcceptAuthRequests(undefined)).rejects.toThrow("User ID is required");
+      await expect(sut.setAcceptAuthRequests(true, undefined)).rejects.toThrow(
+        "User ID is required",
+      );
+    });
+  });
+
+  describe("AdminAuthRequest", () => {
+    it("returns an error when userId isn't provided", async () => {
+      await expect(sut.getAdminAuthRequest(undefined)).rejects.toThrow("User ID is required");
+      await expect(sut.setAdminAuthRequest(undefined, undefined)).rejects.toThrow(
+        "User ID is required",
+      );
+      await expect(sut.clearAdminAuthRequest(undefined)).rejects.toThrow("User ID is required");
+    });
+
+    it("does not allow clearing from setAdminAuthRequest", async () => {
+      await expect(sut.setAdminAuthRequest(null, "USER_ID" as UserId)).rejects.toThrow(
+        "Auth request is required",
+      );
     });
   });
 
@@ -67,8 +107,8 @@ describe("AuthRequestService", () => {
     });
 
     it("should use the master key and hash if they exist", async () => {
-      cryptoService.getMasterKey.mockResolvedValueOnce({ encKey: new Uint8Array(64) } as MasterKey);
-      stateService.getKeyHash.mockResolvedValueOnce("KEY_HASH");
+      masterPasswordService.masterKeySubject.next({ encKey: new Uint8Array(64) } as MasterKey);
+      masterPasswordService.masterKeyHashSubject.next("MASTER_KEY_HASH");
 
       await sut.approveOrDenyAuthRequest(
         true,
@@ -130,8 +170,8 @@ describe("AuthRequestService", () => {
         masterKeyHash: mockDecryptedMasterKeyHash,
       });
 
-      cryptoService.setMasterKey.mockResolvedValueOnce(undefined);
-      cryptoService.setMasterKeyHash.mockResolvedValueOnce(undefined);
+      masterPasswordService.masterKeySubject.next(undefined);
+      masterPasswordService.masterKeyHashSubject.next(undefined);
       cryptoService.decryptUserKeyWithMasterKey.mockResolvedValueOnce(mockDecryptedUserKey);
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
@@ -144,10 +184,18 @@ describe("AuthRequestService", () => {
         mockAuthReqResponse.masterPasswordHash,
         mockPrivateKey,
       );
-      expect(cryptoService.setMasterKey).toBeCalledWith(mockDecryptedMasterKey);
-      expect(cryptoService.setMasterKeyHash).toBeCalledWith(mockDecryptedMasterKeyHash);
-      expect(cryptoService.decryptUserKeyWithMasterKey).toBeCalledWith(mockDecryptedMasterKey);
-      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey);
+      expect(masterPasswordService.mock.setMasterKey).toHaveBeenCalledWith(
+        mockDecryptedMasterKey,
+        mockUserId,
+      );
+      expect(masterPasswordService.mock.setMasterKeyHash).toHaveBeenCalledWith(
+        mockDecryptedMasterKeyHash,
+        mockUserId,
+      );
+      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+        mockDecryptedMasterKey,
+      );
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey);
     });
   });
 

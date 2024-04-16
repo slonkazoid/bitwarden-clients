@@ -75,6 +75,7 @@ import {
   BulkDeleteDialogResult,
   openBulkDeleteDialog,
 } from "../individual-vault/bulk-action-dialogs/bulk-delete-dialog/bulk-delete-dialog.component";
+import { CollectionsDialogResult } from "../individual-vault/collections.component";
 import { RoutedVaultFilterBridgeService } from "../individual-vault/vault-filter/services/routed-vault-filter-bridge.service";
 import { RoutedVaultFilterService } from "../individual-vault/vault-filter/services/routed-vault-filter.service";
 import { createFilterFunction } from "../individual-vault/vault-filter/shared/models/filter-function";
@@ -95,7 +96,7 @@ import {
   BulkCollectionsDialogComponent,
   BulkCollectionsDialogResult,
 } from "./bulk-collections-dialog";
-import { CollectionsComponent } from "./collections.component";
+import { openOrgVaultCollectionsDialog } from "./collections.component";
 import { VaultFilterComponent } from "./vault-filter/vault-filter.component";
 
 const BroadcasterSubscriptionId = "OrgVaultComponent";
@@ -331,7 +332,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.searchService.indexCiphers(ciphers, organization.id);
+        await this.searchService.indexCiphers(ciphers, organization.id);
         return ciphers;
       }),
     );
@@ -350,7 +351,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     const collections$ = combineLatest([nestedCollections$, filter$, this.currentSearchText$]).pipe(
       filter(([collections, filter]) => collections != undefined && filter != undefined),
-      map(([collections, filter, searchText]) => {
+      concatMap(async ([collections, filter, searchText]) => {
         if (
           filter.collectionId === Unassigned ||
           (filter.collectionId === undefined && filter.type !== undefined)
@@ -369,7 +370,7 @@ export class VaultComponent implements OnInit, OnDestroy {
           collectionsToReturn = selectedCollection?.children.map((c) => c.node) ?? [];
         }
 
-        if (this.searchService.isSearchable(searchText)) {
+        if (await this.searchService.isSearchable(searchText)) {
           collectionsToReturn = this.searchPipe.transform(
             collectionsToReturn,
             searchText,
@@ -436,7 +437,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
         const filterFunction = createFilterFunction(filter);
 
-        if (this.searchService.isSearchable(searchText)) {
+        if (await this.searchService.isSearchable(searchText)) {
           return await this.searchService.searchCiphers(searchText, [filterFunction], ciphers);
         }
 
@@ -711,21 +712,37 @@ export class VaultComponent implements OnInit, OnDestroy {
     } else {
       collections = await firstValueFrom(this.allCollectionsWithoutUnassigned$);
     }
-    const [modal] = await this.modalService.openViewRef(
-      CollectionsComponent,
-      this.collectionsModalRef,
-      (comp) => {
-        comp.flexibleCollectionsV1Enabled = this.flexibleCollectionsV1Enabled;
-        comp.collectionIds = cipher.collectionIds;
-        comp.collections = collections;
-        comp.organization = this.organization;
-        comp.cipherId = cipher.id;
-        comp.onSavedCollections.pipe(takeUntil(this.destroy$)).subscribe(() => {
-          modal.close();
-          this.refresh();
-        });
+    const dialog = openOrgVaultCollectionsDialog(this.dialogService, {
+      data: {
+        collectionIds: cipher.collectionIds,
+        collections: collections.filter((c) => !c.readOnly && c.id != Unassigned),
+        organization: this.organization,
+        cipherId: cipher.id,
       },
-    );
+    });
+    /**
+     
+     const [modal] = await this.modalService.openViewRef(
+     CollectionsComponent,
+     this.collectionsModalRef,
+     (comp) => {
+     comp.flexibleCollectionsV1Enabled = this.flexibleCollectionsV1Enabled;
+     comp.collectionIds = cipher.collectionIds;
+     comp.collections = collections;
+     comp.organization = this.organization;
+     comp.cipherId = cipher.id;
+     comp.onSavedCollections.pipe(takeUntil(this.destroy$)).subscribe(() => {
+     modal.close();
+     this.refresh();
+     });
+     },
+     );
+     
+     */
+
+    if ((await lastValueFrom(dialog.closed)) == CollectionsDialogResult.Saved) {
+      await this.refresh();
+    }
   }
 
   async addCipher() {
@@ -1058,9 +1075,18 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
   }
 
-  async editCollection(c: CollectionView, tab: CollectionDialogTabType): Promise<void> {
+  async editCollection(
+    c: CollectionView,
+    tab: CollectionDialogTabType,
+    readonly: boolean = false,
+  ): Promise<void> {
     const dialog = openCollectionDialog(this.dialogService, {
-      data: { collectionId: c?.id, organizationId: this.organization?.id, initialTab: tab },
+      data: {
+        collectionId: c?.id,
+        organizationId: this.organization?.id,
+        initialTab: tab,
+        readonly: readonly,
+      },
     });
 
     const result = await lastValueFrom(dialog.closed);

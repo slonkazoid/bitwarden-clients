@@ -28,12 +28,14 @@ import { AccountService } from "@bitwarden/common/auth/abstractions/account.serv
 import { AvatarService as AvatarServiceAbstraction } from "@bitwarden/common/auth/abstractions/avatar.service";
 import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import { AvatarService } from "@bitwarden/common/auth/services/avatar.service";
 import { DeviceTrustCryptoService } from "@bitwarden/common/auth/services/device-trust-crypto.service.implementation";
 import { DevicesApiServiceImplementation } from "@bitwarden/common/auth/services/devices-api.service.implementation";
 import { KeyConnectorService } from "@bitwarden/common/auth/services/key-connector.service";
+import { MasterPasswordService } from "@bitwarden/common/auth/services/master-password/master-password.service";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/services/two-factor.service";
 import { UserVerificationApiService } from "@bitwarden/common/auth/services/user-verification/user-verification-api.service";
@@ -168,6 +170,7 @@ export class Main {
   organizationUserService: OrganizationUserService;
   collectionService: CollectionService;
   vaultTimeoutService: VaultTimeoutService;
+  masterPasswordService: InternalMasterPasswordServiceAbstraction;
   vaultTimeoutSettingsService: VaultTimeoutSettingsService;
   syncService: SyncService;
   eventCollectionService: EventCollectionServiceAbstraction;
@@ -351,7 +354,10 @@ export class Main {
       migrationRunner,
     );
 
+    this.masterPasswordService = new MasterPasswordService(this.stateProvider);
+
     this.cryptoService = new CryptoService(
+      this.masterPasswordService,
       this.keyGenerationService,
       this.cryptoFunctionService,
       this.encryptService,
@@ -411,7 +417,7 @@ export class Main {
       this.sendService,
     );
 
-    this.searchService = new SearchService(this.logService, this.i18nService);
+    this.searchService = new SearchService(this.logService, this.i18nService, this.stateProvider);
 
     this.broadcasterService = new BroadcasterService();
 
@@ -432,6 +438,8 @@ export class Main {
     this.policyApiService = new PolicyApiService(this.policyService, this.apiService);
 
     this.keyConnectorService = new KeyConnectorService(
+      this.accountService,
+      this.masterPasswordService,
       this.cryptoService,
       this.apiService,
       this.tokenService,
@@ -471,9 +479,11 @@ export class Main {
 
     this.authRequestService = new AuthRequestService(
       this.appIdService,
+      this.accountService,
+      this.masterPasswordService,
       this.cryptoService,
       this.apiService,
-      this.stateService,
+      this.stateProvider,
     );
 
     this.billingAccountProfileStateService = new DefaultBillingAccountProfileStateService(
@@ -481,6 +491,8 @@ export class Main {
     );
 
     this.loginStrategyService = new LoginStrategyService(
+      this.accountService,
+      this.masterPasswordService,
       this.cryptoService,
       this.apiService,
       this.tokenService,
@@ -532,13 +544,13 @@ export class Main {
       this.encryptService,
       this.cipherFileUploadService,
       this.configService,
+      this.stateProvider,
     );
 
     this.folderService = new FolderService(
       this.cryptoService,
       this.i18nService,
       this.cipherService,
-      this.stateService,
       this.stateProvider,
     );
 
@@ -568,6 +580,8 @@ export class Main {
     this.userVerificationService = new UserVerificationService(
       this.stateService,
       this.cryptoService,
+      this.accountService,
+      this.masterPasswordService,
       this.i18nService,
       this.userVerificationApiService,
       this.userDecryptionOptionsService,
@@ -578,6 +592,8 @@ export class Main {
     );
 
     this.vaultTimeoutService = new VaultTimeoutService(
+      this.accountService,
+      this.masterPasswordService,
       this.cipherService,
       this.folderService,
       this.collectionService,
@@ -596,6 +612,8 @@ export class Main {
     this.avatarService = new AvatarService(this.apiService, this.stateProvider);
 
     this.syncService = new SyncService(
+      this.masterPasswordService,
+      this.accountService,
       this.apiService,
       this.domainSettingsService,
       this.folderService,
@@ -664,7 +682,7 @@ export class Main {
       this.apiService,
       this.stateProvider,
       this.logService,
-      this.accountService,
+      this.authService,
     );
 
     this.eventCollectionService = new EventCollectionService(
@@ -672,7 +690,7 @@ export class Main {
       this.stateProvider,
       this.organizationService,
       this.eventUploadService,
-      this.accountService,
+      this.authService,
     );
   }
 

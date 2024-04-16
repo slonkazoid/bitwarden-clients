@@ -2,6 +2,8 @@ import { BehaviorSubject } from "rxjs";
 import { Jsonify } from "type-fest";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
@@ -15,6 +17,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
 
 import { InternalUserDecryptionOptionsServiceAbstraction } from "../abstractions";
@@ -41,6 +44,8 @@ export class WebAuthnLoginStrategy extends LoginStrategy {
 
   constructor(
     data: WebAuthnLoginStrategyData,
+    accountService: AccountService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
     cryptoService: CryptoService,
     apiService: ApiService,
     tokenService: TokenService,
@@ -54,6 +59,8 @@ export class WebAuthnLoginStrategy extends LoginStrategy {
     billingAccountProfileStateService: BillingAccountProfileStateService,
   ) {
     super(
+      accountService,
+      masterPasswordService,
       cryptoService,
       apiService,
       tokenService,
@@ -92,7 +99,7 @@ export class WebAuthnLoginStrategy extends LoginStrategy {
     return Promise.resolve();
   }
 
-  protected override async setUserKey(idTokenResponse: IdentityTokenResponse) {
+  protected override async setUserKey(idTokenResponse: IdentityTokenResponse, userId: UserId) {
     const masterKeyEncryptedUserKey = idTokenResponse.key;
 
     if (masterKeyEncryptedUserKey) {

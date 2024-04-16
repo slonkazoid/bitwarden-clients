@@ -11,7 +11,7 @@
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Käytä salattua holviasi kirjautumalla sisään tai tai luo uusi tili."
+    "message": "Käytä salattua holviasi kirjautumalla sisään tai luo uusi tili."
   },
   "createAccount": {
     "message": "Luo tili"
@@ -802,7 +802,7 @@
     "message": "Lue lisää"
   },
   "authenticatorKeyTotp": {
-    "message": "Todennusaavain (TOTP)"
+    "message": "Todennusavain (TOTP)"
   },
   "verificationCodeTotp": {
     "message": "Todennuskoodi (TOTP)"
@@ -3005,5 +3005,11 @@
   },
   "passkeyRemoved": {
     "message": "Suojausavain poistettiin"
+  },
+  "unassignedItemsBanner": {
+    "message": "Huomautus: Organisaatioiden kokoelmiin määrittämättömät kohteet eivät enää näy laitteiden \"Kaikki holvit\" -näkymissä, vaan ne ovat nähtävissä vain Hallintapaneelista. Määritä kohteet kokoelmiin Hallintapaneelista, jotta ne ovat jatkossakin käytettävissä kaikilta laitteilta."
+  },
+  "unassignedItemsBannerSelfHost": {
+    "message": "Huomautus: 2.5.2024 alkaen kokoelmiin määrittämättömät organisaatioiden kohteet eivät enää näy laitteiden \"Kaikki holvit\" -näkymissä, vaan ne ovat nähtävissä vain Hallintapaneelista. Määritä kohteet kokoelmiin Hallintapaneelista, jotta ne ovat jatkossakin käytettävissä kaikilta laitteilta."
   }
 }

@@ -62,6 +62,7 @@ import { StateService as BaseStateServiceAbstraction } from "@bitwarden/common/p
 import {
   AbstractMemoryStorageService,
   AbstractStorageService,
+  ObservableStorageService,
 } from "@bitwarden/common/platform/abstractions/storage.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
@@ -75,17 +76,15 @@ import {
   GlobalStateProvider,
   StateProvider,
 } from "@bitwarden/common/platform/state";
-import { SearchService } from "@bitwarden/common/services/search.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { CipherFileUploadService } from "@bitwarden/common/vault/abstractions/file-upload/cipher-file-upload.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
+import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/vault/abstractions/totp.service";
+import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 import { DialogService } from "@bitwarden/components";
-import { VaultExportServiceAbstraction } from "@bitwarden/vault-export-core";
 
 import { UnauthGuardService } from "../../auth/popup/services";
 import { AutofillService as AutofillServiceAbstraction } from "../../autofill/services/abstractions/autofill.service";
@@ -100,12 +99,13 @@ import { BrowserEnvironmentService } from "../../platform/services/browser-envir
 import BrowserLocalStorageService from "../../platform/services/browser-local-storage.service";
 import BrowserMessagingPrivateModePopupService from "../../platform/services/browser-messaging-private-mode-popup.service";
 import BrowserMessagingService from "../../platform/services/browser-messaging.service";
-import { BrowserStateService } from "../../platform/services/browser-state.service";
 import { BrowserTaskSchedulerService } from "../../platform/services/browser-task-scheduler.service";
+import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
 import I18nService from "../../platform/services/i18n.service";
 import { ForegroundPlatformUtilsService } from "../../platform/services/platform-utils/foreground-platform-utils.service";
 import { ForegroundDerivedStateProvider } from "../../platform/state/foreground-derived-state.provider";
 import { ForegroundMemoryStorageService } from "../../platform/storage/foreground-memory-storage.service";
+import { BrowserSendStateService } from "../../tools/popup/services/browser-send-state.service";
 import { FilePopoutUtilsService } from "../../tools/popup/services/file-popout-utils.service";
 import { VaultBrowserStateService } from "../../vault/services/vault-browser-state.service";
 import { VaultFilterService } from "../../vault/services/vault-filter.service";
@@ -160,7 +160,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: MessagingService,
     useFactory: () => {
-      return needsBackgroundInit
+      return needsBackgroundInit && BrowserApi.isManifestVersion(2)
         ? new BrowserMessagingPrivateModePopupService()
         : new BrowserMessagingService();
     },
@@ -188,19 +188,8 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: SearchServiceAbstraction,
-    useFactory: (logService: LogService, i18nService: I18nServiceAbstraction) => {
-      return new PopupSearchService(
-        getBgService<SearchService>("searchService")(),
-        logService,
-        i18nService,
-      );
-    },
-    deps: [LogService, I18nServiceAbstraction],
-  }),
-  safeProvider({
-    provide: CipherFileUploadService,
-    useFactory: getBgService<CipherFileUploadService>("cipherFileUploadService"),
-    deps: [],
+    useClass: PopupSearchService,
+    deps: [LogService, I18nServiceAbstraction, StateProvider],
   }),
   safeProvider({
     provide: CipherService,
@@ -233,11 +222,6 @@ const safeProviders: SafeProvider[] = [
     deps: [LogService, StateProvider, AccountServiceAbstraction],
   }),
   safeProvider({
-    provide: TotpService,
-    useFactory: getBgService<TotpService>("totpService"),
-    deps: [],
-  }),
-  safeProvider({
     provide: I18nServiceAbstraction,
     useFactory: (globalStateProvider: GlobalStateProvider) => {
       return new I18nService(BrowserApi.getUILanguage(), globalStateProvider);
@@ -252,6 +236,11 @@ const safeProviders: SafeProvider[] = [
       return cryptoService;
     },
     deps: [EncryptService],
+  }),
+  safeProvider({
+    provide: TotpServiceAbstraction,
+    useClass: TotpService,
+    deps: [CryptoFunctionService, LogService],
   }),
   safeProvider({
     provide: AuthRequestServiceAbstraction,
@@ -326,18 +315,13 @@ const safeProviders: SafeProvider[] = [
     deps: [
       CipherService,
       AutofillSettingsServiceAbstraction,
-      TotpService,
+      TotpServiceAbstraction,
       EventCollectionServiceAbstraction,
       LogService,
       DomainSettingsService,
       UserVerificationService,
       BillingAccountProfileStateService,
     ],
-  }),
-  safeProvider({
-    provide: VaultExportServiceAbstraction,
-    useFactory: getBgService<VaultExportServiceAbstraction>("exportService"),
-    deps: [],
   }),
   safeProvider({
     provide: KeyConnectorService,
@@ -388,7 +372,15 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: OBSERVABLE_MEMORY_STORAGE,
-    useClass: ForegroundMemoryStorageService,
+    useFactory: () => {
+      if (BrowserApi.isManifestVersion(2)) {
+        return new ForegroundMemoryStorageService();
+      }
+
+      return getBgService<AbstractStorageService & ObservableStorageService>(
+        "memoryStorageForStateProviders",
+      )();
+    },
     deps: [],
   }),
   safeProvider({
@@ -414,7 +406,7 @@ const safeProviders: SafeProvider[] = [
       tokenService: TokenServiceAbstraction,
       migrationRunner: MigrationRunner,
     ) => {
-      return new BrowserStateService(
+      return new DefaultBrowserStateService(
         storageService,
         secureStorageService,
         memoryStorageService,
@@ -487,6 +479,11 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: UserNotificationSettingsServiceAbstraction,
     useClass: UserNotificationSettingsService,
+    deps: [StateProvider],
+  }),
+  safeProvider({
+    provide: BrowserSendStateService,
+    useClass: BrowserSendStateService,
     deps: [StateProvider],
   }),
   safeProvider({
