@@ -1,10 +1,7 @@
-import {
-  TaskIdentifier,
-  TaskSchedulerService as TaskSchedulerServiceInterface,
-} from "../abstractions/task-scheduler.service";
+import { TaskIdentifier, TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
 
-export class TaskSchedulerService implements TaskSchedulerServiceInterface {
+export class DefaultTaskSchedulerService extends TaskSchedulerService {
   /**
    * Sets a timeout and returns the timeout id.
    *

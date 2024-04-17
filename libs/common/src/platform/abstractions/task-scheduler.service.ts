@@ -6,17 +6,17 @@ export type TaskIdentifier = {
   intervalId?: number | NodeJS.Timeout;
 };
 
-export interface TaskSchedulerService {
-  setTimeout(
+export abstract class TaskSchedulerService {
+  abstract setTimeout(
     callback: () => void,
     delayInMs: number,
     taskName?: ScheduledTaskName,
   ): Promise<number | NodeJS.Timeout>;
-  setInterval(
+  abstract setInterval(
     callback: () => void,
     intervalInMs: number,
     taskName?: ScheduledTaskName,
     initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout>;
-  clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void>;
+  abstract clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void>;
 }

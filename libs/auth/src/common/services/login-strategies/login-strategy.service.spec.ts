@@ -23,7 +23,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
-import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
+import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import {
   FakeAccountService,
   FakeGlobalState,
@@ -67,7 +67,7 @@ describe("LoginStrategyService", () => {
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let userDecryptionOptionsService: MockProxy<InternalUserDecryptionOptionsServiceAbstraction>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
-  let taskSchedulerService: MockProxy<TaskSchedulerService>;
+  let taskSchedulerService: MockProxy<DefaultTaskSchedulerService>;
 
   let stateProvider: FakeGlobalStateProvider;
   let loginStrategyCacheExpirationState: FakeGlobalState<Date | null>;
@@ -97,7 +97,7 @@ describe("LoginStrategyService", () => {
     userDecryptionOptionsService = mock<UserDecryptionOptionsService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
     stateProvider = new FakeGlobalStateProvider();
-    taskSchedulerService = mock<TaskSchedulerService>();
+    taskSchedulerService = mock<DefaultTaskSchedulerService>();
 
     sut = new LoginStrategyService(
       accountService,

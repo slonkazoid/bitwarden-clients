@@ -3,7 +3,7 @@ import { firstValueFrom, map, Observable } from "rxjs";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { TaskIdentifier } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
-import { TaskSchedulerService } from "@bitwarden/common/platform/services/task-scheduler.service";
+import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import {
   TASK_SCHEDULER_DISK,
   GlobalState,
@@ -23,7 +23,7 @@ const ACTIVE_ALARMS = new KeyDefinition(TASK_SCHEDULER_DISK, "activeAlarms", {
 });
 
 export class BrowserTaskSchedulerService
-  extends TaskSchedulerService
+  extends DefaultTaskSchedulerService
   implements BrowserTaskSchedulerServiceInterface
 {
   private activeAlarmsState: GlobalState<ActiveAlarm[]>;

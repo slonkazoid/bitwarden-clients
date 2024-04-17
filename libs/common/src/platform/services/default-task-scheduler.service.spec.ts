@@ -1,14 +1,14 @@
-import { TaskSchedulerService } from "./task-scheduler.service";
+import { DefaultTaskSchedulerService } from "./default-task-scheduler.service";
 
 describe("TaskSchedulerService", () => {
   const callback = jest.fn();
   const delayInMs = 1000;
   const intervalInMs = 1100;
-  let taskSchedulerService: TaskSchedulerService;
+  let taskSchedulerService: DefaultTaskSchedulerService;
 
   beforeEach(() => {
     jest.useFakeTimers();
-    taskSchedulerService = new TaskSchedulerService();
+    taskSchedulerService = new DefaultTaskSchedulerService();
   });
 
   afterEach(() => {
