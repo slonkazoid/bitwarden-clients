@@ -1,10 +1,11 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 import { TaskIdentifier } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
+import { UserId } from "@bitwarden/common/types/guid";
 
 import { ActiveAlarm } from "./abstractions/browser-task-scheduler.service";
 import { BrowserTaskSchedulerService } from "./browser-task-scheduler.service";
@@ -18,6 +19,7 @@ jest.mock("rxjs", () => ({
 
 // TODO CG - Likely need to rethink how to test this service a bit more carefully.
 describe("BrowserTaskSchedulerService", () => {
+  let activeUserIdMock$: BehaviorSubject<UserId>;
   let logService: MockProxy<ConsoleLogService>;
   let stateProvider: MockProxy<StateProvider>;
   let browserTaskSchedulerService: BrowserTaskSchedulerService;
@@ -41,8 +43,10 @@ describe("BrowserTaskSchedulerService", () => {
         createInfo: { delayInMinutes: 1, periodInMinutes: undefined },
       }),
     ];
+    activeUserIdMock$ = new BehaviorSubject("user-uuid" as UserId);
     logService = mock<ConsoleLogService>();
     stateProvider = mock<StateProvider>({
+      activeUserId$: activeUserIdMock$,
       getGlobal: jest.fn(() =>
         mock<GlobalState<any>>({
           state$: mock<Observable<any>>(),
@@ -108,7 +112,7 @@ describe("BrowserTaskSchedulerService", () => {
       const callback = jest.fn();
       const delayInMs = 999;
       jest.spyOn(globalThis, "setTimeout");
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );
@@ -132,7 +136,7 @@ describe("BrowserTaskSchedulerService", () => {
         ScheduledTaskNames.loginStrategySessionTimeout,
       );
       const callback = jest.fn();
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );
@@ -153,7 +157,7 @@ describe("BrowserTaskSchedulerService", () => {
     it("creates a timeout alarm", async () => {
       const callback = jest.fn();
       const delayInMinutes = 2;
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );
@@ -179,7 +183,7 @@ describe("BrowserTaskSchedulerService", () => {
         }),
       );
       jest.spyOn(browserTaskSchedulerService, "createAlarm");
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );
@@ -210,7 +214,7 @@ describe("BrowserTaskSchedulerService", () => {
       const callback = jest.fn();
       const intervalInMs = 999;
       jest.spyOn(globalThis, "setInterval");
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );
@@ -235,7 +239,7 @@ describe("BrowserTaskSchedulerService", () => {
         ScheduledTaskNames.loginStrategySessionTimeout,
       );
       const callback = jest.fn();
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );
@@ -257,7 +261,7 @@ describe("BrowserTaskSchedulerService", () => {
       const callback = jest.fn();
       const periodInMinutes = 2;
       const initialDelayInMs = 1000;
-      browserTaskSchedulerService.registerTaskHandler(
+      await browserTaskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.loginStrategySessionTimeout,
         callback,
       );

@@ -46,7 +46,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     private messagingService: MessagingService,
     private taskSchedulerService: TaskSchedulerService,
   ) {
-    this.taskSchedulerService.registerTaskHandler(
+    void this.taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.notificationsReconnectTimeout,
       () => this.reconnect(this.isSyncingOnReconnect),
     );

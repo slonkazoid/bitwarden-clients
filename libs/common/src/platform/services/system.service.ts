@@ -29,7 +29,7 @@ export class SystemService implements SystemServiceAbstraction {
     private biometricStateService: BiometricStateService,
     private taskSchedulerService: TaskSchedulerService,
   ) {
-    this.taskSchedulerService.registerTaskHandler(
+    void this.taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.systemClearClipboardTimeout,
       () => this.clearPendingClipboard(),
     );

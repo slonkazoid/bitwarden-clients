@@ -30,11 +30,8 @@ export class BrowserTaskSchedulerService
   readonly activeAlarms$: Observable<ActiveAlarm[]>;
   private recoveredAlarms: Set<string> = new Set();
 
-  constructor(
-    logService: LogService,
-    private stateProvider: StateProvider,
-  ) {
-    super(logService);
+  constructor(logService: LogService, stateProvider: StateProvider) {
+    super(logService, stateProvider);
 
     this.activeAlarmsState = this.stateProvider.getGlobal(ACTIVE_ALARMS);
     this.activeAlarms$ = this.activeAlarmsState.state$.pipe(

@@ -1130,7 +1130,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: TaskSchedulerService,
     useClass: DefaultTaskSchedulerService,
-    deps: [LogService],
+    deps: [LogService, StateProvider],
   }),
   safeProvider({
     provide: ProviderApiServiceAbstraction,

@@ -1,26 +1,31 @@
+import { firstValueFrom } from "rxjs";
+
 import { LogService } from "../abstractions/log.service";
 import { TaskIdentifier, TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
+import { StateProvider } from "../state";
 
 export class DefaultTaskSchedulerService extends TaskSchedulerService {
-  constructor(logService: LogService) {
-    super(logService);
+  constructor(logService: LogService, stateProvider: StateProvider) {
+    super(logService, stateProvider);
 
     this.taskHandlers = new Map();
   }
 
-  registerTaskHandler(taskName: ScheduledTaskName, handler: () => void): void {
-    const existingHandler = this.taskHandlers.get(taskName);
+  async registerTaskHandler(taskName: ScheduledTaskName, handler: () => void): Promise<void> {
+    const activeUserTaskName = await this.getActiveUserTaskName(taskName);
+    const existingHandler = this.taskHandlers.get(activeUserTaskName);
     if (existingHandler) {
       this.logService.warning(`Task handler for ${taskName} already exists. Overwriting.`);
-      this.unregisterTaskHandler(taskName);
+      await this.unregisterTaskHandler(taskName);
     }
 
-    this.taskHandlers.set(taskName, handler);
+    this.taskHandlers.set(activeUserTaskName, handler);
   }
 
-  unregisterTaskHandler(taskName: ScheduledTaskName): void {
-    this.taskHandlers.delete(taskName);
+  async unregisterTaskHandler(taskName: ScheduledTaskName): Promise<void> {
+    const activeUserTaskName = await this.getActiveUserTaskName(taskName);
+    this.taskHandlers.delete(activeUserTaskName);
   }
 
   protected triggerTask(taskName: ScheduledTaskName, _periodInMinutes?: number): void {
@@ -71,5 +76,14 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
     if (taskIdentifier.intervalId) {
       globalThis.clearInterval(taskIdentifier.intervalId);
     }
+  }
+
+  private async getActiveUserTaskName(taskName: ScheduledTaskName): Promise<string> {
+    const activeUserId = await firstValueFrom(this.stateProvider.activeUserId$);
+    if (!activeUserId) {
+      return taskName;
+    }
+
+    return `${activeUserId}_${taskName}`;
   }
 }

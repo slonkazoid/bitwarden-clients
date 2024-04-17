@@ -448,8 +448,9 @@ export default class MainBackground {
       this.logService,
       this.stateProvider,
     );
-    this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.scheduleNextSyncInterval, () =>
-      this.fullSync(),
+    void this.taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.scheduleNextSyncInterval,
+      () => this.fullSync(),
     );
     this.environmentService = new BrowserEnvironmentService(
       this.logService,
