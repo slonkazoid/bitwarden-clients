@@ -29,13 +29,12 @@ export class BrowserTaskSchedulerService
   private activeAlarmsState: GlobalState<ActiveAlarm[]>;
   readonly activeAlarms$: Observable<ActiveAlarm[]>;
   private recoveredAlarms: Set<string> = new Set();
-  private onAlarmHandlers: Record<string, () => void> = {};
 
   constructor(
-    private logService: LogService,
+    logService: LogService,
     private stateProvider: StateProvider,
   ) {
-    super();
+    super(logService);
 
     this.activeAlarmsState = this.stateProvider.getGlobal(ACTIVE_ALARMS);
     this.activeAlarms$ = this.activeAlarmsState.state$.pipe(
@@ -51,21 +50,18 @@ export class BrowserTaskSchedulerService
    * than 1 minute, it will use the global setTimeout. Otherwise, it will
    * create a browser extension alarm to handle the delay.
    *
-   * @param callback - The function to be called after the delay.
-   * @param delayInMs - The delay in milliseconds.
    * @param taskName - The name of the task, used in defining the alarm.
+   * @param delayInMs - The delay in milliseconds.
    */
   async setTimeout(
-    callback: () => void,
-    delayInMs: number,
     taskName: ScheduledTaskName,
+    delayInMs: number,
   ): Promise<number | NodeJS.Timeout> {
     const delayInMinutes = delayInMs / 1000 / 60;
     if (delayInMinutes < 1) {
-      return super.setTimeout(callback, delayInMs);
+      return super.setTimeout(taskName, delayInMs);
     }
 
-    this.registerAlarmHandler(taskName, callback);
     if (this.recoveredAlarms.has(taskName)) {
       await this.triggerRecoveredAlarm(taskName);
       return;
@@ -79,23 +75,20 @@ export class BrowserTaskSchedulerService
    * less than 1 minute, it will use the global setInterval. Otherwise, it will
    * create a browser extension alarm to handle the interval.
    *
-   * @param callback - The function to be called at each interval.
-   * @param intervalInMs - The interval in milliseconds.
    * @param taskName - The name of the task, used in defining the alarm.
+   * @param intervalInMs - The interval in milliseconds.
    * @param initialDelayInMs - The initial delay in milliseconds.
    */
   async setInterval(
-    callback: () => void,
-    intervalInMs: number,
     taskName: ScheduledTaskName,
+    intervalInMs: number,
     initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout> {
     const intervalInMinutes = intervalInMs / 1000 / 60;
     if (intervalInMinutes < 1) {
-      return super.setInterval(callback, intervalInMs);
+      return super.setInterval(taskName, intervalInMs);
     }
 
-    this.registerAlarmHandler(taskName, callback);
     if (this.recoveredAlarms.has(taskName)) {
       await this.triggerRecoveredAlarm(taskName, intervalInMinutes);
     }
@@ -136,7 +129,6 @@ export class BrowserTaskSchedulerService
   async clearAllScheduledTasks(): Promise<void> {
     await this.clearAllAlarms();
     await this.updateActiveAlarms([]);
-    this.onAlarmHandlers = {};
     this.recoveredAlarms.clear();
   }
 
@@ -158,20 +150,6 @@ export class BrowserTaskSchedulerService
 
     await this.createAlarm(name, createInfo);
     await this.setActiveAlarm({ name, startTime: Date.now(), createInfo });
-  }
-
-  /**
-   * Registers an alarm handler for the given name.
-   *
-   * @param name - The name of the alarm.
-   * @param handler - The alarm handler.
-   */
-  private registerAlarmHandler(name: ScheduledTaskName, handler: CallableFunction): void {
-    if (this.onAlarmHandlers[name]) {
-      this.logService.warning(`Alarm handler for ${name} already exists. Overwriting.`);
-    }
-
-    this.onAlarmHandlers[name] = () => handler();
   }
 
   /**
@@ -223,7 +201,6 @@ export class BrowserTaskSchedulerService
    * @param name - The name of the active alarm to delete.
    */
   private async deleteActiveAlarm(name: ScheduledTaskName): Promise<void> {
-    delete this.onAlarmHandlers[name];
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
     const filteredAlarms = activeAlarms?.filter((alarm) => alarm.name !== name);
     await this.updateActiveAlarms(filteredAlarms || []);
@@ -249,7 +226,7 @@ export class BrowserTaskSchedulerService
     periodInMinutes?: number,
   ): Promise<void> {
     this.recoveredAlarms.delete(name);
-    await this.triggerAlarm(name, periodInMinutes);
+    await this.triggerTask(name, periodInMinutes);
   }
 
   /**
@@ -266,7 +243,7 @@ export class BrowserTaskSchedulerService
    */
   private handleOnAlarm = async (alarm: chrome.alarms.Alarm): Promise<void> => {
     const { name, periodInMinutes } = alarm;
-    await this.triggerAlarm(name as ScheduledTaskName, periodInMinutes);
+    await this.triggerTask(name as ScheduledTaskName, periodInMinutes);
   };
 
   /**
@@ -276,8 +253,8 @@ export class BrowserTaskSchedulerService
    * @param name - The name of the alarm to trigger.
    * @param periodInMinutes - The period in minutes of an interval alarm.
    */
-  private async triggerAlarm(name: ScheduledTaskName, periodInMinutes?: number): Promise<void> {
-    const handler = this.onAlarmHandlers[name];
+  protected async triggerTask(name: ScheduledTaskName, periodInMinutes?: number): Promise<void> {
+    const handler = this.taskHandlers.get(name);
     if (!periodInMinutes) {
       await this.deleteActiveAlarm(name);
     }

@@ -28,7 +28,12 @@ export class SystemService implements SystemServiceAbstraction {
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private biometricStateService: BiometricStateService,
     private taskSchedulerService: TaskSchedulerService,
-  ) {}
+  ) {
+    this.taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.systemClearClipboardTimeout,
+      () => this.clearPendingClipboard(),
+    );
+  }
 
   async startProcessReload(authService: AuthService): Promise<void> {
     const accounts = await firstValueFrom(this.stateService.accounts$);
@@ -126,9 +131,8 @@ export class SystemService implements SystemServiceAbstraction {
     };
 
     this.clearClipboardTimeout = this.taskSchedulerService.setTimeout(
-      () => this.clearPendingClipboard(),
-      taskTimeoutInMs,
       ScheduledTaskNames.systemClearClipboardTimeout,
+      taskTimeoutInMs,
     );
   }
 

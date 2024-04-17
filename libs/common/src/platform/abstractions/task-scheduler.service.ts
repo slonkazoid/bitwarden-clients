@@ -1,5 +1,7 @@
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
 
+import { LogService } from "./log.service";
+
 export type TaskIdentifier = {
   taskName?: ScheduledTaskName;
   timeoutId?: number | NodeJS.Timeout;
@@ -7,16 +9,26 @@ export type TaskIdentifier = {
 };
 
 export abstract class TaskSchedulerService {
+  protected taskHandlers: Map<string, () => void>;
+
+  constructor(protected logService: LogService) {}
+
+  abstract registerTaskHandler(taskName: ScheduledTaskName, handler: () => void): void;
+
+  abstract unregisterTaskHandler(taskName: ScheduledTaskName): void;
+
   abstract setTimeout(
-    callback: () => void,
+    taskName: ScheduledTaskName,
     delayInMs: number,
-    taskName?: ScheduledTaskName,
   ): Promise<number | NodeJS.Timeout>;
+
   abstract setInterval(
-    callback: () => void,
+    taskName: ScheduledTaskName,
     intervalInMs: number,
-    taskName?: ScheduledTaskName,
     initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout>;
+
   abstract clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void>;
+
+  protected abstract triggerTask(taskName: ScheduledTaskName, periodInMinutes?: number): void;
 }

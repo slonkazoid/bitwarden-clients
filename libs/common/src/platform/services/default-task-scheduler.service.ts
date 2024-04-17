@@ -1,37 +1,61 @@
+import { LogService } from "../abstractions/log.service";
 import { TaskIdentifier, TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
 
 export class DefaultTaskSchedulerService extends TaskSchedulerService {
+  constructor(logService: LogService) {
+    super(logService);
+
+    this.taskHandlers = new Map();
+  }
+
+  registerTaskHandler(taskName: ScheduledTaskName, handler: () => void): void {
+    const existingHandler = this.taskHandlers.get(taskName);
+    if (existingHandler) {
+      this.logService.warning(`Task handler for ${taskName} already exists. Overwriting.`);
+      this.unregisterTaskHandler(taskName);
+    }
+
+    this.taskHandlers.set(taskName, handler);
+  }
+
+  unregisterTaskHandler(taskName: ScheduledTaskName): void {
+    this.taskHandlers.delete(taskName);
+  }
+
+  protected triggerTask(taskName: ScheduledTaskName, _periodInMinutes?: number): void {
+    const handler = this.taskHandlers.get(taskName);
+    if (handler) {
+      handler();
+    }
+  }
+
   /**
    * Sets a timeout and returns the timeout id.
    *
-   * @param callback - The function to be called after the delay.
+   * @param taskName - The name of the task. Unused in the base implementation.
    * @param delayInMs - The delay in milliseconds.
-   * @param _taskName - The name of the task. Unused in the base implementation.
    */
   async setTimeout(
-    callback: () => void,
+    taskName: ScheduledTaskName,
     delayInMs: number,
-    _taskName?: ScheduledTaskName,
   ): Promise<number | NodeJS.Timeout> {
-    return globalThis.setTimeout(() => callback(), delayInMs);
+    return globalThis.setTimeout(() => this.triggerTask(taskName), delayInMs);
   }
 
   /**
    * Sets an interval and returns the interval id.
    *
-   * @param callback - The function to be called at each interval.
+   * @param taskName - The name of the task. Unused in the base implementation.
    * @param intervalInMs - The interval in milliseconds.
-   * @param _taskName - The name of the task. Unused in the base implementation.
    * @param _initialDelayInMs - The initial delay in milliseconds. Unused in the base implementation.
    */
   async setInterval(
-    callback: () => void,
+    taskName: ScheduledTaskName,
     intervalInMs: number,
-    _taskName?: ScheduledTaskName,
     _initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout> {
-    return globalThis.setInterval(() => callback(), intervalInMs);
+    return globalThis.setInterval(() => this.triggerTask(taskName), intervalInMs);
   }
 
   /**

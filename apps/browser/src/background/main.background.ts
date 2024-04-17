@@ -1098,10 +1098,13 @@ export default class MainBackground {
         }
 
         await this.fullSync(true);
-        await this.taskSchedulerService.setInterval(
-          () => this.fullSync(),
-          5 * 60 * 1000, // check every 5 minutes
+        this.taskSchedulerService.registerTaskHandler(
           ScheduledTaskNames.scheduleNextSyncInterval,
+          () => this.fullSync(),
+        );
+        await this.taskSchedulerService.setInterval(
+          ScheduledTaskNames.scheduleNextSyncInterval,
+          5 * 60 * 1000, // check every 5 minutes
         );
         setTimeout(() => this.notificationsService.init(), 2500);
         resolve();

@@ -31,6 +31,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   private inited = false;
   private inactive = false;
   private reconnectTimer: number | NodeJS.Timeout = null;
+  private isSyncingOnReconnect = true;
 
   constructor(
     private logService: LogService,
@@ -45,6 +46,10 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     private messagingService: MessagingService,
     private taskSchedulerService: TaskSchedulerService,
   ) {
+    this.taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.notificationsReconnectTimeout,
+      () => this.reconnect(this.isSyncingOnReconnect),
+    );
     this.environmentService.environment$.subscribe(() => {
       if (!this.inited) {
         return;
@@ -244,10 +249,10 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     }
 
     if (!this.connected) {
+      this.isSyncingOnReconnect = sync;
       this.reconnectTimer = await this.taskSchedulerService.setTimeout(
-        () => this.reconnect(sync),
-        this.random(120000, 300000),
         ScheduledTaskNames.notificationsReconnectTimeout,
+        this.random(120000, 300000),
       );
     }
   }

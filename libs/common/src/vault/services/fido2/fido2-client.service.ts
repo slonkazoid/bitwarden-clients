@@ -40,6 +40,7 @@ import { Fido2Utils } from "./fido2-utils";
  * It is highly recommended that the W3C specification is used a reference when reading this code.
  */
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
+  private timeoutAbortController: AbortController;
   private readonly TIMEOUTS = {
     NO_VERIFICATION: {
       DEFAULT: 120000,
@@ -61,7 +62,11 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     private domainSettingsService: DomainSettingsService,
     private taskSchedulerService: TaskSchedulerService,
     private logService?: LogService,
-  ) {}
+  ) {
+    this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.fido2ClientAbortTimeout, () =>
+      this.timeoutAbortController?.abort(),
+    );
+  }
 
   async isFido2FeatureEnabled(hostname: string, origin: string): Promise<boolean> {
     const userEnabledPasskeys = await firstValueFrom(this.vaultSettingsService.enablePasskeys$);
@@ -354,10 +359,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       clampedTimeout = Math.max(NO_VERIFICATION.MIN, Math.min(timeout, NO_VERIFICATION.MAX));
     }
 
+    this.timeoutAbortController = abortController;
     return await this.taskSchedulerService.setTimeout(
-      () => abortController.abort(),
-      clampedTimeout,
       ScheduledTaskNames.fido2ClientAbortTimeout,
+      clampedTimeout,
     );
   };
 }

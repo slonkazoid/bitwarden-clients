@@ -115,6 +115,10 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     this.authRequestPushNotificationState = this.stateProvider.get(
       AUTH_REQUEST_PUSH_NOTIFICATION_KEY,
     );
+    this.taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.loginStrategySessionTimeout,
+      () => this.clearCache(),
+    );
 
     this.currentAuthType$ = this.currentAuthnTypeState.state$;
     this.loginStrategy$ = this.currentAuthnTypeState.state$.pipe(
@@ -309,9 +313,8 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
       (_) => new Date(Date.now() + sessionTimeoutLength),
     );
     this.sessionTimeout = await this.taskSchedulerService.setTimeout(
-      () => this.clearCache(),
-      sessionTimeoutLength,
       ScheduledTaskNames.loginStrategySessionTimeout,
+      sessionTimeoutLength,
     );
   }
 
