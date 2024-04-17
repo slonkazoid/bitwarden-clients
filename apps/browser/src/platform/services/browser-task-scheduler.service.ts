@@ -71,7 +71,7 @@ export class BrowserTaskSchedulerService
       return;
     }
 
-    await this.createAlarm(taskName, { delayInMinutes });
+    await this.scheduleAlarm(taskName, { delayInMinutes });
   }
 
   /**
@@ -101,7 +101,7 @@ export class BrowserTaskSchedulerService
     }
 
     const initialDelayInMinutes = initialDelayInMs ? initialDelayInMs / 1000 / 60 : undefined;
-    await this.createAlarm(taskName, {
+    await this.scheduleAlarm(taskName, {
       periodInMinutes: intervalInMinutes,
       delayInMinutes: initialDelayInMinutes ?? intervalInMinutes,
     });
@@ -122,7 +122,7 @@ export class BrowserTaskSchedulerService
       return;
     }
 
-    const wasCleared = await BrowserApi.clearAlarm(taskName);
+    const wasCleared = await this.clearAlarm(taskName);
     if (wasCleared) {
       await this.deleteActiveAlarm(taskName);
       this.recoveredAlarms.delete(taskName);
@@ -134,7 +134,7 @@ export class BrowserTaskSchedulerService
    * alarms and resetting the active alarms state.
    */
   async clearAllScheduledTasks(): Promise<void> {
-    await BrowserApi.clearAllAlarms();
+    await this.clearAllAlarms();
     await this.updateActiveAlarms([]);
     this.onAlarmHandlers = {};
     this.recoveredAlarms.clear();
@@ -146,17 +146,17 @@ export class BrowserTaskSchedulerService
    * @param name - The name of the alarm.
    * @param createInfo - The alarm create info.
    */
-  private async createAlarm(
+  private async scheduleAlarm(
     name: ScheduledTaskName,
     createInfo: chrome.alarms.AlarmCreateInfo,
   ): Promise<void> {
-    const existingAlarm = await BrowserApi.getAlarm(name);
+    const existingAlarm = await this.getAlarm(name);
     if (existingAlarm) {
       this.logService.warning(`Alarm ${name} already exists. Skipping creation.`);
       return;
     }
 
-    await BrowserApi.createAlarm(name, createInfo);
+    await this.createAlarm(name, createInfo);
     await this.setActiveAlarm({ name, startTime: Date.now(), createInfo });
   }
 
@@ -184,7 +184,7 @@ export class BrowserTaskSchedulerService
 
     for (const alarm of activeAlarms) {
       const { name, startTime, createInfo } = alarm;
-      const existingAlarm = await BrowserApi.getAlarm(name);
+      const existingAlarm = await this.getAlarm(name);
       if (existingAlarm) {
         continue;
       }
@@ -199,7 +199,7 @@ export class BrowserTaskSchedulerService
         continue;
       }
 
-      void this.createAlarm(name, createInfo);
+      void this.scheduleAlarm(name, createInfo);
     }
 
     // 10 seconds after verifying the alarm state, we should treat any newly created alarms as non-recovered alarms.
@@ -285,5 +285,69 @@ export class BrowserTaskSchedulerService
     if (handler) {
       handler();
     }
+  }
+
+  /**
+   * Clears a new alarm with the given name and create info. Returns a promise
+   * that indicates when the alarm has been cleared successfully.
+   *
+   * @param alarmName - The name of the alarm to create.
+   */
+  clearAlarm(alarmName: string): Promise<boolean> {
+    if (typeof browser !== "undefined" && browser.alarms) {
+      return browser.alarms.clear(alarmName);
+    }
+
+    return new Promise((resolve) => chrome.alarms.clear(alarmName, resolve));
+  }
+
+  /**
+   * Clears all alarms that have been set by the extension. Returns a promise
+   * that indicates when all alarms have been cleared successfully.
+   */
+  clearAllAlarms(): Promise<boolean> {
+    if (typeof browser !== "undefined" && browser.alarms) {
+      return browser.alarms.clearAll();
+    }
+
+    return new Promise((resolve) => chrome.alarms.clearAll(resolve));
+  }
+
+  /**
+   * Creates a new alarm with the given name and create info.
+   *
+   * @param name - The name of the alarm to create.
+   * @param createInfo - The creation info for the alarm.
+   */
+  async createAlarm(name: string, createInfo: chrome.alarms.AlarmCreateInfo): Promise<void> {
+    if (typeof browser !== "undefined" && browser.alarms) {
+      return browser.alarms.create(name, createInfo);
+    }
+
+    return new Promise((resolve) => chrome.alarms.create(name, createInfo, resolve));
+  }
+
+  /**
+   * Gets the alarm with the given name.
+   *
+   * @param alarmName - The name of the alarm to get.
+   */
+  getAlarm(alarmName: string): Promise<chrome.alarms.Alarm> {
+    if (typeof browser !== "undefined" && browser.alarms) {
+      return browser.alarms.get(alarmName);
+    }
+
+    return new Promise((resolve) => chrome.alarms.get(alarmName, resolve));
+  }
+
+  /**
+   * Gets all alarms that have been set by the extension.
+   */
+  getAllAlarms(): Promise<chrome.alarms.Alarm[]> {
+    if (typeof browser !== "undefined" && browser.alarms) {
+      return browser.alarms.getAll();
+    }
+
+    return new Promise((resolve) => chrome.alarms.getAll(resolve));
   }
 }

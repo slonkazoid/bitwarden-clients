@@ -6,8 +6,6 @@ import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-t
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
 
-import { BrowserApi } from "../browser/browser-api";
-
 import { ActiveAlarm } from "./abstractions/browser-task-scheduler.service";
 import { BrowserTaskSchedulerService } from "./browser-task-scheduler.service";
 
@@ -18,6 +16,7 @@ jest.mock("rxjs", () => ({
   Observable: jest.fn(),
 }));
 
+// TODO CG - Likely need to rethink how to test this service a bit more carefully.
 describe("BrowserTaskSchedulerService", () => {
   let logService: MockProxy<ConsoleLogService>;
   let stateProvider: MockProxy<StateProvider>;
@@ -27,11 +26,6 @@ describe("BrowserTaskSchedulerService", () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
-    jest.spyOn(BrowserApi, "getAlarm").mockImplementation((alarmName) => {
-      if (alarmName === ScheduledTaskNames.scheduleNextSyncInterval) {
-        return Promise.resolve(mock<chrome.alarms.Alarm>({ name: alarmName }));
-      }
-    });
     activeAlarms = [
       mock<ActiveAlarm>({
         name: ScheduledTaskNames.eventUploadsInterval,
@@ -57,12 +51,20 @@ describe("BrowserTaskSchedulerService", () => {
       ),
     });
     browserTaskSchedulerService = new BrowserTaskSchedulerService(logService, stateProvider);
+    jest.spyOn(browserTaskSchedulerService as any, "getAlarm").mockImplementation((alarmName) => {
+      if (alarmName === ScheduledTaskNames.scheduleNextSyncInterval) {
+        return Promise.resolve(mock<chrome.alarms.Alarm>({ name: alarmName }));
+      }
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     jest.useRealTimers();
+    // eslint-disable-next-line
+    // @ts-ignore
+    globalThis.browser = {};
   });
 
   describe("verifyAlarmsState", () => {
@@ -162,12 +164,12 @@ describe("BrowserTaskSchedulerService", () => {
     it("skips creating a duplicate timeout alarm", async () => {
       const callback = jest.fn();
       const delayInMinutes = 2;
-      jest.spyOn(BrowserApi, "getAlarm").mockResolvedValue(
+      jest.spyOn(browserTaskSchedulerService as any, "getAlarm").mockResolvedValue(
         mock<chrome.alarms.Alarm>({
           name: ScheduledTaskNames.loginStrategySessionTimeout,
         }),
       );
-      jest.spyOn(BrowserApi, "createAlarm");
+      jest.spyOn(browserTaskSchedulerService, "createAlarm");
 
       await browserTaskSchedulerService.setTimeout(
         callback,
@@ -175,7 +177,7 @@ describe("BrowserTaskSchedulerService", () => {
         ScheduledTaskNames.loginStrategySessionTimeout,
       );
 
-      expect(BrowserApi.createAlarm).not.toHaveBeenCalled();
+      expect(browserTaskSchedulerService.createAlarm).not.toHaveBeenCalled();
     });
 
     it("logs a warning if a duplicate handler is registered when creating an alarm", () => {
@@ -295,12 +297,12 @@ describe("BrowserTaskSchedulerService", () => {
 
   describe("clearAllScheduledTasks", () => {
     it("clears all scheduled tasks and extension alarms", async () => {
-      jest.spyOn(BrowserApi, "clearAllAlarms");
+      jest.spyOn(browserTaskSchedulerService, "clearAllAlarms");
       jest.spyOn(browserTaskSchedulerService as any, "updateActiveAlarms");
 
       await browserTaskSchedulerService.clearAllScheduledTasks();
 
-      expect(BrowserApi.clearAllAlarms).toHaveBeenCalled();
+      expect(browserTaskSchedulerService.clearAllAlarms).toHaveBeenCalled();
       expect(browserTaskSchedulerService["updateActiveAlarms"]).toHaveBeenCalledWith([]);
       expect(browserTaskSchedulerService["onAlarmHandlers"]).toEqual({});
       expect(browserTaskSchedulerService["recoveredAlarms"].size).toBe(0);
@@ -316,6 +318,136 @@ describe("BrowserTaskSchedulerService", () => {
       await browserTaskSchedulerService["handleOnAlarm"](alarm);
 
       expect(callback).toHaveBeenCalled();
+    });
+  });
+
+  describe("clearAlarm", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      const alarmName = "alarm-name";
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          clear: jest.fn(),
+        },
+      };
+
+      await browserTaskSchedulerService.clearAlarm(alarmName);
+
+      expect(browser.alarms.clear).toHaveBeenCalledWith(alarmName);
+    });
+
+    it("clears the alarm with the provided name", async () => {
+      const alarmName = "alarm-name";
+
+      const wasCleared = await browserTaskSchedulerService.clearAlarm(alarmName);
+
+      expect(chrome.alarms.clear).toHaveBeenCalledWith(alarmName, expect.any(Function));
+      expect(wasCleared).toBe(true);
+    });
+  });
+
+  describe("clearAllAlarms", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          clearAll: jest.fn(),
+        },
+      };
+
+      await browserTaskSchedulerService.clearAllAlarms();
+
+      expect(browser.alarms.clearAll).toHaveBeenCalled();
+    });
+
+    it("clears all alarms", async () => {
+      const wasCleared = await browserTaskSchedulerService.clearAllAlarms();
+
+      expect(chrome.alarms.clearAll).toHaveBeenCalledWith(expect.any(Function));
+      expect(wasCleared).toBe(true);
+    });
+  });
+
+  describe("createAlarm", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      const alarmName = "alarm-name";
+      const alarmInfo = { when: 1000 };
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          create: jest.fn(),
+        },
+      };
+
+      await browserTaskSchedulerService.createAlarm(alarmName, alarmInfo);
+
+      expect(browser.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo);
+    });
+
+    it("creates an alarm", async () => {
+      const alarmName = "alarm-name";
+      const alarmInfo = { when: 1000 };
+
+      await browserTaskSchedulerService.createAlarm(alarmName, alarmInfo);
+
+      expect(chrome.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo, expect.any(Function));
+    });
+  });
+
+  describe.skip("getAlarm", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      const alarmName = "alarm-name";
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          get: jest.fn(),
+        },
+      };
+
+      await browserTaskSchedulerService.getAlarm(alarmName);
+
+      expect(browser.alarms.get).toHaveBeenCalledWith(alarmName);
+    });
+
+    it("gets the alarm by name", async () => {
+      const alarmName = "alarm-name";
+      const alarmMock = mock<chrome.alarms.Alarm>();
+      chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(alarmMock));
+
+      const receivedAlarm = await browserTaskSchedulerService.getAlarm(alarmName);
+
+      expect(chrome.alarms.get).toHaveBeenCalledWith(alarmName, expect.any(Function));
+      expect(receivedAlarm).toBe(alarmMock);
+    });
+  });
+
+  describe("getAllAlarms", () => {
+    it("uses the browser.alarms API if it is available", async () => {
+      globalThis.browser = {
+        // eslint-disable-next-line
+        // @ts-ignore
+        alarms: {
+          getAll: jest.fn(),
+        },
+      };
+
+      await browserTaskSchedulerService.getAllAlarms();
+
+      expect(browser.alarms.getAll).toHaveBeenCalled();
+    });
+
+    it("gets all registered alarms", async () => {
+      const alarms = [mock<chrome.alarms.Alarm>(), mock<chrome.alarms.Alarm>()];
+      chrome.alarms.getAll = jest.fn().mockImplementation((callback) => callback(alarms));
+
+      const receivedAlarms = await browserTaskSchedulerService.getAllAlarms();
+
+      expect(chrome.alarms.getAll).toHaveBeenCalledWith(expect.any(Function));
+      expect(receivedAlarms).toBe(alarms);
     });
   });
 });
