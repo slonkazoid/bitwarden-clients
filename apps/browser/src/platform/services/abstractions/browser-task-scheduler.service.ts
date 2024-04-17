@@ -2,7 +2,7 @@ import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/ta
 import { ScheduledTaskName } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 
 export type ActiveAlarm = {
-  name: ScheduledTaskName;
+  taskName: ScheduledTaskName;
   startTime: number;
   createInfo: chrome.alarms.AlarmCreateInfo;
 };

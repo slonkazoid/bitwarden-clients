@@ -30,15 +30,15 @@ describe("BrowserTaskSchedulerService", () => {
     jest.useFakeTimers();
     activeAlarms = [
       mock<ActiveAlarm>({
-        name: ScheduledTaskNames.eventUploadsInterval,
+        taskName: ScheduledTaskNames.eventUploadsInterval,
         createInfo: eventUploadsIntervalCreateInfo,
       }),
       mock<ActiveAlarm>({
-        name: ScheduledTaskNames.scheduleNextSyncInterval,
+        taskName: ScheduledTaskNames.scheduleNextSyncInterval,
         createInfo: scheduleNextSyncIntervalCreateInfo,
       }),
       mock<ActiveAlarm>({
-        name: ScheduledTaskNames.fido2ClientAbortTimeout,
+        taskName: ScheduledTaskNames.fido2ClientAbortTimeout,
         startTime: Date.now() - 60001,
         createInfo: { delayInMinutes: 1, periodInMinutes: undefined },
       }),
@@ -131,7 +131,9 @@ describe("BrowserTaskSchedulerService", () => {
     });
 
     it("triggers a recovered alarm immediately and skips creating the alarm", async () => {
-      activeAlarms = [mock<ActiveAlarm>({ name: ScheduledTaskNames.loginStrategySessionTimeout })];
+      activeAlarms = [
+        mock<ActiveAlarm>({ taskName: ScheduledTaskNames.loginStrategySessionTimeout }),
+      ];
       browserTaskSchedulerService["recoveredAlarms"].add(
         ScheduledTaskNames.loginStrategySessionTimeout,
       );
@@ -234,7 +236,9 @@ describe("BrowserTaskSchedulerService", () => {
 
     it("triggers a recovered alarm before creating the interval alarm", async () => {
       const periodInMinutes = 4;
-      activeAlarms = [mock<ActiveAlarm>({ name: ScheduledTaskNames.loginStrategySessionTimeout })];
+      activeAlarms = [
+        mock<ActiveAlarm>({ taskName: ScheduledTaskNames.loginStrategySessionTimeout }),
+      ];
       browserTaskSchedulerService["recoveredAlarms"].add(
         ScheduledTaskNames.loginStrategySessionTimeout,
       );

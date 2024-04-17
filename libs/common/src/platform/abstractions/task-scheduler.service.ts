@@ -17,9 +17,9 @@ export abstract class TaskSchedulerService {
     protected stateProvider: StateProvider,
   ) {}
 
-  abstract registerTaskHandler(taskName: ScheduledTaskName, handler: () => void): Promise<void>;
+  abstract registerTaskHandler(taskName: ScheduledTaskName, handler: () => void): void;
 
-  abstract unregisterTaskHandler(taskName: ScheduledTaskName): Promise<void>;
+  abstract unregisterTaskHandler(taskName: ScheduledTaskName): void;
 
   abstract setTimeout(
     taskName: ScheduledTaskName,
