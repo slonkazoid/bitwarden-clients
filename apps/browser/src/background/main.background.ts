@@ -448,6 +448,9 @@ export default class MainBackground {
       this.logService,
       this.stateProvider,
     );
+    this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.scheduleNextSyncInterval, () =>
+      this.fullSync(),
+    );
     this.environmentService = new BrowserEnvironmentService(
       this.logService,
       this.stateProvider,
@@ -1098,10 +1101,6 @@ export default class MainBackground {
         }
 
         await this.fullSync(true);
-        this.taskSchedulerService.registerTaskHandler(
-          ScheduledTaskNames.scheduleNextSyncInterval,
-          () => this.fullSync(),
-        );
         await this.taskSchedulerService.setInterval(
           ScheduledTaskNames.scheduleNextSyncInterval,
           5 * 60 * 1000, // check every 5 minutes
