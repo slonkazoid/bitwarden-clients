@@ -7,6 +7,9 @@ describe("BrowserApi", () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+    // eslint-disable-next-line
+    // @ts-ignore
+    globalThis.browser = {};
   });
 
   describe("isManifestVersion", () => {
