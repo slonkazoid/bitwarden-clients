@@ -333,6 +333,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Send Slack notification of version bumps
+        id: slack-message
         env:
           BROWSER_VERSION: ${{ needs.bump_version.outputs.version_browser }}
           CLI_VERSION: ${{ needs.bump_version.outputs.version_cli }}
@@ -356,4 +357,21 @@ jobs:
             MESSAGE+="Web bumped to version $WEB_VERSION."$'\n'
           fi
 
-          echo "$MESSAGE"
+          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        if: failure()
+        with:
+          keyvault: "bitwarden-ci"
+          secrets: "devops-alerts-slack-webhook-url"
+
+      - name: Notify Slack on failure
+        uses: act10ns/slack@ed1309ab9862e57e9e583e51c7889486b9a00b0f # v2.0.0
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}
+        with:
+          message: ${{ steps.slack-message.outputs.message }}
+          status: ${{ job.status }}
