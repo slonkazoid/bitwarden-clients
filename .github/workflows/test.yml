@@ -357,7 +357,9 @@ jobs:
             MESSAGE+="Web bumped to version $WEB_VERSION."$'\n'
           fi
 
-          echo "message=$MESSAGE" >> $GITHUB_OUTPUT
+          echo 'message<<EOF' >> $GITHUB_OUTPUT
+          echo $MESSAGE >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
       
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
