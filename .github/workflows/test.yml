@@ -44,3 +44,4 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
