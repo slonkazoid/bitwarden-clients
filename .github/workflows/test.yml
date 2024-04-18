@@ -341,19 +341,19 @@ jobs:
         run: |
           MESSAGE=""
           if [[ "${{ inputs.bump_browser }}" = "true" ]]; then
-            MESSAGE="Browser bumped to version $BROWSER_VERSION."
+            MESSAGE+="Browser bumped to version $BROWSER_VERSION.\n"
           fi
 
           if [[ "${{ inputs.bump_cli }}" = "true" ]]; then
-            MESSAGE+="CLI bumped to version $CLI_VERSION."
+            MESSAGE+="CLI bumped to version $CLI_VERSION.\n"
           fi
 
           if [[ "${{ inputs.bump_desktop }}" = "true" ]]; then
-            MESSAGE+="Desktop bumped to version $DESKTOP_VERSION."
+            MESSAGE+="Desktop bumped to version $DESKTOP_VERSION.\n"
           fi
 
           if [[ "${{ inputs.bump_web }}" = "true" ]]; then
-            MESSAGE+="Web bumped to version $WEB_VERSION."
+            MESSAGE+="Web bumped to version $WEB_VERSION.\n"
           fi
 
           echo "$MESSAGE"
