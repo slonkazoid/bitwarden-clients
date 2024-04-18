@@ -373,5 +373,6 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}
         with:
+          channel: '#devops-alerts-test'
           message: ${{ steps.slack-message.outputs.message }}
           status: ${{ job.status }}
