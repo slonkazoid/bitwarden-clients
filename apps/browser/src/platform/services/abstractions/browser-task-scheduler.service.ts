@@ -9,4 +9,5 @@ export type ActiveAlarm = {
 
 export interface BrowserTaskSchedulerService extends TaskSchedulerService {
   clearAllScheduledTasks(): Promise<void>;
+  verifyAlarmsState(): Promise<void>;
 }

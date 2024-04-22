@@ -39,7 +39,6 @@ export class BrowserTaskSchedulerService
     );
 
     this.setupOnAlarmListener();
-    this.verifyAlarmsState().catch((e) => this.logService.error(e));
   }
 
   /**
@@ -130,35 +129,10 @@ export class BrowserTaskSchedulerService
   }
 
   /**
-   * Creates a browser extension alarm with the given name and create info.
-   *
-   * @param taskName - The name of the alarm.
-   * @param createInfo - The alarm create info.
-   */
-  private async scheduleAlarm(
-    taskName: ScheduledTaskName,
-    createInfo: chrome.alarms.AlarmCreateInfo,
-  ): Promise<void> {
-    const existingAlarm = await this.getAlarm(taskName);
-    if (existingAlarm) {
-      this.logService.warning(`Alarm ${taskName} already exists. Skipping creation.`);
-      return;
-    }
-
-    await this.createAlarm(taskName, createInfo);
-
-    await this.setActiveAlarm({
-      taskName,
-      startTime: Date.now(),
-      createInfo,
-    });
-  }
-
-  /**
    * Verifies the state of the active alarms by checking if
    * any alarms have been missed or need to be created.
    */
-  private async verifyAlarmsState(): Promise<void> {
+  async verifyAlarmsState(): Promise<void> {
     const currentTime = Date.now();
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
 
@@ -184,6 +158,31 @@ export class BrowserTaskSchedulerService
 
     // 10 seconds after verifying the alarm state, we should treat any newly created alarms as non-recovered alarms.
     globalThis.setTimeout(() => this.recoveredAlarms.clear(), 10 * 1000);
+  }
+
+  /**
+   * Creates a browser extension alarm with the given name and create info.
+   *
+   * @param taskName - The name of the alarm.
+   * @param createInfo - The alarm create info.
+   */
+  private async scheduleAlarm(
+    taskName: ScheduledTaskName,
+    createInfo: chrome.alarms.AlarmCreateInfo,
+  ): Promise<void> {
+    const existingAlarm = await this.getAlarm(taskName);
+    if (existingAlarm) {
+      this.logService.warning(`Alarm ${taskName} already exists. Skipping creation.`);
+      return;
+    }
+
+    await this.createAlarm(taskName, createInfo);
+
+    await this.setActiveAlarm({
+      taskName,
+      startTime: Date.now(),
+      createInfo,
+    });
   }
 
   /**
@@ -259,7 +258,7 @@ export class BrowserTaskSchedulerService
     alarmName: ScheduledTaskName,
     periodInMinutes?: number,
   ): Promise<void> {
-    const activeUserAlarmName = await this.getActiveUserAlarmName(alarmName);
+    const activeUserAlarmName = this.getTaskFromAlarmName(alarmName);
     const handler = this.taskHandlers.get(activeUserAlarmName);
     if (!periodInMinutes) {
       await this.deleteActiveAlarm(alarmName);
@@ -343,6 +342,10 @@ export class BrowserTaskSchedulerService
       return taskName;
     }
 
-    return `${activeUserId}_${taskName}`;
+    return `${activeUserId}__${taskName}`;
+  }
+
+  private getTaskFromAlarmName(alarmName: string): string {
+    return alarmName.split("__")[1];
   }
 }

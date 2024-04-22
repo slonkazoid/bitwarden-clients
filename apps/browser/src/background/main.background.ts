@@ -1167,6 +1167,7 @@ export default class MainBackground {
           5 * 60 * 1000, // check every 5 minutes
         );
         setTimeout(() => this.notificationsService.init(), 2500);
+        await this.taskSchedulerService.verifyAlarmsState();
         resolve();
       }, 500);
     });
