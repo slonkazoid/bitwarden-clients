@@ -7601,10 +7601,13 @@
     "message": "リリースブログを読む"
   },
   "adminConsole": {
-    "message": "管理者コンソール"
+    "message": "管理コンソール"
   },
   "providerPortal": {
     "message": "プロバイダーポータル"
+  },
+  "success": {
+    "message": "成功"
   },
   "viewCollection": {
     "message": "コレクションを表示"
@@ -7900,10 +7903,151 @@
   "machineAccountAccessUpdated": {
     "message": "マシンアカウントへのアクセス権限を更新しました"
   },
-  "unassignedItemsBanner": {
-    "message": "注意: 割り当てられていない組織項目は、デバイス間のすべての保管庫のビューでは表示されなくなり、管理コンソールからのみアクセスできます。 管理コンソールからコレクションにこれらのアイテムを割り当てると、表示するようにできます。"
+  "restrictedGroupAccessDesc": {
+    "message": "あなた自身をグループに追加することはできません。"
   },
   "unassignedItemsBannerSelfHost": {
     "message": "お知らせ：2024年5月2日に、 割り当てられていない組織アイテムはデバイス間のすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。 管理コンソールからコレクションにこれらのアイテムを割り当てると、表示できるようになります。"
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "注意: 割り当てられていない組織アイテムは、デバイス間のすべての保管庫ビューでは表示されなくなり、管理コンソールからのみアクセスできるようになりました。"
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "お知らせ：2024年5月16日に、 割り当てられていない組織アイテムは、デバイス間のすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。"
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "これらのアイテムのコレクションへの割り当てを",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "で実行すると表示できるようになります。",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "プロバイダを削除"
+  },
+  "deleteProviderConfirmation": {
+    "message": "プロバイダの削除は恒久的で元に戻せません。マスターパスワードを入力して、プロバイダと関連するすべてのデータの削除を確認してください。"
+  },
+  "deleteProviderName": {
+    "message": "$ID$ を削除できません",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDesc": {
+    "message": "$ID$ を削除する前に、すべてのクライアントのリンクを解除してください",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "プロバイダを削除しました"
+  },
+  "providerDeletedDesc": {
+    "message": "プロバイダと関連するすべてのデータを削除しました。"
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "このプロバイダの削除をリクエストしました。下のボタンを使うと確認できます。"
+  },
+  "deleteProviderWarning": {
+    "message": "プロバイダを削除すると元に戻すことはできません。"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "ターゲットコレクションの割り当てに失敗しました。"
+  },
+  "errorAssigningTargetFolder": {
+    "message": "ターゲットフォルダーの割り当てに失敗しました。"
+  },
+  "integrationsAndSdks": {
+    "message": "連携＆SDK",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "システム連携"
+  },
+  "integrationsDesc": {
+    "message": "Bitwarden シークレットマネージャーのシークレットを、サードパーティーのサービスに自動的に同期します。"
+  },
+  "sdks": {
+    "message": "SDK"
+  },
+  "sdksDesc": {
+    "message": "Bitwarden シークレットマネージャー SDK を以下のプログラミング言語で使用して、独自のアプリを構築できます。"
+  },
+  "setUpGithubActions": {
+    "message": "Github アクションを設定"
+  },
+  "setUpGitlabCICD": {
+    "message": "GitLab CI/CD の設定"
+  },
+  "setUpAnsible": {
+    "message": "Ansible を設定"
+  },
+  "cSharpSDKRepo": {
+    "message": "C# リポジトリを表示"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "C++ リポジトリを表示"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "JS WebAssembly リポジトリを表示"
+  },
+  "javaSDKRepo": {
+    "message": "Java リポジトリを表示"
+  },
+  "pythonSDKRepo": {
+    "message": "Python リポジトリを表示"
+  },
+  "phpSDKRepo": {
+    "message": "PHP リポジトリを表示"
+  },
+  "rubySDKRepo": {
+    "message": "Ruby リポジトリを表示"
+  },
+  "goSDKRepo": {
+    "message": "Go リポジトリを表示"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "プロバイダーとして管理するための新しいクライアント組織を作成します。次の請求サイクルに追加のシートが反映されます。"
+  },
+  "selectAPlan": {
+    "message": "プランを選択"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35%割引"
+  },
+  "monthPerMember": {
+    "message": "月/メンバーあたり"
+  },
+  "seats": {
+    "message": "シート"
+  },
+  "addOrganization": {
+    "message": "組織を追加"
+  },
+  "createdNewClient": {
+    "message": "新しいクライアントを作成しました"
+  },
+  "noAccess": {
+    "message": "アクセス不可"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "このコレクションは管理コンソールからのみアクセス可能です"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
   }
 }

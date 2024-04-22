@@ -7606,6 +7606,9 @@
   "providerPortal": {
     "message": "Portal del proveïdor"
   },
+  "success": {
+    "message": "Èxit"
+  },
   "viewCollection": {
     "message": "Mostra col·lecció"
   },
@@ -7625,19 +7628,19 @@
     "message": "Assigna a aquestes col·leccions"
   },
   "bulkCollectionAssignmentDialogDescription": {
-    "message": "Select the collections that the items will be shared with. Once an item is updated in one collection, it will be reflected in all collections. Only organization members with access to these collections will be able to see the items."
+    "message": "Seleccioneu les col·leccions amb les quals es compartiran els elements. Una vegada que un element s'actualitza en una col·lecció, es reflectirà a totes les col·leccions. Només els membres de l'organització amb accés a aquestes col·leccions podran veure els elements."
   },
   "selectCollectionsToAssign": {
-    "message": "Select collections to assign"
+    "message": "Seleccioneu les col·leccions per assignar"
   },
   "noCollectionsAssigned": {
-    "message": "No collections have been assigned"
+    "message": "No s'ha assignat cap col·lecció"
   },
   "successfullyAssignedCollections": {
-    "message": "Successfully assigned collections"
+    "message": "Col·leccions assignades correctament"
   },
   "bulkCollectionAssignmentWarning": {
-    "message": "You have selected $TOTAL_COUNT$ items. You cannot update $READONLY_COUNT$ of the items because you do not have edit permissions.",
+    "message": "Heu seleccionat $TOTAL_COUNT$ elements. No podeu actualitzar-ne $READONLY_COUNT$ dels quals perquè no teniu permisos d'edició.",
     "placeholders": {
       "total_count": {
         "content": "$1",
@@ -7650,55 +7653,55 @@
     }
   },
   "items": {
-    "message": "Items"
+    "message": "Elements"
   },
   "assignedSeats": {
-    "message": "Assigned seats"
+    "message": "Seients assignats"
   },
   "assigned": {
-    "message": "Assigned"
+    "message": "Assignat"
   },
   "used": {
-    "message": "Used"
+    "message": "Utilitzat"
   },
   "remaining": {
-    "message": "Remaining"
+    "message": "Queden"
   },
   "unlinkOrganization": {
-    "message": "Unlink organization"
+    "message": "Desenllaça l'organització"
   },
   "manageSeats": {
-    "message": "MANAGE SEATS"
+    "message": "GESTIONA SEIENTS"
   },
   "manageSeatsDescription": {
-    "message": "Adjustments to seats will be reflected in the next billing cycle."
+    "message": "Els ajustos dels seients es reflectiran en el pròxim cicle de facturació."
   },
   "unassignedSeatsDescription": {
-    "message": "Unassigned subscription seats"
+    "message": "Seients de subscripció no assignats"
   },
   "purchaseSeatDescription": {
-    "message": "Additional seats purchased"
+    "message": "Seients addicionals adquirits"
   },
   "assignedSeatCannotUpdate": {
-    "message": "Assigned Seats can not be updated. Please contact your organization owner for assistance."
+    "message": "Els seients assignats no es poden actualitzar. Poseu-vos en contacte amb el propietari de l'organització per obtenir ajuda."
   },
   "subscriptionUpdateFailed": {
-    "message": "Subscription update failed"
+    "message": "L'actualització de la subscripció ha fallat"
   },
   "trial": {
-    "message": "Trial",
+    "message": "Prova",
     "description": "A subscription status label."
   },
   "pastDue": {
-    "message": "Past due",
+    "message": "Vençuda",
     "description": "A subscription status label"
   },
   "subscriptionExpired": {
-    "message": "Subscription expired",
+    "message": "La subscripció ha caducat",
     "description": "The date header used when a subscription is past due."
   },
   "pastDueWarningForChargeAutomatically": {
-    "message": "You have a grace period of $DAYS$ days from your subscription expiration date to maintain your subscription. Please resolve the past due invoices by $SUSPENSION_DATE$.",
+    "message": "Teniu un període de gràcia de $DAYS$ dies a partir de la data de caducitat de la vostra subscripció per mantenir-la. Resoleu les factures vençudes abans de $SUSPENSION_DATE$.",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -7712,7 +7715,7 @@
     "description": "A warning shown to the user when their subscription is past due and they are charged automatically."
   },
   "pastDueWarningForSendInvoice": {
-    "message": "You have a grace period of $DAYS$ days from the date your first unpaid invoice is due to maintain your subscription. Please resolve the past due invoices by $SUSPENSION_DATE$.",
+    "message": "Teniu un període de gràcia de $DAYS$ dies a partir de la data en què cal que la primera factura no pagada mantinga la subscripció. Resoleu les factures vençudes abans de $SUSPENSION_DATE$.",
     "placeholders": {
       "days": {
         "content": "$1",
@@ -7726,22 +7729,22 @@
     "description": "A warning shown to the user when their subscription is past due and they pay via invoice."
   },
   "unpaidInvoice": {
-    "message": "Unpaid invoice",
+    "message": "Factura no pagada",
     "description": "The header of a warning box shown to a user whose subscription is unpaid."
   },
   "toReactivateYourSubscription": {
-    "message": "To reactivate your subscription, please resolve the past due invoices.",
+    "message": "Per reactivar la subscripció, resoleu les factures vençudes.",
     "description": "The body of a warning box shown to a user whose subscription is unpaid."
   },
   "cancellationDate": {
-    "message": "Cancellation date",
+    "message": "Data de cancel·lació",
     "description": "The date header used when a subscription is cancelled."
   },
   "machineAccountsCannotCreate": {
-    "message": "Machine accounts cannot be created in suspended organizations. Please contact your organization owner for assistance."
+    "message": "No es poden crear comptes de màquina en organitzacions suspeses. Poseu-vos en contacte amb el propietari de l'organització per obtenir ajuda."
   },
   "machineAccount": {
-    "message": "Machine account",
+    "message": "Compte de màquina",
     "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "machineAccounts": {
@@ -7900,10 +7903,151 @@
   "machineAccountAccessUpdated": {
     "message": "Machine account access updated"
   },
-  "unassignedItemsBanner": {
-    "message": "Notice: Unassigned organization items are no longer visible in your All Vaults view across devices and are now only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
+  "restrictedGroupAccessDesc": {
+    "message": "You cannot add yourself to a group."
   },
   "unassignedItemsBannerSelfHost": {
     "message": "Notice: On May 2, 2024, unassigned organization items will no longer be visible in your All Vaults view across devices and will only be accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Notice: Unassigned organization items are no longer visible in your All Vaults view across devices and are now only accessible via the Admin Console."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Notice: On May 16, 2024, unassigned organization items will no longer be visible in your All Vaults view across devices and will only be accessible via the Admin Console."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Assign these items to a collection from the",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "to make them visible.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "Delete provider"
+  },
+  "deleteProviderConfirmation": {
+    "message": "Deleting a provider is permanent and irreversible. Enter your master password to confirm the deletion of the provider and all associated data."
+  },
+  "deleteProviderName": {
+    "message": "Cannot delete $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDesc": {
+    "message": "You must unlink all clients before you can delete $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Provider deleted"
+  },
+  "providerDeletedDesc": {
+    "message": "The Provider and all associated data has been deleted."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "You have requested to delete this Provider. Use the button below to confirm."
+  },
+  "deleteProviderWarning": {
+    "message": "Deleting your provider is permanent. It cannot be undone."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
+  },
+  "integrationsAndSdks": {
+    "message": "Integrations & SDKs",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Integrations"
+  },
+  "integrationsDesc": {
+    "message": "Automatically sync secrets from Bitwarden Secrets Manager to a third-party service."
+  },
+  "sdks": {
+    "message": "SDKs"
+  },
+  "sdksDesc": {
+    "message": "Use Bitwarden Secrets Manager SDK in the following programming languages to build your own applications."
+  },
+  "setUpGithubActions": {
+    "message": "Set up Github Actions"
+  },
+  "setUpGitlabCICD": {
+    "message": "Set up GitLab CI/CD"
+  },
+  "setUpAnsible": {
+    "message": "Set up Ansible"
+  },
+  "cSharpSDKRepo": {
+    "message": "View C# repository"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "View C++ repository"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "View JS WebAssembly repository"
+  },
+  "javaSDKRepo": {
+    "message": "View Java repository"
+  },
+  "pythonSDKRepo": {
+    "message": "View Python repository"
+  },
+  "phpSDKRepo": {
+    "message": "View php repository"
+  },
+  "rubySDKRepo": {
+    "message": "View Ruby repository"
+  },
+  "goSDKRepo": {
+    "message": "View Go repository"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Create a new client organization to manage as a Provider. Additional seats will be reflected in the next billing cycle."
+  },
+  "selectAPlan": {
+    "message": "Select a plan"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35% Discount"
+  },
+  "monthPerMember": {
+    "message": "month per member"
+  },
+  "seats": {
+    "message": "Seats"
+  },
+  "addOrganization": {
+    "message": "Add organization"
+  },
+  "createdNewClient": {
+    "message": "Successfully created new client"
+  },
+  "noAccess": {
+    "message": "No access"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "This collection is only accessible from the admin console"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
   }
 }

@@ -25,13 +25,6 @@
     },
     {
       "all_frames": true,
-      "js": ["content/fido2/trigger-fido2-content-script-injection.js"],
-      "matches": ["https://*/*"],
-      "exclude_matches": ["https://*/*.xml*"],
-      "run_at": "document_start"
-    },
-    {
-      "all_frames": true,
       "css": ["content/autofill.css"],
       "js": ["content/trigger-autofill-script-injection.js", "content/misc-utils.js"],
       "matches": ["*://*/*", "file:///*"],
@@ -71,7 +64,7 @@
     "offscreen"
   ],
   "optional_permissions": ["nativeMessaging", "privacy"],
-  "host_permissions": ["*://*/*"],
+  "host_permissions": ["<all_urls>"],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
     "sandbox": "sandbox allow-scripts; script-src 'self'"

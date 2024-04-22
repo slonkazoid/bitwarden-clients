@@ -68,6 +68,8 @@ const tabs = {
 
 const scripting = {
   executeScript: jest.fn(),
+  registerContentScripts: jest.fn(),
+  unregisterContentScripts: jest.fn(),
 };
 
 const windows = {
@@ -124,6 +126,19 @@ const offscreen = {
   },
 };
 
+const permissions = {
+  contains: jest.fn((permissions, callback) => {
+    callback(true);
+  }),
+};
+
+const webNavigation = {
+  onCommitted: {
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  },
+};
+
 const alarms = {
   clear: jest.fn().mockImplementation((_name, callback) => callback(true)),
   clearAll: jest.fn().mockImplementation((callback) => callback(true)),
@@ -149,5 +164,7 @@ global.chrome = {
   privacy,
   extension,
   offscreen,
+  permissions,
+  webNavigation,
   alarms,
 } as any;

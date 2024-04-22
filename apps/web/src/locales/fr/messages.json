@@ -7606,6 +7606,9 @@
   "providerPortal": {
     "message": "Portail fournisseur"
   },
+  "success": {
+    "message": "Succès"
+  },
   "viewCollection": {
     "message": "Afficher la Collection"
   },
@@ -7900,10 +7903,151 @@
   "machineAccountAccessUpdated": {
     "message": "Accès au compte machine mis à jour"
   },
-  "unassignedItemsBanner": {
-    "message": "Remarque : les éléments d'organisation non assignés ne sont plus visibles dans votre vue Tous les coffres sur tous les appareils et sont uniquement accessibles via la Console d'administration. Assignez ces éléments à une collection à partir de la Console d'administration pour les rendre visibles."
+  "restrictedGroupAccessDesc": {
+    "message": "Vous ne pouvez pas vous ajouter vous-même à un groupe."
   },
   "unassignedItemsBannerSelfHost": {
-    "message": "Remarque : au 2 mai 2024, les éléments d'organisation non assignés ne sont plus visibles dans votre vue Tous les coffres sur tous les appareils et sont uniquement accessibles via la Console d'administration. Assignez ces éléments à une collection à partir de la Console d'administration pour les rendre visibles."
+    "message": "Remarque : le 2 mai 2024, les éléments d'organisation non assignés ne seront plus visibles dans votre vue Tous les coffres sur les appareils et seront uniquement accessibles via la Console Admin. Assignez ces éléments à une collection à partir de la Console Admin pour les rendre visibles."
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Remarque : Les éléments d'organisation non assignés ne sont plus visibles dans la vue Tous les coffres sur les appareils et ne sont maintenant accessibles que via la Console Admin."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Remarque : À partir du 16 mai 2024, les éléments d'organisation non assignés ne seront plus visibles dans la vue Tous les coffres sur les appareils et ne seront maintenant accessibles que via la Console Admin."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Assigner ces éléments à une collection depuis",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "pour les rendre visibles.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "Supprimer le fournisseur"
+  },
+  "deleteProviderConfirmation": {
+    "message": "La suppression d'un fournisseur est permanente et irréversible. Entrez votre mot de passe principal pour confirmer la suppression du fournisseur et de toutes les données associées."
+  },
+  "deleteProviderName": {
+    "message": "Impossible de supprimer $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDesc": {
+    "message": "Vous devez dissocier tous les clients avant de pouvoir supprimer $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Fournisseur supprimé"
+  },
+  "providerDeletedDesc": {
+    "message": "Le fournisseur et toutes les données associées ont été supprimés."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "Vous avez demandé à supprimer ce fournisseur. Utilisez le bouton ci-dessous pour confirmer."
+  },
+  "deleteProviderWarning": {
+    "message": "La suppression de votre fournisseur est permanente. Elle ne peut pas être annulée."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Erreur lors de l'assignation de la collection cible."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Erreur lors de l'assignation du dossier cible."
+  },
+  "integrationsAndSdks": {
+    "message": "Intégrations & SDKs",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Intégrations"
+  },
+  "integrationsDesc": {
+    "message": "Synchroniser automatiquement les secrets à partir du Secrets Manager de Bitwarden vers un service tiers."
+  },
+  "sdks": {
+    "message": "SDK"
+  },
+  "sdksDesc": {
+    "message": "Utilisez Bitwarden Secrets Manager SDK dans les langages de programmation suivants pour construire vos propres applications."
+  },
+  "setUpGithubActions": {
+    "message": "Configurer Github Actions"
+  },
+  "setUpGitlabCICD": {
+    "message": "Configurer GitLab CI/CD"
+  },
+  "setUpAnsible": {
+    "message": "Configurer Ansible"
+  },
+  "cSharpSDKRepo": {
+    "message": "Afficher le dépôt C#"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "Afficher le dépôt C++"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "Afficher le dépôt JS WebAssembly"
+  },
+  "javaSDKRepo": {
+    "message": "Afficher le dépôt Java"
+  },
+  "pythonSDKRepo": {
+    "message": "Afficher le dépôt Python"
+  },
+  "phpSDKRepo": {
+    "message": "Afficher le dépôt php"
+  },
+  "rubySDKRepo": {
+    "message": "Afficher le dépôt Ruby"
+  },
+  "goSDKRepo": {
+    "message": "Afficher le dépôt Go"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Créez une nouvelle organisation de clients à gérer en tant que Fournisseur. Des sièges supplémentaires seront reflétés lors du prochain cycle de facturation."
+  },
+  "selectAPlan": {
+    "message": "Sélectionnez un plan"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35% de réduction"
+  },
+  "monthPerMember": {
+    "message": "mois par membre"
+  },
+  "seats": {
+    "message": "Licences"
+  },
+  "addOrganization": {
+    "message": "Ajouter une organisation"
+  },
+  "createdNewClient": {
+    "message": "Nouveau client créé avec succès"
+  },
+  "noAccess": {
+    "message": "Aucun accès"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "Cette collection n'est accessible qu'à partir de la Console Admin"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
   }
 }

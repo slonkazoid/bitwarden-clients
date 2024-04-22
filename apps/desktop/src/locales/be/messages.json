@@ -800,8 +800,11 @@
   "changeMasterPass": {
     "message": "Змяніць асноўны пароль"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Вы можаце змяніць свой асноўны пароль у вэб-сховішчы на bitwarden.com. Перайсці на вэб-сайт зараз?"
+  "continueToWebApp": {
+    "message": "Continue to web app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "You can change your master password on the Bitwarden web app."
   },
   "fingerprintPhrase": {
     "message": "Фраза адбітка пальца",
@@ -1628,6 +1631,12 @@
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Інтэграцыя з браўзерам не падтрымліваецца"
+  },
+  "browserIntegrationErrorTitle": {
+    "message": "Error enabling browser integration"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "An error has occurred while enabling browser integration."
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "На жаль, інтэграцыя з браўзерам зараз падтрымліваецца толькі ў версіі для Mac App Store."
@@ -2702,5 +2711,11 @@
   },
   "passkeyRemoved": {
     "message": "Passkey removed"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
   }
 }

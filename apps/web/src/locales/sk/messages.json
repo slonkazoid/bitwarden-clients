@@ -344,7 +344,7 @@
     "message": "Krstné meno"
   },
   "middleName": {
-    "message": "Druhé meno"
+    "message": "Stredné meno"
   },
   "lastName": {
     "message": "Priezvisko"
@@ -2814,7 +2814,7 @@
     "message": "Zmenené heslo k účtu."
   },
   "enabledUpdated2fa": {
-    "message": "Dvojstupňové prihlasovanie zapnuté/aktualizované."
+    "message": "Dvojstupňové prihlasovanie uložené"
   },
   "disabled2fa": {
     "message": "Dvojstupňové prihlasovanie vypnuté."
@@ -3234,10 +3234,10 @@
     "message": "Skupinový prístup"
   },
   "groupAccessUserDesc": {
-    "message": "Upraviť skupiny, do ktorých patrí používateľ."
+    "message": "Povoľte členom prístup k zbierkam ich pridaním do jednej alebo viac skupín."
   },
   "invitedUsers": {
-    "message": "Používatelia pozvaní."
+    "message": "Používatelia pozvaní"
   },
   "resendInvitation": {
     "message": "Znovu poslať pozvánku"
@@ -3246,7 +3246,7 @@
     "message": "Znovu poslať e-mail"
   },
   "hasBeenReinvited": {
-    "message": "$USER$ bol znovu pozvaný.",
+    "message": "$USER$ bol znovu pozvaný",
     "placeholders": {
       "user": {
         "content": "$1",
@@ -3270,7 +3270,7 @@
     }
   },
   "confirmUsers": {
-    "message": "Potvrdiť používateľov"
+    "message": "Potvrdiť členov"
   },
   "usersNeedConfirmed": {
     "message": "Máte používateľov, ktorí prijali pozvanie, ale ešte ich musíte potvrdiť. Používatelia nebudú mať prístup k organizácii, kým nebudú potvrdení."
@@ -3294,13 +3294,13 @@
     "message": "Skontrolujte si doručenú poštu, mali by ste obdržať odkaz pre verifikáciu."
   },
   "emailVerified": {
-    "message": "Vaša emailová adresa bola overená."
+    "message": "Emailová adresa konta bola overená"
   },
   "emailVerifiedFailed": {
     "message": "Overovanie zlyhalo. Skúste si odoslať nový verifikačný e-mail."
   },
   "emailVerificationRequired": {
-    "message": "Vyžaduje sa overenie e-mailu"
+    "message": "Vyžaduje sa overenie e-mailom"
   },
   "emailVerificationRequiredDesc": {
     "message": "Na používanie tejto funkcie musíte overiť svoj e-mail."
@@ -7606,6 +7606,9 @@
   "providerPortal": {
     "message": "Portál poskytovateľa"
   },
+  "success": {
+    "message": "Success"
+  },
   "viewCollection": {
     "message": "Pozrieť zbierku"
   },
@@ -7900,10 +7903,151 @@
   "machineAccountAccessUpdated": {
     "message": "Machine account access updated"
   },
-  "unassignedItemsBanner": {
-    "message": "Notice: Unassigned organization items are no longer visible in your All Vaults view across devices and are now only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
+  "restrictedGroupAccessDesc": {
+    "message": "You cannot add yourself to a group."
   },
   "unassignedItemsBannerSelfHost": {
-    "message": "Notice: On May 2, 2024, unassigned organization items will no longer be visible in your All Vaults view across devices and will only be accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
+    "message": "Upozornenie: 2. mája nepriradené položky organizácie už nebudú viditeľné v zobrazení Všetky Trezory a budú prístupné len cez administrátorskú konzolu. Aby boli viditeľné, priraďte tieto položky do kolekcie z konzoly administrátora."
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Upozornenie: Nepriradené položky organizácie už nie sú viditeľné v zobrazení Všetky trezory a sú prístupné iba cez Správcovskú konzolu."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Upozornenie: 16. mája 2024 nepriradené položky organizácie už nebudú viditeľné v zobrazení Všetky trezory a budú prístupné iba cez Správcovskú konzolu."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Priradiť tieto položky do zbierky zo",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": ", aby boli viditeľné.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "Odstrániť poskytovateľa"
+  },
+  "deleteProviderConfirmation": {
+    "message": "Odstránenie poskytovateľa je trvalé a nenávratné. Zadajte vaše hlavné heslo pre potvrdenie odstránenia poskytovateľa a súvisiacich dát."
+  },
+  "deleteProviderName": {
+    "message": "$ID$ sa nedá odstrániť",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDesc": {
+    "message": "Pred tým než budete môcť odstrániť $ID$, musíte odpojiť všetkých klientov",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Poskytovateľ odstránený"
+  },
+  "providerDeletedDesc": {
+    "message": "Poskytovateľ a všetky súvisiace dáta boli odstránené."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "Požiadali ste o odstránenie tohto Poskytovateľa. Pre potvrdenie operácie použite tlačidlo nižšie."
+  },
+  "deleteProviderWarning": {
+    "message": "Odstránenie poskytovateľa je trvalé. Nedá sa vrátiť späť."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Chyba pri priraďovaní cieľovej kolekcie."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Chyba pri priraďovaní cieľového priečinka."
+  },
+  "integrationsAndSdks": {
+    "message": "Integrácie a SDK",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Integrácie"
+  },
+  "integrationsDesc": {
+    "message": "Automaticky synchronizovať položky z Bitwarden Secrets Manager do služby tretej strany."
+  },
+  "sdks": {
+    "message": "SDK"
+  },
+  "sdksDesc": {
+    "message": "Použite Bitwarden Secrets Manager SDK v následujúcich programovacích jazykoch pre vytvorenie vašej vlastnej aplikácie."
+  },
+  "setUpGithubActions": {
+    "message": "Nastaviť Github Actions"
+  },
+  "setUpGitlabCICD": {
+    "message": "Nastaviť GitLab CI/CD"
+  },
+  "setUpAnsible": {
+    "message": "Nastaviť Ansible"
+  },
+  "cSharpSDKRepo": {
+    "message": "Zobraziť C# repozitár"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "Zobraziť C++ repozitár"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "Zobraziť JS WebAssembly repozitár"
+  },
+  "javaSDKRepo": {
+    "message": "Zobraziť Java repozitár"
+  },
+  "pythonSDKRepo": {
+    "message": "Zobraziť Python repozitár"
+  },
+  "phpSDKRepo": {
+    "message": "Zobraziť php repozitár"
+  },
+  "rubySDKRepo": {
+    "message": "Zobraziť Ruby repozitár"
+  },
+  "goSDKRepo": {
+    "message": "Zobraziť Go repozitár"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Vytvoriť novú klientskú organizáciu ktorú môžete spravovať ako Poskytovateľ. Dodatočné sedenia sa prejavia v najbližšom fakturačnom období."
+  },
+  "selectAPlan": {
+    "message": "Vyberte plán"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "Zľava 35%"
+  },
+  "monthPerMember": {
+    "message": "month per member"
+  },
+  "seats": {
+    "message": "Sedenia"
+  },
+  "addOrganization": {
+    "message": "Pridať organizáciu"
+  },
+  "createdNewClient": {
+    "message": "Nový klient úspešne vytvorený"
+  },
+  "noAccess": {
+    "message": "Žiadny prístup"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "Táto zbierka je dostupná iba z administrátorskej konzoly"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
   }
 }

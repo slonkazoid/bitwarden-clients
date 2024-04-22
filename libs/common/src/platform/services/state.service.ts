@@ -571,6 +571,20 @@ export class StateService<
     );
   }
 
+  async setEnableDuckDuckGoBrowserIntegration(
+    value: boolean,
+    options?: StorageOptions,
+  ): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
+    );
+    globals.enableDuckDuckGoBrowserIntegration = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
+    );
+  }
+
   /**
    * @deprecated Use UserKey instead
    */
@@ -617,24 +631,6 @@ export class StateService<
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
-  async getEverBeenUnlocked(options?: StorageOptions): Promise<boolean> {
-    return (
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.profile?.everBeenUnlocked ?? false
-    );
-  }
-
-  async setEverBeenUnlocked(value: boolean, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    account.profile.everBeenUnlocked = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
     );
   }
 
