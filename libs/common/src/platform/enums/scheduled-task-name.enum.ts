@@ -1,5 +1,5 @@
 export const ScheduledTaskNames = {
-  clearClipboardTimeout: "clearClipboardTimeout",
+  generatePasswordClearClipboardTimeout: "generatePasswordClearClipboardTimeout",
   systemClearClipboardTimeout: "systemClearClipboardTimeout",
   loginStrategySessionTimeout: "loginStrategySessionTimeout",
   notificationsReconnectTimeout: "notificationsReconnectTimeout",

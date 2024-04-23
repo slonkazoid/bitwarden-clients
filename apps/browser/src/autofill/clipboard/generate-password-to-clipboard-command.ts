@@ -15,10 +15,10 @@ export class GeneratePasswordToClipboardCommand {
   constructor(
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
-    private taskSchedulerService: BrowserTaskSchedulerService,
+    private taskSchedulerService?: BrowserTaskSchedulerService,
   ) {
-    void this.taskSchedulerService.registerTaskHandler(
-      ScheduledTaskNames.clearClipboardTimeout,
+    void this.taskSchedulerService?.registerTaskHandler(
+      ScheduledTaskNames.generatePasswordClearClipboardTimeout,
       () => ClearClipboard.run(),
     );
   }
@@ -39,12 +39,12 @@ export class GeneratePasswordToClipboardCommand {
     }
 
     const timeoutInMs = clearClipboardDelayInSeconds * 1000;
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.clearClipboardTimeout,
+    await this.taskSchedulerService?.clearScheduledTask({
+      taskName: ScheduledTaskNames.generatePasswordClearClipboardTimeout,
       timeoutId: this.clearClipboardTimeout,
     });
-    await this.taskSchedulerService.setTimeout(
-      ScheduledTaskNames.clearClipboardTimeout,
+    await this.taskSchedulerService?.setTimeout(
+      ScheduledTaskNames.generatePasswordClearClipboardTimeout,
       timeoutInMs,
     );
   }

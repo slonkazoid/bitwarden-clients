@@ -62,9 +62,8 @@ describe("GeneratePasswordToClipboardCommand", () => {
       });
       expect(browserTaskSchedulerService.setTimeout).toHaveBeenCalledTimes(1);
       expect(browserTaskSchedulerService.setTimeout).toHaveBeenCalledWith(
-        expect.any(Function),
+        ScheduledTaskNames.generatePasswordClearClipboardTimeout,
         expect.any(Number),
-        ScheduledTaskNames.clearClipboardTimeout,
       );
       expect(ClearClipboard.run).toHaveBeenCalledTimes(1);
     });
