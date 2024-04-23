@@ -44,9 +44,9 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     private authService: AuthService,
     private authRequestService: AuthRequestServiceAbstraction,
     private messagingService: MessagingService,
-    private taskSchedulerService: TaskSchedulerService,
+    private taskSchedulerService?: TaskSchedulerService,
   ) {
-    void this.taskSchedulerService.registerTaskHandler(
+    void this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.notificationsReconnectTimeout,
       () => this.reconnect(this.isSyncingOnReconnect),
     );
@@ -225,7 +225,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   }
 
   private async reconnect(sync: boolean) {
-    await this.taskSchedulerService.clearScheduledTask({
+    await this.taskSchedulerService?.clearScheduledTask({
       taskName: ScheduledTaskNames.notificationsReconnectTimeout,
       timeoutId: this.reconnectTimer,
     });
@@ -250,7 +250,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
 
     if (!this.connected) {
       this.isSyncingOnReconnect = sync;
-      this.reconnectTimer = await this.taskSchedulerService.setTimeout(
+      this.reconnectTimer = await this.taskSchedulerService?.setTimeout(
         ScheduledTaskNames.notificationsReconnectTimeout,
         this.random(120000, 300000),
       );

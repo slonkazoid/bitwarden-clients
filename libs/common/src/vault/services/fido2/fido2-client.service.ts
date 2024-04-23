@@ -60,10 +60,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     private authService: AuthService,
     private vaultSettingsService: VaultSettingsService,
     private domainSettingsService: DomainSettingsService,
-    private taskSchedulerService: TaskSchedulerService,
+    private taskSchedulerService?: TaskSchedulerService,
     private logService?: LogService,
   ) {
-    void this.taskSchedulerService.registerTaskHandler(
+    void this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.fido2ClientAbortTimeout,
       () => this.timeoutAbortController?.abort(),
     );
@@ -229,7 +229,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       };
     }
 
-    await this.taskSchedulerService.clearScheduledTask({
+    await this.taskSchedulerService?.clearScheduledTask({
       taskName: ScheduledTaskNames.fido2ClientAbortTimeout,
       timeoutId: timeout,
     });
@@ -334,7 +334,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
-    await this.taskSchedulerService.clearScheduledTask({
+    await this.taskSchedulerService?.clearScheduledTask({
       taskName: ScheduledTaskNames.fido2ClientAbortTimeout,
       timeoutId: timeout,
     });
@@ -368,7 +368,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     this.timeoutAbortController = abortController;
-    return await this.taskSchedulerService.setTimeout(
+    return await this.taskSchedulerService?.setTimeout(
       ScheduledTaskNames.fido2ClientAbortTimeout,
       clampedTimeout,
     );

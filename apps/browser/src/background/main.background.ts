@@ -503,14 +503,20 @@ export default class MainBackground {
       this.globalStateProvider,
       this.derivedStateProvider,
     );
-    this.taskSchedulerService = new BrowserTaskSchedulerService(
-      this.logService,
-      this.stateProvider,
-    );
-    void this.taskSchedulerService.registerTaskHandler(
-      ScheduledTaskNames.scheduleNextSyncInterval,
-      () => this.fullSync(),
-    );
+
+    // The taskSchedulerService needs to be instantiated a single time in a potential context.
+    // Since the popup creates a new instance of the main background in mv3, we need to guard against a duplicate registration.
+    if (!this.popupOnlyContext) {
+      this.taskSchedulerService = new BrowserTaskSchedulerService(
+        this.logService,
+        this.stateProvider,
+      );
+      void this.taskSchedulerService.registerTaskHandler(
+        ScheduledTaskNames.scheduleNextSyncInterval,
+        () => this.fullSync(),
+      );
+    }
+
     this.environmentService = new BrowserEnvironmentService(
       this.logService,
       this.stateProvider,
@@ -921,13 +927,13 @@ export default class MainBackground {
       this.logService,
     );
 
-    const systemUtilsServiceReloadCallback = () => {
+    const systemUtilsServiceReloadCallback = async () => {
       const forceWindowReload =
         this.platformUtilsService.isSafari() ||
         this.platformUtilsService.isFirefox() ||
         this.platformUtilsService.isOpera();
+      await this.taskSchedulerService?.clearAllScheduledTasks();
       BrowserApi.reloadExtension(forceWindowReload ? self : null);
-      return Promise.resolve();
     };
 
     this.systemService = new SystemService(
@@ -1162,12 +1168,12 @@ export default class MainBackground {
         }
 
         await this.fullSync(true);
-        await this.taskSchedulerService.setInterval(
+        await this.taskSchedulerService?.setInterval(
           ScheduledTaskNames.scheduleNextSyncInterval,
           5 * 60 * 1000, // check every 5 minutes
         );
         setTimeout(() => this.notificationsService.init(), 2500);
-        await this.taskSchedulerService.verifyAlarmsState();
+        await this.taskSchedulerService?.verifyAlarmsState();
         resolve();
       }, 500);
     });
@@ -1244,7 +1250,6 @@ export default class MainBackground {
     userId ??= (await firstValueFrom(this.accountService.activeAccount$))?.id;
 
     await this.eventUploadService.uploadEvents(userId as UserId);
-    await this.taskSchedulerService.clearAllScheduledTasks();
 
     await Promise.all([
       this.syncService.setLastSync(new Date(0), userId),

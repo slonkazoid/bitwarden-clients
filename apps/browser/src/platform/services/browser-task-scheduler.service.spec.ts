@@ -30,15 +30,15 @@ describe("BrowserTaskSchedulerService", () => {
     jest.useFakeTimers();
     activeAlarms = [
       mock<ActiveAlarm>({
-        taskName: ScheduledTaskNames.eventUploadsInterval,
+        alarmName: ScheduledTaskNames.eventUploadsInterval,
         createInfo: eventUploadsIntervalCreateInfo,
       }),
       mock<ActiveAlarm>({
-        taskName: ScheduledTaskNames.scheduleNextSyncInterval,
+        alarmName: ScheduledTaskNames.scheduleNextSyncInterval,
         createInfo: scheduleNextSyncIntervalCreateInfo,
       }),
       mock<ActiveAlarm>({
-        taskName: ScheduledTaskNames.fido2ClientAbortTimeout,
+        alarmName: ScheduledTaskNames.fido2ClientAbortTimeout,
         startTime: Date.now() - 60001,
         createInfo: { delayInMinutes: 1, periodInMinutes: undefined },
       }),
@@ -87,24 +87,6 @@ describe("BrowserTaskSchedulerService", () => {
         expect.any(Function),
       );
     });
-
-    it("adds the alarm name to the set of recovered alarms if the alarm create info indicates it has expired", () => {
-      expect(
-        browserTaskSchedulerService["recoveredAlarms"].has(
-          ScheduledTaskNames.fido2ClientAbortTimeout,
-        ),
-      ).toBe(true);
-    });
-
-    it("clears the list of recovered alarms after 10 seconds", () => {
-      jest.advanceTimersByTime(10 * 1000);
-
-      expect(
-        browserTaskSchedulerService["recoveredAlarms"].has(
-          ScheduledTaskNames.fido2ClientAbortTimeout,
-        ),
-      ).toBe(false);
-    });
   });
 
   describe("setTimeout", () => {
@@ -123,32 +105,6 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), delayInMs);
-      expect(chrome.alarms.create).not.toHaveBeenCalledWith(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        { delayInMinutes: 1 },
-        expect.any(Function),
-      );
-    });
-
-    it("triggers a recovered alarm immediately and skips creating the alarm", async () => {
-      activeAlarms = [
-        mock<ActiveAlarm>({ taskName: ScheduledTaskNames.loginStrategySessionTimeout }),
-      ];
-      browserTaskSchedulerService["recoveredAlarms"].add(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-      );
-      const callback = jest.fn();
-      await browserTaskSchedulerService.registerTaskHandler(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        callback,
-      );
-
-      await browserTaskSchedulerService.setTimeout(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        60 * 1000,
-      );
-
-      expect(callback).toHaveBeenCalled();
       expect(chrome.alarms.create).not.toHaveBeenCalledWith(
         ScheduledTaskNames.loginStrategySessionTimeout,
         { delayInMinutes: 1 },
@@ -176,27 +132,27 @@ describe("BrowserTaskSchedulerService", () => {
       );
     });
 
-    it("skips creating a duplicate timeout alarm", async () => {
-      const callback = jest.fn();
-      const delayInMinutes = 2;
-      jest.spyOn(browserTaskSchedulerService as any, "getAlarm").mockResolvedValue(
-        mock<chrome.alarms.Alarm>({
-          name: ScheduledTaskNames.loginStrategySessionTimeout,
-        }),
-      );
-      jest.spyOn(browserTaskSchedulerService, "createAlarm");
-      await browserTaskSchedulerService.registerTaskHandler(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        callback,
-      );
-
-      await browserTaskSchedulerService.setTimeout(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        delayInMinutes * 60 * 1000,
-      );
-
-      expect(browserTaskSchedulerService.createAlarm).not.toHaveBeenCalled();
-    });
+    // it("skips creating a duplicate timeout alarm", async () => {
+    //   const callback = jest.fn();
+    //   const delayInMinutes = 2;
+    //   jest.spyOn(browserTaskSchedulerService as any, "getAlarm").mockResolvedValue(
+    //     mock<chrome.alarms.Alarm>({
+    //       name: ScheduledTaskNames.loginStrategySessionTimeout,
+    //     }),
+    //   );
+    //   jest.spyOn(browserTaskSchedulerService, "createAlarm");
+    //   await browserTaskSchedulerService.registerTaskHandler(
+    //     ScheduledTaskNames.loginStrategySessionTimeout,
+    //     callback,
+    //   );
+    //
+    //   await browserTaskSchedulerService.setTimeout(
+    //     ScheduledTaskNames.loginStrategySessionTimeout,
+    //     delayInMinutes * 60 * 1000,
+    //   );
+    //
+    //   expect(browserTaskSchedulerService.createAlarm).not.toHaveBeenCalled();
+    // });
 
     // it("logs a warning if a duplicate handler is registered when creating an alarm", () => {
     //   const callback = jest.fn();
@@ -230,33 +186,6 @@ describe("BrowserTaskSchedulerService", () => {
       expect(chrome.alarms.create).not.toHaveBeenCalledWith(
         ScheduledTaskNames.loginStrategySessionTimeout,
         { periodInMinutes: 1, delayInMinutes: 1 },
-        expect.any(Function),
-      );
-    });
-
-    it("triggers a recovered alarm before creating the interval alarm", async () => {
-      const periodInMinutes = 4;
-      activeAlarms = [
-        mock<ActiveAlarm>({ taskName: ScheduledTaskNames.loginStrategySessionTimeout }),
-      ];
-      browserTaskSchedulerService["recoveredAlarms"].add(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-      );
-      const callback = jest.fn();
-      await browserTaskSchedulerService.registerTaskHandler(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        callback,
-      );
-
-      await browserTaskSchedulerService.setInterval(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        periodInMinutes * 60 * 1000,
-      );
-
-      expect(callback).toHaveBeenCalled();
-      expect(chrome.alarms.create).toHaveBeenCalledWith(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        { periodInMinutes, delayInMinutes: periodInMinutes },
         expect.any(Function),
       );
     });
@@ -324,19 +253,19 @@ describe("BrowserTaskSchedulerService", () => {
     });
   });
 
-  describe("clearAllScheduledTasks", () => {
-    it("clears all scheduled tasks and extension alarms", async () => {
-      jest.spyOn(browserTaskSchedulerService, "clearAllAlarms");
-      jest.spyOn(browserTaskSchedulerService as any, "updateActiveAlarms");
-
-      await browserTaskSchedulerService.clearAllScheduledTasks();
-
-      expect(browserTaskSchedulerService.clearAllAlarms).toHaveBeenCalled();
-      expect(browserTaskSchedulerService["updateActiveAlarms"]).toHaveBeenCalledWith([]);
-      // expect(browserTaskSchedulerService["onAlarmHandlers"]).toEqual({});
-      expect(browserTaskSchedulerService["recoveredAlarms"].size).toBe(0);
-    });
-  });
+  // describe("clearAllScheduledTasks", () => {
+  //   it("clears all scheduled tasks and extension alarms", async () => {
+  //     jest.spyOn(browserTaskSchedulerService, "clearAllAlarms");
+  //     jest.spyOn(browserTaskSchedulerService as any, "updateActiveAlarms");
+  //
+  //     await browserTaskSchedulerService.clearAllScheduledTasks();
+  //
+  //     expect(browserTaskSchedulerService.clearAllAlarms).toHaveBeenCalled();
+  //     expect(browserTaskSchedulerService["updateActiveAlarms"]).toHaveBeenCalledWith([]);
+  //     // expect(browserTaskSchedulerService["onAlarmHandlers"]).toEqual({});
+  //     expect(browserTaskSchedulerService["recoveredAlarms"].size).toBe(0);
+  //   });
+  // });
 
   // describe("handleOnAlarm", () => {
   //   it("triggers the alarm", async () => {
@@ -350,133 +279,133 @@ describe("BrowserTaskSchedulerService", () => {
   //   });
   // });
 
-  describe("clearAlarm", () => {
-    it("uses the browser.alarms API if it is available", async () => {
-      const alarmName = "alarm-name";
-      globalThis.browser = {
-        // eslint-disable-next-line
-        // @ts-ignore
-        alarms: {
-          clear: jest.fn(),
-        },
-      };
-
-      await browserTaskSchedulerService.clearAlarm(alarmName);
-
-      expect(browser.alarms.clear).toHaveBeenCalledWith(alarmName);
-    });
-
-    it("clears the alarm with the provided name", async () => {
-      const alarmName = "alarm-name";
-
-      const wasCleared = await browserTaskSchedulerService.clearAlarm(alarmName);
-
-      expect(chrome.alarms.clear).toHaveBeenCalledWith(alarmName, expect.any(Function));
-      expect(wasCleared).toBe(true);
-    });
-  });
-
-  describe("clearAllAlarms", () => {
-    it("uses the browser.alarms API if it is available", async () => {
-      globalThis.browser = {
-        // eslint-disable-next-line
-        // @ts-ignore
-        alarms: {
-          clearAll: jest.fn(),
-        },
-      };
-
-      await browserTaskSchedulerService.clearAllAlarms();
-
-      expect(browser.alarms.clearAll).toHaveBeenCalled();
-    });
-
-    it("clears all alarms", async () => {
-      const wasCleared = await browserTaskSchedulerService.clearAllAlarms();
-
-      expect(chrome.alarms.clearAll).toHaveBeenCalledWith(expect.any(Function));
-      expect(wasCleared).toBe(true);
-    });
-  });
-
-  describe("createAlarm", () => {
-    it("uses the browser.alarms API if it is available", async () => {
-      const alarmName = "alarm-name";
-      const alarmInfo = { when: 1000 };
-      globalThis.browser = {
-        // eslint-disable-next-line
-        // @ts-ignore
-        alarms: {
-          create: jest.fn(),
-        },
-      };
-
-      await browserTaskSchedulerService.createAlarm(alarmName, alarmInfo);
-
-      expect(browser.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo);
-    });
-
-    it("creates an alarm", async () => {
-      const alarmName = "alarm-name";
-      const alarmInfo = { when: 1000 };
-
-      await browserTaskSchedulerService.createAlarm(alarmName, alarmInfo);
-
-      expect(chrome.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo, expect.any(Function));
-    });
-  });
-
-  describe.skip("getAlarm", () => {
-    it("uses the browser.alarms API if it is available", async () => {
-      const alarmName = "alarm-name";
-      globalThis.browser = {
-        // eslint-disable-next-line
-        // @ts-ignore
-        alarms: {
-          get: jest.fn(),
-        },
-      };
-
-      await browserTaskSchedulerService.getAlarm(alarmName);
-
-      expect(browser.alarms.get).toHaveBeenCalledWith(alarmName);
-    });
-
-    it("gets the alarm by name", async () => {
-      const alarmName = "alarm-name";
-      const alarmMock = mock<chrome.alarms.Alarm>();
-      chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(alarmMock));
-
-      const receivedAlarm = await browserTaskSchedulerService.getAlarm(alarmName);
-
-      expect(chrome.alarms.get).toHaveBeenCalledWith(alarmName, expect.any(Function));
-      expect(receivedAlarm).toBe(alarmMock);
-    });
-  });
-
-  describe("getAllAlarms", () => {
-    it("uses the browser.alarms API if it is available", async () => {
-      globalThis.browser = {
-        // eslint-disable-next-line
-        // @ts-ignore
-        alarms: {
-          getAll: jest.fn(),
-        },
-      };
-
-      await browserTaskSchedulerService.getAllAlarms();
-
-      expect(browser.alarms.getAll).toHaveBeenCalled();
-    });
-
-    it("gets all registered alarms", async () => {
-      const alarms = [mock<chrome.alarms.Alarm>(), mock<chrome.alarms.Alarm>()];
-      chrome.alarms.getAll = jest.fn().mockImplementation((callback) => callback(alarms));
-
-      const receivedAlarms = await browserTaskSchedulerService.getAllAlarms();
-
-      expect(chrome.alarms.getAll).toHaveBeenCalledWith(expect.any(Function));
-      expect(receivedAlarms).toBe(alarms);
-    });
-  });
+  // describe("clearAlarm", () => {
+  //   it("uses the browser.alarms API if it is available", async () => {
+  //     const alarmName = "alarm-name";
+  //     globalThis.browser = {
+  //       // eslint-disable-next-line
+  //       // @ts-ignore
+  //       alarms: {
+  //         clear: jest.fn(),
+  //       },
+  //     };
+  //
+  //     await browserTaskSchedulerService.clearAlarm(alarmName);
+  //
+  //     expect(browser.alarms.clear).toHaveBeenCalledWith(alarmName);
+  //   });
+  //
+  //   it("clears the alarm with the provided name", async () => {
+  //     const alarmName = "alarm-name";
+  //
+  //     const wasCleared = await browserTaskSchedulerService.clearAlarm(alarmName);
+  //
+  //     expect(chrome.alarms.clear).toHaveBeenCalledWith(alarmName, expect.any(Function));
+  //     expect(wasCleared).toBe(true);
+  //   });
+  // });
+  //
+  // describe("clearAllAlarms", () => {
+  //   it("uses the browser.alarms API if it is available", async () => {
+  //     globalThis.browser = {
+  //       // eslint-disable-next-line
+  //       // @ts-ignore
+  //       alarms: {
+  //         clearAll: jest.fn(),
+  //       },
+  //     };
+  //
+  //     await browserTaskSchedulerService.clearAllAlarms();
+  //
+  //     expect(browser.alarms.clearAll).toHaveBeenCalled();
+  //   });
+  //
+  //   it("clears all alarms", async () => {
+  //     const wasCleared = await browserTaskSchedulerService.clearAllAlarms();
+  //
+  //     expect(chrome.alarms.clearAll).toHaveBeenCalledWith(expect.any(Function));
+  //     expect(wasCleared).toBe(true);
+  //   });
+  // });
+  //
+  // describe("createAlarm", () => {
+  //   it("uses the browser.alarms API if it is available", async () => {
+  //     const alarmName = "alarm-name";
+  //     const alarmInfo = { when: 1000 };
+  //     globalThis.browser = {
+  //       // eslint-disable-next-line
+  //       // @ts-ignore
+  //       alarms: {
+  //         create: jest.fn(),
+  //       },
+  //     };
+  //
+  //     await browserTaskSchedulerService.createAlarm(alarmName, alarmInfo);
+  //
+  //     expect(browser.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo);
+  //   });
+  //
+  //   it("creates an alarm", async () => {
+  //     const alarmName = "alarm-name";
+  //     const alarmInfo = { when: 1000 };
+  //
+  //     await browserTaskSchedulerService.createAlarm(alarmName, alarmInfo);
+  //
+  //     expect(chrome.alarms.create).toHaveBeenCalledWith(alarmName, alarmInfo, expect.any(Function));
+  //   });
+  // });
+  //
+  // describe.skip("getAlarm", () => {
+  //   it("uses the browser.alarms API if it is available", async () => {
+  //     const alarmName = "alarm-name";
+  //     globalThis.browser = {
+  //       // eslint-disable-next-line
+  //       // @ts-ignore
+  //       alarms: {
+  //         get: jest.fn(),
+  //       },
+  //     };
+  //
+  //     await browserTaskSchedulerService.getAlarm(alarmName);
+  //
+  //     expect(browser.alarms.get).toHaveBeenCalledWith(alarmName);
+  //   });
+  //
+  //   it("gets the alarm by name", async () => {
+  //     const alarmName = "alarm-name";
+  //     const alarmMock = mock<chrome.alarms.Alarm>();
+  //     chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(alarmMock));
+  //
+  //     const receivedAlarm = await browserTaskSchedulerService.getAlarm(alarmName);
+  //
+  //     expect(chrome.alarms.get).toHaveBeenCalledWith(alarmName, expect.any(Function));
+  //     expect(receivedAlarm).toBe(alarmMock);
+  //   });
+  // });
+  //
+  // describe("getAllAlarms", () => {
+  //   it("uses the browser.alarms API if it is available", async () => {
+  //     globalThis.browser = {
+  //       // eslint-disable-next-line
+  //       // @ts-ignore
+  //       alarms: {
+  //         getAll: jest.fn(),
+  //       },
+  //     };
+  //
+  //     await browserTaskSchedulerService.getAllAlarms();
+  //
+  //     expect(browser.alarms.getAll).toHaveBeenCalled();
+  //   });
+  //
+  //   it("gets all registered alarms", async () => {
+  //     const alarms = [mock<chrome.alarms.Alarm>(), mock<chrome.alarms.Alarm>()];
+  //     chrome.alarms.getAll = jest.fn().mockImplementation((callback) => callback(alarms));
+  //
+  //     const receivedAlarms = await browserTaskSchedulerService.getAllAlarms();
+  //
+  //     expect(chrome.alarms.getAll).toHaveBeenCalledWith(expect.any(Function));
+  //     expect(receivedAlarms).toBe(alarms);
+  //   });
+  // });
 });

@@ -27,9 +27,9 @@ export class SystemService implements SystemServiceAbstraction {
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private biometricStateService: BiometricStateService,
-    private taskSchedulerService: TaskSchedulerService,
+    private taskSchedulerService?: TaskSchedulerService,
   ) {
-    void this.taskSchedulerService.registerTaskHandler(
+    void this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.systemClearClipboardTimeout,
       () => this.clearPendingClipboard(),
     );
@@ -102,7 +102,7 @@ export class SystemService implements SystemServiceAbstraction {
   }
 
   async clearClipboard(clipboardValue: string, timeoutMs: number = null): Promise<void> {
-    await this.taskSchedulerService.clearScheduledTask({
+    await this.taskSchedulerService?.clearScheduledTask({
       taskName: ScheduledTaskNames.systemClearClipboardTimeout,
       timeoutId: this.clearClipboardTimeout,
     });
@@ -130,7 +130,7 @@ export class SystemService implements SystemServiceAbstraction {
       }
     };
 
-    this.clearClipboardTimeout = this.taskSchedulerService.setTimeout(
+    this.clearClipboardTimeout = this.taskSchedulerService?.setTimeout(
       ScheduledTaskNames.systemClearClipboardTimeout,
       taskTimeoutInMs,
     );
