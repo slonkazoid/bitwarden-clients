@@ -104,10 +104,7 @@ export class BrowserTaskSchedulerService
     }
 
     const alarmName = await this.getActiveUserAlarmName(taskName);
-    const wasCleared = await this.clearAlarm(alarmName);
-    if (wasCleared) {
-      await this.deleteActiveAlarm(alarmName);
-    }
+    await this.clearScheduledAlarm(alarmName);
   }
 
   /**
@@ -172,10 +169,12 @@ export class BrowserTaskSchedulerService
       return;
     }
 
+    // We should always prioritize user-based alarms over non-user-based alarms. If a non-user-based alarm
+    // exists when the user-based alarm is being created, we want to clear the non-user-based alarm.
     const taskName = this.getTaskFromAlarmName(alarmName);
     const existingTaskBasedAlarm = await this.getAlarm(taskName);
     if (existingTaskBasedAlarm) {
-      await this.clearAlarm(taskName);
+      await this.clearScheduledAlarm(taskName);
     }
 
     await this.createAlarm(alarmName, createInfo);
@@ -193,7 +192,7 @@ export class BrowserTaskSchedulerService
     createInfo: chrome.alarms.AlarmCreateInfo,
   ): Promise<void> {
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
-    const filteredAlarms = activeAlarms?.filter((alarm) => alarm.alarmName !== alarmName);
+    const filteredAlarms = activeAlarms.filter((alarm) => alarm.alarmName !== alarmName);
     filteredAlarms.push({
       alarmName,
       startTime: Date.now(),
@@ -209,8 +208,15 @@ export class BrowserTaskSchedulerService
    */
   private async deleteActiveAlarm(alarmName: string): Promise<void> {
     const activeAlarms = await firstValueFrom(this.activeAlarms$);
-    const filteredAlarms = activeAlarms?.filter((alarm) => alarm.alarmName !== alarmName);
+    const filteredAlarms = activeAlarms.filter((alarm) => alarm.alarmName !== alarmName);
     await this.updateActiveAlarms(filteredAlarms || []);
+  }
+
+  private async clearScheduledAlarm(alarmName: string): Promise<void> {
+    const wasCleared = await this.clearAlarm(alarmName);
+    if (wasCleared) {
+      await this.deleteActiveAlarm(alarmName);
+    }
   }
 
   /**
@@ -267,22 +273,34 @@ export class BrowserTaskSchedulerService
       handler();
     }
 
+    // We should always prioritize user-based alarms over non-user-based alarms. As a result, if a triggered
+    // alarm is not user-based, we want to verify if  the alarm should continue to exist. If an alarm exists
+    // for the same task that is user-based, we want to clear the non-user-based alarm.
     if (alarmName === taskName) {
-      await this.verifyNonUserBasedAlarm(taskName);
+      const taskName = this.getTaskFromAlarmName(alarmName);
+      const existingUserBasedAlarm = await this.getAlarm(taskName);
+      if (existingUserBasedAlarm) {
+        await this.clearScheduledAlarm(taskName);
+      }
     }
   }
 
-  private async verifyNonUserBasedAlarm(alarmName: ScheduledTaskName): Promise<void> {
-    const activeUserAlarm = await this.getActiveUserAlarmName(alarmName);
-    const existingAlarm = await this.getAlarm(activeUserAlarm);
-    if (!existingAlarm) {
-      return;
+  private async getActiveUserAlarmName(taskName: ScheduledTaskName): Promise<string> {
+    const activeUserId = await firstValueFrom(this.stateProvider.activeUserId$);
+    if (!activeUserId) {
+      return taskName;
     }
 
-    const wasCleared = await this.clearAlarm(alarmName);
-    if (wasCleared) {
-      await this.deleteActiveAlarm(alarmName);
+    return `${activeUserId}__${taskName}`;
+  }
+
+  private getTaskFromAlarmName(alarmName: string): ScheduledTaskName {
+    const activeUserTask = alarmName.split("__")[1] as ScheduledTaskName;
+    if (activeUserTask) {
+      return activeUserTask;
     }
+
+    return alarmName as ScheduledTaskName;
   }
 
   /**
@@ -339,23 +357,5 @@ export class BrowserTaskSchedulerService
     }
 
     return new Promise((resolve) => chrome.alarms.get(alarmName, resolve));
-  }
-
-  private async getActiveUserAlarmName(taskName: ScheduledTaskName): Promise<string> {
-    const activeUserId = await firstValueFrom(this.stateProvider.activeUserId$);
-    if (!activeUserId) {
-      return taskName;
-    }
-
-    return `${activeUserId}__${taskName}`;
-  }
-
-  private getTaskFromAlarmName(alarmName: string): ScheduledTaskName {
-    const activeUserTask = alarmName.split("__")[1] as ScheduledTaskName;
-    if (activeUserTask) {
-      return activeUserTask;
-    }
-
-    return alarmName as ScheduledTaskName;
   }
 }
