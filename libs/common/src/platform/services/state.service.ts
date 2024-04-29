@@ -3,7 +3,6 @@ import { Jsonify, JsonValue } from "type-fest";
 
 import { AccountService } from "../../auth/abstractions/account.service";
 import { TokenService } from "../../auth/abstractions/token.service";
-import { KdfConfig } from "../../auth/models/domain/kdf-config";
 import { BiometricKey } from "../../auth/types/biometric-key";
 import { GeneratorOptions } from "../../tools/generator/generator-options";
 import { GeneratedPasswordHistory, PasswordGeneratorOptions } from "../../tools/generator/password";
@@ -19,7 +18,7 @@ import {
   AbstractMemoryStorageService,
   AbstractStorageService,
 } from "../abstractions/storage.service";
-import { HtmlStorageLocation, KdfType, StorageLocation } from "../enums";
+import { HtmlStorageLocation, StorageLocation } from "../enums";
 import { StateFactory } from "../factories/state-factory";
 import { Utils } from "../misc/utils";
 import { Account, AccountData, AccountSettings } from "../models/domain/account";
@@ -65,8 +64,6 @@ export class StateService<
   private hasBeenInited = false;
   protected isRecoveredSession = false;
 
-  protected accountDiskCache = new BehaviorSubject<Record<string, TAccount>>({});
-
   // default account serializer, must be overridden by child class
   protected accountDeserializer = Account.fromJSON as (json: Jsonify<TAccount>) => TAccount;
 
@@ -80,7 +77,6 @@ export class StateService<
     protected environmentService: EnvironmentService,
     protected tokenService: TokenService,
     private migrationRunner: MigrationRunner,
-    protected useAccountCache: boolean = true,
   ) {}
 
   async init(initOptions: InitOptions = {}): Promise<void> {
@@ -115,14 +111,19 @@ export class StateService<
       return;
     }
 
+    // Get all likely authenticated accounts
+    const authenticatedAccounts = (
+      (await this.storageService.get<string[]>(keys.authenticatedAccounts)) ?? []
+    ).filter((account) => account != null);
+
     await this.updateState(async (state) => {
-      state.authenticatedAccounts =
-        (await this.storageService.get<string[]>(keys.authenticatedAccounts)) ?? [];
-      for (const i in state.authenticatedAccounts) {
-        if (i != null) {
-          state = await this.syncAccountFromDisk(state.authenticatedAccounts[i]);
-        }
+      for (const i in authenticatedAccounts) {
+        state = await this.syncAccountFromDisk(authenticatedAccounts[i]);
       }
+
+      // After all individual accounts have been added
+      state.authenticatedAccounts = authenticatedAccounts;
+
       const storedActiveUser = await this.storageService.get<string>(keys.activeUserId);
       if (storedActiveUser != null) {
         state.activeUserId = storedActiveUser;
@@ -641,49 +642,6 @@ export class StateService<
     );
   }
 
-  async getKdfConfig(options?: StorageOptions): Promise<KdfConfig> {
-    const iterations = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.profile?.kdfIterations;
-    const memory = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.profile?.kdfMemory;
-    const parallelism = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.profile?.kdfParallelism;
-    return new KdfConfig(iterations, memory, parallelism);
-  }
-
-  async setKdfConfig(config: KdfConfig, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    account.profile.kdfIterations = config.iterations;
-    account.profile.kdfMemory = config.memory;
-    account.profile.kdfParallelism = config.parallelism;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
-  async getKdfType(options?: StorageOptions): Promise<KdfType> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.profile?.kdfType;
-  }
-
-  async setKdfType(value: KdfType, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    account.profile.kdfType = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
   async getLastActive(options?: StorageOptions): Promise<number> {
     options = this.reconcileOptions(options, await this.defaultOnDiskOptions());
 
@@ -839,23 +797,6 @@ export class StateService<
     );
   }
 
-  async getSecurityStamp(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.tokens?.securityStamp;
-  }
-
-  async setSecurityStamp(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    account.tokens.securityStamp = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-  }
-
   async getUserId(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -990,13 +931,6 @@ export class StateService<
       return null;
     }
 
-    if (this.useAccountCache) {
-      const cachedAccount = this.accountDiskCache.value[options.userId];
-      if (cachedAccount != null) {
-        return cachedAccount;
-      }
-    }
-
     const account = options?.useSecureStorage
       ? (await this.secureStorageService.get<TAccount>(options.userId, options)) ??
         (await this.storageService.get<TAccount>(
@@ -1004,8 +938,6 @@ export class StateService<
           this.reconcileOptions(options, { htmlStorageLocation: HtmlStorageLocation.Local }),
         ))
       : await this.storageService.get<TAccount>(options.userId, options);
-
-    this.setDiskCache(options.userId, account);
     return account;
   }
 
@@ -1035,8 +967,6 @@ export class StateService<
       : this.storageService;
 
     await storageLocation.save(`${options.userId}`, account, options);
-
-    this.deleteDiskCache(options.userId);
   }
 
   protected async saveAccountToMemory(account: TAccount): Promise<void> {
@@ -1236,9 +1166,6 @@ export class StateService<
     await this.updateState(async (state) => {
       userId = userId ?? state.activeUserId;
       delete state.accounts[userId];
-
-      this.deleteDiskCache(userId);
-
       return state;
     });
   }
@@ -1351,20 +1278,6 @@ export class StateService<
 
       return await this.setState(updatedState);
     });
-  }
-
-  private setDiskCache(key: string, value: TAccount, options?: StorageOptions) {
-    if (this.useAccountCache) {
-      this.accountDiskCache.value[key] = value;
-      this.accountDiskCache.next(this.accountDiskCache.value);
-    }
-  }
-
-  protected deleteDiskCache(key: string) {
-    if (this.useAccountCache) {
-      delete this.accountDiskCache.value[key];
-      this.accountDiskCache.next(this.accountDiskCache.value);
-    }
   }
 }
 

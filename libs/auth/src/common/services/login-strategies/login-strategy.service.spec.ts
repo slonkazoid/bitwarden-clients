@@ -2,7 +2,8 @@ import { MockProxy, mock } from "jest-mock-extended";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
@@ -63,10 +64,11 @@ describe("LoginStrategyService", () => {
   let encryptService: MockProxy<EncryptService>;
   let passwordStrengthService: MockProxy<PasswordStrengthServiceAbstraction>;
   let policyService: MockProxy<PolicyService>;
-  let deviceTrustCryptoService: MockProxy<DeviceTrustCryptoServiceAbstraction>;
+  let deviceTrustService: MockProxy<DeviceTrustServiceAbstraction>;
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let userDecryptionOptionsService: MockProxy<InternalUserDecryptionOptionsServiceAbstraction>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
+  let kdfConfigService: MockProxy<KdfConfigService>;
   let taskSchedulerService: MockProxy<DefaultTaskSchedulerService>;
 
   let stateProvider: FakeGlobalStateProvider;
@@ -92,11 +94,12 @@ describe("LoginStrategyService", () => {
     encryptService = mock<EncryptService>();
     passwordStrengthService = mock<PasswordStrengthServiceAbstraction>();
     policyService = mock<PolicyService>();
-    deviceTrustCryptoService = mock<DeviceTrustCryptoServiceAbstraction>();
+    deviceTrustService = mock<DeviceTrustServiceAbstraction>();
     authRequestService = mock<AuthRequestServiceAbstraction>();
     userDecryptionOptionsService = mock<UserDecryptionOptionsService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
     stateProvider = new FakeGlobalStateProvider();
+    kdfConfigService = mock<KdfConfigService>();
     taskSchedulerService = mock<DefaultTaskSchedulerService>();
 
     sut = new LoginStrategyService(
@@ -117,11 +120,12 @@ describe("LoginStrategyService", () => {
       encryptService,
       passwordStrengthService,
       policyService,
-      deviceTrustCryptoService,
+      deviceTrustService,
       authRequestService,
       userDecryptionOptionsService,
       stateProvider,
       billingAccountProfileStateService,
+      kdfConfigService,
       taskSchedulerService,
     );
 

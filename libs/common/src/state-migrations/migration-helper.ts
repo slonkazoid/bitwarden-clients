@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-restricted-paths -- Needed to provide client type to migrations
+import { ClientType } from "../enums";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to print log messages
 import { LogService } from "../platform/abstractions/log.service";
 // eslint-disable-next-line import/no-restricted-paths -- Needed to interface with storage locations
@@ -17,6 +19,7 @@ export class MigrationHelper {
     private storageService: AbstractStorageService,
     public logService: LogService,
     type: MigrationHelperType,
+    public clientType: ClientType,
   ) {
     this.type = type;
   }
@@ -154,7 +157,7 @@ export class MigrationHelper {
    *
    * This is useful from creating migrations off of this paradigm, but should not be used once a value is migrated to a state provider.
    *
-   * @returns a list of all accounts that have been authenticated with state service, cast the the expected type.
+   * @returns a list of all accounts that have been authenticated with state service, cast the expected type.
    */
   async getAccounts<ExpectedAccountType>(): Promise<
     { userId: string; account: ExpectedAccountType }[]
