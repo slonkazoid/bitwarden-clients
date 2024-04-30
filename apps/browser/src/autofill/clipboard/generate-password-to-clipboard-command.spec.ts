@@ -26,7 +26,13 @@ describe("GeneratePasswordToClipboardCommand", () => {
     passwordGenerationService = mock<PasswordGenerationServiceAbstraction>();
     autofillSettingsService = mock<AutofillSettingsService>();
     browserTaskSchedulerService = mock<BrowserTaskSchedulerService>({
-      setTimeout: jest.fn(async (callback, timeoutInMs) => setTimeout(callback, timeoutInMs)),
+      setTimeout: jest.fn(async (taskName, timeoutInMs) =>
+        setTimeout(() => {
+          if (taskName === ScheduledTaskNames.generatePasswordClearClipboardTimeout) {
+            void ClearClipboard.run();
+          }
+        }, timeoutInMs),
+      ),
     });
 
     passwordGenerationService.getOptions.mockResolvedValue([{ length: 8 }, {} as any]);
