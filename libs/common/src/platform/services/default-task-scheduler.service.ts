@@ -10,30 +10,6 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
     this.taskHandlers = new Map();
   }
 
-  registerTaskHandler(taskName: ScheduledTaskName, handler: () => void) {
-    const existingHandler = this.taskHandlers.get(taskName);
-    if (existingHandler) {
-      this.logService.warning(`Task handler for ${taskName} already exists. Overwriting.`);
-      this.unregisterTaskHandler(taskName);
-    }
-
-    this.taskHandlers.set(taskName, handler);
-  }
-
-  unregisterTaskHandler(taskName: ScheduledTaskName) {
-    this.taskHandlers.delete(taskName);
-  }
-
-  protected async triggerTask(
-    taskName: ScheduledTaskName,
-    _periodInMinutes?: number,
-  ): Promise<void> {
-    const handler = this.taskHandlers.get(taskName);
-    if (handler) {
-      handler();
-    }
-  }
-
   /**
    * Sets a timeout and returns the timeout id.
    *
@@ -44,6 +20,8 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
     taskName: ScheduledTaskName,
     delayInMs: number,
   ): Promise<number | NodeJS.Timeout> {
+    this.validateRegisteredTask(taskName);
+
     return globalThis.setTimeout(() => this.triggerTask(taskName), delayInMs);
   }
 
@@ -59,6 +37,8 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
     intervalInMs: number,
     _initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout> {
+    this.validateRegisteredTask(taskName);
+
     return globalThis.setInterval(() => this.triggerTask(taskName), intervalInMs);
   }
 
@@ -74,6 +54,58 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
 
     if (taskIdentifier.intervalId) {
       globalThis.clearInterval(taskIdentifier.intervalId);
+    }
+  }
+
+  /**
+   * Registers a task handler.
+   *
+   * @param taskName - The name of the task.
+   * @param handler - The task handler.
+   */
+  registerTaskHandler(taskName: ScheduledTaskName, handler: () => void) {
+    const existingHandler = this.taskHandlers.get(taskName);
+    if (existingHandler) {
+      this.logService.warning(`Task handler for ${taskName} already exists. Overwriting.`);
+      this.unregisterTaskHandler(taskName);
+    }
+
+    this.taskHandlers.set(taskName, handler);
+  }
+
+  /**
+   * Unregisters a task handler.
+   *
+   * @param taskName - The name of the task.
+   */
+  unregisterTaskHandler(taskName: ScheduledTaskName) {
+    this.taskHandlers.delete(taskName);
+  }
+
+  /**
+   * Triggers a task.
+   *
+   * @param taskName - The name of the task.
+   * @param _periodInMinutes - The period in minutes. Unused in the base implementation.
+   */
+  protected async triggerTask(
+    taskName: ScheduledTaskName,
+    _periodInMinutes?: number,
+  ): Promise<void> {
+    const handler = this.taskHandlers.get(taskName);
+    if (handler) {
+      handler();
+    }
+  }
+
+  /**
+   * Validates that a task handler is registered.
+   *
+   * @param taskName - The name of the task.
+   */
+  protected validateRegisteredTask(taskName: ScheduledTaskName): void {
+    if (!this.taskHandlers.has(taskName)) {
+      throw new Error(`Task handler for ${taskName} not registered. Unable to schedule task.`);
     }
   }
 }
