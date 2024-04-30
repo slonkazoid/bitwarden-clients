@@ -6,7 +6,7 @@ import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-t
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { BrowserTaskSchedulerService } from "../../platform/services/browser-task-scheduler.service";
+import { BrowserTaskSchedulerService } from "../../platform/services/abstractions/browser-task-scheduler.service";
 
 import { ClearClipboard } from "./clear-clipboard";
 import { GeneratePasswordToClipboardCommand } from "./generate-password-to-clipboard-command";

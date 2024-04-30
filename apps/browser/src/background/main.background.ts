@@ -215,12 +215,13 @@ import { UpdateBadge } from "../platform/listeners/update-badge";
 import { ChromeMessageSender } from "../platform/messaging/chrome-message.sender";
 /* eslint-enable no-restricted-imports */
 import { BrowserStateService as StateServiceAbstraction } from "../platform/services/abstractions/browser-state.service";
+import { BrowserTaskSchedulerService } from "../platform/services/abstractions/browser-task-scheduler.service";
 import { BrowserCryptoService } from "../platform/services/browser-crypto.service";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import BrowserLocalStorageService from "../platform/services/browser-local-storage.service";
 import BrowserMemoryStorageService from "../platform/services/browser-memory-storage.service";
 import { BrowserScriptInjectorService } from "../platform/services/browser-script-injector.service";
-import { BrowserTaskSchedulerService } from "../platform/services/browser-task-scheduler.service";
+import { BrowserTaskSchedulerServiceImplementation } from "../platform/services/browser-task-scheduler.service";
 import { DefaultBrowserStateService } from "../platform/services/default-browser-state.service";
 import I18nService from "../platform/services/i18n.service";
 import { LocalBackedSessionStorageService } from "../platform/services/local-backed-session-storage.service";
@@ -505,7 +506,7 @@ export default class MainBackground {
     // The taskSchedulerService needs to be instantiated a single time in a potential context.
     // Since the popup creates a new instance of the main background in mv3, we need to guard against a duplicate registration.
     if (!this.popupOnlyContext) {
-      this.taskSchedulerService = new BrowserTaskSchedulerService(
+      this.taskSchedulerService = new BrowserTaskSchedulerServiceImplementation(
         this.logService,
         this.stateProvider,
       );

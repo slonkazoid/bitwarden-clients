@@ -104,7 +104,7 @@ import { ScriptInjectorService } from "../../platform/services/abstractions/scri
 import { BrowserEnvironmentService } from "../../platform/services/browser-environment.service";
 import BrowserLocalStorageService from "../../platform/services/browser-local-storage.service";
 import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
-import { BrowserTaskSchedulerService } from "../../platform/services/browser-task-scheduler.service";
+import { BrowserTaskSchedulerServiceImplementation } from "../../platform/services/browser-task-scheduler.service";
 import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
 import I18nService from "../../platform/services/i18n.service";
 import { ForegroundPlatformUtilsService } from "../../platform/services/platform-utils/foreground-platform-utils.service";
@@ -568,10 +568,10 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: TaskSchedulerService,
-    useExisting: BrowserTaskSchedulerService,
+    useExisting: BrowserTaskSchedulerServiceImplementation,
   }),
   safeProvider({
-    provide: BrowserTaskSchedulerService,
+    provide: BrowserTaskSchedulerServiceImplementation,
     deps: [LogService, StateProvider],
   }),
 ];

@@ -1,4 +1,4 @@
-import { BrowserTaskSchedulerService } from "../../services/browser-task-scheduler.service";
+import { BrowserTaskSchedulerServiceImplementation } from "../../services/browser-task-scheduler.service";
 
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";
@@ -11,15 +11,17 @@ export type TaskSchedulerServiceInitOptions = TaskSchedulerServiceFactoryOptions
   StateProviderInitOptions;
 
 export function taskSchedulerServiceFactory(
-  cache: { browserTaskSchedulerService?: BrowserTaskSchedulerService } & CachedServices,
+  cache: {
+    browserTaskSchedulerService?: BrowserTaskSchedulerServiceImplementation;
+  } & CachedServices,
   opts: TaskSchedulerServiceInitOptions,
-): Promise<BrowserTaskSchedulerService> {
+): Promise<BrowserTaskSchedulerServiceImplementation> {
   return factory(
     cache,
     "browserTaskSchedulerService",
     opts,
     async () =>
-      new BrowserTaskSchedulerService(
+      new BrowserTaskSchedulerServiceImplementation(
         await logServiceFactory(cache, opts),
         await stateProviderFactory(cache, opts),
       ),
