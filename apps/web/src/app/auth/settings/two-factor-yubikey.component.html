@@ -1,4 +1,94 @@
-<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="2faYubiKeyTitle">
+<form *ngIf="authed" [formGroup]="formGroup" [bitSubmit]="submit">
+  <bit-dialog dialogSize="large">
+    <span bitDialogTitle>
+      {{ "twoStepLogin" | i18n }}
+      <span bitTypography="body1">YubiKey</span>
+    </span>
+    <ng-container bitDialogContent>
+      <app-callout
+        type="success"
+        title="{{ 'enabled' | i18n }}"
+        icon="bwi bwi-check-circle"
+        *ngIf="enabled"
+      >
+        {{ "twoStepLoginProviderEnabled" | i18n }}
+      </app-callout>
+      <app-callout type="warning">
+        <p bitTypography="body1">{{ "twoFactorYubikeyWarning" | i18n }}</p>
+        <ul class="tw-mb-0" bitTypography="body1">
+          <li>{{ "twoFactorYubikeySupportUsb" | i18n }}</li>
+          <li>{{ "twoFactorYubikeySupportMobile" | i18n }}</li>
+        </ul>
+      </app-callout>
+      <img class="tw-float-right mfaType3" alt="YubiKey OTP security key logo" />
+      <p bitTypography="body1">{{ "twoFactorYubikeyAdd" | i18n }}:</p>
+      <ol bitTypography="body1">
+        <li>{{ "twoFactorYubikeyPlugIn" | i18n }}</li>
+        <li>{{ "twoFactorYubikeySelectKey" | i18n }}</li>
+        <li>{{ "twoFactorYubikeyTouchButton" | i18n }}</li>
+        <li>{{ "twoFactorYubikeySaveForm" | i18n }}</li>
+      </ol>
+      <hr />
+      <div class="tw-grid tw-grid-cols-12 tw-gap-4" formArrayName="keys">
+        <div
+          class="tw-col-span-6"
+          *ngFor="let k of formGroup.controls.keys.controls; let i = index"
+        >
+          <div formGroupName="{{ i }}">
+            <bit-form-field>
+              <bit-label>{{ "yubikeyX" | i18n: i + 1 }}</bit-label>
+              <input
+                *ngIf="!k.get('existingKey').value"
+                bitInput
+                type="password"
+                formControlName="key"
+                appInputVerbatim
+              />
+            </bit-form-field>
+          </div>
+          <div class="tw-flex" *ngIf="k.get('existingKey').value">
+            <span class="tw-mr-2">{{ k.get("existingKey").value }}</span>
+            <button
+              bitIconButton="bwi-minus"
+              type="button"
+              buttonType="danger"
+              (click)="remove(k.value)"
+              appA11yTitle="{{ 'remove' | i18n }}"
+            >
+              <!-- <i class="bwi bwi-minus-circle bwi-lg" aria-hidden="true"></i> -->
+            </button>
+          </div>
+        </div>
+      </div>
+      <p bitTypography="body1" class="tw-font-bold tw-mb-2">{{ "nfcSupport" | i18n }}</p>
+      <bit-form-control>
+        <bit-label>{{ "twoFactorYubikeySupportsNfc" | i18n }}</bit-label>
+        <input bitCheckbox type="checkbox" formControlName="nfc" />
+        <bit-hint class="tw-text-sm">{{ "twoFactorYubikeySupportsNfcDesc" | i18n }}</bit-hint>
+      </bit-form-control>
+    </ng-container>
+    <ng-container bitDialogFooter>
+      <button bitButton bitFormButton type="submit" buttonType="primary">
+        {{ "save" | i18n }}
+      </button>
+      <button
+        *ngIf="enabled"
+        #disableBtn
+        bitButton
+        bitFormButton
+        type="button"
+        buttonType="secondary"
+        (click)="disable()"
+      >
+        {{ "disableAllKeys" | i18n }}
+      </button>
+      <button bitButton bitFormButton type="button" buttonType="secondary" bitDialogClose>
+        {{ "close" | i18n }}
+      </button>
+    </ng-container>
+  </bit-dialog>
+</form>
+<!--<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="2faYubiKeyTitle">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -115,4 +205,4 @@
       </form>
     </div>
   </div>
-</div>
+</div>-->

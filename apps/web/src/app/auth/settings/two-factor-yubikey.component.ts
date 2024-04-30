@@ -1,4 +1,6 @@
-import { Component } from "@angular/core";
+import { DIALOG_DATA, DialogConfig } from "@angular/cdk/dialog";
+import { Component, Inject } from "@angular/core";
+import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
@@ -24,21 +26,24 @@ interface Key {
 })
 export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   type = TwoFactorProviderType.Yubikey;
-  keys: Key[];
+  keyValues: Key[];
   nfc = false;
 
   formPromise: Promise<TwoFactorYubiKeyResponse>;
   disablePromise: Promise<unknown>;
 
   override componentName = "app-two-factor-yubikey";
+  formGroup: FormGroup<{ keys: FormArray<FormControl<any>>; nfc: FormControl<any> }>;
 
   constructor(
+    @Inject(DIALOG_DATA) protected data: AuthResponse<TwoFactorYubiKeyResponse>,
     apiService: ApiService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
     logService: LogService,
     userVerificationService: UserVerificationService,
     dialogService: DialogService,
+    private formBuilder: FormBuilder,
   ) {
     super(
       apiService,
@@ -48,6 +53,33 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
       userVerificationService,
       dialogService,
     );
+    this.auth(data);
+  }
+
+  get keyPass() {
+    return this.formGroup.controls.keys.controls;
+  }
+
+  ngOnInit() {
+    this.formGroup = this.formBuilder.group({
+      keys: this.formBuilder.array([]),
+      nfc: this.formBuilder.control(this.nfc),
+    });
+    this.patch();
+  }
+
+  patch() {
+    const control = <FormArray>this.formGroup.get("keys");
+    this.keyValues.forEach((val) => {
+      control.push(this.patchValues(val.key, val.existingKey));
+    });
+  }
+
+  patchValues(key: string, existingKey: string) {
+    return this.formBuilder.group({
+      key: [key],
+      existingKey: [existingKey],
+    });
   }
 
   auth(authResponse: AuthResponse<TwoFactorYubiKeyResponse>) {
@@ -55,15 +87,20 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     this.processResponse(authResponse.response);
   }
 
-  async submit() {
+  submit = async () => {
+    const keys = this.formGroup.controls.keys.value;
     const request = await this.buildRequestModel(UpdateTwoFactorYubioOtpRequest);
-    request.key1 = this.keys != null && this.keys.length > 0 ? this.keys[0].key : null;
-    request.key2 = this.keys != null && this.keys.length > 1 ? this.keys[1].key : null;
-    request.key3 = this.keys != null && this.keys.length > 2 ? this.keys[2].key : null;
-    request.key4 = this.keys != null && this.keys.length > 3 ? this.keys[3].key : null;
-    request.key5 = this.keys != null && this.keys.length > 4 ? this.keys[4].key : null;
-    request.nfc = this.nfc;
+    request.key1 = keys != null && keys.length > 0 ? keys[0].key : null;
+    request.key2 = keys != null && keys.length > 1 ? keys[1].key : null;
+    request.key3 = keys != null && keys.length > 2 ? keys[2].key : null;
+    request.key4 = keys != null && keys.length > 3 ? keys[3].key : null;
+    request.key5 = keys != null && keys.length > 4 ? keys[4].key : null;
+    request.nfc = this.formGroup.value.nfc;
 
+    return this.submitForm(request);
+  };
+
+  private submitForm(request: UpdateTwoFactorYubioOtpRequest) {
     return super.enable(async () => {
       this.formPromise = this.apiService.putTwoFactorYubiKey(request);
       const response = await this.formPromise;
@@ -83,7 +120,8 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
 
   private processResponse(response: TwoFactorYubiKeyResponse) {
     this.enabled = response.enabled;
-    this.keys = [
+
+    this.keyValues = [
       { key: response.key1, existingKey: this.padRight(response.key1) },
       { key: response.key2, existingKey: this.padRight(response.key2) },
       { key: response.key3, existingKey: this.padRight(response.key3) },
@@ -102,5 +140,12 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
       str += character;
     }
     return str;
+  }
+
+  static open(
+    dialogService: DialogService,
+    config: DialogConfig<AuthResponse<TwoFactorYubiKeyResponse>>,
+  ) {
+    return dialogService.open<boolean>(TwoFactorYubiKeyComponent, config);
   }
 }
