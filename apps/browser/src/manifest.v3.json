@@ -59,9 +59,11 @@
     "clipboardRead",
     "clipboardWrite",
     "idle",
+    "alarms",
     "scripting",
     "offscreen",
-    "alarms"
+    "webRequest",
+    "webRequestAuthProvider"
   ],
   "optional_permissions": ["nativeMessaging", "privacy"],
   "host_permissions": ["<all_urls>"],
