@@ -6,7 +6,7 @@ import { ConsoleLogService } from "@bitwarden/common/platform/services/console-l
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
 import { UserId } from "@bitwarden/common/types/guid";
 
-import { flushPromises } from "../../autofill/spec/testing-utils";
+import { flushPromises, triggerOnAlarmEvent } from "../../autofill/spec/testing-utils";
 
 import {
   ActiveAlarm,
@@ -49,6 +49,7 @@ describe("BrowserTaskSchedulerService", () => {
   let activeAlarmsMock$: BehaviorSubject<ActiveAlarm[]>;
   let logService: MockProxy<ConsoleLogService>;
   let stateProvider: MockProxy<StateProvider>;
+  let globalStateMock: MockProxy<GlobalState<any>>;
   let browserTaskSchedulerService: BrowserTaskSchedulerService;
   let activeAlarms: ActiveAlarm[] = [];
   const eventUploadsIntervalCreateInfo = { periodInMinutes: 5, delayInMinutes: 5 };
@@ -74,14 +75,13 @@ describe("BrowserTaskSchedulerService", () => {
     activeAlarmsMock$ = new BehaviorSubject(activeAlarms);
     activeUserIdMock$ = new BehaviorSubject(userUuid);
     logService = mock<ConsoleLogService>();
+    globalStateMock = mock<GlobalState<any>>({
+      state$: mock<Observable<any>>(),
+      update: jest.fn((callback) => callback([], {} as any)),
+    });
     stateProvider = mock<StateProvider>({
       activeUserId$: activeUserIdMock$,
-      getGlobal: jest.fn(() =>
-        mock<GlobalState<any>>({
-          state$: mock<Observable<any>>(),
-          update: jest.fn((callback) => callback([], {} as any)),
-        }),
-      ),
+      getGlobal: jest.fn(() => globalStateMock),
     });
     browserTaskSchedulerService = new BrowserTaskSchedulerServiceImplementation(
       logService,
@@ -248,6 +248,73 @@ describe("BrowserTaskSchedulerService", () => {
         ScheduledTaskNames.loginStrategySessionTimeout,
         expect.any(Function),
       );
+    });
+
+    it("triggers a task when an onAlarm event is triggered", () => {
+      const alarm = mock<chrome.alarms.Alarm>({
+        name: ScheduledTaskNames.loginStrategySessionTimeout,
+      });
+
+      triggerOnAlarmEvent(alarm);
+
+      expect(callback).toHaveBeenCalled();
+    });
+  });
+
+  describe("clearScheduledTask", () => {
+    it("skips clearing an alarm if the task name is not passed", async () => {
+      await browserTaskSchedulerService.clearScheduledTask({
+        timeoutId: 1,
+      });
+
+      expect(chrome.alarms.clear).not.toHaveBeenCalled();
+    });
+
+    it("clears the alarm associated with the task", async () => {
+      await browserTaskSchedulerService.clearScheduledTask({
+        taskName: ScheduledTaskNames.loginStrategySessionTimeout,
+      });
+
+      expect(chrome.alarms.clear).toHaveBeenCalledWith(
+        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        expect.any(Function),
+      );
+    });
+
+    it("clears the alarm associated with the task when in a non-Chrome environment", async () => {
+      setupGlobalBrowserMock();
+
+      await browserTaskSchedulerService.clearScheduledTask({
+        taskName: ScheduledTaskNames.loginStrategySessionTimeout,
+      });
+
+      expect(browser.alarms.clear).toHaveBeenCalledWith(
+        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+      );
+    });
+  });
+
+  describe("clearAllScheduledTasks", () => {
+    it("clears all scheduled tasks and extension alarms", async () => {
+      // @ts-expect-error mocking global state update method
+      globalStateMock.update = jest.fn((callback) => {
+        const stateValue = callback([], {} as any);
+        activeAlarmsMock$.next(stateValue);
+        return stateValue;
+      });
+
+      await browserTaskSchedulerService.clearAllScheduledTasks();
+
+      expect(chrome.alarms.clearAll).toHaveBeenCalled();
+      expect(activeAlarmsMock$.value).toEqual([]);
+    });
+
+    it("clears all extension alarms within a non Chrome environment", async () => {
+      setupGlobalBrowserMock();
+
+      await browserTaskSchedulerService.clearAllScheduledTasks();
+
+      expect(browser.alarms.clearAll).toHaveBeenCalled();
     });
   });
 });
