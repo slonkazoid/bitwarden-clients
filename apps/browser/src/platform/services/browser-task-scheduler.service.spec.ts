@@ -39,7 +39,7 @@ function setupGlobalBrowserMock(overrides: Partial<chrome.alarms.Alarm> = {}) {
 }
 const userUuid = "user-uuid" as UserId;
 function getAlarmNameMock(taskName: string) {
-  return `${userUuid}__${taskName}`;
+  return `${taskName}__${userUuid}`;
 }
 
 describe("BrowserTaskSchedulerService", () => {
@@ -252,8 +252,12 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(globalThis.setInterval).toHaveBeenCalledWith(expect.any(Function), intervalInMs);
-      expect(chrome.alarms.create).not.toHaveBeenCalled();
     });
+
+    it.todo(
+      "sets up stepped alarms that trigger behavior after the first minute of setInterval execution",
+      () => {},
+    );
 
     it("creates an interval alarm", async () => {
       const periodInMinutes = 2;
@@ -267,7 +271,7 @@ describe("BrowserTaskSchedulerService", () => {
 
       expect(chrome.alarms.create).toHaveBeenCalledWith(
         getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
-        { periodInMinutes, delayInMinutes: initialDelayInMs / 1000 / 60 },
+        { periodInMinutes, delayInMinutes: 0.5 },
         expect.any(Function),
       );
     });

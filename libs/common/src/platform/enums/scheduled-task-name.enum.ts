@@ -6,6 +6,7 @@ export const ScheduledTaskNames = {
   fido2ClientAbortTimeout: "fido2ClientAbortTimeout",
   scheduleNextSyncInterval: "scheduleNextSyncInterval",
   eventUploadsInterval: "eventUploadsInterval",
+  vaultTimeoutCheckInterval: "vaultTimeoutCheckInterval",
 } as const;
 
 export type ScheduledTaskName = (typeof ScheduledTaskNames)[keyof typeof ScheduledTaskNames];

@@ -668,6 +668,7 @@ const safeProviders: SafeProvider[] = [
       StateEventRunnerService,
       LOCKED_CALLBACK,
       LOGOUT_CALLBACK,
+      TaskSchedulerService,
     ],
   }),
   safeProvider({

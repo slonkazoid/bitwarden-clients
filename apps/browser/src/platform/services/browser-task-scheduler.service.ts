@@ -64,8 +64,8 @@ export class BrowserTaskSchedulerServiceImplementation
     // The alarm previously scheduled will be used as a backup in case the setTimeout fails.
     if (delayInMinutes < 1) {
       return globalThis.setTimeout(async () => {
-        await this.triggerTask(alarmName);
         await this.clearScheduledAlarm(alarmName);
+        await this.triggerTask(alarmName);
       }, delayInMs);
     }
   }
@@ -84,19 +84,54 @@ export class BrowserTaskSchedulerServiceImplementation
     intervalInMs: number,
     initialDelayInMs?: number,
   ): Promise<number | NodeJS.Timeout> {
-    const intervalInMinutes = intervalInMs / 1000 / 60;
-    if (intervalInMinutes < 1) {
-      return super.setInterval(taskName, intervalInMs);
-    }
-
     this.validateRegisteredTask(taskName);
 
+    const intervalInMinutes = intervalInMs / 1000 / 60;
     const alarmName = await this.getActiveUserAlarmName(taskName);
-    const initialDelayInMinutes = initialDelayInMs ? initialDelayInMs / 1000 / 60 : undefined;
+    const initialDelayInMinutes = initialDelayInMs
+      ? initialDelayInMs / 1000 / 60
+      : intervalInMinutes;
+
+    if (intervalInMinutes < 1) {
+      return this.setupSteppedIntervalAlarms(taskName, alarmName, intervalInMinutes, intervalInMs);
+    }
+
     await this.scheduleAlarm(alarmName, {
-      periodInMinutes: intervalInMinutes,
-      delayInMinutes: initialDelayInMinutes ?? intervalInMinutes,
+      periodInMinutes: this.getUpperBoundDelayInMinutes(intervalInMinutes),
+      delayInMinutes: this.getUpperBoundDelayInMinutes(initialDelayInMinutes),
     });
+  }
+
+  private async setupSteppedIntervalAlarms(
+    taskName: ScheduledTaskName,
+    alarmName: string,
+    intervalInMinutes: number,
+    intervalInMs: number,
+  ) {
+    let elapsedMs = 0;
+    const intervalId: number | NodeJS.Timeout = globalThis.setInterval(async () => {
+      elapsedMs += intervalInMs;
+      const elapsedMinutes = elapsedMs / 1000 / 60;
+      if (elapsedMinutes >= this.getAlarmMinDelayInMinutes()) {
+        globalThis.clearInterval(intervalId);
+        return;
+      }
+      await this.triggerTask(alarmName, intervalInMinutes);
+    }, intervalInMs);
+
+    const numberOfAlarmsToCreate = Math.ceil(1 / intervalInMinutes);
+    for (let i = 0; i < numberOfAlarmsToCreate; i++) {
+      const steppedAlarmName = `${alarmName}__${i}`;
+      const periodInMinutes = this.getAlarmMinDelayInMinutes() + i * intervalInMinutes;
+      await this.clearScheduledAlarm(steppedAlarmName);
+      await this.clearScheduledAlarm(`${taskName}__${i}`);
+
+      await this.scheduleAlarm(steppedAlarmName, {
+        periodInMinutes: this.getUpperBoundDelayInMinutes(periodInMinutes),
+      });
+    }
+
+    return intervalId;
   }
 
   /**
@@ -308,7 +343,7 @@ export class BrowserTaskSchedulerServiceImplementation
       return taskName;
     }
 
-    return `${activeUserId}__${taskName}`;
+    return `${taskName}__${activeUserId}`;
   }
 
   /**
@@ -318,7 +353,7 @@ export class BrowserTaskSchedulerServiceImplementation
    * @param alarmName - The alarm name to parse.
    */
   private getTaskFromAlarmName(alarmName: string): ScheduledTaskName {
-    const activeUserTask = alarmName.split("__")[1] as ScheduledTaskName;
+    const activeUserTask = alarmName.split("__")[0] as ScheduledTaskName;
     if (activeUserTask) {
       return activeUserTask;
     }
@@ -392,6 +427,10 @@ export class BrowserTaskSchedulerServiceImplementation
     return typeof browser !== "undefined" && !!browser.alarms;
   }
 
+  private getAlarmMinDelayInMinutes(): number {
+    return this.isNonChromeEnvironment() ? 1 : 0.5;
+  }
+
   /**
    * Gets the upper bound delay in minutes for a given delay in minutes. This is
    * used to ensure that the delay is at least 1 minute in non-Chrome environments.
@@ -400,7 +439,6 @@ export class BrowserTaskSchedulerServiceImplementation
    * @param delayInMinutes - The delay in minutes.
    */
   private getUpperBoundDelayInMinutes(delayInMinutes: number): number {
-    const minDelayInMinutes = this.isNonChromeEnvironment() ? 1 : 0.5;
-    return Math.max(minDelayInMinutes, delayInMinutes);
+    return Math.max(this.getAlarmMinDelayInMinutes(), delayInMinutes);
   }
 }

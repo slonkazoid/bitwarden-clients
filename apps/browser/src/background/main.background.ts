@@ -764,6 +764,7 @@ export default class MainBackground {
       this.stateEventRunnerService,
       lockedCallback,
       logoutCallback,
+      this.taskSchedulerService,
     );
     this.containerService = new ContainerService(this.cryptoService, this.encryptService);
 
