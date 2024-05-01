@@ -80,23 +80,6 @@ describe("BrowserTaskSchedulerService", () => {
   });
 
   describe("setTimeout", () => {
-    it("uses the global setTimeout API if the delay is less than 1000ms", async () => {
-      const delayInMs = 999;
-      jest.spyOn(globalThis, "setTimeout");
-
-      await browserTaskSchedulerService.setTimeout(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        delayInMs,
-      );
-
-      expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), delayInMs);
-      expect(chrome.alarms.create).not.toHaveBeenCalledWith(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        { delayInMinutes: 1 },
-        expect.any(Function),
-      );
-    });
-
     it("creates a timeout alarm", async () => {
       await browserTaskSchedulerService.setTimeout(
         ScheduledTaskNames.loginStrategySessionTimeout,
@@ -139,6 +122,23 @@ describe("BrowserTaskSchedulerService", () => {
 
       expect(chrome.alarms.clear).toHaveBeenCalledWith(
         ScheduledTaskNames.loginStrategySessionTimeout,
+        expect.any(Function),
+      );
+    });
+
+    it("uses the global setTimeout API if the delay is less than 1000ms", async () => {
+      const delayInMs = 15000;
+      jest.spyOn(globalThis, "setTimeout");
+
+      await browserTaskSchedulerService.setTimeout(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        delayInMs,
+      );
+
+      expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), delayInMs);
+      expect(chrome.alarms.create).toHaveBeenCalledWith(
+        `${userUuid}__${ScheduledTaskNames.loginStrategySessionTimeout}`,
+        { delayInMinutes: 0.5 },
         expect.any(Function),
       );
     });

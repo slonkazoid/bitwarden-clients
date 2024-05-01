@@ -52,15 +52,22 @@ export class BrowserTaskSchedulerServiceImplementation
     taskName: ScheduledTaskName,
     delayInMs: number,
   ): Promise<number | NodeJS.Timeout> {
-    const delayInMinutes = delayInMs / 1000 / 60;
-    if (delayInMinutes < 1) {
-      return super.setTimeout(taskName, delayInMs);
-    }
-
     this.validateRegisteredTask(taskName);
 
+    const delayInMinutes = delayInMs / 1000 / 60;
     const alarmName = await this.getActiveUserAlarmName(taskName);
-    await this.scheduleAlarm(alarmName, { delayInMinutes });
+    await this.scheduleAlarm(alarmName, {
+      delayInMinutes: this.getUpperBoundDelayInMinutes(delayInMinutes),
+    });
+
+    // If the delay is less than a minute, we want to attempt to trigger the task through a setTimeout.
+    // The alarm previously scheduled will be used as a backup in case the setTimeout fails.
+    if (delayInMinutes < 1) {
+      return globalThis.setTimeout(async () => {
+        await this.triggerTask(alarmName);
+        await this.clearScheduledAlarm(alarmName);
+      }, delayInMs);
+    }
   }
 
   /**
@@ -395,5 +402,17 @@ export class BrowserTaskSchedulerServiceImplementation
    */
   private isNonChromeEnvironment(): boolean {
     return typeof browser !== "undefined" && !!browser.alarms;
+  }
+
+  /**
+   * Gets the upper bound delay in minutes for a given delay in minutes. This is
+   * used to ensure that the delay is at least 1 minute in non-Chrome environments.
+   * In Chrome environments, the delay can be as low as 0.5 minutes.
+   *
+   * @param delayInMinutes - The delay in minutes.
+   */
+  private getUpperBoundDelayInMinutes(delayInMinutes: number): number {
+    const minDelayInMinutes = this.isNonChromeEnvironment() ? 1 : 0.5;
+    return Math.max(minDelayInMinutes, delayInMinutes);
   }
 }
