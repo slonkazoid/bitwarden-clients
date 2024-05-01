@@ -95,17 +95,30 @@ describe("BrowserTaskSchedulerService", () => {
     // @ts-expect-error mocking global browser object
     // eslint-disable-next-line no-global-assign
     globalThis.browser = {};
+    chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(undefined));
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     jest.useRealTimers();
+
     // eslint-disable-next-line no-global-assign
     globalThis.browser = undefined;
   });
 
   describe("setTimeout", () => {
+    it("triggers an error when setting a timeout for a task that is not registered", async () => {
+      await expect(
+        browserTaskSchedulerService.setTimeout(
+          ScheduledTaskNames.notificationsReconnectTimeout,
+          1000,
+        ),
+      ).rejects.toThrowError(
+        `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
+      );
+    });
+
     it("creates a timeout alarm", async () => {
       await browserTaskSchedulerService.setTimeout(
         ScheduledTaskNames.loginStrategySessionTimeout,
@@ -228,6 +241,95 @@ describe("BrowserTaskSchedulerService", () => {
     });
   });
 
+  describe("setInterval", () => {
+    it("uses the global setInterval API if the interval is less than 1000ms", async () => {
+      const intervalInMs = 999;
+      jest.spyOn(globalThis, "setInterval");
+
+      await browserTaskSchedulerService.setInterval(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        intervalInMs,
+      );
+
+      expect(globalThis.setInterval).toHaveBeenCalledWith(expect.any(Function), intervalInMs);
+      expect(chrome.alarms.create).not.toHaveBeenCalled();
+    });
+
+    it("creates an interval alarm", async () => {
+      const periodInMinutes = 2;
+      const initialDelayInMs = 1000;
+
+      await browserTaskSchedulerService.setInterval(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        periodInMinutes * 60 * 1000,
+        initialDelayInMs,
+      );
+
+      expect(chrome.alarms.create).toHaveBeenCalledWith(
+        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        { periodInMinutes, delayInMinutes: initialDelayInMs / 1000 / 60 },
+        expect.any(Function),
+      );
+    });
+
+    it("defaults the alarm's delay in minutes to the interval in minutes if the delay is not specified", async () => {
+      const periodInMinutes = 2;
+      await browserTaskSchedulerService.setInterval(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        periodInMinutes * 60 * 1000,
+      );
+
+      expect(chrome.alarms.create).toHaveBeenCalledWith(
+        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        { periodInMinutes, delayInMinutes: periodInMinutes },
+        expect.any(Function),
+      );
+    });
+  });
+
+  describe("verifyAlarmsState", () => {
+    it("skips recovering a scheduled task if an existing alarm for the task is present", async () => {
+      chrome.alarms.get = jest
+        .fn()
+        .mockImplementation((_name, callback) => callback(mock<chrome.alarms.Alarm>()));
+
+      await browserTaskSchedulerService.verifyAlarmsState();
+
+      expect(chrome.alarms.create).not.toHaveBeenCalled();
+      expect(callback).not.toHaveBeenCalled();
+    });
+
+    describe("extension alarm is not set", () => {
+      it("triggers the task when the task should have triggered", async () => {
+        const fido2Callback = jest.fn();
+        browserTaskSchedulerService.registerTaskHandler(
+          ScheduledTaskNames.fido2ClientAbortTimeout,
+          fido2Callback,
+        );
+
+        await browserTaskSchedulerService.verifyAlarmsState();
+
+        expect(fido2Callback).toHaveBeenCalled();
+      });
+
+      it("schedules an alarm for the task when it has not yet triggered ", async () => {
+        const syncCallback = jest.fn();
+        browserTaskSchedulerService.registerTaskHandler(
+          ScheduledTaskNames.scheduleNextSyncInterval,
+          syncCallback,
+        );
+
+        await browserTaskSchedulerService.verifyAlarmsState();
+
+        expect(chrome.alarms.create).toHaveBeenCalledWith(
+          ScheduledTaskNames.scheduleNextSyncInterval,
+          scheduleNextSyncIntervalCreateInfo,
+          expect.any(Function),
+        );
+      });
+    });
+  });
+
   describe("triggering a task", () => {
     it("clears an non user-based alarm if a separate user-based alarm has been set up", async () => {
       jest.useFakeTimers();
@@ -263,9 +365,7 @@ describe("BrowserTaskSchedulerService", () => {
 
   describe("clearScheduledTask", () => {
     it("skips clearing an alarm if the task name is not passed", async () => {
-      await browserTaskSchedulerService.clearScheduledTask({
-        timeoutId: 1,
-      });
+      await browserTaskSchedulerService.clearScheduledTask({ timeoutId: 1 });
 
       expect(chrome.alarms.clear).not.toHaveBeenCalled();
     });

@@ -137,10 +137,6 @@ export class BrowserTaskSchedulerServiceImplementation
 
     for (const alarm of activeAlarms) {
       const { alarmName, startTime, createInfo } = alarm;
-      if (!alarmName) {
-        return;
-      }
-
       const existingAlarm = await this.getAlarm(alarmName);
       if (existingAlarm) {
         continue;
