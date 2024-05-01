@@ -6,6 +6,8 @@ import { ConsoleLogService } from "@bitwarden/common/platform/services/console-l
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
 import { UserId } from "@bitwarden/common/types/guid";
 
+import { flushPromises } from "../../autofill/spec/testing-utils";
+
 import {
   ActiveAlarm,
   BrowserTaskSchedulerService,
@@ -20,10 +22,29 @@ jest.mock("rxjs", () => {
   };
 });
 
+function setupGlobalBrowserMock(overrides: Partial<chrome.alarms.Alarm> = {}) {
+  globalThis.browser.alarms = {
+    create: jest.fn(),
+    clear: jest.fn(),
+    get: jest.fn(),
+    getAll: jest.fn(),
+    clearAll: jest.fn(),
+    onAlarm: {
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      hasListener: jest.fn(),
+    },
+    ...overrides,
+  };
+}
+const userUuid = "user-uuid" as UserId;
+function getAlarmNameMock(taskName: string) {
+  return `${userUuid}__${taskName}`;
+}
+
 describe("BrowserTaskSchedulerService", () => {
   const callback = jest.fn();
   const delayInMinutes = 2;
-  const userUuid = "user-uuid" as UserId;
   let activeUserIdMock$: BehaviorSubject<UserId>;
   let activeAlarmsMock$: BehaviorSubject<ActiveAlarm[]>;
   let logService: MockProxy<ConsoleLogService>;
@@ -71,12 +92,17 @@ describe("BrowserTaskSchedulerService", () => {
       ScheduledTaskNames.loginStrategySessionTimeout,
       callback,
     );
+    // @ts-expect-error mocking global browser object
+    // eslint-disable-next-line no-global-assign
+    globalThis.browser = {};
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
     jest.useRealTimers();
+    // eslint-disable-next-line no-global-assign
+    globalThis.browser = undefined;
   });
 
   describe("setTimeout", () => {
@@ -87,7 +113,7 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(chrome.alarms.create).toHaveBeenCalledWith(
-        `${userUuid}__${ScheduledTaskNames.loginStrategySessionTimeout}`,
+        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
         { delayInMinutes },
         expect.any(Function),
       );
@@ -126,19 +152,100 @@ describe("BrowserTaskSchedulerService", () => {
       );
     });
 
-    it("uses the global setTimeout API if the delay is less than 1000ms", async () => {
-      const delayInMs = 15000;
-      jest.spyOn(globalThis, "setTimeout");
+    it("creates an alarm that is not associated with a user", async () => {
+      activeUserIdMock$.next(undefined);
+      chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(undefined));
+
+      await browserTaskSchedulerService.setTimeout(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        delayInMinutes * 60 * 1000,
+      );
+
+      expect(chrome.alarms.create).toHaveBeenCalledWith(
+        ScheduledTaskNames.loginStrategySessionTimeout,
+        { delayInMinutes },
+        expect.any(Function),
+      );
+    });
+
+    describe("when the task is scheduled to be triggered in less than 1 minute", () => {
+      const delayInMs = 45000;
+
+      it("sets a timeout using the global setTimeout API", async () => {
+        jest.spyOn(globalThis, "setTimeout");
+
+        await browserTaskSchedulerService.setTimeout(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          delayInMs,
+        );
+
+        expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), delayInMs);
+      });
+
+      it("sets a fallback alarm", async () => {
+        const delayInMs = 15000;
+        await browserTaskSchedulerService.setTimeout(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          delayInMs,
+        );
+
+        expect(chrome.alarms.create).toHaveBeenCalledWith(
+          getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+          { delayInMinutes: 0.5 },
+          expect.any(Function),
+        );
+      });
+
+      it("sets the fallback for a minimum of 1 minute if the environment not for Chrome", async () => {
+        setupGlobalBrowserMock();
+
+        await browserTaskSchedulerService.setTimeout(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          delayInMs,
+        );
+
+        expect(browser.alarms.create).toHaveBeenCalledWith(
+          getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+          { delayInMinutes: 1 },
+        );
+      });
+
+      it("clears the fallback alarm when the setTimeout is triggered", async () => {
+        jest.useFakeTimers();
+
+        await browserTaskSchedulerService.setTimeout(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          delayInMs,
+        );
+        jest.advanceTimersByTime(delayInMs);
+        await flushPromises();
+
+        expect(chrome.alarms.clear).toHaveBeenCalledWith(
+          getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+          expect.any(Function),
+        );
+      });
+    });
+  });
+
+  describe("triggering a task", () => {
+    it("clears an non user-based alarm if a separate user-based alarm has been set up", async () => {
+      jest.useFakeTimers();
+      activeUserIdMock$.next(undefined);
+      const delayInMs = 10000;
+      chrome.alarms.get = jest
+        .fn()
+        .mockImplementation((_name, callback) => callback(mock<chrome.alarms.Alarm>()));
 
       await browserTaskSchedulerService.setTimeout(
         ScheduledTaskNames.loginStrategySessionTimeout,
         delayInMs,
       );
+      jest.advanceTimersByTime(delayInMs);
+      await flushPromises();
 
-      expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), delayInMs);
-      expect(chrome.alarms.create).toHaveBeenCalledWith(
-        `${userUuid}__${ScheduledTaskNames.loginStrategySessionTimeout}`,
-        { delayInMinutes: 0.5 },
+      expect(chrome.alarms.clear).toHaveBeenCalledWith(
+        ScheduledTaskNames.loginStrategySessionTimeout,
         expect.any(Function),
       );
     });

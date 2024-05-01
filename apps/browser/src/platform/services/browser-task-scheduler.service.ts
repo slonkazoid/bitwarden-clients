@@ -152,7 +152,7 @@ export class BrowserTaskSchedulerServiceImplementation
         createInfo.delayInMinutes &&
         startTime + createInfo.delayInMinutes * 60 * 1000 < currentTime;
       if (shouldAlarmHaveBeenTriggered || hasSetTimeoutAlarmExceededDelay) {
-        await this.triggerRecoveredAlarm(alarmName);
+        await this.triggerTask(alarmName);
         continue;
       }
 
@@ -245,16 +245,6 @@ export class BrowserTaskSchedulerServiceImplementation
    */
   private async updateActiveAlarms(alarms: ActiveAlarm[]): Promise<void> {
     await this.activeAlarmsState.update(() => alarms);
-  }
-
-  /**
-   * Triggers a recovered alarm by deleting it from the recovered alarms set
-   *
-   * @param alarmName - The name of the recovered alarm to trigger.
-   * @param periodInMinutes - The period in minutes of the recovered alarm.
-   */
-  private async triggerRecoveredAlarm(alarmName: string, periodInMinutes?: number): Promise<void> {
-    await this.triggerTask(alarmName, periodInMinutes);
   }
 
   /**
@@ -398,7 +388,9 @@ export class BrowserTaskSchedulerServiceImplementation
 
   /**
    * Checks if the environment is a non-Chrome environment. This is used to determine
-   * if the browser alarms API should be used in place of the chrome alarms API.
+   * if the browser alarms API should be used in place of the chrome alarms API. This
+   * is necessary because the `chrome` polyfill that Mozilla implements does not allow
+   * passing the callback parameter in the same way most `chrome.alarm` api calls allow.
    */
   private isNonChromeEnvironment(): boolean {
     return typeof browser !== "undefined" && !!browser.alarms;
