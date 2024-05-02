@@ -44,6 +44,14 @@ describe("DefaultTaskSchedulerService", () => {
     );
   });
 
+  it("triggers an error when setting an interval for a task that is not registered", async () => {
+    await expect(
+      taskSchedulerService.setInterval(ScheduledTaskNames.notificationsReconnectTimeout, 1000),
+    ).rejects.toThrowError(
+      `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
+    );
+  });
+
   it("overrides the handler for a previously registered task and provides a warning about the task registration", () => {
     taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.loginStrategySessionTimeout,

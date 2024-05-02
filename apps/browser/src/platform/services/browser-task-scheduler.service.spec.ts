@@ -242,6 +242,17 @@ describe("BrowserTaskSchedulerService", () => {
   });
 
   describe("setInterval", () => {
+    it("triggers an error when setting an interval for a task that is not registered", async () => {
+      await expect(
+        browserTaskSchedulerService.setInterval(
+          ScheduledTaskNames.notificationsReconnectTimeout,
+          1000,
+        ),
+      ).rejects.toThrowError(
+        `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
+      );
+    });
+
     describe("setting an interval that is less than 1 minute", () => {
       const intervalInMs = 10000;
 
