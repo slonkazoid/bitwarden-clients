@@ -611,7 +611,6 @@ export class Main {
       this.cipherService,
       this.folderService,
       this.collectionService,
-      this.cryptoService,
       this.platformUtilsService,
       this.messagingService,
       this.searchService,
@@ -731,7 +730,7 @@ export class Main {
     this.authService.logOut(() => {
       /* Do nothing */
     });
-    const userId = await this.stateService.getUserId();
+    const userId = (await this.stateService.getUserId()) as UserId;
     await Promise.all([
       this.eventUploadService.uploadEvents(userId as UserId),
       this.syncService.setLastSync(new Date(0)),
@@ -742,9 +741,10 @@ export class Main {
       this.passwordGenerationService.clear(),
     ]);
 
-    await this.stateEventRunnerService.handleEvent("logout", userId as UserId);
+    await this.stateEventRunnerService.handleEvent("logout", userId);
 
     await this.stateService.clean();
+    await this.accountService.clean(userId);
     process.env.BW_SESSION = null;
   }
 

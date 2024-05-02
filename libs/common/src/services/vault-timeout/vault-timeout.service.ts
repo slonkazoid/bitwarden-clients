@@ -1,4 +1,4 @@
-import { firstValueFrom, timeout } from "rxjs";
+import { combineLatest, firstValueFrom, switchMap } from "rxjs";
 
 import { SearchService } from "../../abstractions/search.service";
 import { VaultTimeoutSettingsService } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
@@ -7,9 +7,7 @@ import { AccountService } from "../../auth/abstractions/account.service";
 import { AuthService } from "../../auth/abstractions/auth.service";
 import { InternalMasterPasswordServiceAbstraction } from "../../auth/abstractions/master-password.service.abstraction";
 import { AuthenticationStatus } from "../../auth/enums/authentication-status";
-import { ClientType } from "../../enums";
 import { VaultTimeoutAction } from "../../enums/vault-timeout-action.enum";
-import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { MessagingService } from "../../platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { StateService } from "../../platform/abstractions/state.service";
@@ -28,7 +26,6 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private cipherService: CipherService,
     private folderService: FolderService,
     private collectionService: CollectionService,
-    private cryptoService: CryptoService,
     protected platformUtilsService: PlatformUtilsService,
     private messagingService: MessagingService,
     private searchService: SearchService,
@@ -44,8 +41,6 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     if (this.inited) {
       return;
     }
-    // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3483)
-    await this.migrateKeyForNeverLockIfNeeded();
 
     this.inited = true;
     if (checkOnInterval) {
@@ -64,14 +59,25 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     // Get whether or not the view is open a single time so it can be compared for each user
     const isViewOpen = await this.platformUtilsService.isViewOpen();
 
-    const activeUserId = await firstValueFrom(this.stateService.activeAccount$.pipe(timeout(500)));
-
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    for (const userId in accounts) {
-      if (userId != null && (await this.shouldLock(userId, activeUserId, isViewOpen))) {
-        await this.executeTimeoutAction(userId);
-      }
-    }
+    await firstValueFrom(
+      combineLatest([
+        this.accountService.activeAccount$,
+        this.accountService.accountActivity$,
+      ]).pipe(
+        switchMap(async ([activeAccount, accountActivity]) => {
+          const activeUserId = activeAccount?.id;
+          for (const userIdString in accountActivity) {
+            const userId = userIdString as UserId;
+            if (
+              userId != null &&
+              (await this.shouldLock(userId, accountActivity[userId], activeUserId, isViewOpen))
+            ) {
+              await this.executeTimeoutAction(userId);
+            }
+          }
+        }),
+      ),
+    );
   }
 
   async lock(userId?: string): Promise<void> {
@@ -123,6 +129,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
   private async shouldLock(
     userId: string,
+    lastActive: Date,
     activeUserId: string,
     isViewOpen: boolean,
   ): Promise<boolean> {
@@ -146,13 +153,12 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       return false;
     }
 
-    const lastActive = await this.stateService.getLastActive({ userId: userId });
     if (lastActive == null) {
       return false;
     }
 
     const vaultTimeoutSeconds = vaultTimeout * 60;
-    const diffSeconds = (new Date().getTime() - lastActive) / 1000;
+    const diffSeconds = (new Date().getTime() - lastActive.getTime()) / 1000;
     return diffSeconds >= vaultTimeoutSeconds;
   }
 
@@ -163,22 +169,5 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     timeoutAction === VaultTimeoutAction.LogOut
       ? await this.logOut(userId)
       : await this.lock(userId);
-  }
-
-  private async migrateKeyForNeverLockIfNeeded(): Promise<void> {
-    // Web can't set vault timeout to never
-    if (this.platformUtilsService.getClientType() == ClientType.Web) {
-      return;
-    }
-    const accounts = await firstValueFrom(this.stateService.accounts$);
-    for (const userId in accounts) {
-      if (userId != null) {
-        await this.cryptoService.migrateAutoKeyIfNeeded(userId);
-        // Legacy users should be logged out since we're not on the web vault and can't migrate.
-        if (await this.cryptoService.isLegacyUser(null, userId)) {
-          await this.logOut(userId);
-        }
-      }
-    }
   }
 }

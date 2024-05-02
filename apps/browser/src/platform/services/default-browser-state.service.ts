@@ -29,8 +29,6 @@ export class DefaultBrowserStateService
     initializeAs: "record",
   })
   protected accountsSubject: BehaviorSubject<{ [userId: string]: Account }>;
-  @sessionSync({ initializer: (s: string) => s })
-  protected activeAccountSubject: BehaviorSubject<string>;
 
   protected accountDeserializer = Account.fromJSON;
 
@@ -62,15 +60,6 @@ export class DefaultBrowserStateService
     // Apply browser overrides to default account values
     account = new Account(account);
     await super.addAccount(account);
-  }
-
-  async getIsAuthenticated(options?: StorageOptions): Promise<boolean> {
-    // Firefox Private Mode can clash with non-Private Mode because they both read from the same onDiskOptions
-    // Check that there is an account in memory before considering the user authenticated
-    return (
-      (await super.getIsAuthenticated(options)) &&
-      (await this.getAccount(await this.defaultInMemoryOptions())) != null
-    );
   }
 
   // Overriding the base class to prevent deleting the cache on save. We register a storage listener
