@@ -219,7 +219,7 @@ export class BrowserTaskSchedulerServiceImplementation
   ): Promise<void> {
     const existingAlarm = await this.getAlarm(alarmName);
     if (existingAlarm) {
-      this.logService.warning(`Alarm ${alarmName} already exists. Skipping creation.`);
+      this.logService.debug(`Alarm ${alarmName} already exists. Skipping creation.`);
       return;
     }
 

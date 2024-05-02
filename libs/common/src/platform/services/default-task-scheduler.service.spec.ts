@@ -8,7 +8,7 @@ import { StateProvider } from "../state";
 
 import { DefaultTaskSchedulerService } from "./default-task-scheduler.service";
 
-describe("TaskSchedulerService", () => {
+describe("DefaultTaskSchedulerService", () => {
   const callback = jest.fn();
   const delayInMs = 1000;
   const intervalInMs = 1100;
@@ -25,7 +25,7 @@ describe("TaskSchedulerService", () => {
       activeUserId$: activeUserIdMock$,
     });
     taskSchedulerService = new DefaultTaskSchedulerService(logService, stateProvider);
-    void taskSchedulerService.registerTaskHandler(
+    taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.loginStrategySessionTimeout,
       callback,
     );
@@ -34,6 +34,20 @@ describe("TaskSchedulerService", () => {
   afterEach(() => {
     jest.clearAllTimers();
     jest.clearAllMocks();
+  });
+
+  it("overrides the handler for a previously registered task and provides a warning about the task registration", () => {
+    taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.loginStrategySessionTimeout,
+      callback,
+    );
+
+    expect(logService.warning).toHaveBeenCalledWith(
+      `Task handler for ${ScheduledTaskNames.loginStrategySessionTimeout} already exists. Overwriting.`,
+    );
+    expect(
+      taskSchedulerService["taskHandlers"].get(ScheduledTaskNames.loginStrategySessionTimeout),
+    ).toBeDefined();
   });
 
   it("sets a timeout and returns the timeout id", async () => {
