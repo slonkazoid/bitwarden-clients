@@ -242,22 +242,56 @@ describe("BrowserTaskSchedulerService", () => {
   });
 
   describe("setInterval", () => {
-    it("uses the global setInterval API if the interval is less than 1000ms", async () => {
-      const intervalInMs = 999;
-      jest.spyOn(globalThis, "setInterval");
+    describe("setting an interval that is less than 1 minute", () => {
+      const intervalInMs = 10000;
 
-      await browserTaskSchedulerService.setInterval(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        intervalInMs,
-      );
+      it("sets up stepped alarms that trigger behavior after the first minute of setInterval execution", async () => {
+        await browserTaskSchedulerService.setInterval(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          intervalInMs,
+        );
 
-      expect(globalThis.setInterval).toHaveBeenCalledWith(expect.any(Function), intervalInMs);
+        expect(chrome.alarms.create).toHaveBeenCalledWith(
+          `${getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout)}__0`,
+          { periodInMinutes: 0.5 },
+          expect.any(Function),
+        );
+        expect(chrome.alarms.create).toHaveBeenCalledWith(
+          `${getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout)}__1`,
+          { periodInMinutes: 0.6666666666666666 },
+          expect.any(Function),
+        );
+        expect(chrome.alarms.create).toHaveBeenCalledWith(
+          `${getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout)}__2`,
+          { periodInMinutes: 0.8333333333333333 },
+          expect.any(Function),
+        );
+      });
+
+      it("sets an interval using the global setInterval API", async () => {
+        jest.spyOn(globalThis, "setInterval");
+
+        await browserTaskSchedulerService.setInterval(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          intervalInMs,
+        );
+
+        expect(globalThis.setInterval).toHaveBeenCalledWith(expect.any(Function), intervalInMs);
+      });
+
+      it("clears the global setInterval instance once the interval has elapsed the minimum required delay for an alarm", async () => {
+        jest.useFakeTimers();
+        jest.spyOn(globalThis, "clearInterval");
+
+        await browserTaskSchedulerService.setInterval(
+          ScheduledTaskNames.loginStrategySessionTimeout,
+          intervalInMs,
+        );
+        jest.advanceTimersByTime(50000);
+
+        expect(globalThis.clearInterval).toHaveBeenCalledWith(expect.any(Number));
+      });
     });
-
-    it.todo(
-      "sets up stepped alarms that trigger behavior after the first minute of setInterval execution",
-      () => {},
-    );
 
     it("creates an interval alarm", async () => {
       const periodInMinutes = 2;
