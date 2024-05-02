@@ -108,17 +108,6 @@ describe("BrowserTaskSchedulerService", () => {
   });
 
   describe("setTimeout", () => {
-    it("triggers an error when setting a timeout for a task that is not registered", async () => {
-      await expect(
-        browserTaskSchedulerService.setTimeout(
-          ScheduledTaskNames.notificationsReconnectTimeout,
-          1000,
-        ),
-      ).rejects.toThrowError(
-        `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
-      );
-    });
-
     it("creates a timeout alarm", async () => {
       await browserTaskSchedulerService.setTimeout(
         ScheduledTaskNames.loginStrategySessionTimeout,

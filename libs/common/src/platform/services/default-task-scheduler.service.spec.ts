@@ -36,6 +36,14 @@ describe("DefaultTaskSchedulerService", () => {
     jest.clearAllMocks();
   });
 
+  it("triggers an error when setting a timeout for a task that is not registered", async () => {
+    await expect(
+      taskSchedulerService.setTimeout(ScheduledTaskNames.notificationsReconnectTimeout, 1000),
+    ).rejects.toThrowError(
+      `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
+    );
+  });
+
   it("overrides the handler for a previously registered task and provides a warning about the task registration", () => {
     taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.loginStrategySessionTimeout,
