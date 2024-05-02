@@ -355,7 +355,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: ScriptInjectorService,
     useClass: BrowserScriptInjectorService,
-    deps: [],
+    deps: [PlatformUtilsService, LogService],
   }),
   safeProvider({
     provide: KeyConnectorService,
