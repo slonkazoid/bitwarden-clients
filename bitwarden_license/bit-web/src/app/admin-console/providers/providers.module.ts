@@ -4,9 +4,16 @@ import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { SearchModule } from "@bitwarden/components";
-import { OrganizationPlansComponent } from "@bitwarden/web-vault/app/billing";
+import { DangerZoneComponent } from "@bitwarden/web-vault/app/auth/settings/account/danger-zone.component";
+import { OrganizationPlansComponent, TaxInfoComponent } from "@bitwarden/web-vault/app/billing";
 import { PaymentMethodWarningsModule } from "@bitwarden/web-vault/app/billing/shared";
 import { OssModule } from "@bitwarden/web-vault/app/oss.module";
+
+import {
+  CreateClientOrganizationComponent,
+  ManageClientOrganizationSubscriptionComponent,
+  ManageClientOrganizationsComponent,
+} from "../../billing/providers/clients";
 
 import { AddOrganizationComponent } from "./clients/add-organization.component";
 import { ClientsComponent } from "./clients/clients.component";
@@ -36,6 +43,8 @@ import { SetupComponent } from "./setup/setup.component";
     SearchModule,
     ProvidersLayoutComponent,
     PaymentMethodWarningsModule,
+    TaxInfoComponent,
+    DangerZoneComponent,
   ],
   declarations: [
     AcceptProviderComponent,
@@ -50,6 +59,9 @@ import { SetupComponent } from "./setup/setup.component";
     SetupComponent,
     SetupProviderComponent,
     UserAddEditComponent,
+    CreateClientOrganizationComponent,
+    ManageClientOrganizationsComponent,
+    ManageClientOrganizationSubscriptionComponent,
   ],
   providers: [WebProviderService, ProviderPermissionsGuard],
 })

@@ -1,3 +1,8 @@
+/**
+ * need to update test environment so structuredClone works appropriately
+ * @jest-environment ../../libs/shared/test.environment.ts
+ */
+
 import { MockProxy, mock } from "jest-mock-extended";
 import { firstValueFrom } from "rxjs";
 
@@ -6,15 +11,56 @@ import { FakeGlobalStateProvider } from "../../../spec/fake-state-provider";
 import { trackEmissions } from "../../../spec/utils";
 import { LogService } from "../../platform/abstractions/log.service";
 import { MessagingService } from "../../platform/abstractions/messaging.service";
+import { Utils } from "../../platform/misc/utils";
 import { UserId } from "../../types/guid";
-import { AccountInfo } from "../abstractions/account.service";
-import { AuthenticationStatus } from "../enums/authentication-status";
+import { AccountInfo, accountInfoEqual } from "../abstractions/account.service";
 
 import {
   ACCOUNT_ACCOUNTS,
   ACCOUNT_ACTIVE_ACCOUNT_ID,
+  ACCOUNT_ACTIVITY,
   AccountServiceImplementation,
 } from "./account.service";
+
+describe("accountInfoEqual", () => {
+  const accountInfo: AccountInfo = { name: "name", email: "email", emailVerified: true };
+
+  it("compares nulls", () => {
+    expect(accountInfoEqual(null, null)).toBe(true);
+    expect(accountInfoEqual(null, accountInfo)).toBe(false);
+    expect(accountInfoEqual(accountInfo, null)).toBe(false);
+  });
+
+  it("compares all keys, not just those defined in AccountInfo", () => {
+    const different = { ...accountInfo, extra: "extra" };
+
+    expect(accountInfoEqual(accountInfo, different)).toBe(false);
+  });
+
+  it("compares name", () => {
+    const same = { ...accountInfo };
+    const different = { ...accountInfo, name: "name2" };
+
+    expect(accountInfoEqual(accountInfo, same)).toBe(true);
+    expect(accountInfoEqual(accountInfo, different)).toBe(false);
+  });
+
+  it("compares email", () => {
+    const same = { ...accountInfo };
+    const different = { ...accountInfo, email: "email2" };
+
+    expect(accountInfoEqual(accountInfo, same)).toBe(true);
+    expect(accountInfoEqual(accountInfo, different)).toBe(false);
+  });
+
+  it("compares emailVerified", () => {
+    const same = { ...accountInfo };
+    const different = { ...accountInfo, emailVerified: false };
+
+    expect(accountInfoEqual(accountInfo, same)).toBe(true);
+    expect(accountInfoEqual(accountInfo, different)).toBe(false);
+  });
+});
 
 describe("accountService", () => {
   let messagingService: MockProxy<MessagingService>;
@@ -23,10 +69,8 @@ describe("accountService", () => {
   let sut: AccountServiceImplementation;
   let accountsState: FakeGlobalState<Record<UserId, AccountInfo>>;
   let activeAccountIdState: FakeGlobalState<UserId>;
-  const userId = "userId" as UserId;
-  function userInfo(status: AuthenticationStatus): AccountInfo {
-    return { status, email: "email", name: "name" };
-  }
+  const userId = Utils.newGuid() as UserId;
+  const userInfo = { email: "email", name: "name", emailVerified: true };
 
   beforeEach(() => {
     messagingService = mock();
@@ -50,61 +94,68 @@ describe("accountService", () => {
       expect(emissions).toEqual([undefined]);
     });
 
-    it("should emit the active account and status", async () => {
+    it("should emit the active account", async () => {
       const emissions = trackEmissions(sut.activeAccount$);
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
+      accountsState.stateSubject.next({ [userId]: userInfo });
       activeAccountIdState.stateSubject.next(userId);
 
       expect(emissions).toEqual([
         undefined, // initial value
-        { id: userId, ...userInfo(AuthenticationStatus.Unlocked) },
-      ]);
-    });
-
-    it("should update the status if the account status changes", async () => {
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
-      activeAccountIdState.stateSubject.next(userId);
-      const emissions = trackEmissions(sut.activeAccount$);
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Locked) });
-
-      expect(emissions).toEqual([
-        { id: userId, ...userInfo(AuthenticationStatus.Unlocked) },
-        { id: userId, ...userInfo(AuthenticationStatus.Locked) },
+        { id: userId, ...userInfo },
       ]);
     });
 
     it("should remember the last emitted value", async () => {
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
+      accountsState.stateSubject.next({ [userId]: userInfo });
       activeAccountIdState.stateSubject.next(userId);
 
       expect(await firstValueFrom(sut.activeAccount$)).toEqual({
         id: userId,
-        ...userInfo(AuthenticationStatus.Unlocked),
+        ...userInfo,
       });
     });
   });
 
   describe("accounts$", () => {
     it("should maintain an accounts cache", async () => {
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Locked) });
+      accountsState.stateSubject.next({ [userId]: userInfo });
+      accountsState.stateSubject.next({ [userId]: userInfo });
       expect(await firstValueFrom(sut.accounts$)).toEqual({
-        [userId]: userInfo(AuthenticationStatus.Locked),
+        [userId]: userInfo,
       });
     });
   });
 
   describe("addAccount", () => {
     it("should emit the new account", async () => {
-      await sut.addAccount(userId, userInfo(AuthenticationStatus.Unlocked));
+      await sut.addAccount(userId, userInfo);
       const currentValue = await firstValueFrom(sut.accounts$);
 
-      expect(currentValue).toEqual({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
+      expect(currentValue).toEqual({ [userId]: userInfo });
     });
+
+    it("sets the last active date of the account to now", async () => {
+      const state = globalStateProvider.getFake(ACCOUNT_ACTIVITY);
+      state.stateSubject.next({});
+      await sut.addAccount(userId, userInfo);
+
+      expect(state.nextMock).toHaveBeenCalledWith({ [userId]: expect.any(Date) });
+    });
+
+    it.each([null, undefined, 123, "not a guid"])(
+      "does not set last active if the userId is not a valid guid",
+      async (userId) => {
+        const state = globalStateProvider.getFake(ACCOUNT_ACTIVITY);
+        state.stateSubject.next({});
+        await expect(sut.addAccount(userId as UserId, userInfo)).rejects.toThrow(
+          "userId is required",
+        );
+      },
+    );
   });
 
   describe("setAccountName", () => {
-    const initialState = { [userId]: userInfo(AuthenticationStatus.Unlocked) };
+    const initialState = { [userId]: userInfo };
     beforeEach(() => {
       accountsState.stateSubject.next(initialState);
     });
@@ -114,7 +165,7 @@ describe("accountService", () => {
       const currentState = await firstValueFrom(accountsState.state$);
 
       expect(currentState).toEqual({
-        [userId]: { ...userInfo(AuthenticationStatus.Unlocked), name: "new name" },
+        [userId]: { ...userInfo, name: "new name" },
       });
     });
 
@@ -127,7 +178,7 @@ describe("accountService", () => {
   });
 
   describe("setAccountEmail", () => {
-    const initialState = { [userId]: userInfo(AuthenticationStatus.Unlocked) };
+    const initialState = { [userId]: userInfo };
     beforeEach(() => {
       accountsState.stateSubject.next(initialState);
     });
@@ -137,7 +188,7 @@ describe("accountService", () => {
       const currentState = await firstValueFrom(accountsState.state$);
 
       expect(currentState).toEqual({
-        [userId]: { ...userInfo(AuthenticationStatus.Unlocked), email: "new email" },
+        [userId]: { ...userInfo, email: "new email" },
       });
     });
 
@@ -149,49 +200,61 @@ describe("accountService", () => {
     });
   });
 
-  describe("setAccountStatus", () => {
-    const initialState = { [userId]: userInfo(AuthenticationStatus.Unlocked) };
+  describe("setAccountEmailVerified", () => {
+    const initialState = { [userId]: userInfo };
+    initialState[userId].emailVerified = false;
     beforeEach(() => {
       accountsState.stateSubject.next(initialState);
     });
 
     it("should update the account", async () => {
-      await sut.setAccountStatus(userId, AuthenticationStatus.Locked);
+      await sut.setAccountEmailVerified(userId, true);
       const currentState = await firstValueFrom(accountsState.state$);
 
       expect(currentState).toEqual({
-        [userId]: {
-          ...userInfo(AuthenticationStatus.Unlocked),
-          status: AuthenticationStatus.Locked,
-        },
+        [userId]: { ...userInfo, emailVerified: true },
       });
     });
 
-    it("should not update if the status is the same", async () => {
-      await sut.setAccountStatus(userId, AuthenticationStatus.Unlocked);
+    it("should not update if the email is the same", async () => {
+      await sut.setAccountEmailVerified(userId, false);
       const currentState = await firstValueFrom(accountsState.state$);
 
       expect(currentState).toEqual(initialState);
     });
+  });
 
-    it("should emit logout if the status is logged out", async () => {
-      const emissions = trackEmissions(sut.accountLogout$);
-      await sut.setAccountStatus(userId, AuthenticationStatus.LoggedOut);
-
-      expect(emissions).toEqual([userId]);
+  describe("clean", () => {
+    beforeEach(() => {
+      accountsState.stateSubject.next({ [userId]: userInfo });
     });
 
-    it("should emit lock if the status is locked", async () => {
-      const emissions = trackEmissions(sut.accountLock$);
-      await sut.setAccountStatus(userId, AuthenticationStatus.Locked);
+    it("removes account info of the given user", async () => {
+      await sut.clean(userId);
+      const currentState = await firstValueFrom(accountsState.state$);
 
-      expect(emissions).toEqual([userId]);
+      expect(currentState).toEqual({
+        [userId]: {
+          email: "",
+          emailVerified: false,
+          name: undefined,
+        },
+      });
+    });
+
+    it("removes account activity of the given user", async () => {
+      const state = globalStateProvider.getFake(ACCOUNT_ACTIVITY);
+      state.stateSubject.next({ [userId]: new Date() });
+
+      await sut.clean(userId);
+
+      expect(state.nextMock).toHaveBeenCalledWith({});
     });
   });
 
   describe("switchAccount", () => {
     beforeEach(() => {
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
+      accountsState.stateSubject.next({ [userId]: userInfo });
       activeAccountIdState.stateSubject.next(userId);
     });
 
@@ -208,25 +271,82 @@ describe("accountService", () => {
     });
   });
 
-  describe("setMaxAccountStatus", () => {
-    it("should update the account", async () => {
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.Unlocked) });
-      await sut.setMaxAccountStatus(userId, AuthenticationStatus.Locked);
-      const currentState = await firstValueFrom(accountsState.state$);
+  describe("account activity", () => {
+    let state: FakeGlobalState<Record<UserId, Date>>;
 
-      expect(currentState).toEqual({
-        [userId]: userInfo(AuthenticationStatus.Locked),
+    beforeEach(() => {
+      state = globalStateProvider.getFake(ACCOUNT_ACTIVITY);
+    });
+    describe("accountActivity$", () => {
+      it("returns the account activity state", async () => {
+        state.stateSubject.next({
+          [toId("user1")]: new Date(1),
+          [toId("user2")]: new Date(2),
+        });
+
+        await expect(firstValueFrom(sut.accountActivity$)).resolves.toEqual({
+          [toId("user1")]: new Date(1),
+          [toId("user2")]: new Date(2),
+        });
+      });
+
+      it("returns an empty object when account activity is null", async () => {
+        state.stateSubject.next(null);
+
+        await expect(firstValueFrom(sut.accountActivity$)).resolves.toEqual({});
       });
     });
 
-    it("should not update if the new max status is higher than the current", async () => {
-      accountsState.stateSubject.next({ [userId]: userInfo(AuthenticationStatus.LoggedOut) });
-      await sut.setMaxAccountStatus(userId, AuthenticationStatus.Locked);
-      const currentState = await firstValueFrom(accountsState.state$);
+    describe("sortedUserIds$", () => {
+      it("returns the sorted user ids by date with most recent first", async () => {
+        state.stateSubject.next({
+          [toId("user1")]: new Date(3),
+          [toId("user2")]: new Date(2),
+          [toId("user3")]: new Date(1),
+        });
 
-      expect(currentState).toEqual({
-        [userId]: userInfo(AuthenticationStatus.LoggedOut),
+        await expect(firstValueFrom(sut.sortedUserIds$)).resolves.toEqual([
+          "user1" as UserId,
+          "user2" as UserId,
+          "user3" as UserId,
+        ]);
       });
+
+      it("returns an empty array when account activity is null", async () => {
+        state.stateSubject.next(null);
+
+        await expect(firstValueFrom(sut.sortedUserIds$)).resolves.toEqual([]);
+      });
+    });
+
+    describe("setAccountActivity", () => {
+      const userId = Utils.newGuid() as UserId;
+      it("sets the account activity", async () => {
+        await sut.setAccountActivity(userId, new Date(1));
+
+        expect(state.nextMock).toHaveBeenCalledWith({ [userId]: new Date(1) });
+      });
+
+      it("does not update if the activity is the same", async () => {
+        state.stateSubject.next({ [userId]: new Date(1) });
+
+        await sut.setAccountActivity(userId, new Date(1));
+
+        expect(state.nextMock).not.toHaveBeenCalled();
+      });
+
+      it.each([null, undefined, 123, "not a guid"])(
+        "does not set last active if the userId is not a valid guid",
+        async (userId) => {
+          await sut.setAccountActivity(userId as UserId, new Date(1));
+
+          expect(state.nextMock).not.toHaveBeenCalled();
+        },
+      );
     });
   });
 });
+
+function toId(userId: string) {
+  return userId as UserId;
+}

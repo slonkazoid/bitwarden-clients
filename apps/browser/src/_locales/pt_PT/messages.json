@@ -7,8 +7,8 @@
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Um gestor de palavras-passe seguro e gratuito para todos os seus dispositivos.",
-    "description": "Extension description"
+    "message": "Em casa, no trabalho, em todo o lado, o Bitwarden protege todas as suas palavras-passe e informações sensíveis",
+    "description": "Extension description, MUST be less than 112 characters (Safari restriction)"
   },
   "loginOrCreateNewAccount": {
     "message": "Inicie sessão ou crie uma nova conta para aceder ao seu cofre seguro."
@@ -172,6 +172,12 @@
   "changeMasterPassword": {
     "message": "Alterar palavra-passe mestra"
   },
+  "continueToWebApp": {
+    "message": "Continuar para a aplicação Web?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Pode alterar a sua palavra-passe mestra na aplicação Web Bitwarden."
+  },
   "fingerprintPhrase": {
     "message": "Frase de impressão digital",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -297,10 +303,10 @@
     "message": "Incluir número"
   },
   "minNumbers": {
-    "message": "Números mínimos"
+    "message": "Mínimo de números"
   },
   "minSpecial": {
-    "message": "Caracteres especiais minímos"
+    "message": "Mínimo de caracteres especiais"
   },
   "avoidAmbChar": {
     "message": "Evitar caracteres ambíguos"
@@ -556,12 +562,6 @@
   },
   "addedFolder": {
     "message": "Pasta adicionada"
-  },
-  "changeMasterPass": {
-    "message": "Alterar palavra-passe mestra"
-  },
-  "changeMasterPasswordConfirmation": {
-    "message": "Pode alterar o seu endereço de e-mail no cofre do site bitwarden.com. Deseja visitar o site agora?"
   },
   "twoStepLoginConfirmation": {
     "message": "A verificação de dois passos torna a sua conta mais segura, exigindo que verifique o seu início de sessão com outro dispositivo, como uma chave de segurança, aplicação de autenticação, SMS, chamada telefónica ou e-mail. A verificação de dois passos pode ser configurada em bitwarden.com. Pretende visitar o site agora?"
@@ -1064,7 +1064,7 @@
     "message": "Editar as definições do navegador."
   },
   "autofillOverlayVisibilityOff": {
-    "message": "Desligado",
+    "message": "Desativado",
     "description": "Overlay setting select option for disabling autofill overlay"
   },
   "autofillOverlayVisibilityOnFieldFocus": {
@@ -1119,9 +1119,6 @@
   },
   "commandLockVaultDesc": {
     "message": "Bloquear o cofre"
-  },
-  "privateModeWarning": {
-    "message": "O suporte do modo privado é experimental e algumas funcionalidades são limitadas."
   },
   "customFields": {
     "message": "Campos personalizados"
@@ -1279,7 +1276,7 @@
     "message": "Número do passaporte"
   },
   "licenseNumber": {
-    "message": "Número da licença"
+    "message": "Número da carta de condução"
   },
   "email": {
     "message": "E-mail"
@@ -1303,7 +1300,7 @@
     "message": "Cidade / Localidade"
   },
   "stateProvince": {
-    "message": "Estado / Província"
+    "message": "Estado / Região"
   },
   "zipPostalCode": {
     "message": "Código postal"
@@ -1443,7 +1440,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Criado a",
+    "message": "Criado",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -2913,7 +2910,7 @@
     "message": "Mudar de conta"
   },
   "switchAccounts": {
-    "message": "Mudar de contas"
+    "message": "Mudar de conta"
   },
   "switchToAccount": {
     "message": "Mudar para conta"
@@ -2999,5 +2996,37 @@
   "saveCipherAttemptFailed": {
     "message": "Erro ao guardar as credenciais. Verifique a consola para obter detalhes.",
     "description": "Notification message for when saving credentials has failed."
+  },
+  "success": {
+    "message": "Com sucesso"
+  },
+  "removePasskey": {
+    "message": "Remover chave de acesso"
+  },
+  "passkeyRemoved": {
+    "message": "Chave de acesso removida"
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Aviso: Os itens da organização não atribuídos já não são visíveis na vista Todos os cofres e só são acessíveis através da Consola de administração."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Aviso: A 16 de maio de 2024, os itens da organização não atribuídos deixarão de estar visíveis na vista Todos os cofres e só estarão acessíveis através da consola de administração."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Atribua estes itens a uma coleção a partir da",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "para os tornar visíveis.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "adminConsole": {
+    "message": "Consola de administração"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Erro ao atribuir a coleção de destino."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Erro ao atribuir a pasta de destino."
   }
 }

@@ -1,4 +1,7 @@
+import { firstValueFrom, map } from "rxjs";
+
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
@@ -17,7 +20,6 @@ import {
   NOOP_COMMAND_SUFFIX,
 } from "@bitwarden/common/autofill/constants";
 import { EventType } from "@bitwarden/common/enums";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -26,17 +28,18 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { accountServiceFactory } from "../../auth/background/service-factories/account-service.factory";
 import {
   authServiceFactory,
   AuthServiceInitOptions,
 } from "../../auth/background/service-factories/auth-service.factory";
+import { KeyConnectorServiceInitOptions } from "../../auth/background/service-factories/key-connector-service.factory";
 import { userVerificationServiceFactory } from "../../auth/background/service-factories/user-verification-service.factory";
 import { openUnlockPopout } from "../../auth/popup/utils/auth-popout-window";
 import { autofillSettingsServiceFactory } from "../../autofill/background/service_factories/autofill-settings-service.factory";
 import { eventCollectionServiceFactory } from "../../background/service-factories/event-collection-service.factory";
 import { Account } from "../../models/account";
 import { CachedServices } from "../../platform/background/service-factories/factory-options";
-import { stateServiceFactory } from "../../platform/background/service-factories/state-service.factory";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { passwordGenerationServiceFactory } from "../../tools/background/service_factories/password-generation-service.factory";
 import {
@@ -70,15 +73,17 @@ export class ContextMenuClickedHandler {
     private autofillAction: AutofillAction,
     private authService: AuthService,
     private cipherService: CipherService,
-    private stateService: StateService,
     private totpService: TotpService,
     private eventCollectionService: EventCollectionService,
     private userVerificationService: UserVerificationService,
+    private accountService: AccountService,
   ) {}
 
   static async mv3Create(cachedServices: CachedServices) {
     const stateFactory = new StateFactory(GlobalState, Account);
-    const serviceOptions: AuthServiceInitOptions & CipherServiceInitOptions = {
+    const serviceOptions: AuthServiceInitOptions &
+      CipherServiceInitOptions &
+      KeyConnectorServiceInitOptions = {
       apiServiceOptions: {
         logoutCallback: NOT_IMPLEMENTED,
       },
@@ -125,10 +130,10 @@ export class ContextMenuClickedHandler {
       (tab, cipher) => autofillCommand.doAutofillTabWithCipherCommand(tab, cipher),
       await authServiceFactory(cachedServices, serviceOptions),
       await cipherServiceFactory(cachedServices, serviceOptions),
-      await stateServiceFactory(cachedServices, serviceOptions),
       await totpServiceFactory(cachedServices, serviceOptions),
       await eventCollectionServiceFactory(cachedServices, serviceOptions),
       await userVerificationServiceFactory(cachedServices, serviceOptions),
+      await accountServiceFactory(cachedServices, serviceOptions),
     );
   }
 
@@ -236,9 +241,10 @@ export class ContextMenuClickedHandler {
       return;
     }
 
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.stateService.setLastActive(new Date().getTime());
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+    await this.accountService.setAccountActivity(activeUserId, new Date());
     switch (info.parentMenuItemId) {
       case AUTOFILL_ID:
       case AUTOFILL_IDENTITY_ID:

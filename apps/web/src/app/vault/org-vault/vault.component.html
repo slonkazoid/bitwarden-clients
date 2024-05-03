@@ -48,13 +48,12 @@
       [showBulkMove]="false"
       [showBulkTrashOptions]="filter.type === 'trash'"
       [useEvents]="organization?.useEvents"
-      [cloneableOrganizationCiphers]="true"
       [showAdminActions]="true"
       (onEvent)="onVaultItemsEvent($event)"
-      [showBulkEditCollectionAccess]="
-        (showBulkEditCollectionAccess$ | async) && organization?.flexibleCollections
-      "
+      [showBulkEditCollectionAccess]="organization?.flexibleCollections"
+      [showBulkAddToCollections]="organization?.flexibleCollections"
       [viewingOrgVault]="true"
+      [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled"
     >
     </app-vault-items>
     <ng-container *ngIf="!flexibleCollectionsV1Enabled">
@@ -99,8 +98,9 @@
       </bit-no-items>
       <collection-access-restricted
         *ngIf="showCollectionAccessRestricted"
-        [canEdit]="selectedCollection != null && selectedCollection.node.canEdit(organization)"
-        (editInfoClicked)="editCollection(selectedCollection.node, CollectionDialogTabType.Info)"
+        (viewCollectionClicked)="
+          editCollection(selectedCollection.node, CollectionDialogTabType.Info, true)
+        "
       >
       </collection-access-restricted>
     </ng-container>

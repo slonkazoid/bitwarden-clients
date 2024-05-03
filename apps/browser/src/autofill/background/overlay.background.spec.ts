@@ -33,7 +33,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { BrowserStateService } from "../../platform/services/browser-state.service";
+import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
 import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
 import { AutofillService } from "../services/abstractions/autofill.service";
 import {
@@ -72,7 +72,7 @@ describe("OverlayBackground", () => {
       urls: { icons: "https://icons.bitwarden.com/" },
     }),
   );
-  const stateService = mock<BrowserStateService>();
+  const stateService = mock<DefaultBrowserStateService>();
   const autofillSettingsService = mock<AutofillSettingsService>();
   const i18nService = mock<I18nService>();
   const platformUtilsService = mock<BrowserPlatformUtilsService>();
@@ -592,7 +592,7 @@ describe("OverlayBackground", () => {
         beforeEach(() => {
           sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
           jest
-            .spyOn(overlayBackground["stateService"], "setAddEditCipherInfo")
+            .spyOn(overlayBackground["cipherService"], "setAddEditCipherInfo")
             .mockImplementation();
           jest.spyOn(overlayBackground as any, "openAddEditVaultItemPopout").mockImplementation();
         });
@@ -600,7 +600,7 @@ describe("OverlayBackground", () => {
         it("will not open the add edit popout window if the message does not have a login cipher provided", () => {
           sendExtensionRuntimeMessage({ command: "autofillOverlayAddNewVaultItem" }, sender);
 
-          expect(overlayBackground["stateService"].setAddEditCipherInfo).not.toHaveBeenCalled();
+          expect(overlayBackground["cipherService"].setAddEditCipherInfo).not.toHaveBeenCalled();
           expect(overlayBackground["openAddEditVaultItemPopout"]).not.toHaveBeenCalled();
         });
 
@@ -621,7 +621,7 @@ describe("OverlayBackground", () => {
           );
           await flushPromises();
 
-          expect(overlayBackground["stateService"].setAddEditCipherInfo).toHaveBeenCalled();
+          expect(overlayBackground["cipherService"].setAddEditCipherInfo).toHaveBeenCalled();
           expect(BrowserApi.sendMessage).toHaveBeenCalledWith(
             "inlineAutofillMenuRefreshAddEditCipher",
           );

@@ -2,7 +2,8 @@ import { MockProxy, mock } from "jest-mock-extended";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
@@ -11,6 +12,7 @@ import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { TokenTwoFactorRequest } from "@bitwarden/common/auth/models/request/identity-token/token-two-factor.request";
 import { IdentityTokenResponse } from "@bitwarden/common/auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "@bitwarden/common/auth/models/response/identity-two-factor.response";
+import { FakeMasterPasswordService } from "@bitwarden/common/auth/services/master-password/fake-master-password.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -22,8 +24,14 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
-import { FakeGlobalState, FakeGlobalStateProvider } from "@bitwarden/common/spec";
+import {
+  FakeAccountService,
+  FakeGlobalState,
+  FakeGlobalStateProvider,
+  mockAccountServiceWith,
+} from "@bitwarden/common/spec";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
+import { UserId } from "@bitwarden/common/types/guid";
 
 import {
   AuthRequestServiceAbstraction,
@@ -38,6 +46,8 @@ import { CACHE_EXPIRATION_KEY } from "./login-strategy.state";
 describe("LoginStrategyService", () => {
   let sut: LoginStrategyService;
 
+  let accountService: FakeAccountService;
+  let masterPasswordService: FakeMasterPasswordService;
   let cryptoService: MockProxy<CryptoService>;
   let apiService: MockProxy<ApiService>;
   let tokenService: MockProxy<TokenService>;
@@ -53,15 +63,20 @@ describe("LoginStrategyService", () => {
   let encryptService: MockProxy<EncryptService>;
   let passwordStrengthService: MockProxy<PasswordStrengthServiceAbstraction>;
   let policyService: MockProxy<PolicyService>;
-  let deviceTrustCryptoService: MockProxy<DeviceTrustCryptoServiceAbstraction>;
+  let deviceTrustService: MockProxy<DeviceTrustServiceAbstraction>;
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let userDecryptionOptionsService: MockProxy<InternalUserDecryptionOptionsServiceAbstraction>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
+  let kdfConfigService: MockProxy<KdfConfigService>;
 
   let stateProvider: FakeGlobalStateProvider;
   let loginStrategyCacheExpirationState: FakeGlobalState<Date | null>;
 
+  const userId = "USER_ID" as UserId;
+
   beforeEach(() => {
+    accountService = mockAccountServiceWith(userId);
+    masterPasswordService = new FakeMasterPasswordService();
     cryptoService = mock<CryptoService>();
     apiService = mock<ApiService>();
     tokenService = mock<TokenService>();
@@ -77,13 +92,16 @@ describe("LoginStrategyService", () => {
     encryptService = mock<EncryptService>();
     passwordStrengthService = mock<PasswordStrengthServiceAbstraction>();
     policyService = mock<PolicyService>();
-    deviceTrustCryptoService = mock<DeviceTrustCryptoServiceAbstraction>();
+    deviceTrustService = mock<DeviceTrustServiceAbstraction>();
     authRequestService = mock<AuthRequestServiceAbstraction>();
     userDecryptionOptionsService = mock<UserDecryptionOptionsService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
     stateProvider = new FakeGlobalStateProvider();
+    kdfConfigService = mock<KdfConfigService>();
 
     sut = new LoginStrategyService(
+      accountService,
+      masterPasswordService,
       cryptoService,
       apiService,
       tokenService,
@@ -99,11 +117,12 @@ describe("LoginStrategyService", () => {
       encryptService,
       passwordStrengthService,
       policyService,
-      deviceTrustCryptoService,
+      deviceTrustService,
       authRequestService,
       userDecryptionOptionsService,
       stateProvider,
       billingAccountProfileStateService,
+      kdfConfigService,
     );
 
     loginStrategyCacheExpirationState = stateProvider.getFake(CACHE_EXPIRATION_KEY);

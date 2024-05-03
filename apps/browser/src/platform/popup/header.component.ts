@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
-import { Observable, map } from "rxjs";
+import { Observable, map, of, switchMap } from "rxjs";
 
-import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 
 import { enableAccountSwitching } from "../flags";
@@ -14,14 +14,15 @@ export class HeaderComponent {
   @Input() noTheme = false;
   @Input() hideAccountSwitcher = false;
   authedAccounts$: Observable<boolean>;
-  constructor(accountService: AccountService) {
-    this.authedAccounts$ = accountService.accounts$.pipe(
-      map((accounts) => {
+  constructor(authService: AuthService) {
+    this.authedAccounts$ = authService.authStatuses$.pipe(
+      map((record) => Object.values(record)),
+      switchMap((statuses) => {
         if (!enableAccountSwitching()) {
-          return false;
+          return of(false);
         }
 
-        return Object.values(accounts).some((a) => a.status !== AuthenticationStatus.LoggedOut);
+        return of(statuses.some((status) => status !== AuthenticationStatus.LoggedOut));
       }),
     );
   }

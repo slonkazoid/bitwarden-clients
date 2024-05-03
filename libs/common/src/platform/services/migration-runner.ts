@@ -1,3 +1,4 @@
+import { ClientType } from "../../enums";
 import { waitForMigrations } from "../../state-migrations";
 import { CURRENT_VERSION, currentVersion } from "../../state-migrations/migrate";
 import { MigrationHelper } from "../../state-migrations/migration-helper";
@@ -11,6 +12,7 @@ export class MigrationRunner {
     protected diskStorage: AbstractStorageService,
     protected logService: LogService,
     protected migrationBuilderService: MigrationBuilderService,
+    private clientType: ClientType,
   ) {}
 
   async run(): Promise<void> {
@@ -18,6 +20,8 @@ export class MigrationRunner {
       await currentVersion(this.diskStorage, this.logService),
       this.diskStorage,
       this.logService,
+      "general",
+      this.clientType,
     );
 
     if (migrationHelper.currentVersion < 0) {

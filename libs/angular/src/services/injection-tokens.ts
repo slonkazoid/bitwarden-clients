@@ -1,6 +1,7 @@
 import { InjectionToken } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
+import { ClientType } from "@bitwarden/common/enums";
 import {
   AbstractMemoryStorageService,
   AbstractStorageService,
@@ -8,6 +9,7 @@ import {
 } from "@bitwarden/common/platform/abstractions/storage.service";
 import { ThemeType } from "@bitwarden/common/platform/enums";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
+import { Message } from "@bitwarden/common/platform/messaging";
 
 declare const tag: unique symbol;
 /**
@@ -35,7 +37,6 @@ export const MEMORY_STORAGE = new SafeInjectionToken<AbstractMemoryStorageServic
 );
 export const SECURE_STORAGE = new SafeInjectionToken<AbstractStorageService>("SECURE_STORAGE");
 export const STATE_FACTORY = new SafeInjectionToken<StateFactory>("STATE_FACTORY");
-export const STATE_SERVICE_USE_CACHE = new SafeInjectionToken<boolean>("STATE_SERVICE_USE_CACHE");
 export const LOGOUT_CALLBACK = new SafeInjectionToken<
   (expired: boolean, userId?: string) => Promise<void>
 >("LOGOUT_CALLBACK");
@@ -49,3 +50,7 @@ export const LOG_MAC_FAILURES = new SafeInjectionToken<boolean>("LOG_MAC_FAILURE
 export const SYSTEM_THEME_OBSERVABLE = new SafeInjectionToken<Observable<ThemeType>>(
   "SYSTEM_THEME_OBSERVABLE",
 );
+export const INTRAPROCESS_MESSAGING_SUBJECT = new SafeInjectionToken<Subject<Message<object>>>(
+  "INTRAPROCESS_MESSAGING_SUBJECT",
+);
+export const CLIENT_TYPE = new SafeInjectionToken<ClientType>("CLIENT_TYPE");

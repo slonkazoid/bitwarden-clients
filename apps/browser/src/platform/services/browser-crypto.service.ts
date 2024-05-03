@@ -1,6 +1,8 @@
 import { firstValueFrom } from "rxjs";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { KeyGenerationService } from "@bitwarden/common/platform/abstractions/key-generation.service";
@@ -17,6 +19,7 @@ import { UserKey } from "@bitwarden/common/types/key";
 
 export class BrowserCryptoService extends CryptoService {
   constructor(
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
     keyGenerationService: KeyGenerationService,
     cryptoFunctionService: CryptoFunctionService,
     encryptService: EncryptService,
@@ -26,8 +29,10 @@ export class BrowserCryptoService extends CryptoService {
     accountService: AccountService,
     stateProvider: StateProvider,
     private biometricStateService: BiometricStateService,
+    kdfConfigService: KdfConfigService,
   ) {
     super(
+      masterPasswordService,
       keyGenerationService,
       cryptoFunctionService,
       encryptService,
@@ -36,6 +41,7 @@ export class BrowserCryptoService extends CryptoService {
       stateService,
       accountService,
       stateProvider,
+      kdfConfigService,
     );
   }
   override async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: UserId): Promise<boolean> {

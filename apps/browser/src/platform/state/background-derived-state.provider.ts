@@ -16,7 +16,7 @@ export class BackgroundDerivedStateProvider extends DefaultDerivedStateProvider 
     return new BackgroundDerivedState(
       parentState$,
       deriveDefinition,
-      this.memoryStorage,
+      deriveDefinition.buildCacheKey(),
       dependencies,
     );
   }

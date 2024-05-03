@@ -31,15 +31,33 @@ export class CollectionAdminView extends CollectionView {
     this.assigned = response.assigned;
   }
 
-  override canEdit(org: Organization): boolean {
+  /**
+   * Whether the current user can edit the collection, including user and group access
+   */
+  override canEdit(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
     return org?.flexibleCollections
-      ? org?.canEditAnyCollection || this.manage
-      : org?.canEditAnyCollection || (org?.canEditAssignedCollections && this.assigned);
+      ? org?.canEditAnyCollection(flexibleCollectionsV1Enabled) || this.manage
+      : org?.canEditAnyCollection(flexibleCollectionsV1Enabled) ||
+          (org?.canEditAssignedCollections && this.assigned);
   }
 
   override canDelete(org: Organization): boolean {
     return org?.flexibleCollections
       ? org?.canDeleteAnyCollection || (!org?.limitCollectionCreationDeletion && this.manage)
       : org?.canDeleteAnyCollection || (org?.canDeleteAssignedCollections && this.assigned);
+  }
+
+  /**
+   * Whether the user can modify user access to this collection
+   */
+  canEditUserAccess(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
+    return this.canEdit(org, flexibleCollectionsV1Enabled) || org.permissions.manageUsers;
+  }
+
+  /**
+   * Whether the user can modify group access to this collection
+   */
+  canEditGroupAccess(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
+    return this.canEdit(org, flexibleCollectionsV1Enabled) || org.permissions.manageGroups;
   }
 }

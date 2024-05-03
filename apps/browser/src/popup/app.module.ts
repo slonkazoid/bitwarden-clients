@@ -11,11 +11,10 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
-import { BitwardenToastModule } from "@bitwarden/angular/components/toastr.component";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
-import { AvatarModule, ButtonModule } from "@bitwarden/components";
+import { AvatarModule, ButtonModule, ToastModule } from "@bitwarden/components";
 import { ExportScopeCalloutComponent } from "@bitwarden/vault-export-ui";
 
 import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
@@ -36,7 +35,12 @@ import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.comp
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
+import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { HeaderComponent } from "../platform/popup/header.component";
+import { PopupFooterComponent } from "../platform/popup/layout/popup-footer.component";
+import { PopupHeaderComponent } from "../platform/popup/layout/popup-header.component";
+import { PopupPageComponent } from "../platform/popup/layout/popup-page.component";
+import { PopupTabNavigationComponent } from "../platform/popup/layout/popup-tab-navigation.component";
 import { FilePopoutCalloutComponent } from "../tools/popup/components/file-popout-callout.component";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
@@ -67,14 +71,12 @@ import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { PopOutComponent } from "./components/pop-out.component";
-import { PrivateModeWarningComponent } from "./components/private-mode-warning.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { FoldersComponent } from "./settings/folders.component";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
 import { OptionsComponent } from "./settings/options.component";
-import { PremiumComponent } from "./settings/premium.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { SyncComponent } from "./settings/sync.component";
 import { VaultTimeoutInputComponent } from "./settings/vault-timeout-input.component";
@@ -87,7 +89,7 @@ import "../platform/popup/locales";
   imports: [
     A11yModule,
     AppRoutingModule,
-    BitwardenToastModule.forRoot({
+    ToastModule.forRoot({
       maxOpened: 2,
       autoDismiss: true,
       closeButton: true,
@@ -109,6 +111,10 @@ import "../platform/popup/locales";
     AccountComponent,
     ButtonModule,
     ExportScopeCalloutComponent,
+    PopupPageComponent,
+    PopupTabNavigationComponent,
+    PopupFooterComponent,
+    PopupHeaderComponent,
   ],
   declarations: [
     ActionButtonsComponent,
@@ -143,7 +149,6 @@ import "../platform/popup/locales";
     PasswordHistoryComponent,
     PopOutComponent,
     PremiumComponent,
-    PrivateModeWarningComponent,
     RegisterComponent,
     SendAddEditComponent,
     SendGroupingsComponent,

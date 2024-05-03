@@ -1,9 +1,11 @@
-import { Observable, map, BehaviorSubject } from "rxjs";
+import { firstValueFrom, Observable, map, BehaviorSubject } from "rxjs";
 import { Jsonify } from "type-fest";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
@@ -20,6 +22,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/src/auth/abstractions/device-trust.service.abstraction";
+import { UserId } from "@bitwarden/common/types/guid";
 
 import {
   InternalUserDecryptionOptionsServiceAbstraction,
@@ -78,6 +82,8 @@ export class SsoLoginStrategy extends LoginStrategy {
 
   constructor(
     data: SsoLoginStrategyData,
+    accountService: AccountService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
     cryptoService: CryptoService,
     apiService: ApiService,
     tokenService: TokenService,
@@ -89,12 +95,15 @@ export class SsoLoginStrategy extends LoginStrategy {
     twoFactorService: TwoFactorService,
     userDecryptionOptionsService: InternalUserDecryptionOptionsServiceAbstraction,
     private keyConnectorService: KeyConnectorService,
-    private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    private deviceTrustService: DeviceTrustServiceAbstraction,
     private authRequestService: AuthRequestServiceAbstraction,
     private i18nService: I18nService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
+    kdfConfigService: KdfConfigService,
   ) {
     super(
+      accountService,
+      masterPasswordService,
       cryptoService,
       apiService,
       tokenService,
@@ -106,6 +115,7 @@ export class SsoLoginStrategy extends LoginStrategy {
       twoFactorService,
       userDecryptionOptionsService,
       billingAccountProfileStateService,
+      kdfConfigService,
     );
 
     this.cache = new BehaviorSubject(data);
@@ -137,7 +147,11 @@ export class SsoLoginStrategy extends LoginStrategy {
 
     // Auth guard currently handles redirects for this.
     if (ssoAuthResult.forcePasswordReset == ForceSetPasswordReason.AdminForcePasswordReset) {
-      await this.stateService.setForceSetPasswordReason(ssoAuthResult.forcePasswordReset);
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ssoAuthResult.forcePasswordReset,
+        userId,
+      );
     }
 
     this.cache.next({
@@ -205,7 +219,10 @@ export class SsoLoginStrategy extends LoginStrategy {
 
   // TODO: future passkey login strategy will need to support setting user key (decrypting via TDE or admin approval request)
   // so might be worth moving this logic to a common place (base login strategy or a separate service?)
-  protected override async setUserKey(tokenResponse: IdentityTokenResponse): Promise<void> {
+  protected override async setUserKey(
+    tokenResponse: IdentityTokenResponse,
+    userId: UserId,
+  ): Promise<void> {
     const masterKeyEncryptedUserKey = tokenResponse.key;
 
     // Note: masterKeyEncryptedUserKey is undefined for SSO JIT provisioned users
@@ -221,13 +238,13 @@ export class SsoLoginStrategy extends LoginStrategy {
 
     // Note: TDE and key connector are mutually exclusive
     if (userDecryptionOptions?.trustedDeviceOption) {
-      await this.trySetUserKeyWithApprovedAdminRequestIfExists();
+      await this.trySetUserKeyWithApprovedAdminRequestIfExists(userId);
 
       const hasUserKey = await this.cryptoService.hasUserKey();
 
       // Only try to set user key with device key if admin approval request was not successful
       if (!hasUserKey) {
-        await this.trySetUserKeyWithDeviceKey(tokenResponse);
+        await this.trySetUserKeyWithDeviceKey(tokenResponse, userId);
       }
     } else if (
       masterKeyEncryptedUserKey != null &&
@@ -241,9 +258,9 @@ export class SsoLoginStrategy extends LoginStrategy {
     // is responsible for deriving master key from MP entry and then decrypting the user key
   }
 
-  private async trySetUserKeyWithApprovedAdminRequestIfExists(): Promise<void> {
+  private async trySetUserKeyWithApprovedAdminRequestIfExists(userId: UserId): Promise<void> {
     // At this point a user could have an admin auth request that has been approved
-    const adminAuthReqStorable = await this.stateService.getAdminAuthRequest();
+    const adminAuthReqStorable = await this.authRequestService.getAdminAuthRequest(userId);
 
     if (!adminAuthReqStorable) {
       return;
@@ -257,7 +274,7 @@ export class SsoLoginStrategy extends LoginStrategy {
     } catch (error) {
       if (error instanceof ErrorResponse && error.statusCode === HttpStatusCode.NotFound) {
         // if we get a 404, it means the auth request has been deleted so clear it from storage
-        await this.stateService.setAdminAuthRequest(null);
+        await this.authRequestService.clearAdminAuthRequest(userId);
       }
 
       // Always return on an error here as we don't want to block the user from logging in
@@ -284,21 +301,24 @@ export class SsoLoginStrategy extends LoginStrategy {
       if (await this.cryptoService.hasUserKey()) {
         // Now that we have a decrypted user key in memory, we can check if we
         // need to establish trust on the current device
-        await this.deviceTrustCryptoService.trustDeviceIfRequired();
+        await this.deviceTrustService.trustDeviceIfRequired(userId);
 
         // if we successfully decrypted the user key, we can delete the admin auth request out of state
         // TODO: eventually we post and clean up DB as well once consumed on client
-        await this.stateService.setAdminAuthRequest(null);
+        await this.authRequestService.clearAdminAuthRequest(userId);
 
         this.platformUtilsService.showToast("success", null, this.i18nService.t("loginApproved"));
       }
     }
   }
 
-  private async trySetUserKeyWithDeviceKey(tokenResponse: IdentityTokenResponse): Promise<void> {
+  private async trySetUserKeyWithDeviceKey(
+    tokenResponse: IdentityTokenResponse,
+    userId: UserId,
+  ): Promise<void> {
     const trustedDeviceOption = tokenResponse.userDecryptionOptions?.trustedDeviceOption;
 
-    const deviceKey = await this.deviceTrustCryptoService.getDeviceKey();
+    const deviceKey = await this.deviceTrustService.getDeviceKey(userId);
     const encDevicePrivateKey = trustedDeviceOption?.encryptedPrivateKey;
     const encUserKey = trustedDeviceOption?.encryptedUserKey;
 
@@ -306,7 +326,8 @@ export class SsoLoginStrategy extends LoginStrategy {
       return;
     }
 
-    const userKey = await this.deviceTrustCryptoService.decryptUserKeyWithDeviceKey(
+    const userKey = await this.deviceTrustService.decryptUserKeyWithDeviceKey(
+      userId,
       encDevicePrivateKey,
       encUserKey,
       deviceKey,
@@ -318,7 +339,8 @@ export class SsoLoginStrategy extends LoginStrategy {
   }
 
   private async trySetUserKeyWithMasterKey(): Promise<void> {
-    const masterKey = await this.cryptoService.getMasterKey();
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    const masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(userId));
 
     // There is a scenario in which the master key is not set here. That will occur if the user
     // has a master password and is using Key Connector. In that case, we cannot set the master key

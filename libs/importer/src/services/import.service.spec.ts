@@ -1,5 +1,6 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
@@ -10,13 +11,13 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { FieldType } from "@bitwarden/common/vault/enums/field-type.enum";
-import { UriMatchType } from "@bitwarden/common/vault/enums/uri-match-type.enum";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { FolderData } from "@bitwarden/common/vault/models/data/folder.data";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { Collection } from "@bitwarden/common/vault/models/domain/collection";
 import { Folder } from "@bitwarden/common/vault/models/domain/folder";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
@@ -46,7 +47,9 @@ const cipherData: CipherData = {
   key: "EncKey",
   reprompt: CipherRepromptType.None,
   login: {
-    uris: [{ uri: "EncryptedString", uriChecksum: "EncryptedString", match: UriMatchType.Domain }],
+    uris: [
+      { uri: "EncryptedString", uriChecksum: "EncryptedString", match: UriMatchStrategy.Domain },
+    ],
     username: "EncryptedString",
     password: "EncryptedString",
     passwordRevisionDate: "2022-01-31T12:00:00.000Z",
@@ -283,7 +286,7 @@ describe("ImportService", () => {
         new Object() as FolderView,
       );
 
-      await expect(setImportTargetMethod).rejects.toThrow("Error assigning target collection");
+      await expect(setImportTargetMethod).rejects.toThrow();
     });
 
     it("passing importTarget as null on setImportTarget throws error", async () => {
@@ -293,17 +296,57 @@ describe("ImportService", () => {
         new Object() as CollectionView,
       );
 
-      await expect(setImportTargetMethod).rejects.toThrow("Error assigning target folder");
+      await expect(setImportTargetMethod).rejects.toThrow();
+    });
+
+    it("passing importTarget, collectionRelationship has the expected values", async () => {
+      collectionService.getAllDecrypted.mockResolvedValue([
+        mockImportTargetCollection,
+        mockCollection1,
+        mockCollection2,
+      ]);
+
+      importResult.ciphers.push(createCipher({ name: "cipher1" }));
+      importResult.ciphers.push(createCipher({ name: "cipher2" }));
+      importResult.collectionRelationships.push([0, 0]);
+      importResult.collections.push(mockCollection1);
+      importResult.collections.push(mockCollection2);
+
+      await importService["setImportTarget"](
+        importResult,
+        organizationId,
+        mockImportTargetCollection,
+      );
+      expect(importResult.collectionRelationships.length).toEqual(2);
+      expect(importResult.collectionRelationships[0]).toEqual([1, 0]);
+      expect(importResult.collectionRelationships[1]).toEqual([0, 1]);
+    });
+
+    it("passing importTarget, folderRelationship has the expected values", async () => {
+      folderService.getAllDecryptedFromState.mockResolvedValue([
+        mockImportTargetFolder,
+        mockFolder1,
+        mockFolder2,
+      ]);
+
+      importResult.folders.push(mockFolder1);
+      importResult.folders.push(mockFolder2);
+
+      importResult.ciphers.push(createCipher({ name: "cipher1", folderId: mockFolder1.id }));
+      importResult.ciphers.push(createCipher({ name: "cipher2" }));
+      importResult.folderRelationships.push([0, 0]);
+
+      await importService["setImportTarget"](importResult, "", mockImportTargetFolder);
+      expect(importResult.folderRelationships.length).toEqual(2);
+      expect(importResult.folderRelationships[0]).toEqual([1, 0]);
+      expect(importResult.folderRelationships[1]).toEqual([0, 1]);
     });
 
     it("if no targetCollection is found, does nothing", async () => {
       collectionService.getAllDecrypted.mockResolvedValue([mockCollection1, mockCollection2]);
-
-      const myImportTarget = "myImportTarget";
-
       importResult.collections.push(mockImportTargetCollection);
 
-      await importService["setImportTarget"](importResult, "123", myImportTarget);
+      await importService["setImportTarget"](importResult, "123", mockImportTargetCollection);
       expect(importResult.collections.length).toBe(1);
       expect(importResult.collections[0].name).toBe("myImportTarget");
     });
@@ -421,3 +464,15 @@ describe("ImportService", () => {
     });
   });
 });
+
+function createCipher(options: Partial<CipherView> = {}) {
+  const cipher = new CipherView();
+
+  cipher.name;
+  cipher.type = options.type;
+  cipher.folderId = options.folderId;
+  cipher.collectionIds = options.collectionIds;
+  cipher.organizationId = options.organizationId;
+
+  return cipher;
+}

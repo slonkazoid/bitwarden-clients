@@ -1,13 +1,21 @@
+import { Observable } from "rxjs";
+
 import { UriMatchStrategySetting } from "../../models/domain/domain-service";
 import { SymmetricCryptoKey } from "../../platform/models/domain/symmetric-crypto-key";
+import { CipherId, CollectionId, OrganizationId } from "../../types/guid";
 import { CipherType } from "../enums/cipher-type";
 import { CipherData } from "../models/data/cipher.data";
 import { Cipher } from "../models/domain/cipher";
 import { Field } from "../models/domain/field";
 import { CipherView } from "../models/view/cipher.view";
 import { FieldView } from "../models/view/field.view";
+import { AddEditCipherInfo } from "../types/add-edit-cipher-info";
 
 export abstract class CipherService {
+  /**
+   *  An observable monitoring the add/edit cipher info saved to memory.
+   */
+  addEditCipherInfo$: Observable<AddEditCipherInfo>;
   clearCache: (userId?: string) => Promise<void>;
   encrypt: (
     model: CipherView,
@@ -39,8 +47,24 @@ export abstract class CipherService {
   updateLastUsedDate: (id: string) => Promise<void>;
   updateLastLaunchedDate: (id: string) => Promise<void>;
   saveNeverDomain: (domain: string) => Promise<void>;
-  createWithServer: (cipher: Cipher, orgAdmin?: boolean) => Promise<any>;
-  updateWithServer: (cipher: Cipher, orgAdmin?: boolean, isNotClone?: boolean) => Promise<any>;
+  /**
+   * Create a cipher with the server
+   *
+   * @param cipher The cipher to create
+   * @param orgAdmin If true, the request is submitted as an organization admin request
+   *
+   * @returns A promise that resolves to the created cipher
+   */
+  createWithServer: (cipher: Cipher, orgAdmin?: boolean) => Promise<Cipher>;
+  /**
+   * Update a cipher with the server
+   * @param cipher The cipher to update
+   * @param orgAdmin If true, the request is submitted as an organization admin request
+   * @param isNotClone If true, the cipher is not a clone and should be treated as a new cipher
+   *
+   * @returns A promise that resolves to the updated cipher
+   */
+  updateWithServer: (cipher: Cipher, orgAdmin?: boolean, isNotClone?: boolean) => Promise<Cipher>;
   shareWithServer: (
     cipher: CipherView,
     organizationId: string,
@@ -62,8 +86,34 @@ export abstract class CipherService {
     data: ArrayBuffer,
     admin?: boolean,
   ) => Promise<Cipher>;
-  saveCollectionsWithServer: (cipher: Cipher) => Promise<any>;
-  upsert: (cipher: CipherData | CipherData[]) => Promise<any>;
+  /**
+   * Save the collections for a cipher with the server
+   *
+   * @param cipher The cipher to save collections for
+   *
+   * @returns A promise that resolves when the collections have been saved
+   */
+  saveCollectionsWithServer: (cipher: Cipher) => Promise<Cipher>;
+  /**
+   * Bulk update collections for many ciphers with the server
+   * @param orgId
+   * @param cipherIds
+   * @param collectionIds
+   * @param removeCollections - If true, the collections will be removed from the ciphers, otherwise they will be added
+   */
+  bulkUpdateCollectionsWithServer: (
+    orgId: OrganizationId,
+    cipherIds: CipherId[],
+    collectionIds: CollectionId[],
+    removeCollections: boolean,
+  ) => Promise<void>;
+  /**
+   * Update the local store of CipherData with the provided data. Values are upserted into the existing store.
+   *
+   * @param cipher The cipher data to upsert. Can be a single CipherData object or an array of CipherData objects.
+   * @returns A promise that resolves to a record of updated cipher store, keyed by their cipher ID. Returns all ciphers, not just those updated
+   */
+  upsert: (cipher: CipherData | CipherData[]) => Promise<Record<CipherId, CipherData>>;
   replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;
   clear: (userId: string) => Promise<any>;
   moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;
@@ -88,4 +138,5 @@ export abstract class CipherService {
     asAdmin?: boolean,
   ) => Promise<void>;
   getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<any>;
+  setAddEditCipherInfo: (value: AddEditCipherInfo) => Promise<void>;
 }

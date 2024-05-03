@@ -5,6 +5,8 @@ import { DeviceType } from "@bitwarden/common/enums";
 import { TabMessage } from "../../types/tab-messages";
 import { BrowserPlatformUtilsService } from "../services/platform-utils/browser-platform-utils.service";
 
+import { registerContentScriptsPolyfill } from "./browser-api.register-content-scripts-polyfill";
+
 export class BrowserApi {
   static isWebExtensionsApi: boolean = typeof browser !== "undefined";
   static isSafariApi: boolean =
@@ -202,10 +204,6 @@ export class BrowserApi {
     chrome.tabs.sendMessage<TabMessage, T>(tabId, message, options, responseCallback);
   }
 
-  static async getPrivateModeWindows(): Promise<browser.windows.Window[]> {
-    return (await browser.windows.getAll()).filter((win) => win.incognito);
-  }
-
   static async onWindowCreated(callback: (win: chrome.windows.Window) => any) {
     // FIXME: Make sure that is does not cause a memory leak in Safari or use BrowserApi.AddListener
     // and test that it doesn't break.
@@ -234,10 +232,6 @@ export class BrowserApi {
    */
   static isBackgroundPage(window: Window & typeof globalThis): boolean {
     return typeof window !== "undefined" && window === BrowserApi.getBackgroundPage();
-  }
-
-  static getApplicationVersion(): string {
-    return chrome.runtime.getManifest().version;
   }
 
   /**
@@ -351,11 +345,11 @@ export class BrowserApi {
   private static setupUnloadListeners() {
     // The MDN recommend using 'visibilitychange' but that event is fired any time the popup window is obscured as well
     // 'pagehide' works just like 'unload' but is compatible with the back/forward cache, so we prefer using that one
-    window.onpagehide = () => {
+    self.addEventListener("pagehide", () => {
       for (const [event, callback] of BrowserApi.trackedChromeEventListeners) {
         event.removeListener(callback);
       }
-    };
+    });
   }
 
   static sendMessage(subscriber: string, arg: any = {}) {
@@ -423,7 +417,7 @@ export class BrowserApi {
       return;
     }
 
-    const currentHref = window.location.href;
+    const currentHref = self.location.href;
     views
       .filter((w) => w.location.href != null && !w.location.href.includes("background.html"))
       .filter((w) => !exemptCurrentHref || w.location.href !== currentHref)
@@ -565,30 +559,39 @@ export class BrowserApi {
   }
 
   /**
-   * Opens the offscreen document with the given reasons and justification.
+   * Handles registration of static content scripts within manifest v2.
    *
-   * @param reasons - List of reasons for opening the offscreen document.
-   * @see https://developer.chrome.com/docs/extensions/reference/api/offscreen#type-Reason
-   * @param justification - Custom written justification for opening the offscreen document.
+   * @param contentScriptOptions - Details of the registered content scripts
    */
-  static async createOffscreenDocument(reasons: chrome.offscreen.Reason[], justification: string) {
-    await chrome.offscreen.createDocument({
-      url: "offscreen-document/index.html",
-      reasons,
-      justification,
-    });
+  static async registerContentScriptsMv2(
+    contentScriptOptions: browser.contentScripts.RegisteredContentScriptOptions,
+  ): Promise<browser.contentScripts.RegisteredContentScript> {
+    if (typeof browser !== "undefined" && !!browser.contentScripts?.register) {
+      return await browser.contentScripts.register(contentScriptOptions);
+    }
+
+    return await registerContentScriptsPolyfill(contentScriptOptions);
   }
 
   /**
-   * Closes the offscreen document.
+   * Handles registration of static content scripts within manifest v3.
    *
-   * @param callback - Optional callback to execute after the offscreen document is closed.
+   * @param scripts - Details of the registered content scripts
    */
-  static closeOffscreenDocument(callback?: () => void) {
-    chrome.offscreen.closeDocument(() => {
-      if (callback) {
-        callback();
-      }
-    });
+  static async registerContentScriptsMv3(
+    scripts: chrome.scripting.RegisteredContentScript[],
+  ): Promise<void> {
+    await chrome.scripting.registerContentScripts(scripts);
+  }
+
+  /**
+   * Handles unregistering of static content scripts within manifest v3.
+   *
+   * @param filter - Optional filter to unregister content scripts. Passing an empty object will unregister all content scripts.
+   */
+  static async unregisterContentScriptsMv3(
+    filter?: chrome.scripting.ContentScriptFilter,
+  ): Promise<void> {
+    await chrome.scripting.unregisterContentScripts(filter);
   }
 }

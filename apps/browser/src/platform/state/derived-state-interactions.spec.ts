@@ -4,14 +4,13 @@
  */
 
 import { NgZone } from "@angular/core";
-import { FakeStorageService } from "@bitwarden/common/../spec/fake-storage.service";
-import { awaitAsync, trackEmissions } from "@bitwarden/common/../spec/utils";
 import { mock } from "jest-mock-extended";
 import { Subject, firstValueFrom } from "rxjs";
 
 import { DeriveDefinition } from "@bitwarden/common/platform/state";
 // eslint-disable-next-line import/no-restricted-paths -- needed to define a derive definition
 import { StateDefinition } from "@bitwarden/common/platform/state/state-definition";
+import { awaitAsync, trackEmissions, ObservableTracker } from "@bitwarden/common/spec";
 
 import { mockPorts } from "../../../spec/mock-port.spec-util";
 
@@ -22,6 +21,7 @@ const stateDefinition = new StateDefinition("test", "memory");
 const deriveDefinition = new DeriveDefinition(stateDefinition, "test", {
   derive: (dateString: string) => (dateString == null ? null : new Date(dateString)),
   deserializer: (dateString: string) => (dateString == null ? null : new Date(dateString)),
+  cleanupDelayMs: 1000,
 });
 
 // Mock out the runInsideAngular operator so we don't have to deal with zone.js
@@ -35,17 +35,16 @@ describe("foreground background derived state interactions", () => {
   let foreground: ForegroundDerivedState<Date>;
   let background: BackgroundDerivedState<string, Date, Record<string, unknown>>;
   let parentState$: Subject<string>;
-  let memoryStorage: FakeStorageService;
   const initialParent = "2020-01-01";
   const ngZone = mock<NgZone>();
+  const portName = "testPort";
 
   beforeEach(() => {
     mockPorts();
     parentState$ = new Subject<string>();
-    memoryStorage = new FakeStorageService();
 
-    background = new BackgroundDerivedState(parentState$, deriveDefinition, memoryStorage, {});
-    foreground = new ForegroundDerivedState(deriveDefinition, memoryStorage, ngZone);
+    background = new BackgroundDerivedState(parentState$, deriveDefinition, portName, {});
+    foreground = new ForegroundDerivedState(deriveDefinition, portName, ngZone);
   });
 
   afterEach(() => {
@@ -65,16 +64,13 @@ describe("foreground background derived state interactions", () => {
   });
 
   it("should initialize a late-connected foreground", async () => {
-    const newForeground = new ForegroundDerivedState(deriveDefinition, memoryStorage, ngZone);
-    const backgroundEmissions = trackEmissions(background.state$);
+    const newForeground = new ForegroundDerivedState(deriveDefinition, portName, ngZone);
+    const backgroundTracker = new ObservableTracker(background.state$);
     parentState$.next(initialParent);
-    await awaitAsync();
+    const foregroundTracker = new ObservableTracker(newForeground.state$);
 
-    const foregroundEmissions = trackEmissions(newForeground.state$);
-    await awaitAsync(10);
-
-    expect(backgroundEmissions).toEqual([new Date(initialParent)]);
-    expect(foregroundEmissions).toEqual([new Date(initialParent)]);
+    expect(await backgroundTracker.expectEmission()).toEqual(new Date(initialParent));
+    expect(await foregroundTracker.expectEmission()).toEqual(new Date(initialParent));
   });
 
   describe("forceValue", () => {
@@ -82,8 +78,6 @@ describe("foreground background derived state interactions", () => {
       const dateString = "2020-12-12";
       const emissions = trackEmissions(background.state$);
 
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       await foreground.forceValue(new Date(dateString));
       await awaitAsync();
 
@@ -99,9 +93,7 @@ describe("foreground background derived state interactions", () => {
 
       expect(foreground["port"]).toBeDefined();
       const newDate = new Date();
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      foreground.forceValue(newDate);
+      await foreground.forceValue(newDate);
       await awaitAsync();
 
       expect(connectMock.mock.calls.length).toBe(initialConnectCalls);
@@ -114,9 +106,7 @@ describe("foreground background derived state interactions", () => {
 
       expect(foreground["port"]).toBeUndefined();
       const newDate = new Date();
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      foreground.forceValue(newDate);
+      await foreground.forceValue(newDate);
       await awaitAsync();
 
       expect(connectMock.mock.calls.length).toBe(initialConnectCalls + 1);

@@ -15,7 +15,7 @@
     "message": "Видове"
   },
   "typeLogin": {
-    "message": "Запис"
+    "message": "Вход"
   },
   "typeCard": {
     "message": "Карта"
@@ -800,8 +800,11 @@
   "changeMasterPass": {
     "message": "Промяна на главната парола"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Главната парола на трезор може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?"
+  "continueToWebApp": {
+    "message": "Продължаване към уеб приложението?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Може да промените главната си парола в уеб приложението на Битуорден."
   },
   "fingerprintPhrase": {
     "message": "Уникална фраза",
@@ -1628,6 +1631,12 @@
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Интеграцията с браузър не се поддържа"
+  },
+  "browserIntegrationErrorTitle": {
+    "message": "Грешка при включването на интеграцията с браузъра"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "Възникна грешка при включването на интеграцията с браузъра."
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "За жалост в момента интеграцията с браузър не се поддържа във версията за магазина на Mac."
@@ -2687,5 +2696,29 @@
   "commonImportFormats": {
     "message": "Често използвани формати",
     "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Успех"
+  },
+  "troubleshooting": {
+    "message": "Отстраняване на проблеми"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Изключете хардуерното ускорение и рестартирайте"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Включете хардуерното ускорение и рестартирайте"
+  },
+  "removePasskey": {
+    "message": "Премахване на секретния ключ"
+  },
+  "passkeyRemoved": {
+    "message": "Секретният ключ е премахнат"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Грешка при задаването на целева колекция."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Грешка при задаването на целева папка."
   }
 }

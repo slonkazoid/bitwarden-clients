@@ -1,9 +1,13 @@
 import { Directive } from "@angular/core";
 import { Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
@@ -56,6 +60,9 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     private userVerificationService: UserVerificationService,
     protected router: Router,
     dialogService: DialogService,
+    kdfConfigService: KdfConfigService,
+    private accountService: AccountService,
+    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
   ) {
     super(
       i18nService,
@@ -66,13 +73,15 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       policyService,
       stateService,
       dialogService,
+      kdfConfigService,
     );
   }
 
   async ngOnInit() {
     await this.syncService.fullSync(true);
 
-    this.reason = await this.stateService.getForceSetPasswordReason();
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    this.reason = await firstValueFrom(this.masterPasswordService.forceSetPasswordReason$(userId));
 
     // If we somehow end up here without a reason, go back to the home page
     if (this.reason == ForceSetPasswordReason.None) {
@@ -98,8 +107,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
 
   async setupSubmitActions(): Promise<boolean> {
     this.email = await this.stateService.getEmail();
-    this.kdf = await this.stateService.getKdfType();
-    this.kdfConfig = await this.stateService.getKdfConfig();
+    this.kdfConfig = await this.kdfConfigService.getKdfConfig();
     return true;
   }
 
@@ -118,7 +126,6 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       const newMasterKey = await this.cryptoService.makeMasterKey(
         this.masterPassword,
         this.email.trim().toLowerCase(),
-        this.kdf,
         this.kdfConfig,
       );
       const newPasswordHash = await this.cryptoService.hashMasterKey(
@@ -163,7 +170,11 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
         this.i18nService.t("updatedMasterPassword"),
       );
 
-      await this.stateService.setForceSetPasswordReason(ForceSetPasswordReason.None);
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ForceSetPasswordReason.None,
+        userId,
+      );
 
       if (this.onSuccessfulChangePassword != null) {
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.

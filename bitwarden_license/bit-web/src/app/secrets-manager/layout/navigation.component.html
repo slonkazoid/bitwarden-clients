@@ -18,8 +18,14 @@
   ></bit-nav-item>
   <bit-nav-item
     icon="bwi-wrench"
-    [text]="'serviceAccounts' | i18n"
-    route="service-accounts"
+    [text]="'machineAccounts' | i18n"
+    route="machine-accounts"
+    [relativeTo]="route.parent"
+  ></bit-nav-item>
+  <bit-nav-item
+    icon="bwi-providers"
+    [text]="'integrations' | i18n"
+    route="integrations"
     [relativeTo]="route.parent"
   ></bit-nav-item>
   <bit-nav-item
@@ -41,4 +47,6 @@
       [relativeTo]="route.parent"
     ></bit-nav-item>
   </bit-nav-group>
+
+  <app-toggle-width></app-toggle-width>
 </nav>

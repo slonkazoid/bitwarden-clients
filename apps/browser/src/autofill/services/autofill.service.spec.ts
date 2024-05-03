@@ -12,6 +12,7 @@ import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abs
 import { EventType } from "@bitwarden/common/enums";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import {
@@ -32,7 +33,7 @@ import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
-import { BrowserStateService } from "../../platform/services/browser-state.service";
+import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
 import { AutofillPort } from "../enums/autofill-port.enums";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
@@ -63,22 +64,23 @@ const mockEquivalentDomains = [
 describe("AutofillService", () => {
   let autofillService: AutofillService;
   const cipherService = mock<CipherService>();
-  const stateService = mock<BrowserStateService>();
   const autofillSettingsService = mock<AutofillSettingsService>();
   const mockUserId = Utils.newGuid() as UserId;
   const accountService: FakeAccountService = mockAccountServiceWith(mockUserId);
   const fakeStateProvider: FakeStateProvider = new FakeStateProvider(accountService);
   let domainSettingsService: DomainSettingsService;
+  let scriptInjectorService: BrowserScriptInjectorService;
   const totpService = mock<TotpService>();
   const eventCollectionService = mock<EventCollectionService>();
   const logService = mock<LogService>();
   const userVerificationService = mock<UserVerificationService>();
   const billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
+  const platformUtilsService = mock<PlatformUtilsService>();
 
   beforeEach(() => {
+    scriptInjectorService = new BrowserScriptInjectorService(platformUtilsService, logService);
     autofillService = new AutofillService(
       cipherService,
-      stateService,
       autofillSettingsService,
       totpService,
       eventCollectionService,
@@ -86,6 +88,8 @@ describe("AutofillService", () => {
       domainSettingsService,
       userVerificationService,
       billingAccountProfileStateService,
+      scriptInjectorService,
+      accountService,
     );
 
     domainSettingsService = new DefaultDomainSettingsService(fakeStateProvider);
@@ -253,6 +257,7 @@ describe("AutofillService", () => {
 
       expect(BrowserApi.executeScriptInTab).toHaveBeenCalledWith(tabMock.id, {
         file: "content/content-message-handler.js",
+        frameId: 0,
         ...defaultExecuteScriptOptions,
       });
     });

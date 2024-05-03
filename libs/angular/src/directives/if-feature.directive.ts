@@ -1,7 +1,7 @@
 import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from "@angular/core";
 
-import { FeatureFlag, FeatureFlagValue } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { AllowedFeatureFlagTypes, FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 
 /**
@@ -23,14 +23,14 @@ export class IfFeatureDirective implements OnInit {
    * Optional value to compare against the value of the feature flag in the config service.
    * @default true
    */
-  @Input() appIfFeatureValue: FeatureFlagValue = true;
+  @Input() appIfFeatureValue: AllowedFeatureFlagTypes = true;
 
   private hasView = false;
 
   constructor(
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
-    private configService: ConfigServiceAbstraction,
+    private configService: ConfigService,
     private logService: LogService,
   ) {}
 

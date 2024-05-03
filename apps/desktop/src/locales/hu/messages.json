@@ -800,8 +800,11 @@
   "changeMasterPass": {
     "message": "Mesterjelszó módosítása"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "A mesterjelszó megváltoztatható a bitwarden.com webes széfben. Szeretnénk felkeresni a webhelyet mos?"
+  "continueToWebApp": {
+    "message": "Tovább a webes alkalmazáshoz?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "A mesterjelszó a Bitwarden webalkalmazásban módosítható."
   },
   "fingerprintPhrase": {
     "message": "Azonosítókifejezés",
@@ -1628,6 +1631,12 @@
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "A böngésző integráció nem támogatott."
+  },
+  "browserIntegrationErrorTitle": {
+    "message": "Böngésző integráció engedélyezése"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "Hiba történt a böngésző integrációjának engedélyezése közben."
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Sajnos a böngésző integrációt egyelőre csak a Mac App Store verzió támogatja."
@@ -2687,5 +2696,29 @@
   "commonImportFormats": {
     "message": "Általános formátumok",
     "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Sikeres"
+  },
+  "troubleshooting": {
+    "message": "Hibaelhárítás"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "A hardveres gyorsítás letiltása és újraindítás"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "A hardveres gyorsítás engedélyezése és újraindítás"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Hiba történt a célgyűjtemény hozzárendelése során."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Hiba történt a célmappa hozzárendelése során."
   }
 }

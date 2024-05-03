@@ -75,26 +75,6 @@ export class MessagingMain {
       case "getWindowIsFocused":
         this.windowIsFocused();
         break;
-      case "enableBrowserIntegration":
-        this.main.nativeMessagingMain.generateManifests();
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.main.nativeMessagingMain.listen();
-        break;
-      case "enableDuckDuckGoBrowserIntegration":
-        this.main.nativeMessagingMain.generateDdgManifests();
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.main.nativeMessagingMain.listen();
-        break;
-      case "disableBrowserIntegration":
-        this.main.nativeMessagingMain.removeManifests();
-        this.main.nativeMessagingMain.stop();
-        break;
-      case "disableDuckDuckGoBrowserIntegration":
-        this.main.nativeMessagingMain.removeDdgManifests();
-        this.main.nativeMessagingMain.stop();
-        break;
       default:
         break;
     }

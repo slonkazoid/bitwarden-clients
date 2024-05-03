@@ -2,6 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "module": "ES2020",
@@ -9,6 +10,7 @@
     "allowJs": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "lib": ["ES2021.String"],
     "paths": {
       "@bitwarden/admin-console": ["../../libs/admin-console/src"],
       "@bitwarden/angular/*": ["../../libs/angular/src/*"],

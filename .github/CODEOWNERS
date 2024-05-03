@@ -57,10 +57,12 @@ libs/common/src/admin-console @bitwarden/team-admin-console-dev
 libs/admin-console @bitwarden/team-admin-console-dev
 
 ## Billing team files ##
+apps/browser/src/billing @bitwarden/team-billing-dev
 apps/web/src/app/billing @bitwarden/team-billing-dev
 libs/angular/src/billing @bitwarden/team-billing-dev
 libs/common/src/billing @bitwarden/team-billing-dev
 libs/billing @bitwarden/team-billing-dev
+bitwarden_license/bit-web/src/app/billing @bitwarden/team-billing-dev
 
 ## Platform team files ##
 apps/browser/src/platform @bitwarden/team-platform-dev
@@ -83,6 +85,7 @@ apps/web/src/translation-constants.ts @bitwarden/team-platform-dev
 
 ## Autofill team files ##
 apps/browser/src/autofill @bitwarden/team-autofill-dev
+apps/desktop/src/autofill @bitwarden/team-autofill-dev
 libs/common/src/autofill @bitwarden/team-autofill-dev
 
 ## Component Library ##

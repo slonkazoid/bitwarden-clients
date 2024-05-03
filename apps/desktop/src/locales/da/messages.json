@@ -545,7 +545,7 @@
     "message": "Angivelse af hovedadgangskode igen er obligatorisk."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Hovedadgangskoden skal udgøre minimum $VALUE$ tegn.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -780,7 +780,7 @@
     "message": "Kontakt os"
   },
   "helpAndFeedback": {
-    "message": "Help and feedback"
+    "message": "Hjælp og feedback"
   },
   "getHelp": {
     "message": "Få hjælp"
@@ -800,8 +800,11 @@
   "changeMasterPass": {
     "message": "Skift hovedadgangskode"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Man kan ændre sin hovedadgangskode via bitwarden.com web-boksen. Besøg webstedet nu?"
+  "continueToWebApp": {
+    "message": "Fortsæt til web-app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Hovedadgangskoden kan ændres via Bitwarden web-appen."
   },
   "fingerprintPhrase": {
     "message": "Fingeraftrykssætning",
@@ -1420,10 +1423,10 @@
     "message": "oplås din boks"
   },
   "autoPromptWindowsHello": {
-    "message": "Bed om Windows Hello ved start"
+    "message": "Anmod om Windows Hello ved app-start"
   },
   "autoPromptTouchId": {
-    "message": "Bed om Touch ID ved start"
+    "message": "Anmod om Touch ID ved app-start"
   },
   "requirePasswordOnStart": {
     "message": "Kræv adgangskode eller PIN-kode ved app-start"
@@ -1629,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "Browserintegration understøttes ikke"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Fejl ved aktivering af webbrowserintegration"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "En fejl opstod under aktivering af webbrowserintegration."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "Desværre understøttes browserintegration indtil videre kun i Mac App Store-versionen."
   },
@@ -1645,10 +1654,10 @@
     "message": "Tilføj et ekstra sikkerhedslag ved at kræve bekræftelse af fingeraftrykssætning, når der oprettes forbindelse mellem din computer og din browser. Dette kræver brugerhandling og bekræftelse, hver gang der forbindelse oprettes."
   },
   "enableHardwareAcceleration": {
-    "message": "Use hardware acceleration"
+    "message": "Benyt hardwareacceleration"
   },
   "enableHardwareAccelerationDesc": {
-    "message": "By default this setting is ON. Turn OFF only if you experience graphical issues. Restart is required."
+    "message": "Denne indstilling er som standard TIL. Slå kun FRA, hvis der opleves grafiske problemer. Genstart kræves."
   },
   "approve": {
     "message": "Godkend"
@@ -1931,7 +1940,7 @@
     "message": "Minutter"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Organisationspolitikker påvirker din boks-timeout. Maksimalt tilladt boks-timeout er $HOURS$ time(r) og $MINUTES$ minut(ter)",
+    "message": "Organisationspolitikkerne har fastsat den maksimalt tilladte boks-timeout til $HOURS$ time(r) og $MINUTES$ minut(ter).",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -2687,5 +2696,29 @@
   "commonImportFormats": {
     "message": "Almindelige formater",
     "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Gennemført"
+  },
+  "troubleshooting": {
+    "message": "Fejlfinding"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Deaktivér hardwareacceleration og genstart"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Aktivér hardwareacceleration og genstart"
+  },
+  "removePasskey": {
+    "message": "Fjern adgangsnøgle"
+  },
+  "passkeyRemoved": {
+    "message": "Adgangsnøgle fjernet"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Fejl ved tildeling af målsamling."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Fejl ved tildeling af målmappe."
   }
 }

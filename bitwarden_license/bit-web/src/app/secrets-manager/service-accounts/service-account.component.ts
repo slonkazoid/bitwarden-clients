@@ -45,11 +45,11 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     catchError(() => {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.router.navigate(["/sm", this.organizationId, "service-accounts"]).then(() => {
+      this.router.navigate(["/sm", this.organizationId, "machine-accounts"]).then(() => {
         this.platformUtilsService.showToast(
           "error",
           null,
-          this.i18nService.t("notFound", this.i18nService.t("serviceAccount")),
+          this.i18nService.t("notFound", this.i18nService.t("machineAccount")),
         );
       });
       return EMPTY;

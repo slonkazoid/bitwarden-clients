@@ -9,6 +9,8 @@ const config: StorybookConfig = {
     "../libs/components/src/**/*.stories.@(js|jsx|ts|tsx)",
     "../apps/web/src/**/*.mdx",
     "../apps/web/src/**/*.stories.@(js|jsx|ts|tsx)",
+    "../apps/browser/src/**/*.mdx",
+    "../apps/browser/src/**/*.stories.@(js|jsx|ts|tsx)",
     "../bitwarden_license/bit-web/src/**/*.mdx",
     "../bitwarden_license/bit-web/src/**/*.stories.@(js|jsx|ts|tsx)",
   ],
@@ -38,9 +40,7 @@ const config: StorybookConfig = {
   },
   env: (config) => ({
     ...config,
-    FLAGS: JSON.stringify({
-      secretsManager: true,
-    }),
+    FLAGS: JSON.stringify({}),
   }),
   webpackFinal: async (config, { configType }) => {
     if (config.resolve) {

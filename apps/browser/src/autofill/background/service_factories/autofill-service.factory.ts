@@ -1,4 +1,8 @@
 import {
+  accountServiceFactory,
+  AccountServiceInitOptions,
+} from "../../../auth/background/service-factories/account-service.factory";
+import {
   UserVerificationServiceInitOptions,
   userVerificationServiceFactory,
 } from "../../../auth/background/service-factories/user-verification-service.factory";
@@ -8,6 +12,10 @@ import {
 } from "../../../background/service-factories/event-collection-service.factory";
 import { billingAccountProfileStateServiceFactory } from "../../../platform/background/service-factories/billing-account-profile-state-service.factory";
 import {
+  browserScriptInjectorServiceFactory,
+  BrowserScriptInjectorServiceInitOptions,
+} from "../../../platform/background/service-factories/browser-script-injector-service.factory";
+import {
   CachedServices,
   factory,
   FactoryOptions,
@@ -16,10 +24,6 @@ import {
   logServiceFactory,
   LogServiceInitOptions,
 } from "../../../platform/background/service-factories/log-service.factory";
-import {
-  stateServiceFactory,
-  StateServiceInitOptions,
-} from "../../../platform/background/service-factories/state-service.factory";
 import {
   cipherServiceFactory,
   CipherServiceInitOptions,
@@ -44,13 +48,14 @@ type AutoFillServiceOptions = FactoryOptions;
 
 export type AutoFillServiceInitOptions = AutoFillServiceOptions &
   CipherServiceInitOptions &
-  StateServiceInitOptions &
   AutofillSettingsServiceInitOptions &
   TotpServiceInitOptions &
   EventCollectionServiceInitOptions &
   LogServiceInitOptions &
   UserVerificationServiceInitOptions &
-  DomainSettingsServiceInitOptions;
+  DomainSettingsServiceInitOptions &
+  BrowserScriptInjectorServiceInitOptions &
+  AccountServiceInitOptions;
 
 export function autofillServiceFactory(
   cache: { autofillService?: AbstractAutoFillService } & CachedServices,
@@ -63,7 +68,6 @@ export function autofillServiceFactory(
     async () =>
       new AutofillService(
         await cipherServiceFactory(cache, opts),
-        await stateServiceFactory(cache, opts),
         await autofillSettingsServiceFactory(cache, opts),
         await totpServiceFactory(cache, opts),
         await eventCollectionServiceFactory(cache, opts),
@@ -71,6 +75,8 @@ export function autofillServiceFactory(
         await domainSettingsServiceFactory(cache, opts),
         await userVerificationServiceFactory(cache, opts),
         await billingAccountProfileStateServiceFactory(cache, opts),
+        await browserScriptInjectorServiceFactory(cache, opts),
+        await accountServiceFactory(cache, opts),
       ),
   );
 }

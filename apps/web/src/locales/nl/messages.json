@@ -579,7 +579,7 @@
     "message": "Toegang"
   },
   "accessLevel": {
-    "message": "Access level"
+    "message": "Toegangsniveau"
   },
   "loggedOut": {
     "message": "Uitgelogd"
@@ -660,13 +660,13 @@
     "message": "Geef je passkey een naam om deze later te herkennen."
   },
   "useForVaultEncryption": {
-    "message": "Use for vault encryption"
+    "message": "Gebruik voor kluis versleuteling"
   },
   "useForVaultEncryptionInfo": {
-    "message": "Log in and unlock on supported devices without your master password. Follow the prompts from your browser to finalize setup."
+    "message": "Meld aan en ontgrendel op ondersteunde apparaten zonder uw hoofdwachtwoord. Volg de aanwijzingen in uw browser om dit te activeren."
   },
   "useForVaultEncryptionErrorReadingPasskey": {
-    "message": "Error reading passkey. Try again or uncheck this option."
+    "message": "Fout bij lezen van passkey. Probeer het opnieuw of selecteer een andere optie."
   },
   "encryptionNotSupported": {
     "message": "Encryptie niet ondersteund"
@@ -1809,12 +1809,16 @@
   "unsecuredWebsitesFound": {
     "message": "Onveilige websites gevonden"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "We hebben $COUNT$ items met onbeveiligde URIs in je kluis gevonden. Als de website het ondersteunt, moet je de URI naar https:// wijzigen.",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "We vonden $COUNT$ items met onbeveiligde URIs in $VAULT$. Als de website het ondersteunt, kun je de URI beter aanpassen naar https://.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1830,12 +1834,16 @@
   "inactive2faFound": {
     "message": "Logins zonder 2FA gevonden"
   },
-  "inactive2faFoundDesc": {
-    "message": "We hebben $COUNT$ website(s) in je kluis gevonden waar je (volgens 2fa.directory) nog tweestapsaanmelding kunt instellen. Om deze accounts beter te beschermen, zou je tweestapsaanmelding moeten inschakelen.",
+  "inactive2faFoundReportDesc": {
+    "message": "We vonden $COUNT$ website(s) in $VAULT$ waar je tweestapsaanmelding nog niet gebruikt (terwijl dat volgens 2fa.directory wel kan). Om deze accounts beter te beschermen, kun je tweestapsaanmelding instellen.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1854,12 +1862,16 @@
   "exposedPasswordsFound": {
     "message": "Gelekte wachtwoorden gevonden"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "We hebben in je kluis $COUNT$ wachtwoorden gevonden die zijn gelekt. Je zou voor deze accounts een nieuw wachtwoord moeten instellen.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "We vonden $COUNT$ items in $VAULT$ met wachtwoorden die voorkomen in bekende datalekken. Je kunt die wachtwoorden het beste vervangen door een nieuw wachtwoord.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1887,12 +1899,16 @@
   "weakPasswordsFound": {
     "message": "Zwakke wachtwoorden gevonden"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "We hebben $COUNT$ zwakke wachtwoorden in je kluis gevonden. Je zou ze moeten veranderen in sterke wachtwoorden.",
+  "weakPasswordsFoundReportDesc": {
+    "message": "We vonden $COUNT$ items in $VAULT$ met zwakke wachtwoorden. Je kunt die wachtwoorden het beste vervangen door sterke wachtwoorden.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1908,12 +1924,16 @@
   "reusedPasswordsFound": {
     "message": "Dubbele wachtwoorden gevonden"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "We hebben $COUNT$ dubbele wachtwoorden in je kluis gevonden. Je zou deze moeten veranderen in unieke wachtwoorden.",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "We vonden $COUNT$ wachtwoorden die vaker voorkomen in $VAULT$. Je kunt die wachtwoorden het beste vervangen door een uniek wachtwoord.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -2036,7 +2056,7 @@
     "message": "1 GB versleutelde opslag voor bijlagen."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+    "message": "Gepatenteerde 2 stap login opties zoals YubiKey en Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Noodtoegang"
@@ -3621,7 +3641,7 @@
     "message": "Encryptiesleutel bijwerken"
   },
   "updateEncryptionSchemeDesc": {
-    "message": "We've changed the encryption scheme to provide better security. Update your encryption key now by entering your master password below."
+    "message": "Wij hebben de versleutelings- methode aangepast om betere beveiliging te kunnen leveren. Voer uw hoofdwachtwoord in om dit door te voeren."
   },
   "updateEncryptionKeyWarning": {
     "message": "Na het bijwerken van je encryptiesleutel moet je je afmelden en weer aanmelden bij alle Bitwarden-applicaties die je gebruikt (zoals de mobiele app of browserextensies). Als je niet opnieuw inlogt (wat je nieuwe encryptiesleutel downloadt), kan dit gegevensbeschadiging tot gevolg hebben. We proberen je automatisch uit te loggen, maar het kan zijn dat dit met enige vertraging gebeurt."
@@ -3781,7 +3801,7 @@
     "message": "Dit item heeft oude bestandsbijlagen die aangepast moeten worden."
   },
   "attachmentFixDescription": {
-    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
+    "message": "Deze bijlage maakt gebruik van verouderde versleuteling. Selecteer \"oplossen\" om het bestand te downloaden, opnieuw te versleutelen en vervolgens opnieuw te uploaden."
   },
   "fix": {
     "message": "Oplossen",
@@ -4044,10 +4064,10 @@
     "message": "Je kunt dit tabblad nu sluiten en doorgaan in de extensie."
   },
   "youSuccessfullyLoggedIn": {
-    "message": "You successfully logged in"
+    "message": "U bent succesvol ingelogd"
   },
   "thisWindowWillCloseIn5Seconds": {
-    "message": "This window will automatically close in 5 seconds"
+    "message": "Dit scherm sluit automatisch over 5 seconden"
   },
   "includeAllTeamsFeatures": {
     "message": "Alle functionaliteit van Teams plus:"
@@ -4776,13 +4796,13 @@
     "message": "Accountherstel-administratie"
   },
   "accountRecoveryPolicyDesc": {
-    "message": "Based on the encryption method, recover accounts when master passwords or trusted devices are forgotten or lost."
+    "message": "Gebaseerd op de huidige versleutelings- methode, herstel accounts wanneer hoofdwachtwoorden of vertrouwde apparaten vergeten of vermist zijn."
   },
   "accountRecoveryPolicyWarning": {
-    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+    "message": "Bestaande accounts met hoofdwachtwoorden vereisen gebruikers om zelf in te schrijven voordat administratoren hun accounts kunnen herstellen. Automatische inschrijving zal automatisch account herstel inschakelen voor nieuwe gebruikers."
   },
   "accountRecoverySingleOrgRequirementDesc": {
-    "message": "The single organization Enterprise policy must be turned on before activating this policy."
+    "message": "Het enkele organisatie beleid moet aangezet zijn voordat dit beleid geactiveerd kan worden."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatische inschrijving"
@@ -4956,6 +4976,9 @@
   "addExistingOrganization": {
     "message": "Bestaande organisatie toevoegen"
   },
+  "addNewOrganization": {
+    "message": "Nieuwe organisatie toevoegen"
+  },
   "myProvider": {
     "message": "Mijn provider"
   },
@@ -5114,7 +5137,7 @@
     "message": "Automatisch invullen activeren"
   },
   "activateAutofillPolicyDesc": {
-    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+    "message": "Activeer de automatisch invullen wanneer de pagina geladen is instelling in de browser extensie voor bestaande en nieuwe gebruikers."
   },
   "experimentalFeature": {
     "message": "Gehackte of onbetrouwbare websites kunnen automatisch invullen bij laden van pagina misbruiken."
@@ -5412,7 +5435,7 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpAnchor": {
-    "message": "require single sign-on authentication policy",
+    "message": "vereis single sign-on authenticatie beleid",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
@@ -5429,15 +5452,15 @@
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDescStart": {
-    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "message": "Verbind inloggen met SSO naar je zelf beheerde Decoderingsserver. Door deze optie te gebruiken hoeven gebruikers niet hun hoofdwachtwoord te gebruiken om kluis data te decoderen. Het",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescLink": {
-    "message": "require SSO authentication and single organization policies",
+    "message": "vereis het SSO authenticatie beleid en het enkele organisatie beleid",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescEnd": {
-    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "message": "is vereist om Key Connector decryptie in te stellen. Contacteer Bitwarden support voor assistentie.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
@@ -6197,7 +6220,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Service account deleted"
+    "message": "Service account verwijderd"
   },
   "deleteServiceAccountsToast": {
     "message": "Serviceaccounts verwijderd"
@@ -6456,6 +6479,9 @@
   },
   "editGroupCollectionsDesc": {
     "message": "Geef toegang tot collecties door ze aan deze groep toe te voegen."
+  },
+  "editGroupCollectionsRestrictionsDesc": {
+    "message": "You can only assign collections you manage."
   },
   "accessAllCollectionsDesc": {
     "message": "Geef toegang tot alle huidige en toekomstige collecties."
@@ -6734,7 +6760,7 @@
     }
   },
   "teamsStarterPlanInvLimitReachedManageBilling": {
-    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Upgrade to your plan to invite more members.",
+    "message": "Gratis organisaties beschikken maximaal over $SEATCOUNT$ leden. Upgrade je abonnement om meer leden uit te kunnen nodigen.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -6881,7 +6907,7 @@
     "message": "Werk je versleutelingsinstellingen bij om aan de nieuwe beveiligingsaanbevelingen te voldoen en de bescherming van je account te verbeteren."
   },
   "changeKdfLoggedOutWarning": {
-    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login setup. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+    "message": "Als u doorgaat zullen al uw actieve sessies word uitgelogd. U zult zich opnieuw aan moeten melden en 2 stappen verificatie moeten instellen. Wij raden u aan om uw gegevens eerst te exporteren voordat u uw encryptie instellingen aanpast om data verlies te voorkomen."
   },
   "secretsManager": {
     "message": "Secrets Manager"
@@ -7020,10 +7046,10 @@
     "message": "Gelekt hoofdwachtwoord"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "Dit wachtwoord is gevonden in een datalek. Gebruik een uniek wachtwoord om je account te beveiligen. Weet je zeker dat je een gelekt wachtwoord wil gebruiken?"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "Zwak en gelekt hoofdwachtwoord"
   },
   "weakAndBreachedMasterPasswordDesc": {
     "message": "Zwak wachtwoord geïdentificeerd en gevonden in een datalek. Gebruik een sterk en uniek wachtwoord om je account te beschermen. Weet je zeker dat je dit wachtwoord wilt gebruiken?"
@@ -7271,7 +7297,7 @@
     "message": "Volgende"
   },
   "ssoLoginIsRequired": {
-    "message": "SSO login is required"
+    "message": "SSO login is vereist"
   },
   "selectedRegionFlag": {
     "message": "Geselecteerde regionale vlag"
@@ -7423,7 +7449,7 @@
     "message": "Service account limiet (optioneel)"
   },
   "maxServiceAccountCost": {
-    "message": "Max potential service account cost"
+    "message": "Maximale potentiële service account kosten"
   },
   "loggedInExclamation": {
     "message": "Ingelogd!"
@@ -7444,7 +7470,7 @@
     "message": "Aliasdomein"
   },
   "alreadyHaveAccount": {
-    "message": "Already have an account?"
+    "message": "Heb je al een account?"
   },
   "skipToContent": {
     "message": "Ga naar de inhoud"
@@ -7471,7 +7497,7 @@
     }
   },
   "seeDetailedInstructions": {
-    "message": "See detailed instructions on our help site at",
+    "message": "Zie gedetailleerde instructies op onze hulp pagina hier",
     "description": "This is followed a by a hyperlink to the help website."
   },
   "installBrowserExtension": {
@@ -7487,16 +7513,19 @@
     "message": "Er is een onverwachte fout opgetreden tijdens het laden van deze Send. Probeer het later opnieuw."
   },
   "seatLimitReached": {
-    "message": "Seat limit has been reached"
+    "message": "Gebruikers limiet is bereikt"
   },
   "contactYourProvider": {
-    "message": "Contact your provider to purchase additional seats."
+    "message": "Contacteer uw provider om aanvullende licenties aan te schaffen."
   },
   "seatLimitReachedContactYourProvider": {
-    "message": "Seat limit has been reached. Contact your provider to purchase additional seats."
+    "message": "De limiet voor het aantal gebruikers is bereikt. Contacteer je provider om aanvullende licenties aan te schaffen."
   },
   "collectionAccessRestricted": {
     "message": "Collectietoegang is beperkt"
+  },
+  "readOnlyCollectionAccess": {
+    "message": "Je hebt geen toegang om deze collectie te beheren."
   },
   "grantCollectionAccess": {
     "message": "Groepen of mensen toegang tot deze collectie geven."
@@ -7511,7 +7540,7 @@
     "message": "Toegang tot serviceaccount bijgewerkt"
   },
   "commonImportFormats": {
-    "message": "Common formats",
+    "message": "Gangbare formaten",
     "description": "Label indicating the most common import formats"
   },
   "maintainYourSubscription": {
@@ -7600,10 +7629,451 @@
   "providerPortal": {
     "message": "Providerportaal"
   },
+  "success": {
+    "message": "Succes"
+  },
+  "viewCollection": {
+    "message": "Collectie weergeven"
+  },
   "restrictedGroupAccess": {
-    "message": "You cannot add yourself to groups."
+    "message": "Het is niet mogelijk om jezelf toe te voegen aan groepen."
   },
   "restrictedCollectionAccess": {
-    "message": "You cannot add yourself to collections."
+    "message": "Het is niet mogelijk om jezelf toe te voegen aan collecties."
+  },
+  "assign": {
+    "message": "Toewijzen"
+  },
+  "assignToCollections": {
+    "message": "Toewijzen aan collecties"
+  },
+  "assignToTheseCollections": {
+    "message": "Aan deze collecties toewijzen"
+  },
+  "bulkCollectionAssignmentDialogDescription": {
+    "message": "Selecteer de collecies om de items mee te delen. Zodra een item in een collectie is bijgewerkt, werkt dat door in alle collecties. Alleen organisatieleden met toegang tot deze collecties kunnen de items zien."
+  },
+  "selectCollectionsToAssign": {
+    "message": "Collecties voor toewijzen selecteren"
+  },
+  "noCollectionsAssigned": {
+    "message": "Er zijn geen collecties toegewezen"
+  },
+  "successfullyAssignedCollections": {
+    "message": "Succesvol toegewezen collecties"
+  },
+  "bulkCollectionAssignmentWarning": {
+    "message": "Je hebt $TOTAL_COUNT$ items geselecteerd. Je kunt $READONLY_COUNT$ items niet bijwerken omdat je geen bewerkrechten hebt.",
+    "placeholders": {
+      "total_count": {
+        "content": "$1",
+        "example": "10"
+      },
+      "readonly_count": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "items": {
+    "message": "Items"
+  },
+  "assignedSeats": {
+    "message": "Toegewezen plaatsen"
+  },
+  "assigned": {
+    "message": "Toegewezen"
+  },
+  "used": {
+    "message": "Gebruikt"
+  },
+  "remaining": {
+    "message": "Resterend"
+  },
+  "unlinkOrganization": {
+    "message": "Organisatie ontkoppelen"
+  },
+  "manageSeats": {
+    "message": "PLAATSEN BEHEREN"
+  },
+  "manageSeatsDescription": {
+    "message": "Aanpassingen op plaatsen zijn effectief in de volgende factureringscyclus."
+  },
+  "unassignedSeatsDescription": {
+    "message": "Niet-toegewezen stoelen"
+  },
+  "purchaseSeatDescription": {
+    "message": "Aanvullende gekochte plaatsen"
+  },
+  "assignedSeatCannotUpdate": {
+    "message": "Je kunt toegewezen plaatsen niet bijwerken. Neem contact op met de eigenaar van je organisatie voor ondersteuning."
+  },
+  "subscriptionUpdateFailed": {
+    "message": "Abonnement bijwerken mislukt"
+  },
+  "trial": {
+    "message": "Proefperiode",
+    "description": "A subscription status label."
+  },
+  "pastDue": {
+    "message": "Verlopen",
+    "description": "A subscription status label"
+  },
+  "subscriptionExpired": {
+    "message": "Abonnement verlopen",
+    "description": "The date header used when a subscription is past due."
+  },
+  "pastDueWarningForChargeAutomatically": {
+    "message": "Je hebt een gratieperiode van $DAYS$ dagen vanaf de vervaldatum van je abonnement om je abonnement te behouden. Graag de openstaande facturen voor $SUSPENSION_DATE$ voldoen.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they are charged automatically."
+  },
+  "pastDueWarningForSendInvoice": {
+    "message": "Je hebt een gratieperiode van $DAYS$ dagen vanaf de datum waarop je eerste niet-betaalde factuur verloopt om je abonnement te behouden. Graag de openstaande facturen voor $SUSPENSION_DATE$ voldoen.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they pay via invoice."
+  },
+  "unpaidInvoice": {
+    "message": "Openstaande factuur",
+    "description": "The header of a warning box shown to a user whose subscription is unpaid."
+  },
+  "toReactivateYourSubscription": {
+    "message": "Voldoe de openstaande facturen om je abonnement te activeren.",
+    "description": "The body of a warning box shown to a user whose subscription is unpaid."
+  },
+  "cancellationDate": {
+    "message": "Annuleringsdatum",
+    "description": "The date header used when a subscription is cancelled."
+  },
+  "machineAccountsCannotCreate": {
+    "message": "Je kunt geen machine-accounts aanmaken in opgeschorte organisaties. Neem contact op met de eigenaar van je organisatie voor hulp."
+  },
+  "machineAccount": {
+    "message": "Machine-account",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "machineAccounts": {
+    "message": "Machine-accounts",
+    "description": "The title for the section that deals with machine accounts."
+  },
+  "newMachineAccount": {
+    "message": "Nieuw machine-account",
+    "description": "Title for creating a new machine account."
+  },
+  "machineAccountsNoItemsMessage": {
+    "message": "Nieuw machine-account aanmaken om te beginnen met het automatiseren van secrets.",
+    "description": "Message to encourage the user to start creating machine accounts."
+  },
+  "machineAccountsNoItemsTitle": {
+    "message": "Nog niets te tonen",
+    "description": "Title to indicate that there are no machine accounts to display."
+  },
+  "deleteMachineAccounts": {
+    "message": "Machine-accounts verwijderen",
+    "description": "Title for the action to delete one or multiple machine accounts."
+  },
+  "deleteMachineAccount": {
+    "message": "Machine-account verwijderen",
+    "description": "Title for the action to delete a single machine account."
+  },
+  "viewMachineAccount": {
+    "message": "Machine-account weergeven",
+    "description": "Action to view the details of a machine account."
+  },
+  "deleteMachineAccountDialogMessage": {
+    "message": "Het verwijderen van machine-account $MACHINE_ACCOUNT$ is definitief en onomkeerbaar.",
+    "placeholders": {
+      "machine_account": {
+        "content": "$1",
+        "example": "Machine account name"
+      }
+    }
+  },
+  "deleteMachineAccountsDialogMessage": {
+    "message": "Het verwijderen van machine-accounts is definitief en onomkeerbaar."
+  },
+  "deleteMachineAccountsConfirmMessage": {
+    "message": "$COUNT$ machine-accounts verwijderen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteMachineAccountToast": {
+    "message": "Machine-account verwijderd"
+  },
+  "deleteMachineAccountsToast": {
+    "message": "Machine-accounts verwijderd"
+  },
+  "searchMachineAccounts": {
+    "message": "Machine-accounts zoeken",
+    "description": "Placeholder text for searching machine accounts."
+  },
+  "editMachineAccount": {
+    "message": "Machine-account bewerken",
+    "description": "Title for editing a machine account."
+  },
+  "machineAccountName": {
+    "message": "Machine-accountnaam",
+    "description": "Label for the name of a machine account"
+  },
+  "machineAccountCreated": {
+    "message": "Machine-account aangemaakt",
+    "description": "Notifies that a new machine account has been created"
+  },
+  "machineAccountUpdated": {
+    "message": "Machine-account verwijderd",
+    "description": "Notifies that a machine account has been updated"
+  },
+  "projectMachineAccountsDescription": {
+    "message": "Machine-accounts toegang tot dit project geven."
+  },
+  "projectMachineAccountsSelectHint": {
+    "message": "Typ of selecteer machine-accounts"
+  },
+  "projectEmptyMachineAccountAccessPolicies": {
+    "message": "Machine-accounts toevoegen om toegang te verlenen"
+  },
+  "machineAccountPeopleDescription": {
+    "message": "Groepen of mensen toegang tot dit machine-account geven."
+  },
+  "machineAccountProjectsDescription": {
+    "message": "Projecten aan dit machine-account toewijzen. "
+  },
+  "createMachineAccount": {
+    "message": "Machine-account aanmaken"
+  },
+  "maPeopleWarningMessage": {
+    "message": "Het verwijderen van mensen uit een machine-account verwijdert de door hen aangemaakte toegangstokens niet. Voor de veiligheid kun je het beste de toegangstokens die zijn gemaakt door mensen die zijn verwijderd uit een machine-account intrekken."
+  },
+  "smAccessRemovalWarningMaTitle": {
+    "message": "Toegang tot dit machine-account verwijderen"
+  },
+  "smAccessRemovalWarningMaMessage": {
+    "message": "Deze actie verwijdert je toegang tot het machine-account."
+  },
+  "machineAccountsIncluded": {
+    "message": "$COUNT$ machine-accounts inbegrepen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalMachineAccountCost": {
+    "message": "$COST$ per maand voor extra machine-accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "additionalMachineAccounts": {
+    "message": "Extra machine-accounts"
+  },
+  "includedMachineAccounts": {
+    "message": "Bij je abonnement horen $COUNT$ machine-accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalMachineAccounts": {
+    "message": "Je kunt extra machine-accounts toevoegen voor $COST$ per maand.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "limitMachineAccounts": {
+    "message": "Machine-accounts beperken (optioneel)"
+  },
+  "limitMachineAccountsDesc": {
+    "message": "Stel een limiet in voor je machine-accounts. Zodra deze limiet is bereikt, kun je geen nieuwe machine-accounts toevoegen."
+  },
+  "machineAccountLimit": {
+    "message": "Machine-account limiet (optioneel)"
+  },
+  "maxMachineAccountCost": {
+    "message": "Maximale potentiële machine-account kosten"
+  },
+  "machineAccountAccessUpdated": {
+    "message": "Toegang tot machine-account bijgewerkt"
+  },
+  "restrictedGroupAccessDesc": {
+    "message": "Je kunt jezelf niet aan een groep toevoegen."
+  },
+  "unassignedItemsBannerSelfHost": {
+    "message": "Kennisgeving: Vanaf 2 mei 2024 zijn niet-toegewezen organisatie-items op geen enkel apparaat meer zichtbaar in de weergave van alle kluisjes en alleen toegankelijk via de Admin Console. Je kunt deze items in het Admin Console aan een collectie toewijzen om ze zichtbaar te maken."
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Let op: Niet-toegewezen organisatie-items zijn niet langer zichtbaar in de weergave van alle kluissen op verschillende apparaten en zijn nu alleen toegankelijk via de Admin Console."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Let op: Vanaf 16 mei 2024 zijn niet-toegewezen organisatie-items niet langer zichtbaar in de weergave van alle kluissen op verschillende apparaten en alleen toegankelijk via de Admin Console."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Deze items toewijzen aan een collectie van de",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "om ze zichtbaar te maken.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "Provider verwijderen"
+  },
+  "deleteProviderConfirmation": {
+    "message": "Het verwijderen van een provider is definitief en onomkeerbaar. Voer je hoofdwachtwoord in om het verwijderen van de provider en alle bijbehorende gegevens te bevestigen."
+  },
+  "deleteProviderName": {
+    "message": "Kan $ID$ niet verwijderen",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDesc": {
+    "message": "Je moet alle clients ontkoppelen voordat je $ID$ kunt verwijderen",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Provider verwijderd"
+  },
+  "providerDeletedDesc": {
+    "message": "De organisatie en alle bijhorende gegevens zijn verwijderd."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "Je hebt het verwijderen van deze provider aangevraagd. Gebruik deonderstaande knop om te bevestigen."
+  },
+  "deleteProviderWarning": {
+    "message": "Het verwijderen van een provider is definitief. Je kunt het niet ongedaan maken."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Fout bij toewijzen doelverzameling."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Fout bij toewijzen doelmap."
+  },
+  "integrationsAndSdks": {
+    "message": "Integraties & SDKs",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Integraties"
+  },
+  "integrationsDesc": {
+    "message": "Automatisch secrets synchroniseren van Bitwarden Secrets Manager met een dienst van derden."
+  },
+  "sdks": {
+    "message": "SDKs"
+  },
+  "sdksDesc": {
+    "message": "Gebruik Bitwarden Secrets Manager SDK in de volgende programmeertalen om je eigen applicaties te bouwen."
+  },
+  "setUpGithubActions": {
+    "message": "GitHub Actions instellen"
+  },
+  "setUpGitlabCICD": {
+    "message": "GitLab CI/CD instellen"
+  },
+  "setUpAnsible": {
+    "message": "Ansibel instellen"
+  },
+  "cSharpSDKRepo": {
+    "message": "C#-repository bekijken"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "C++-repository bekijken"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "JS WebAssembly-repository bekijken"
+  },
+  "javaSDKRepo": {
+    "message": "Java-repository bekijken"
+  },
+  "pythonSDKRepo": {
+    "message": "Python-repository bekijken"
+  },
+  "phpSDKRepo": {
+    "message": "Php-repository bekijken"
+  },
+  "rubySDKRepo": {
+    "message": "Ruby-repository bekijken"
+  },
+  "goSDKRepo": {
+    "message": "Go-repository bekijken"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Create a new client organization to manage as a Provider. Additional seats will be reflected in the next billing cycle."
+  },
+  "selectAPlan": {
+    "message": "Select a plan"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35% Discount"
+  },
+  "monthPerMember": {
+    "message": "month per member"
+  },
+  "seats": {
+    "message": "Seats"
+  },
+  "addOrganization": {
+    "message": "Add organization"
+  },
+  "createdNewClient": {
+    "message": "Successfully created new client"
+  },
+  "noAccess": {
+    "message": "Geen toegang"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "Deze collectie is alleen toegankelijk vanaf de admin console"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Manage billing from the Provider Portal"
   }
 }

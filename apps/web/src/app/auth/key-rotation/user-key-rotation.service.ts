@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -24,17 +27,20 @@ import { UserKeyRotationApiService } from "./user-key-rotation-api.service";
 @Injectable()
 export class UserKeyRotationService {
   constructor(
+    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
     private apiService: UserKeyRotationApiService,
     private cipherService: CipherService,
     private folderService: FolderService,
     private sendService: SendService,
     private emergencyAccessService: EmergencyAccessService,
     private resetPasswordService: OrganizationUserResetPasswordService,
-    private deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    private deviceTrustService: DeviceTrustServiceAbstraction,
     private cryptoService: CryptoService,
     private encryptService: EncryptService,
     private stateService: StateService,
-    private configService: ConfigServiceAbstraction,
+    private accountService: AccountService,
+    private configService: ConfigService,
+    private kdfConfigService: KdfConfigService,
   ) {}
 
   /**
@@ -50,8 +56,7 @@ export class UserKeyRotationService {
     const masterKey = await this.cryptoService.makeMasterKey(
       masterPassword,
       await this.stateService.getEmail(),
-      await this.stateService.getKdfType(),
-      await this.stateService.getKdfConfig(),
+      await this.kdfConfigService.getKdfConfig(),
     );
 
     if (!masterKey) {
@@ -59,7 +64,8 @@ export class UserKeyRotationService {
     }
 
     // Set master key again in case it was lost (could be lost on refresh)
-    await this.cryptoService.setMasterKey(masterKey);
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    await this.masterPasswordService.setMasterKey(masterKey, userId);
     const [newUserKey, newEncUserKey] = await this.cryptoService.makeUserKey(masterKey);
 
     if (!newUserKey || !newEncUserKey) {
@@ -84,13 +90,18 @@ export class UserKeyRotationService {
     request.emergencyAccessKeys = await this.emergencyAccessService.getRotatedKeys(newUserKey);
     request.resetPasswordKeys = await this.resetPasswordService.getRotatedKeys(newUserKey);
 
-    if (await this.configService.getFeatureFlag<boolean>(FeatureFlag.KeyRotationImprovements)) {
+    if (await this.configService.getFeatureFlag(FeatureFlag.KeyRotationImprovements)) {
       await this.apiService.postUserKeyUpdate(request);
     } else {
       await this.rotateUserKeyAndEncryptedDataLegacy(request);
     }
 
-    await this.deviceTrustCryptoService.rotateDevicesTrust(newUserKey, masterPasswordHash);
+    const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
+    await this.deviceTrustService.rotateDevicesTrust(
+      activeAccount.id,
+      newUserKey,
+      masterPasswordHash,
+    );
   }
 
   private async encryptPrivateKey(newUserKey: UserKey): Promise<EncryptedString | null> {

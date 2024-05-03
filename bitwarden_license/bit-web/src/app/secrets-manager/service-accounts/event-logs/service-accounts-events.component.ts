@@ -17,7 +17,7 @@ import { ServiceAccountEventLogApiService } from "./service-account-event-log-ap
   templateUrl: "./service-accounts-events.component.html",
 })
 export class ServiceAccountEventsComponent extends BaseEventsComponent implements OnDestroy {
-  exportFileName = "service-account-events";
+  exportFileName = "machine-account-events";
   private destroy$ = new Subject<void>();
   private serviceAccountId: string;
 
@@ -65,7 +65,7 @@ export class ServiceAccountEventsComponent extends BaseEventsComponent implement
 
   protected getUserName() {
     return {
-      name: this.i18nService.t("serviceAccount") + " " + this.serviceAccountId,
+      name: this.i18nService.t("machineAccount") + " " + this.serviceAccountId,
       email: "",
     };
   }

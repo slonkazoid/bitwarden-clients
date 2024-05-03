@@ -73,18 +73,18 @@ export class OrganizationService implements InternalOrganizationServiceAbstracti
     return this.organizations$.pipe(mapToSingleOrganization(id));
   }
 
+  getAll$(userId?: UserId): Observable<Organization[]> {
+    return this.getOrganizationsFromState$(userId);
+  }
+
   async getAll(userId?: string): Promise<Organization[]> {
     return await firstValueFrom(this.getOrganizationsFromState$(userId as UserId));
   }
 
-  async canManageSponsorships(): Promise<boolean> {
-    return await firstValueFrom(
-      this.organizations$.pipe(
-        mapToExcludeOrganizationsWithoutFamilySponsorshipSupport(),
-        mapToBooleanHasAnyOrganizations(),
-      ),
-    );
-  }
+  canManageSponsorships$ = this.organizations$.pipe(
+    mapToExcludeOrganizationsWithoutFamilySponsorshipSupport(),
+    mapToBooleanHasAnyOrganizations(),
+  );
 
   async hasOrganizations(): Promise<boolean> {
     return await firstValueFrom(this.organizations$.pipe(mapToBooleanHasAnyOrganizations()));

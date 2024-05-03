@@ -1,10 +1,6 @@
 import { Observable } from "rxjs";
 
 import { DerivedStateDependencies } from "../../../types/state";
-import {
-  AbstractStorageService,
-  ObservableStorageService,
-} from "../../abstractions/storage.service";
 import { DeriveDefinition } from "../derive-definition";
 import { DerivedState } from "../derived-state";
 import { DerivedStateProvider } from "../derived-state.provider";
@@ -14,7 +10,7 @@ import { DefaultDerivedState } from "./default-derived-state";
 export class DefaultDerivedStateProvider implements DerivedStateProvider {
   private cache: Record<string, DerivedState<unknown>> = {};
 
-  constructor(protected memoryStorage: AbstractStorageService & ObservableStorageService) {}
+  constructor() {}
 
   get<TFrom, TTo, TDeps extends DerivedStateDependencies>(
     parentState$: Observable<TFrom>,
@@ -39,11 +35,6 @@ export class DefaultDerivedStateProvider implements DerivedStateProvider {
     deriveDefinition: DeriveDefinition<TFrom, TTo, TDeps>,
     dependencies: TDeps,
   ): DerivedState<TTo> {
-    return new DefaultDerivedState<TFrom, TTo, TDeps>(
-      parentState$,
-      deriveDefinition,
-      this.memoryStorage,
-      dependencies,
-    );
+    return new DefaultDerivedState<TFrom, TTo, TDeps>(parentState$, deriveDefinition, dependencies);
   }
 }

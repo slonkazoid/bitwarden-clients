@@ -1,20 +1,27 @@
 import * as path from "path";
 
 import { app } from "electron";
-import { firstValueFrom } from "rxjs";
+import { Subject, firstValueFrom } from "rxjs";
 
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
+import { ClientType } from "@bitwarden/common/enums";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
+import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { DefaultBiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
+import { Message, MessageSender } from "@bitwarden/common/platform/messaging";
+// eslint-disable-next-line no-restricted-imports -- For dependency creation
+import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
+import { KeyGenerationService } from "@bitwarden/common/platform/services/key-generation.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationBuilderService } from "@bitwarden/common/platform/services/migration-builder.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
-import { NoopMessagingService } from "@bitwarden/common/platform/services/noop-messaging.service";
 /* eslint-disable import/no-restricted-paths -- We need the implementation to inject, but generally this should not be accessed */
 import { StorageServiceProvider } from "@bitwarden/common/platform/services/storage-service.provider";
 import { DefaultActiveUserStateProvider } from "@bitwarden/common/platform/state/implementations/default-active-user-state.provider";
@@ -26,6 +33,7 @@ import { StateEventRegistrarService } from "@bitwarden/common/platform/state/sta
 import { MemoryStorageService as MemoryStorageServiceForStateProviders } from "@bitwarden/common/platform/state/storage/memory-storage.service";
 /* eslint-enable import/no-restricted-paths */
 
+import { DesktopAutofillSettingsService } from "./autofill/services/desktop-autofill-settings.service";
 import { MenuMain } from "./main/menu/menu.main";
 import { MessagingMain } from "./main/messaging.main";
 import { NativeMessagingMain } from "./main/native-messaging.main";
@@ -44,6 +52,7 @@ import { ELECTRON_SUPPORTS_SECURE_STORAGE } from "./platform/services/electron-p
 import { ElectronStateService } from "./platform/services/electron-state.service";
 import { ElectronStorageService } from "./platform/services/electron-storage.service";
 import { I18nMainService } from "./platform/services/i18n.main.service";
+import { IllegalSecureStorageService } from "./platform/services/illegal-secure-storage.service";
 import { ElectronMainMessagingService } from "./services/electron-main-messaging.service";
 import { isMacAppStore } from "./utils";
 
@@ -53,7 +62,7 @@ export class Main {
   storageService: ElectronStorageService;
   memoryStorageService: MemoryStorageService;
   memoryStorageForStateProviders: MemoryStorageServiceForStateProviders;
-  messagingService: ElectronMainMessagingService;
+  messagingService: MessageSender;
   stateService: StateService;
   environmentService: DefaultEnvironmentService;
   mainCryptoFunctionService: MainCryptoFunctionService;
@@ -61,6 +70,8 @@ export class Main {
   desktopSettingsService: DesktopSettingsService;
   migrationRunner: MigrationRunner;
   tokenService: TokenServiceAbstraction;
+  keyGenerationService: KeyGenerationServiceAbstraction;
+  encryptService: EncryptService;
 
   windowMain: WindowMain;
   messagingMain: MessagingMain;
@@ -71,6 +82,7 @@ export class Main {
   biometricsService: BiometricsServiceAbstraction;
   nativeMessagingMain: NativeMessagingMain;
   clipboardMain: ClipboardMain;
+  desktopAutofillSettingsService: DesktopAutofillSettingsService;
 
   constructor() {
     // Set paths for portable builds
@@ -122,7 +134,7 @@ export class Main {
     this.i18nService = new I18nMainService("en", "./locales/", globalStateProvider);
 
     const accountService = new AccountServiceImplementation(
-      new NoopMessagingService(),
+      MessageSender.EMPTY,
       this.logService,
       globalStateProvider,
     );
@@ -146,22 +158,40 @@ export class Main {
       activeUserStateProvider,
       singleUserStateProvider,
       globalStateProvider,
-      new DefaultDerivedStateProvider(this.memoryStorageForStateProviders),
+      new DefaultDerivedStateProvider(),
     );
 
     this.environmentService = new DefaultEnvironmentService(stateProvider, accountService);
+
+    this.mainCryptoFunctionService = new MainCryptoFunctionService();
+    this.mainCryptoFunctionService.init();
+
+    this.keyGenerationService = new KeyGenerationService(this.mainCryptoFunctionService);
+
+    this.encryptService = new EncryptServiceImplementation(
+      this.mainCryptoFunctionService,
+      this.logService,
+      true, // log mac failures
+    );
+
+    // Note: secure storage service is not available and should not be called in the main background process.
+    const illegalSecureStorageService = new IllegalSecureStorageService();
 
     this.tokenService = new TokenService(
       singleUserStateProvider,
       globalStateProvider,
       ELECTRON_SUPPORTS_SECURE_STORAGE,
-      this.storageService,
+      illegalSecureStorageService,
+      this.keyGenerationService,
+      this.encryptService,
+      this.logService,
     );
 
     this.migrationRunner = new MigrationRunner(
       this.storageService,
       this.logService,
       new MigrationBuilderService(),
+      ClientType.Desktop,
     );
 
     // TODO: this state service will have access to on disk storage, but not in memory storage.
@@ -177,7 +207,6 @@ export class Main {
       this.environmentService,
       this.tokenService,
       this.migrationRunner,
-      false, // Do not use disk caching because this will get out of sync with the renderer service
     );
 
     this.desktopSettingsService = new DesktopSettingsService(stateProvider);
@@ -197,7 +226,13 @@ export class Main {
     this.updaterMain = new UpdaterMain(this.i18nService, this.windowMain);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.desktopSettingsService);
 
-    this.messagingService = new ElectronMainMessagingService(this.windowMain, (message) => {
+    const messageSubject = new Subject<Message<object>>();
+    this.messagingService = MessageSender.combine(
+      new SubjectMessageSender(messageSubject), // For local messages
+      new ElectronMainMessagingService(this.windowMain),
+    );
+
+    messageSubject.asObservable().subscribe((message) => {
       this.messagingMain.onMessage(message);
     });
 
@@ -233,11 +268,10 @@ export class Main {
       app.getPath("exe"),
     );
 
+    this.desktopAutofillSettingsService = new DesktopAutofillSettingsService(stateProvider);
+
     this.clipboardMain = new ClipboardMain();
     this.clipboardMain.init();
-
-    this.mainCryptoFunctionService = new MainCryptoFunctionService();
-    this.mainCryptoFunctionService.init();
   }
 
   bootstrap() {
@@ -266,12 +300,20 @@ export class Main {
         this.powerMonitorMain.init();
         await this.updaterMain.init();
 
-        if (
-          (await this.stateService.getEnableBrowserIntegration()) ||
-          (await this.stateService.getEnableDuckDuckGoBrowserIntegration())
-        ) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        const [browserIntegrationEnabled, ddgIntegrationEnabled] = await Promise.all([
+          this.stateService.getEnableBrowserIntegration(),
+          firstValueFrom(this.desktopAutofillSettingsService.enableDuckDuckGoBrowserIntegration$),
+        ]);
+
+        if (browserIntegrationEnabled || ddgIntegrationEnabled) {
+          // Re-register the native messaging host integrations on startup, in case they are not present
+          if (browserIntegrationEnabled) {
+            this.nativeMessagingMain.generateManifests().catch(this.logService.error);
+          }
+          if (ddgIntegrationEnabled) {
+            this.nativeMessagingMain.generateDdgManifests().catch(this.logService.error);
+          }
+
           this.nativeMessagingMain.listen();
         }
 

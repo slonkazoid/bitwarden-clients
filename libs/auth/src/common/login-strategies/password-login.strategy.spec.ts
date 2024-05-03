@@ -2,6 +2,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
@@ -9,6 +10,7 @@ import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/for
 import { IdentityTokenResponse } from "@bitwarden/common/auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "@bitwarden/common/auth/models/response/identity-two-factor.response";
 import { MasterPasswordPolicyResponse } from "@bitwarden/common/auth/models/response/master-password-policy.response";
+import { FakeMasterPasswordService } from "@bitwarden/common/auth/services/master-password/fake-master-password.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -19,11 +21,13 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { HashPurpose } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { FakeAccountService, mockAccountServiceWith } from "@bitwarden/common/spec";
 import {
   PasswordStrengthServiceAbstraction,
   PasswordStrengthService,
 } from "@bitwarden/common/tools/password-strength";
 import { CsprngArray } from "@bitwarden/common/types/csprng";
+import { UserId } from "@bitwarden/common/types/guid";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 
 import { LoginStrategyServiceAbstraction } from "../abstractions";
@@ -42,6 +46,7 @@ const masterKey = new SymmetricCryptoKey(
     "N2KWjlLpfi5uHjv+YcfUKIpZ1l+W+6HRensmIqD+BFYBf6N/dvFpJfWwYnVBdgFCK2tJTAIMLhqzIQQEUmGFgg==",
   ),
 ) as MasterKey;
+const userId = Utils.newGuid() as UserId;
 const deviceId = Utils.newGuid();
 const masterPasswordPolicy = new MasterPasswordPolicyResponse({
   EnforceOnLogin: true,
@@ -50,6 +55,8 @@ const masterPasswordPolicy = new MasterPasswordPolicyResponse({
 
 describe("PasswordLoginStrategy", () => {
   let cache: PasswordLoginStrategyData;
+  let accountService: FakeAccountService;
+  let masterPasswordService: FakeMasterPasswordService;
 
   let loginStrategyService: MockProxy<LoginStrategyServiceAbstraction>;
   let cryptoService: MockProxy<CryptoService>;
@@ -65,12 +72,16 @@ describe("PasswordLoginStrategy", () => {
   let policyService: MockProxy<PolicyService>;
   let passwordStrengthService: MockProxy<PasswordStrengthServiceAbstraction>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
+  let kdfConfigService: MockProxy<KdfConfigService>;
 
   let passwordLoginStrategy: PasswordLoginStrategy;
   let credentials: PasswordLoginCredentials;
   let tokenResponse: IdentityTokenResponse;
 
   beforeEach(async () => {
+    accountService = mockAccountServiceWith(userId);
+    masterPasswordService = new FakeMasterPasswordService();
+
     loginStrategyService = mock<LoginStrategyServiceAbstraction>();
     cryptoService = mock<CryptoService>();
     apiService = mock<ApiService>();
@@ -85,9 +96,12 @@ describe("PasswordLoginStrategy", () => {
     policyService = mock<PolicyService>();
     passwordStrengthService = mock<PasswordStrengthService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
+    kdfConfigService = mock<KdfConfigService>();
 
     appIdService.getAppId.mockResolvedValue(deviceId);
-    tokenService.decodeAccessToken.mockResolvedValue({});
+    tokenService.decodeAccessToken.mockResolvedValue({
+      sub: userId,
+    });
 
     loginStrategyService.makePreloginKey.mockResolvedValue(masterKey);
 
@@ -102,6 +116,8 @@ describe("PasswordLoginStrategy", () => {
 
     passwordLoginStrategy = new PasswordLoginStrategy(
       cache,
+      accountService,
+      masterPasswordService,
       cryptoService,
       apiService,
       tokenService,
@@ -116,6 +132,7 @@ describe("PasswordLoginStrategy", () => {
       policyService,
       loginStrategyService,
       billingAccountProfileStateService,
+      kdfConfigService,
     );
     credentials = new PasswordLoginCredentials(email, masterPassword);
     tokenResponse = identityTokenResponseFactory(masterPasswordPolicy);
@@ -145,13 +162,17 @@ describe("PasswordLoginStrategy", () => {
   it("sets keys after a successful authentication", async () => {
     const userKey = new SymmetricCryptoKey(new Uint8Array(64).buffer as CsprngArray) as UserKey;
 
-    cryptoService.getMasterKey.mockResolvedValue(masterKey);
+    masterPasswordService.masterKeySubject.next(masterKey);
     cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+    tokenService.decodeAccessToken.mockResolvedValue({ sub: userId });
 
     await passwordLoginStrategy.logIn(credentials);
 
-    expect(cryptoService.setMasterKey).toHaveBeenCalledWith(masterKey);
-    expect(cryptoService.setMasterKeyHash).toHaveBeenCalledWith(localHashedPassword);
+    expect(masterPasswordService.mock.setMasterKey).toHaveBeenCalledWith(masterKey, userId);
+    expect(masterPasswordService.mock.setMasterKeyHash).toHaveBeenCalledWith(
+      localHashedPassword,
+      userId,
+    );
     expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
     expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
@@ -179,12 +200,14 @@ describe("PasswordLoginStrategy", () => {
   it("forces the user to update their master password on successful login when it does not meet master password policy requirements", async () => {
     passwordStrengthService.getPasswordStrength.mockReturnValue({ score: 0 } as any);
     policyService.evaluateMasterPassword.mockReturnValue(false);
+    tokenService.decodeAccessToken.mockResolvedValue({ sub: userId });
 
     const result = await passwordLoginStrategy.logIn(credentials);
 
     expect(policyService.evaluateMasterPassword).toHaveBeenCalled();
-    expect(stateService.setForceSetPasswordReason).toHaveBeenCalledWith(
+    expect(masterPasswordService.mock.setForceSetPasswordReason).toHaveBeenCalledWith(
       ForceSetPasswordReason.WeakMasterPassword,
+      userId,
     );
     expect(result.forcePasswordReset).toEqual(ForceSetPasswordReason.WeakMasterPassword);
   });
@@ -192,6 +215,7 @@ describe("PasswordLoginStrategy", () => {
   it("forces the user to update their master password on successful 2FA login when it does not meet master password policy requirements", async () => {
     passwordStrengthService.getPasswordStrength.mockReturnValue({ score: 0 } as any);
     policyService.evaluateMasterPassword.mockReturnValue(false);
+    tokenService.decodeAccessToken.mockResolvedValue({ sub: userId });
 
     const token2FAResponse = new IdentityTwoFactorResponse({
       TwoFactorProviders: ["0"],
@@ -222,8 +246,9 @@ describe("PasswordLoginStrategy", () => {
     expect(firstResult.forcePasswordReset).toEqual(ForceSetPasswordReason.None);
 
     // Second login attempt should save the force password reset options and return in result
-    expect(stateService.setForceSetPasswordReason).toHaveBeenCalledWith(
+    expect(masterPasswordService.mock.setForceSetPasswordReason).toHaveBeenCalledWith(
       ForceSetPasswordReason.WeakMasterPassword,
+      userId,
     );
     expect(secondResult.forcePasswordReset).toEqual(ForceSetPasswordReason.WeakMasterPassword);
   });
