@@ -448,10 +448,6 @@ export class ImportService implements ImportServiceAbstraction {
         throw new Error(this.i18nService.t("errorAssigningTargetCollection"));
       }
 
-      if (!targetCollection) {
-        return;
-      }
-
       const noCollectionRelationShips: [number, number][] = [];
       importResult.ciphers.forEach((c, index) => {
         if (
