@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, importProvidersFrom } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Meta, StoryObj, applicationConfig, moduleMetadata } from "@storybook/angular";
+import { applicationConfig, Meta, moduleMetadata, StoryObj } from "@storybook/angular";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import {
@@ -315,13 +315,13 @@ export default {
         importProvidersFrom(
           RouterModule.forRoot(
             [
-              { path: "", redirectTo: "vault", pathMatch: "full" },
-              { path: "vault", component: MockVaultPageComponent },
-              { path: "generator", component: MockGeneratorPageComponent },
-              { path: "send", component: MockSendPageComponent },
-              { path: "settings", component: MockSettingsPageComponent },
+              { path: "", redirectTo: "tabs/vault", pathMatch: "full" },
+              { path: "tabs/vault", component: MockVaultPageComponent },
+              { path: "tabs/generator", component: MockGeneratorPageComponent },
+              { path: "tabs/send", component: MockSendPageComponent },
+              { path: "tabs/settings", component: MockSettingsPageComponent },
               // in case you are coming from a story that also uses the router
-              { path: "**", redirectTo: "vault" },
+              { path: "**", redirectTo: "tabs/vault" },
             ],
             { useHash: true },
           ),
