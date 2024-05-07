@@ -173,9 +173,12 @@ describe("PasswordLoginStrategy", () => {
       localHashedPassword,
       userId,
     );
-    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
-    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
-    expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
+    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(
+      tokenResponse.key,
+      userId,
+    );
+    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey, userId);
+    expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey, userId);
   });
 
   it("does not force the user to update their master password when there are no requirements", async () => {

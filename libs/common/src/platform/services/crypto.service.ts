@@ -395,12 +395,11 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   async setOrgKeys(
-    orgs: ProfileOrganizationResponse[] = [],
-    providerOrgs: ProfileProviderOrganizationResponse[] = [],
+    orgs: ProfileOrganizationResponse[],
+    providerOrgs: ProfileProviderOrganizationResponse[],
+    userId: UserId,
   ): Promise<void> {
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.activeUserEncryptedOrgKeysState.update((_) => {
+    await this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).update(() => {
       const encOrgKeyData: { [orgId: string]: EncryptedOrganizationKeyData } = {};
 
       orgs.forEach((org) => {
@@ -450,8 +449,8 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.stateProvider.setUserState(USER_ENCRYPTED_ORGANIZATION_KEYS, null, userId);
   }
 
-  async setProviderKeys(providers: ProfileProviderResponse[]): Promise<void> {
-    await this.activeUserEncryptedProviderKeysState.update((_) => {
+  async setProviderKeys(providers: ProfileProviderResponse[], userId: UserId): Promise<void> {
+    await this.stateProvider.getUser(userId, USER_ENCRYPTED_PROVIDER_KEYS).update(() => {
       const encProviderKeys: { [providerId: ProviderId]: EncryptedString } = {};
 
       providers.forEach((provider) => {
@@ -494,12 +493,14 @@ export class CryptoService implements CryptoServiceAbstraction {
     return [encShareKey, shareKey as T];
   }
 
-  async setPrivateKey(encPrivateKey: EncryptedString): Promise<void> {
+  async setPrivateKey(encPrivateKey: EncryptedString, userId: UserId): Promise<void> {
     if (encPrivateKey == null) {
       return;
     }
 
-    await this.activeUserEncryptedPrivateKeyState.update(() => encPrivateKey);
+    await this.stateProvider
+      .getUser(userId, USER_ENCRYPTED_PRIVATE_KEY)
+      .update(() => encPrivateKey);
   }
 
   async getPrivateKey(): Promise<Uint8Array> {
@@ -523,9 +524,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.hashPhrase(userFingerprint);
   }
 
-  async makeKeyPair(key?: SymmetricCryptoKey): Promise<[string, EncString]> {
-    // Default to user key
-    key ||= await this.getUserKeyWithLegacySupport();
+  async makeKeyPair(key: SymmetricCryptoKey): Promise<[string, EncString]> {
+    if (key == null) {
+      throw new Error("'key' is a required parameter and must be non-null.");
+    }
 
     const keyPair = await this.cryptoFunctionService.rsaGenerateKeyPair(2048);
     const publicB64 = Utils.fromBufferToB64(keyPair[0]);
@@ -621,19 +623,20 @@ export class CryptoService implements CryptoServiceAbstraction {
     await this.stateProvider.setUserState(USER_EVER_HAD_USER_KEY, null, userId);
   }
 
-  async rsaEncrypt(data: Uint8Array, publicKey?: Uint8Array): Promise<EncString> {
+  async rsaEncrypt(data: Uint8Array, publicKey: Uint8Array): Promise<EncString> {
     if (publicKey == null) {
-      publicKey = await this.getPublicKey();
-    }
-    if (publicKey == null) {
-      throw new Error("Public key unavailable.");
+      throw new Error("'publicKey' is a required parameter and must be non-null");
     }
 
     const encBytes = await this.cryptoFunctionService.rsaEncrypt(data, publicKey, "sha1");
     return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Utils.fromBufferToB64(encBytes));
   }
 
-  async rsaDecrypt(encValue: string, privateKeyValue?: Uint8Array): Promise<Uint8Array> {
+  async rsaDecrypt(encValue: string, privateKey: Uint8Array): Promise<Uint8Array> {
+    if (privateKey == null) {
+      throw new Error("'privateKey' is a required parameter and must be non-null");
+    }
+
     const headerPieces = encValue.split(".");
     let encType: EncryptionType = null;
     let encPieces: string[];
@@ -665,10 +668,6 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     const data = Utils.fromB64ToArray(encPieces[0]);
-    const privateKey = privateKeyValue ?? (await this.getPrivateKey());
-    if (privateKey == null) {
-      throw new Error("No private key.");
-    }
 
     let alg: "sha1" | "sha256" = "sha1";
     switch (encType) {
@@ -771,6 +770,13 @@ export class CryptoService implements CryptoServiceAbstraction {
     publicKey: string;
     privateKey: EncString;
   }> {
+    // Verify user key doesn't exist
+    const existingUserKey = await this.getUserKey();
+    if (existingUserKey != null) {
+      this.logService.error("Tried to initialize account with existing user key.");
+      throw new Error("Cannot initialize account, keys already exist.");
+    }
+
     const userKey = (await this.keyGenerationService.createKey(512)) as UserKey;
     const [publicKey, privateKey] = await this.makeKeyPair(userKey);
     await this.setUserKey(userKey);

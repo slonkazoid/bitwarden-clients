@@ -223,7 +223,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: EncryptedMessageHandlerService,
     deps: [
-      StateServiceAbstraction,
+      AccountServiceAbstraction,
       AuthServiceAbstraction,
       CipherServiceAbstraction,
       PolicyServiceAbstraction,
