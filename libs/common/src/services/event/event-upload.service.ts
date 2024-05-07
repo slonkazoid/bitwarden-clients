@@ -23,9 +23,8 @@ export class EventUploadService implements EventUploadServiceAbstraction {
     private authService: AuthService,
     private taskSchedulerService?: TaskSchedulerService,
   ) {
-    void this.taskSchedulerService?.registerTaskHandler(
-      ScheduledTaskNames.eventUploadsInterval,
-      () => this.uploadEvents(),
+    this.taskSchedulerService?.registerTaskHandler(ScheduledTaskNames.eventUploadsInterval, () =>
+      this.uploadEvents(),
     );
   }
 

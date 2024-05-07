@@ -1,11 +1,10 @@
 import { LogService } from "../abstractions/log.service";
 import { TaskIdentifier, TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
-import { StateProvider } from "../state";
 
 export class DefaultTaskSchedulerService extends TaskSchedulerService {
-  constructor(logService: LogService, stateProvider: StateProvider) {
-    super(logService, stateProvider);
+  constructor(protected logService: LogService) {
+    super();
 
     this.taskHandlers = new Map();
   }

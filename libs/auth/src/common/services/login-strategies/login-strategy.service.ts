@@ -121,7 +121,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     this.authRequestPushNotificationState = this.stateProvider.get(
       AUTH_REQUEST_PUSH_NOTIFICATION_KEY,
     );
-    void this.taskSchedulerService?.registerTaskHandler(
+    this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.loginStrategySessionTimeout,
       () => this.clearCache(),
     );

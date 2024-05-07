@@ -17,7 +17,7 @@ export class GeneratePasswordToClipboardCommand {
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
     private taskSchedulerService?: BrowserTaskSchedulerService,
   ) {
-    void this.taskSchedulerService?.registerTaskHandler(
+    this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.generatePasswordClearClipboardTimeout,
       () => ClearClipboard.run(),
     );

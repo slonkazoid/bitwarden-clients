@@ -1,7 +1,4 @@
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
-import { StateProvider } from "../state";
-
-import { LogService } from "./log.service";
 
 export type TaskIdentifier = {
   taskName?: ScheduledTaskName;
@@ -10,10 +7,6 @@ export type TaskIdentifier = {
 };
 
 export abstract class TaskSchedulerService {
-  constructor(
-    protected logService: LogService,
-    protected stateProvider: StateProvider,
-  ) {}
   protected taskHandlers: Map<string, () => void>;
   abstract setTimeout(
     taskName: ScheduledTaskName,

@@ -32,7 +32,7 @@ export class SystemService implements SystemServiceAbstraction {
     private accountService: AccountService,
     private taskSchedulerService?: TaskSchedulerService,
   ) {
-    void this.taskSchedulerService?.registerTaskHandler(
+    this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.systemClearClipboardTimeout,
       () => this.clearPendingClipboard(),
     );

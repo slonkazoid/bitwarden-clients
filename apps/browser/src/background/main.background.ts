@@ -516,7 +516,7 @@ export default class MainBackground {
         this.logService,
         this.stateProvider,
       );
-      void this.taskSchedulerService.registerTaskHandler(
+      this.taskSchedulerService.registerTaskHandler(
         ScheduledTaskNames.scheduleNextSyncInterval,
         () => this.fullSync(),
       );

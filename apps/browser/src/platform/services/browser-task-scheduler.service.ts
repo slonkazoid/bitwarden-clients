@@ -29,8 +29,11 @@ export class BrowserTaskSchedulerServiceImplementation
   private activeAlarmsState: GlobalState<ActiveAlarm[]>;
   readonly activeAlarms$: Observable<ActiveAlarm[]>;
 
-  constructor(logService: LogService, stateProvider: StateProvider) {
-    super(logService, stateProvider);
+  constructor(
+    logService: LogService,
+    private stateProvider: StateProvider,
+  ) {
+    super(logService);
 
     this.activeAlarmsState = this.stateProvider.getGlobal(ACTIVE_ALARMS);
     this.activeAlarms$ = this.activeAlarmsState.state$.pipe(
@@ -420,7 +423,7 @@ export class BrowserTaskSchedulerServiceImplementation
    *
    * @param alarmName - The name of the alarm to get.
    */
-  private async getAlarm(alarmName: string): Promise<chrome.alarms.Alarm> {
+  private getAlarm(alarmName: string): Promise<chrome.alarms.Alarm> {
     if (this.isNonChromeEnvironment()) {
       return browser.alarms.get(alarmName);
     }

@@ -40,7 +40,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null,
     private taskSchedulerService?: TaskSchedulerService,
   ) {
-    void this.taskSchedulerService?.registerTaskHandler(
+    this.taskSchedulerService?.registerTaskHandler(
       ScheduledTaskNames.vaultTimeoutCheckInterval,
       () => this.checkVaultTimeout(),
     );
