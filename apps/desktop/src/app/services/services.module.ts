@@ -50,7 +50,6 @@ import { Message, MessageListener, MessageSender } from "@bitwarden/common/platf
 // eslint-disable-next-line no-restricted-imports -- Used for dependency injection
 import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
-import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
 import { SystemService } from "@bitwarden/common/platform/services/system.service";
@@ -282,11 +281,6 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: CLIENT_TYPE,
     useValue: ClientType.Desktop,
-  }),
-  safeProvider({
-    provide: TaskSchedulerService,
-    useClass: DefaultTaskSchedulerService,
-    deps: [LogServiceAbstraction, StateProvider],
   }),
 ];
 
