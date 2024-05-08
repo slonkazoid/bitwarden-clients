@@ -163,7 +163,10 @@ describe("SsoLoginStrategy", () => {
 
     // Assert
     expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledTimes(1);
-    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(
+      tokenResponse.key,
+      userId,
+    );
   });
 
   describe("Trusted Device Decryption", () => {
@@ -417,7 +420,7 @@ describe("SsoLoginStrategy", () => {
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl);
+      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl, userId);
     });
 
     it("converts new SSO user with no master password to Key Connector on first login", async () => {
@@ -430,6 +433,7 @@ describe("SsoLoginStrategy", () => {
       expect(keyConnectorService.convertNewSsoUserToKeyConnector).toHaveBeenCalledWith(
         tokenResponse,
         ssoOrgId,
+        userId,
       );
     });
 
@@ -441,11 +445,15 @@ describe("SsoLoginStrategy", () => {
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       masterPasswordService.masterKeySubject.next(masterKey);
-      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+      masterPasswordService.mock.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
+      expect(masterPasswordService.mock.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+        masterKey,
+        undefined,
+        undefined,
+      );
       expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     });
   });
@@ -468,7 +476,7 @@ describe("SsoLoginStrategy", () => {
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl);
+      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl, userId);
     });
 
     it("converts new SSO user with no master password to Key Connector on first login", async () => {
@@ -481,6 +489,7 @@ describe("SsoLoginStrategy", () => {
       expect(keyConnectorService.convertNewSsoUserToKeyConnector).toHaveBeenCalledWith(
         tokenResponse,
         ssoOrgId,
+        userId,
       );
     });
 
@@ -492,11 +501,15 @@ describe("SsoLoginStrategy", () => {
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       masterPasswordService.masterKeySubject.next(masterKey);
-      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+      masterPasswordService.mock.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
+      expect(masterPasswordService.mock.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+        masterKey,
+        undefined,
+        undefined,
+      );
       expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
     });
   });

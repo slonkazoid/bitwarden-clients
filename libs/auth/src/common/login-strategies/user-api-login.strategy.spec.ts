@@ -159,7 +159,7 @@ describe("UserApiLoginStrategy", () => {
     await apiLogInStrategy.logIn(credentials);
 
     expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
-    expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey);
+    expect(cryptoService.setPrivateKey).toHaveBeenCalledWith(tokenResponse.privateKey, userId);
   });
 
   it("gets and sets the master key if Key Connector is enabled", async () => {
@@ -174,7 +174,7 @@ describe("UserApiLoginStrategy", () => {
 
     await apiLogInStrategy.logIn(credentials);
 
-    expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl);
+    expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl, userId);
   });
 
   it("decrypts and sets the user key if Key Connector is enabled", async () => {
@@ -190,11 +190,15 @@ describe("UserApiLoginStrategy", () => {
 
     apiService.postIdentityToken.mockResolvedValue(tokenResponse);
     masterPasswordService.masterKeySubject.next(masterKey);
-    cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+    masterPasswordService.mock.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
     await apiLogInStrategy.logIn(credentials);
 
-    expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
-    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
+    expect(masterPasswordService.mock.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+      masterKey,
+      undefined,
+      undefined,
+    );
+    expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey, userId);
   });
 });
