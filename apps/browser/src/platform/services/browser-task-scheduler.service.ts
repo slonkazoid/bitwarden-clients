@@ -58,8 +58,7 @@ export class BrowserTaskSchedulerServiceImplementation
     this.validateRegisteredTask(taskName);
 
     const delayInMinutes = delayInMs / 1000 / 60;
-    const alarmName = await this.getActiveUserAlarmName(taskName);
-    await this.scheduleAlarm(alarmName, {
+    await this.scheduleAlarm(taskName, {
       delayInMinutes: this.getUpperBoundDelayInMinutes(delayInMinutes),
     });
 
@@ -67,8 +66,8 @@ export class BrowserTaskSchedulerServiceImplementation
     // The alarm previously scheduled will be used as a backup in case the setTimeout fails.
     if (delayInMinutes < 1) {
       return globalThis.setTimeout(async () => {
-        await this.clearScheduledAlarm(alarmName);
-        await this.triggerTask(alarmName);
+        await this.clearScheduledAlarm(taskName);
+        await this.triggerTask(taskName);
       }, delayInMs);
     }
   }
@@ -90,16 +89,15 @@ export class BrowserTaskSchedulerServiceImplementation
     this.validateRegisteredTask(taskName);
 
     const intervalInMinutes = intervalInMs / 1000 / 60;
-    const alarmName = await this.getActiveUserAlarmName(taskName);
     const initialDelayInMinutes = initialDelayInMs
       ? initialDelayInMs / 1000 / 60
       : intervalInMinutes;
 
     if (intervalInMinutes < 1) {
-      return this.setupSteppedIntervalAlarms(taskName, alarmName, intervalInMs);
+      return this.setupSteppedIntervalAlarms(taskName, intervalInMs);
     }
 
-    await this.scheduleAlarm(alarmName, {
+    await this.scheduleAlarm(taskName, {
       periodInMinutes: this.getUpperBoundDelayInMinutes(intervalInMinutes),
       delayInMinutes: this.getUpperBoundDelayInMinutes(initialDelayInMinutes),
     });
@@ -112,28 +110,28 @@ export class BrowserTaskSchedulerServiceImplementation
    * api does not support intervals less than 1 minute.
    *
    * @param taskName - The name of the task, separate of any user id.
-   * @param alarmName - The name of the alarm to create, could contain a user id.
    * @param intervalInMs - The interval in milliseconds.
    */
   private async setupSteppedIntervalAlarms(
     taskName: ScheduledTaskName,
-    alarmName: string,
     intervalInMs: number,
   ): Promise<number | NodeJS.Timeout> {
     const alarmMinDelayInMinutes = this.getAlarmMinDelayInMinutes();
     const intervalInMinutes = intervalInMs / 1000 / 60;
-    const numberOfAlarmsToCreate = Math.ceil(1 / intervalInMinutes);
+    const numberOfAlarmsToCreate = Math.ceil(Math.ceil(1 / intervalInMinutes) / 2) + 1;
+    const steppedAlarmPeriodInMinutes = alarmMinDelayInMinutes + intervalInMinutes;
     for (let alarmIndex = 0; alarmIndex < numberOfAlarmsToCreate; alarmIndex++) {
-      const steppedAlarmName = `${alarmName}__${alarmIndex}`;
-      const periodInMinutes = alarmMinDelayInMinutes + intervalInMinutes * alarmIndex;
+      const steppedAlarmName = `${taskName}__${alarmIndex}`;
 
-      // We need to clear alarms based on the task name as well as the
-      // user-based alarm name to ensure duplicate alarms are not created.
-      await this.clearScheduledAlarm(`${taskName}__${alarmIndex}`);
+      const delayInMinutes = this.getUpperBoundDelayInMinutes(
+        alarmMinDelayInMinutes + intervalInMinutes * alarmIndex,
+      );
+
       await this.clearScheduledAlarm(steppedAlarmName);
 
       await this.scheduleAlarm(steppedAlarmName, {
-        periodInMinutes: this.getUpperBoundDelayInMinutes(periodInMinutes),
+        periodInMinutes: steppedAlarmPeriodInMinutes,
+        delayInMinutes,
       });
     }
 
@@ -147,7 +145,7 @@ export class BrowserTaskSchedulerServiceImplementation
         return;
       }
 
-      await this.triggerTask(alarmName, intervalInMinutes);
+      await this.triggerTask(taskName, intervalInMinutes);
     }, intervalInMs);
 
     return intervalId;
@@ -168,8 +166,7 @@ export class BrowserTaskSchedulerServiceImplementation
       return;
     }
 
-    const alarmName = await this.getActiveUserAlarmName(taskName);
-    await this.clearScheduledAlarm(alarmName);
+    await this.clearScheduledAlarm(taskName);
   }
 
   /**
@@ -224,14 +221,6 @@ export class BrowserTaskSchedulerServiceImplementation
     if (existingAlarm) {
       this.logService.debug(`Alarm ${alarmName} already exists. Skipping creation.`);
       return;
-    }
-
-    // We should always prioritize user-based alarms over non-user-based alarms. If a non-user-based alarm
-    // exists when the user-based alarm is being created, we want to clear the non-user-based alarm.
-    const taskName = this.getTaskFromAlarmName(alarmName);
-    const existingTaskBasedAlarm = await this.getAlarm(taskName);
-    if (existingTaskBasedAlarm) {
-      await this.clearScheduledAlarm(taskName);
     }
 
     await this.createAlarm(alarmName, createInfo);
@@ -331,43 +320,10 @@ export class BrowserTaskSchedulerServiceImplementation
     if (handler) {
       handler();
     }
-
-    // We should always prioritize user-based alarms over non-user-based alarms. As a result, if a triggered
-    // alarm is not user-based, we want to verify if  the alarm should continue to exist. If an alarm exists
-    // for the same task that is user-based, we want to clear the non-user-based alarm.
-    if (alarmName === taskName) {
-      const taskName = this.getTaskFromAlarmName(alarmName);
-      const existingUserBasedAlarm = await this.getAlarm(taskName);
-      if (existingUserBasedAlarm) {
-        await this.clearScheduledAlarm(taskName);
-      }
-    }
   }
 
   /**
-   * Gets the active user id from state.
-   */
-  private async getActiveUserId(): Promise<string> {
-    return await firstValueFrom(this.stateProvider.activeUserId$);
-  }
-
-  /**
-   * Gets the active user alarm name by appending the active user id to the task name.
-   *
-   * @param taskName - The task name to append the active user id to.
-   */
-  private async getActiveUserAlarmName(taskName: ScheduledTaskName): Promise<string> {
-    const activeUserId = await this.getActiveUserId();
-    if (!activeUserId) {
-      return taskName;
-    }
-
-    return `${taskName}__${activeUserId}`;
-  }
-
-  /**
-   * Parses and returns the task name from an alarm name. If the alarm name
-   * contains a user id, it will return the task name without the user id.
+   * Parses and returns the task name from an alarm name.
    *
    * @param alarmName - The alarm name to parse.
    */

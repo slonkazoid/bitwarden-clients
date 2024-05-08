@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
-import { UserId } from "@bitwarden/common/types/guid";
 
 import { flushPromises, triggerOnAlarmEvent } from "../../autofill/spec/testing-utils";
 
@@ -37,15 +36,10 @@ function setupGlobalBrowserMock(overrides: Partial<chrome.alarms.Alarm> = {}) {
     ...overrides,
   };
 }
-const userUuid = "user-uuid" as UserId;
-function getAlarmNameMock(taskName: string) {
-  return `${taskName}__${userUuid}`;
-}
 
 describe("BrowserTaskSchedulerService", () => {
   const callback = jest.fn();
   const delayInMinutes = 2;
-  let activeUserIdMock$: BehaviorSubject<UserId>;
   let activeAlarmsMock$: BehaviorSubject<ActiveAlarm[]>;
   let logService: MockProxy<ConsoleLogService>;
   let stateProvider: MockProxy<StateProvider>;
@@ -73,14 +67,12 @@ describe("BrowserTaskSchedulerService", () => {
       }),
     ];
     activeAlarmsMock$ = new BehaviorSubject(activeAlarms);
-    activeUserIdMock$ = new BehaviorSubject(userUuid);
     logService = mock<ConsoleLogService>();
     globalStateMock = mock<GlobalState<any>>({
       state$: mock<Observable<any>>(),
       update: jest.fn((callback) => callback([], {} as any)),
     });
     stateProvider = mock<StateProvider>({
-      activeUserId$: activeUserIdMock$,
       getGlobal: jest.fn(() => globalStateMock),
     });
     browserTaskSchedulerService = new BrowserTaskSchedulerServiceImplementation(
@@ -126,7 +118,7 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(chrome.alarms.create).toHaveBeenCalledWith(
-        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        ScheduledTaskNames.loginStrategySessionTimeout,
         { delayInMinutes },
         expect.any(Function),
       );
@@ -142,43 +134,6 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(chrome.alarms.create).not.toHaveBeenCalled();
-    });
-
-    it("clears a scheduled alarm if a user-specific alarm for the same task is being registered", async () => {
-      const mockAlarm = mock<chrome.alarms.Alarm>({
-        name: ScheduledTaskNames.loginStrategySessionTimeout,
-      });
-      chrome.alarms.get = jest
-        .fn()
-        .mockImplementation((name, callback) =>
-          callback(name === ScheduledTaskNames.loginStrategySessionTimeout ? mockAlarm : undefined),
-        );
-
-      await browserTaskSchedulerService.setTimeout(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        delayInMinutes * 60 * 1000,
-      );
-
-      expect(chrome.alarms.clear).toHaveBeenCalledWith(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        expect.any(Function),
-      );
-    });
-
-    it("creates an alarm that is not associated with a user", async () => {
-      activeUserIdMock$.next(undefined);
-      chrome.alarms.get = jest.fn().mockImplementation((_name, callback) => callback(undefined));
-
-      await browserTaskSchedulerService.setTimeout(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        delayInMinutes * 60 * 1000,
-      );
-
-      expect(chrome.alarms.create).toHaveBeenCalledWith(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        { delayInMinutes },
-        expect.any(Function),
-      );
     });
 
     describe("when the task is scheduled to be triggered in less than 1 minute", () => {
@@ -203,7 +158,7 @@ describe("BrowserTaskSchedulerService", () => {
         );
 
         expect(chrome.alarms.create).toHaveBeenCalledWith(
-          getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+          ScheduledTaskNames.loginStrategySessionTimeout,
           { delayInMinutes: 0.5 },
           expect.any(Function),
         );
@@ -218,7 +173,7 @@ describe("BrowserTaskSchedulerService", () => {
         );
 
         expect(browser.alarms.create).toHaveBeenCalledWith(
-          getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+          ScheduledTaskNames.loginStrategySessionTimeout,
           { delayInMinutes: 1 },
         );
       });
@@ -234,7 +189,7 @@ describe("BrowserTaskSchedulerService", () => {
         await flushPromises();
 
         expect(chrome.alarms.clear).toHaveBeenCalledWith(
-          getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+          ScheduledTaskNames.loginStrategySessionTimeout,
           expect.any(Function),
         );
       });
@@ -263,18 +218,23 @@ describe("BrowserTaskSchedulerService", () => {
         );
 
         expect(chrome.alarms.create).toHaveBeenCalledWith(
-          `${getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout)}__0`,
-          { periodInMinutes: 0.5 },
+          `${ScheduledTaskNames.loginStrategySessionTimeout}__0`,
+          { periodInMinutes: 0.6666666666666666, delayInMinutes: 0.5 },
           expect.any(Function),
         );
         expect(chrome.alarms.create).toHaveBeenCalledWith(
-          `${getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout)}__1`,
-          { periodInMinutes: 0.6666666666666666 },
+          `${ScheduledTaskNames.loginStrategySessionTimeout}__1`,
+          { periodInMinutes: 0.6666666666666666, delayInMinutes: 0.6666666666666666 },
           expect.any(Function),
         );
         expect(chrome.alarms.create).toHaveBeenCalledWith(
-          `${getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout)}__2`,
-          { periodInMinutes: 0.8333333333333333 },
+          `${ScheduledTaskNames.loginStrategySessionTimeout}__2`,
+          { periodInMinutes: 0.6666666666666666, delayInMinutes: 0.8333333333333333 },
+          expect.any(Function),
+        );
+        expect(chrome.alarms.create).toHaveBeenCalledWith(
+          `${ScheduledTaskNames.loginStrategySessionTimeout}__3`,
+          { periodInMinutes: 0.6666666666666666, delayInMinutes: 1 },
           expect.any(Function),
         );
       });
@@ -315,7 +275,7 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(chrome.alarms.create).toHaveBeenCalledWith(
-        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        ScheduledTaskNames.loginStrategySessionTimeout,
         { periodInMinutes, delayInMinutes: 0.5 },
         expect.any(Function),
       );
@@ -329,7 +289,7 @@ describe("BrowserTaskSchedulerService", () => {
       );
 
       expect(chrome.alarms.create).toHaveBeenCalledWith(
-        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        ScheduledTaskNames.loginStrategySessionTimeout,
         { periodInMinutes, delayInMinutes: periodInMinutes },
         expect.any(Function),
       );
@@ -380,27 +340,6 @@ describe("BrowserTaskSchedulerService", () => {
   });
 
   describe("triggering a task", () => {
-    it("clears an non user-based alarm if a separate user-based alarm has been set up", async () => {
-      jest.useFakeTimers();
-      activeUserIdMock$.next(undefined);
-      const delayInMs = 10000;
-      chrome.alarms.get = jest
-        .fn()
-        .mockImplementation((_name, callback) => callback(mock<chrome.alarms.Alarm>()));
-
-      await browserTaskSchedulerService.setTimeout(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        delayInMs,
-      );
-      jest.advanceTimersByTime(delayInMs);
-      await flushPromises();
-
-      expect(chrome.alarms.clear).toHaveBeenCalledWith(
-        ScheduledTaskNames.loginStrategySessionTimeout,
-        expect.any(Function),
-      );
-    });
-
     it("triggers a task when an onAlarm event is triggered", () => {
       const alarm = mock<chrome.alarms.Alarm>({
         name: ScheduledTaskNames.loginStrategySessionTimeout,
@@ -425,7 +364,7 @@ describe("BrowserTaskSchedulerService", () => {
       });
 
       expect(chrome.alarms.clear).toHaveBeenCalledWith(
-        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        ScheduledTaskNames.loginStrategySessionTimeout,
         expect.any(Function),
       );
     });
@@ -438,7 +377,7 @@ describe("BrowserTaskSchedulerService", () => {
       });
 
       expect(browser.alarms.clear).toHaveBeenCalledWith(
-        getAlarmNameMock(ScheduledTaskNames.loginStrategySessionTimeout),
+        ScheduledTaskNames.loginStrategySessionTimeout,
       );
     });
   });
