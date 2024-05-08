@@ -109,7 +109,7 @@ export class BrowserTaskSchedulerServiceImplementation
    * expected scheduled task through the alarms api. This is necessary because the alarms
    * api does not support intervals less than 1 minute.
    *
-   * @param taskName - The name of the task, separate of any user id.
+   * @param taskName - The name of the task
    * @param intervalInMs - The interval in milliseconds.
    */
   private async setupSteppedIntervalAlarms(
