@@ -30,6 +30,8 @@ import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
+import { AccountSecurityComponent } from "../auth/popup/settings/account-security.component";
+import { VaultTimeoutInputComponent } from "../auth/popup/settings/vault-timeout-input.component";
 import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
@@ -49,6 +51,7 @@ import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.componen
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
 import { ExportComponent } from "../tools/popup/settings/export.component";
+import { SettingsComponent } from "../tools/popup/settings/settings.component";
 import { ActionButtonsComponent } from "../vault/popup/components/action-buttons.component";
 import { CipherRowComponent } from "../vault/popup/components/cipher-row.component";
 import { Fido2CipherRowComponent } from "../vault/popup/components/fido2/fido2-cipher-row.component";
@@ -64,9 +67,14 @@ import { ShareComponent } from "../vault/popup/components/vault/share.component"
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
+import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
+import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
+import { FoldersComponent } from "../vault/popup/settings/folders.component";
+import { SyncComponent } from "../vault/popup/settings/sync.component";
+import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.component";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -74,12 +82,8 @@ import { PopOutComponent } from "./components/pop-out.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
-import { FoldersComponent } from "./settings/folders.component";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
 import { OptionsComponent } from "./settings/options.component";
-import { SettingsComponent } from "./settings/settings.component";
-import { SyncComponent } from "./settings/sync.component";
-import { VaultTimeoutInputComponent } from "./settings/vault-timeout-input.component";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
 
@@ -145,6 +149,7 @@ import "../platform/popup/locales";
     LoginViaAuthRequestComponent,
     LoginDecryptionOptionsComponent,
     OptionsComponent,
+    AppearanceComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordHistoryComponent,
@@ -156,7 +161,9 @@ import "../platform/popup/locales";
     SendListComponent,
     SendTypeComponent,
     SetPasswordComponent,
+    AccountSecurityComponent,
     SettingsComponent,
+    VaultSettingsComponent,
     ShareComponent,
     SsoComponent,
     SyncComponent,
@@ -177,6 +184,7 @@ import "../platform/popup/locales";
     EnvironmentSelectorComponent,
     CurrentAccountComponent,
     AccountSwitcherComponent,
+    VaultV2Component,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
