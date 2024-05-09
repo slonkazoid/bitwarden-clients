@@ -13,6 +13,7 @@ export enum ReportType {
   UnsecuredWebsites = "unsecuredWebsites",
   Inactive2fa = "inactive2fa",
   DataBreach = "dataBreach",
+  MemberAccessReport = "memberAccessReport",
 }
 
 type ReportWithoutVariant = Omit<ReportEntry, "variant">;
@@ -52,6 +53,12 @@ export const reports: Record<ReportType, ReportWithoutVariant> = {
     title: "dataBreachReport",
     description: "breachDesc",
     route: "breach-report",
+    icon: ReportBreach,
+  },
+  [ReportType.MemberAccessReport]: {
+    title: "memberAccessReport",
+    description: "memberAccessReportDesc",
+    route: "member-access-report",
     icon: ReportBreach,
   },
 };
