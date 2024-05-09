@@ -48,6 +48,7 @@ export class VaultItemsComponent {
   @Input() addAccessStatus: number;
   @Input() addAccessToggle: boolean;
   @Input() restrictProviderAccess: boolean;
+  @Input() vaultBulkManagementActionEnabled = false;
 
   private _ciphers?: CipherView[] = [];
   @Input() get ciphers(): CipherView[] {

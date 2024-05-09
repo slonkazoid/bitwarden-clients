@@ -8354,5 +8354,8 @@
   },
   "verified": {
     "message": "Verified"
+  },
+  "addToFolder": {
+    "message": "Add to folder"
   }
 }

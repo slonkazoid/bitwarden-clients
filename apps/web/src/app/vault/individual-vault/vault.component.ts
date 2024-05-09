@@ -140,6 +140,9 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
     FeatureFlag.FlexibleCollectionsV1,
   );
+  protected vaultBulkManagementActionEnabled$ = this.configService.getFeatureFlag$(
+    FeatureFlag.VaultBulkManagementAction,
+  );
 
   private searchText$ = new Subject<string>();
   private refresh$ = new BehaviorSubject<void>(null);
