@@ -1,10 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { BehaviorSubject } from "rxjs";
 
-import { UserId } from "../../../../common/src/types/guid";
 import { LogService } from "../abstractions/log.service";
 import { ScheduledTaskNames } from "../enums/scheduled-task-name.enum";
-import { StateProvider } from "../state";
 
 import { DefaultTaskSchedulerService } from "./default-task-scheduler.service";
 
@@ -12,19 +9,13 @@ describe("DefaultTaskSchedulerService", () => {
   const callback = jest.fn();
   const delayInMs = 1000;
   const intervalInMs = 1100;
-  let activeUserIdMock$: BehaviorSubject<UserId>;
   let logService: MockProxy<LogService>;
-  let stateProvider: MockProxy<StateProvider>;
   let taskSchedulerService: DefaultTaskSchedulerService;
 
   beforeEach(() => {
     jest.useFakeTimers();
-    activeUserIdMock$ = new BehaviorSubject<UserId>("user-uuid" as UserId);
     logService = mock<LogService>();
-    stateProvider = mock<StateProvider>({
-      activeUserId$: activeUserIdMock$,
-    });
-    taskSchedulerService = new DefaultTaskSchedulerService(logService, stateProvider);
+    taskSchedulerService = new DefaultTaskSchedulerService(logService);
     taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.loginStrategySessionTimeout,
       callback,
