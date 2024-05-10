@@ -21,9 +21,9 @@ export class EventUploadService implements EventUploadServiceAbstraction {
     private stateProvider: StateProvider,
     private logService: LogService,
     private authService: AuthService,
-    private taskSchedulerService?: TaskSchedulerService,
+    private taskSchedulerService: TaskSchedulerService,
   ) {
-    this.taskSchedulerService?.registerTaskHandler(ScheduledTaskNames.eventUploadsInterval, () =>
+    this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.eventUploadsInterval, () =>
       this.uploadEvents(),
     );
   }
@@ -36,7 +36,7 @@ export class EventUploadService implements EventUploadServiceAbstraction {
     this.inited = true;
     if (checkOnInterval) {
       void this.uploadEvents();
-      void this.taskSchedulerService?.setInterval(
+      void this.taskSchedulerService.setInterval(
         ScheduledTaskNames.eventUploadsInterval,
         60 * 1000, // check every 60 seconds
       );

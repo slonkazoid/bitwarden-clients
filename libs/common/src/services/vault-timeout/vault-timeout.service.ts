@@ -36,11 +36,11 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private authService: AuthService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private stateEventRunnerService: StateEventRunnerService,
+    private taskSchedulerService: TaskSchedulerService,
     private lockedCallback: (userId?: string) => Promise<void> = null,
     private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null,
-    private taskSchedulerService?: TaskSchedulerService,
   ) {
-    this.taskSchedulerService?.registerTaskHandler(
+    this.taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.vaultTimeoutCheckInterval,
       () => this.checkVaultTimeout(),
     );
@@ -59,7 +59,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
   startCheck() {
     void this.checkVaultTimeout();
-    void this.taskSchedulerService?.setInterval(
+    void this.taskSchedulerService.setInterval(
       ScheduledTaskNames.vaultTimeoutCheckInterval,
       10 * 1000, // check every 10 seconds
     );

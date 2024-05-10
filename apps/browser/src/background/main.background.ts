@@ -507,18 +507,13 @@ export default class MainBackground {
       this.derivedStateProvider,
     );
 
-    // The taskSchedulerService needs to be instantiated a single time in a potential context.
-    // Since the popup creates a new instance of the main background in mv3, we need to guard against a duplicate registration.
-    if (!this.popupOnlyContext) {
-      this.taskSchedulerService = new BrowserTaskSchedulerServiceImplementation(
-        this.logService,
-        this.stateProvider,
-      );
-      this.taskSchedulerService.registerTaskHandler(
-        ScheduledTaskNames.scheduleNextSyncInterval,
-        () => this.fullSync(),
-      );
-    }
+    this.taskSchedulerService = new BrowserTaskSchedulerServiceImplementation(
+      this.logService,
+      this.stateProvider,
+    );
+    this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.scheduleNextSyncInterval, () =>
+      this.fullSync(),
+    );
 
     this.environmentService = new BrowserEnvironmentService(
       this.logService,
@@ -779,9 +774,9 @@ export default class MainBackground {
       this.authService,
       this.vaultTimeoutSettingsService,
       this.stateEventRunnerService,
+      this.taskSchedulerService,
       lockedCallback,
       logoutCallback,
-      this.taskSchedulerService,
     );
     this.containerService = new ContainerService(this.cryptoService, this.encryptService);
 
@@ -934,7 +929,7 @@ export default class MainBackground {
         this.platformUtilsService.isSafari() ||
         this.platformUtilsService.isFirefox() ||
         this.platformUtilsService.isOpera();
-      await this.taskSchedulerService?.clearAllScheduledTasks();
+      await this.taskSchedulerService.clearAllScheduledTasks();
       BrowserApi.reloadExtension(forceWindowReload ? self : null);
     };
 
@@ -1159,12 +1154,12 @@ export default class MainBackground {
       setTimeout(async () => {
         await this.refreshBadge();
         await this.fullSync(true);
-        await this.taskSchedulerService?.setInterval(
+        await this.taskSchedulerService.setInterval(
           ScheduledTaskNames.scheduleNextSyncInterval,
           5 * 60 * 1000, // check every 5 minutes
         );
         setTimeout(() => this.notificationsService.init(), 2500);
-        await this.taskSchedulerService?.verifyAlarmsState();
+        await this.taskSchedulerService.verifyAlarmsState();
         resolve();
       }, 500);
     });

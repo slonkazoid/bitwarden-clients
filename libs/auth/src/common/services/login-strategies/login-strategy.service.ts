@@ -113,7 +113,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     protected stateProvider: GlobalStateProvider,
     protected billingAccountProfileStateService: BillingAccountProfileStateService,
     protected kdfConfigService: KdfConfigService,
-    protected taskSchedulerService?: TaskSchedulerService,
+    protected taskSchedulerService: TaskSchedulerService,
   ) {
     this.currentAuthnTypeState = this.stateProvider.get(CURRENT_LOGIN_STRATEGY_KEY);
     this.loginStrategyCacheState = this.stateProvider.get(CACHE_KEY);
@@ -121,7 +121,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     this.authRequestPushNotificationState = this.stateProvider.get(
       AUTH_REQUEST_PUSH_NOTIFICATION_KEY,
     );
-    this.taskSchedulerService?.registerTaskHandler(
+    this.taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.loginStrategySessionTimeout,
       () => this.clearCache(),
     );
@@ -319,7 +319,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     await this.loginStrategyCacheExpirationState.update(
       (_) => new Date(Date.now() + sessionTimeoutLength),
     );
-    this.sessionTimeout = await this.taskSchedulerService?.setTimeout(
+    this.sessionTimeout = await this.taskSchedulerService.setTimeout(
       ScheduledTaskNames.loginStrategySessionTimeout,
       sessionTimeoutLength,
     );
@@ -327,7 +327,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
 
   private async clearSessionTimeout(): Promise<void> {
     await this.loginStrategyCacheExpirationState.update((_) => null);
-    await this.taskSchedulerService?.clearScheduledTask({
+    await this.taskSchedulerService.clearScheduledTask({
       taskName: ScheduledTaskNames.loginStrategySessionTimeout,
       timeoutId: this.sessionTimeout,
     });

@@ -669,9 +669,9 @@ const safeProviders: SafeProvider[] = [
       AuthServiceAbstraction,
       VaultTimeoutSettingsServiceAbstraction,
       StateEventRunnerService,
+      TaskSchedulerService,
       LOCKED_CALLBACK,
       LOGOUT_CALLBACK,
-      TaskSchedulerService,
     ],
   }),
   safeProvider({
