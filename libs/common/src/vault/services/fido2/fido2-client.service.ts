@@ -1,4 +1,4 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Subscription } from "rxjs";
 import { parse } from "tldts";
 
 import { AuthService } from "../../../auth/abstractions/auth.service";
@@ -179,7 +179,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
-    const timeout = await this.setAbortTimeout(
+    const timeoutSubscription = this.setAbortTimeout(
       abortController,
       params.authenticatorSelection?.userVerification,
       params.timeout,
@@ -228,10 +228,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       };
     }
 
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.fido2ClientAbortTimeout,
-      timeoutId: timeout,
-    });
+    timeoutSubscription?.unsubscribe();
 
     return {
       credentialId: Fido2Utils.bufferToString(makeCredentialResult.credentialId),
@@ -292,7 +289,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
 
-    const timeout = await this.setAbortTimeout(
+    const timeoutSubscription = this.setAbortTimeout(
       abortController,
       params.userVerification,
       params.timeout,
@@ -333,10 +330,8 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.fido2ClientAbortTimeout,
-      timeoutId: timeout,
-    });
+
+    timeoutSubscription?.unsubscribe();
 
     return {
       authenticatorData: Fido2Utils.bufferToString(getAssertionResult.authenticatorData),
@@ -350,11 +345,11 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     };
   }
 
-  private setAbortTimeout = async (
+  private setAbortTimeout = (
     abortController: AbortController,
     userVerification?: UserVerification,
     timeout?: number,
-  ): Promise<number | NodeJS.Timeout> => {
+  ): Subscription => {
     let clampedTimeout: number;
 
     const { WITH_VERIFICATION, NO_VERIFICATION } = this.TIMEOUTS;
@@ -367,7 +362,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     this.timeoutAbortController = abortController;
-    return await this.taskSchedulerService.setTimeout(
+    return this.taskSchedulerService.setTimeout(
       ScheduledTaskNames.fido2ClientAbortTimeout,
       clampedTimeout,
     );

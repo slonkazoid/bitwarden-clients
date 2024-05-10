@@ -1,7 +1,6 @@
-import { firstValueFrom, map, Observable } from "rxjs";
+import { firstValueFrom, map, Observable, Subscription } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { TaskIdentifier } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import {
@@ -51,25 +50,30 @@ export class BrowserTaskSchedulerServiceImplementation
    * @param taskName - The name of the task, used in defining the alarm.
    * @param delayInMs - The delay in milliseconds.
    */
-  async setTimeout(
-    taskName: ScheduledTaskName,
-    delayInMs: number,
-  ): Promise<number | NodeJS.Timeout> {
+  setTimeout(taskName: ScheduledTaskName, delayInMs: number): Subscription {
+    let timeoutHandle: number | NodeJS.Timeout;
     this.validateRegisteredTask(taskName);
 
     const delayInMinutes = delayInMs / 1000 / 60;
-    await this.scheduleAlarm(taskName, {
+    void this.scheduleAlarm(taskName, {
       delayInMinutes: this.getUpperBoundDelayInMinutes(delayInMinutes),
     });
 
     // If the delay is less than a minute, we want to attempt to trigger the task through a setTimeout.
     // The alarm previously scheduled will be used as a backup in case the setTimeout fails.
     if (delayInMinutes < this.getUpperBoundDelayInMinutes(delayInMinutes)) {
-      return globalThis.setTimeout(async () => {
+      timeoutHandle = globalThis.setTimeout(async () => {
         await this.clearScheduledAlarm(taskName);
         await this.triggerTask(taskName);
       }, delayInMs);
     }
+
+    return new Subscription(() => {
+      if (timeoutHandle) {
+        globalThis.clearTimeout(timeoutHandle);
+      }
+      void this.clearScheduledAlarm(taskName);
+    });
   }
 
   /**
@@ -81,11 +85,11 @@ export class BrowserTaskSchedulerServiceImplementation
    * @param intervalInMs - The interval in milliseconds.
    * @param initialDelayInMs - The initial delay in milliseconds.
    */
-  async setInterval(
+  setInterval(
     taskName: ScheduledTaskName,
     intervalInMs: number,
     initialDelayInMs?: number,
-  ): Promise<number | NodeJS.Timeout> {
+  ): Subscription {
     this.validateRegisteredTask(taskName);
 
     const intervalInMinutes = intervalInMs / 1000 / 60;
@@ -97,10 +101,12 @@ export class BrowserTaskSchedulerServiceImplementation
       return this.setupSteppedIntervalAlarms(taskName, intervalInMs);
     }
 
-    await this.scheduleAlarm(taskName, {
+    void this.scheduleAlarm(taskName, {
       periodInMinutes: this.getUpperBoundDelayInMinutes(intervalInMinutes),
       delayInMinutes: this.getUpperBoundDelayInMinutes(initialDelayInMinutes),
     });
+
+    return new Subscription(() => this.clearScheduledAlarm(taskName));
   }
 
   /**
@@ -112,61 +118,50 @@ export class BrowserTaskSchedulerServiceImplementation
    * @param taskName - The name of the task
    * @param intervalInMs - The interval in milliseconds.
    */
-  private async setupSteppedIntervalAlarms(
+  private setupSteppedIntervalAlarms(
     taskName: ScheduledTaskName,
     intervalInMs: number,
-  ): Promise<number | NodeJS.Timeout> {
+  ): Subscription {
     const alarmMinDelayInMinutes = this.getAlarmMinDelayInMinutes();
     const intervalInMinutes = intervalInMs / 1000 / 60;
     const numberOfAlarmsToCreate = Math.ceil(Math.ceil(1 / intervalInMinutes) / 2) + 1;
     const steppedAlarmPeriodInMinutes = alarmMinDelayInMinutes + intervalInMinutes;
+    const steppedAlarmNames: string[] = [];
     for (let alarmIndex = 0; alarmIndex < numberOfAlarmsToCreate; alarmIndex++) {
       const steppedAlarmName = `${taskName}__${alarmIndex}`;
+      steppedAlarmNames.push(steppedAlarmName);
 
       const delayInMinutes = this.getUpperBoundDelayInMinutes(
         alarmMinDelayInMinutes + intervalInMinutes * alarmIndex,
       );
 
-      await this.clearScheduledAlarm(steppedAlarmName);
-
-      await this.scheduleAlarm(steppedAlarmName, {
-        periodInMinutes: steppedAlarmPeriodInMinutes,
-        delayInMinutes,
+      void this.clearScheduledAlarm(steppedAlarmName).then(() => {
+        void this.scheduleAlarm(steppedAlarmName, {
+          periodInMinutes: steppedAlarmPeriodInMinutes,
+          delayInMinutes,
+        });
       });
     }
 
     let elapsedMs = 0;
-    const intervalId: number | NodeJS.Timeout = globalThis.setInterval(async () => {
+    const intervalHandle: number | NodeJS.Timeout = globalThis.setInterval(async () => {
       elapsedMs += intervalInMs;
       const elapsedMinutes = elapsedMs / 1000 / 60;
 
       if (elapsedMinutes >= alarmMinDelayInMinutes) {
-        globalThis.clearInterval(intervalId);
+        globalThis.clearInterval(intervalHandle);
         return;
       }
 
       await this.triggerTask(taskName, intervalInMinutes);
     }, intervalInMs);
 
-    return intervalId;
-  }
-
-  /**
-   * Clears a scheduled task by its task identifier. If the task identifier
-   * contains a task name, it will clear the browser extension alarm with that
-   * name.
-   *
-   * @param taskIdentifier - The task identifier containing the task name.
-   */
-  async clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void> {
-    void super.clearScheduledTask(taskIdentifier);
-
-    const { taskName } = taskIdentifier;
-    if (!taskName) {
-      return;
-    }
-
-    await this.clearScheduledAlarm(taskName);
+    return new Subscription(() => {
+      if (intervalHandle) {
+        globalThis.clearInterval(intervalHandle);
+      }
+      steppedAlarmNames.forEach((alarmName) => void this.clearScheduledAlarm(alarmName));
+    });
   }
 
   /**

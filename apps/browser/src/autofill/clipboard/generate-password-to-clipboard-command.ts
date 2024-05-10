@@ -1,4 +1,4 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Subscription } from "rxjs";
 
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
@@ -10,7 +10,7 @@ import { ClearClipboard } from "./clear-clipboard";
 import { copyToClipboard } from "./copy-to-clipboard-command";
 
 export class GeneratePasswordToClipboardCommand {
-  private clearClipboardTimeout: number | NodeJS.Timeout;
+  private clearClipboardSubscription: Subscription;
 
   constructor(
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
@@ -39,11 +39,8 @@ export class GeneratePasswordToClipboardCommand {
     }
 
     const timeoutInMs = clearClipboardDelayInSeconds * 1000;
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.generatePasswordClearClipboardTimeout,
-      timeoutId: this.clearClipboardTimeout,
-    });
-    await this.taskSchedulerService.setTimeout(
+    this.clearClipboardSubscription?.unsubscribe();
+    this.clearClipboardSubscription = this.taskSchedulerService.setTimeout(
       ScheduledTaskNames.generatePasswordClearClipboardTimeout,
       timeoutInMs,
     );

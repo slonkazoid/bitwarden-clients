@@ -5,6 +5,7 @@ import {
   map,
   Observable,
   shareReplay,
+  Subscription,
 } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -72,7 +73,7 @@ import {
 const sessionTimeoutLength = 2 * 60 * 1000; // 2 minutes
 
 export class LoginStrategyService implements LoginStrategyServiceAbstraction {
-  private sessionTimeout: number | NodeJS.Timeout;
+  private sessionTimeoutSubscription: Subscription;
   private currentAuthnTypeState: GlobalState<AuthenticationType | null>;
   private loginStrategyCacheState: GlobalState<CacheData | null>;
   private loginStrategyCacheExpirationState: GlobalState<Date | null>;
@@ -319,7 +320,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     await this.loginStrategyCacheExpirationState.update(
       (_) => new Date(Date.now() + sessionTimeoutLength),
     );
-    this.sessionTimeout = await this.taskSchedulerService.setTimeout(
+    this.sessionTimeoutSubscription = this.taskSchedulerService.setTimeout(
       ScheduledTaskNames.loginStrategySessionTimeout,
       sessionTimeoutLength,
     );
@@ -327,10 +328,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
 
   private async clearSessionTimeout(): Promise<void> {
     await this.loginStrategyCacheExpirationState.update((_) => null);
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.loginStrategySessionTimeout,
-      timeoutId: this.sessionTimeout,
-    });
+    this.sessionTimeoutSubscription?.unsubscribe();
   }
 
   private async isSessionValid(): Promise<boolean> {

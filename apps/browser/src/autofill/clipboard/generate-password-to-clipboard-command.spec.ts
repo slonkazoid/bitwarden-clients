@@ -1,5 +1,5 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Subscription } from "rxjs";
 
 import { AutofillSettingsService } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
@@ -11,9 +11,13 @@ import { BrowserTaskSchedulerService } from "../../platform/services/abstraction
 import { ClearClipboard } from "./clear-clipboard";
 import { GeneratePasswordToClipboardCommand } from "./generate-password-to-clipboard-command";
 
-jest.mock("rxjs", () => ({
-  firstValueFrom: jest.fn(),
-}));
+jest.mock("rxjs", () => {
+  const actual = jest.requireActual("rxjs");
+  return {
+    ...actual,
+    firstValueFrom: jest.fn(),
+  };
+});
 
 describe("GeneratePasswordToClipboardCommand", () => {
   let passwordGenerationService: MockProxy<PasswordGenerationServiceAbstraction>;
@@ -26,13 +30,15 @@ describe("GeneratePasswordToClipboardCommand", () => {
     passwordGenerationService = mock<PasswordGenerationServiceAbstraction>();
     autofillSettingsService = mock<AutofillSettingsService>();
     browserTaskSchedulerService = mock<BrowserTaskSchedulerService>({
-      setTimeout: jest.fn(async (taskName, timeoutInMs) =>
-        setTimeout(() => {
+      setTimeout: jest.fn((taskName, timeoutInMs) => {
+        const timeoutHandle = setTimeout(() => {
           if (taskName === ScheduledTaskNames.generatePasswordClearClipboardTimeout) {
             void ClearClipboard.run();
           }
-        }, timeoutInMs),
-      ),
+        }, timeoutInMs);
+
+        return new Subscription(() => clearTimeout(timeoutHandle));
+      }),
     });
 
     passwordGenerationService.getOptions.mockResolvedValue([{ length: 8 }, {} as any]);

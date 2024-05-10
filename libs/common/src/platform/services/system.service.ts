@@ -1,4 +1,4 @@
-import { firstValueFrom, map, timeout } from "rxjs";
+import { firstValueFrom, map, Subscription, timeout } from "rxjs";
 
 import { PinServiceAbstraction } from "../../../../auth/src/common/abstractions";
 import { VaultTimeoutSettingsService } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
@@ -19,7 +19,7 @@ import { Utils } from "../misc/utils";
 
 export class SystemService implements SystemServiceAbstraction {
   private reloadInterval: any = null;
-  private clearClipboardTimeout: any = null;
+  private clearClipboardTimeoutSubscription: Subscription;
   private clearClipboardTimeoutFunction: () => Promise<any> = null;
 
   constructor(
@@ -121,10 +121,7 @@ export class SystemService implements SystemServiceAbstraction {
   }
 
   async clearClipboard(clipboardValue: string, timeoutMs: number = null): Promise<void> {
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.systemClearClipboardTimeout,
-      timeoutId: this.clearClipboardTimeout,
-    });
+    this.clearClipboardTimeoutSubscription?.unsubscribe();
 
     if (Utils.isNullOrWhitespace(clipboardValue)) {
       return;
@@ -149,7 +146,7 @@ export class SystemService implements SystemServiceAbstraction {
       }
     };
 
-    this.clearClipboardTimeout = this.taskSchedulerService.setTimeout(
+    this.clearClipboardTimeoutSubscription = this.taskSchedulerService.setTimeout(
       ScheduledTaskNames.systemClearClipboardTimeout,
       taskTimeoutInMs,
     );

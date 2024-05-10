@@ -28,17 +28,17 @@ describe("DefaultTaskSchedulerService", () => {
   });
 
   it("triggers an error when setting a timeout for a task that is not registered", async () => {
-    await expect(
+    expect(() =>
       taskSchedulerService.setTimeout(ScheduledTaskNames.notificationsReconnectTimeout, 1000),
-    ).rejects.toThrowError(
+    ).toThrow(
       `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
     );
   });
 
   it("triggers an error when setting an interval for a task that is not registered", async () => {
-    await expect(
+    expect(() =>
       taskSchedulerService.setInterval(ScheduledTaskNames.notificationsReconnectTimeout, 1000),
-    ).rejects.toThrowError(
+    ).toThrow(
       `Task handler for ${ScheduledTaskNames.notificationsReconnectTimeout} not registered. Unable to schedule task.`,
     );
   });
@@ -57,8 +57,8 @@ describe("DefaultTaskSchedulerService", () => {
     ).toBeDefined();
   });
 
-  it("sets a timeout and returns the timeout id", async () => {
-    const timeoutId = await taskSchedulerService.setTimeout(
+  it("sets a timeout and returns the timeout id", () => {
+    const timeoutId = taskSchedulerService.setTimeout(
       ScheduledTaskNames.loginStrategySessionTimeout,
       delayInMs,
     );
@@ -71,8 +71,8 @@ describe("DefaultTaskSchedulerService", () => {
     expect(callback).toHaveBeenCalled();
   });
 
-  it("sets an interval timeout and results the interval id", async () => {
-    const intervalId = await taskSchedulerService.setInterval(
+  it("sets an interval timeout and results the interval id", () => {
+    const intervalId = taskSchedulerService.setInterval(
       ScheduledTaskNames.loginStrategySessionTimeout,
       intervalInMs,
     );
@@ -89,32 +89,32 @@ describe("DefaultTaskSchedulerService", () => {
     expect(callback).toHaveBeenCalledTimes(2);
   });
 
-  it("clears scheduled tasks using the timeout id", async () => {
-    const timeoutId = await taskSchedulerService.setTimeout(
+  it("clears scheduled tasks using the timeout id", () => {
+    const timeoutHandle = taskSchedulerService.setTimeout(
       ScheduledTaskNames.loginStrategySessionTimeout,
       delayInMs,
     );
 
-    expect(timeoutId).toBeDefined();
+    expect(timeoutHandle).toBeDefined();
     expect(callback).not.toHaveBeenCalled();
 
-    await taskSchedulerService.clearScheduledTask({ timeoutId });
+    timeoutHandle.unsubscribe();
 
     jest.advanceTimersByTime(delayInMs);
 
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it("clears scheduled tasks using the interval id", async () => {
-    const intervalId = await taskSchedulerService.setInterval(
+  it("clears scheduled tasks using the interval id", () => {
+    const intervalHandle = taskSchedulerService.setInterval(
       ScheduledTaskNames.loginStrategySessionTimeout,
       intervalInMs,
     );
 
-    expect(intervalId).toBeDefined();
+    expect(intervalHandle).toBeDefined();
     expect(callback).not.toHaveBeenCalled();
 
-    await taskSchedulerService.clearScheduledTask({ intervalId });
+    intervalHandle.unsubscribe();
 
     jest.advanceTimersByTime(intervalInMs);
 

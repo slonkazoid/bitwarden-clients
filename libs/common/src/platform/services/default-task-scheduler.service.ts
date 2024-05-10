@@ -1,5 +1,7 @@
+import { Subscription } from "rxjs";
+
 import { LogService } from "../abstractions/log.service";
-import { TaskIdentifier, TaskSchedulerService } from "../abstractions/task-scheduler.service";
+import { TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
 
 export class DefaultTaskSchedulerService extends TaskSchedulerService {
@@ -15,13 +17,11 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
    * @param taskName - The name of the task. Unused in the base implementation.
    * @param delayInMs - The delay in milliseconds.
    */
-  async setTimeout(
-    taskName: ScheduledTaskName,
-    delayInMs: number,
-  ): Promise<number | NodeJS.Timeout> {
+  setTimeout(taskName: ScheduledTaskName, delayInMs: number): Subscription {
     this.validateRegisteredTask(taskName);
 
-    return globalThis.setTimeout(() => this.triggerTask(taskName), delayInMs);
+    const timeoutHandle = globalThis.setTimeout(() => this.triggerTask(taskName), delayInMs);
+    return new Subscription(() => globalThis.clearTimeout(timeoutHandle));
   }
 
   /**
@@ -31,29 +31,16 @@ export class DefaultTaskSchedulerService extends TaskSchedulerService {
    * @param intervalInMs - The interval in milliseconds.
    * @param _initialDelayInMs - The initial delay in milliseconds. Unused in the base implementation.
    */
-  async setInterval(
+  setInterval(
     taskName: ScheduledTaskName,
     intervalInMs: number,
     _initialDelayInMs?: number,
-  ): Promise<number | NodeJS.Timeout> {
+  ): Subscription {
     this.validateRegisteredTask(taskName);
 
-    return globalThis.setInterval(() => this.triggerTask(taskName), intervalInMs);
-  }
+    const intervalHandle = globalThis.setInterval(() => this.triggerTask(taskName), intervalInMs);
 
-  /**
-   * Clears a scheduled task.
-   *
-   * @param taskIdentifier - The task identifier containing the timeout or interval id.
-   */
-  async clearScheduledTask(taskIdentifier: TaskIdentifier): Promise<void> {
-    if (taskIdentifier.timeoutId) {
-      globalThis.clearTimeout(taskIdentifier.timeoutId);
-    }
-
-    if (taskIdentifier.intervalId) {
-      globalThis.clearInterval(taskIdentifier.intervalId);
-    }
+    return new Subscription(() => globalThis.clearInterval(intervalHandle));
   }
 
   /**

@@ -1,6 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import * as signalRMsgPack from "@microsoft/signalr-protocol-msgpack";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Subscription } from "rxjs";
 
 import { AuthRequestServiceAbstraction } from "../../../auth/src/common/abstractions";
 import { ApiService } from "../abstractions/api.service";
@@ -30,7 +30,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   private connected = false;
   private inited = false;
   private inactive = false;
-  private reconnectTimer: number | NodeJS.Timeout = null;
+  private reconnectTimerSubscription: Subscription;
   private isSyncingOnReconnect = true;
 
   constructor(
@@ -225,10 +225,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   }
 
   private async reconnect(sync: boolean) {
-    await this.taskSchedulerService.clearScheduledTask({
-      taskName: ScheduledTaskNames.notificationsReconnectTimeout,
-      timeoutId: this.reconnectTimer,
-    });
+    this.reconnectTimerSubscription?.unsubscribe();
 
     if (this.connected || !this.inited || this.inactive) {
       return;
@@ -250,7 +247,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
 
     if (!this.connected) {
       this.isSyncingOnReconnect = sync;
-      this.reconnectTimer = await this.taskSchedulerService.setTimeout(
+      this.reconnectTimerSubscription = this.taskSchedulerService.setTimeout(
         ScheduledTaskNames.notificationsReconnectTimeout,
         this.random(120000, 300000),
       );
