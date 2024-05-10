@@ -64,7 +64,7 @@ export class BrowserTaskSchedulerServiceImplementation
 
     // If the delay is less than a minute, we want to attempt to trigger the task through a setTimeout.
     // The alarm previously scheduled will be used as a backup in case the setTimeout fails.
-    if (delayInMinutes < 1) {
+    if (delayInMinutes < this.getUpperBoundDelayInMinutes(delayInMinutes)) {
       return globalThis.setTimeout(async () => {
         await this.clearScheduledAlarm(taskName);
         await this.triggerTask(taskName);
@@ -93,7 +93,7 @@ export class BrowserTaskSchedulerServiceImplementation
       ? initialDelayInMs / 1000 / 60
       : intervalInMinutes;
 
-    if (intervalInMinutes < 1) {
+    if (intervalInMinutes < this.getUpperBoundDelayInMinutes(intervalInMinutes)) {
       return this.setupSteppedIntervalAlarms(taskName, intervalInMs);
     }
 
