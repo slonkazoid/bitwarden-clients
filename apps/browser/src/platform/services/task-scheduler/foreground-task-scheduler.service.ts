@@ -19,7 +19,6 @@ export class ForegroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
     super(logService, stateProvider);
 
     this.port = chrome.runtime.connect({ name: BrowserTaskSchedulerPortName });
-    this.port.onMessage.addListener(this.handlePortMessage);
   }
 
   /**
@@ -60,25 +59,6 @@ export class ForegroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
 
     return super.setInterval(taskName, intervalInMs, initialDelayInMs);
   }
-
-  /**
-   * Handles port messages from the background task scheduler.
-   *
-   * @param message - The message that indicates we should clear an alarm.
-   * @param port - The port that the message was received on.
-   */
-  private handlePortMessage = (
-    message: BrowserTaskSchedulerPortMessage,
-    port: chrome.runtime.Port,
-  ) => {
-    if (port.name !== BrowserTaskSchedulerPortName) {
-      return;
-    }
-
-    if (message.action === BrowserTaskSchedulerPortActions.clearAlarm) {
-      void super.clearScheduledAlarm(message.alarmName);
-    }
-  };
 
   /**
    * Sends a message to the background task scheduler.

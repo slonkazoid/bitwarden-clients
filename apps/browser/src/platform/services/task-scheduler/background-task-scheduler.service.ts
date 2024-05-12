@@ -20,21 +20,6 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
   }
 
   /**
-   * Clears a scheduled alarm and sends a message to all ports to clear the alarm.
-   *
-   * @param alarmName - The name of the alarm.
-   */
-  async clearScheduledAlarm(alarmName: string): Promise<void> {
-    void super.clearScheduledAlarm(alarmName);
-    const taskName = this.getTaskFromAlarmName(alarmName);
-    this.sendMessageToPorts({
-      action: BrowserTaskSchedulerPortActions.clearAlarm,
-      taskName,
-      alarmName,
-    });
-  }
-
-  /**
    * Handles a port connection made from the foreground task scheduler.
    *
    * @param port - The port that was connected.
@@ -84,13 +69,4 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
       return;
     }
   };
-
-  /**
-   * Sends a message to all ports.
-   *
-   * @param message - The message to send.
-   */
-  private sendMessageToPorts(message: BrowserTaskSchedulerPortMessage) {
-    this.ports.forEach((port) => port.postMessage(message));
-  }
 }
