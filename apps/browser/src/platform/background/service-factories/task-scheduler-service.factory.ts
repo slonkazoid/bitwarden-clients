@@ -1,4 +1,4 @@
-import { BrowserTaskSchedulerServiceImplementation } from "../../services/browser-task-scheduler.service";
+import { BrowserTaskSchedulerServiceImplementation } from "../../services/task-scheduler/browser-task-scheduler.service";
 
 import { CachedServices, factory, FactoryOptions } from "./factory-options";
 import { logServiceFactory, LogServiceInitOptions } from "./log-service.factory";

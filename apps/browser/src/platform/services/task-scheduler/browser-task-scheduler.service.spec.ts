@@ -5,12 +5,12 @@ import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-t
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
 
-import { flushPromises, triggerOnAlarmEvent } from "../../autofill/spec/testing-utils";
-
+import { flushPromises, triggerOnAlarmEvent } from "../../../autofill/spec/testing-utils";
 import {
   ActiveAlarm,
   BrowserTaskSchedulerService,
-} from "./abstractions/browser-task-scheduler.service";
+} from "../abstractions/browser-task-scheduler.service";
+
 import { BrowserTaskSchedulerServiceImplementation } from "./browser-task-scheduler.service";
 
 jest.mock("rxjs", () => {

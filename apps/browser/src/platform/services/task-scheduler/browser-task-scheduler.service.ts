@@ -10,12 +10,11 @@ import {
   StateProvider,
 } from "@bitwarden/common/platform/state";
 
-import { BrowserApi } from "../browser/browser-api";
-
+import { BrowserApi } from "../../browser/browser-api";
 import {
   ActiveAlarm,
   BrowserTaskSchedulerService,
-} from "./abstractions/browser-task-scheduler.service";
+} from "../abstractions/browser-task-scheduler.service";
 
 const ACTIVE_ALARMS = new KeyDefinition(TASK_SCHEDULER_DISK, "activeAlarms", {
   deserializer: (value: ActiveAlarm[]) => value ?? [],
@@ -265,7 +264,7 @@ export class BrowserTaskSchedulerServiceImplementation
    *
    * @param alarmName - The name of the alarm to clear.
    */
-  private async clearScheduledAlarm(alarmName: string): Promise<void> {
+  async clearScheduledAlarm(alarmName: string): Promise<void> {
     const wasCleared = await this.clearAlarm(alarmName);
     if (wasCleared) {
       await this.deleteActiveAlarm(alarmName);
@@ -322,7 +321,7 @@ export class BrowserTaskSchedulerServiceImplementation
    *
    * @param alarmName - The alarm name to parse.
    */
-  private getTaskFromAlarmName(alarmName: string): ScheduledTaskName {
+  protected getTaskFromAlarmName(alarmName: string): ScheduledTaskName {
     return alarmName.split("__")[0] as ScheduledTaskName;
   }
 

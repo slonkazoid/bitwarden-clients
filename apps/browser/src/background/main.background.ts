@@ -221,12 +221,13 @@ import BrowserLocalStorageService from "../platform/services/browser-local-stora
 import BrowserMemoryStorageService from "../platform/services/browser-memory-storage.service";
 import { BrowserMultithreadEncryptServiceImplementation } from "../platform/services/browser-multithread-encrypt.service.implementation";
 import { BrowserScriptInjectorService } from "../platform/services/browser-script-injector.service";
-import { BrowserTaskSchedulerServiceImplementation } from "../platform/services/browser-task-scheduler.service";
 import { DefaultBrowserStateService } from "../platform/services/default-browser-state.service";
 import I18nService from "../platform/services/i18n.service";
 import { LocalBackedSessionStorageService } from "../platform/services/local-backed-session-storage.service";
 import { BackgroundPlatformUtilsService } from "../platform/services/platform-utils/background-platform-utils.service";
 import { BrowserPlatformUtilsService } from "../platform/services/platform-utils/browser-platform-utils.service";
+import { BackgroundTaskSchedulerService } from "../platform/services/task-scheduler/background-task-scheduler.service";
+import { ForegroundTaskSchedulerService } from "../platform/services/task-scheduler/foreground-task-scheduler.service";
 import { BackgroundDerivedStateProvider } from "../platform/state/background-derived-state.provider";
 import { BackgroundMemoryStorageService } from "../platform/storage/background-memory-storage.service";
 import { BrowserStorageServiceProvider } from "../platform/storage/browser-storage-service.provider";
@@ -507,10 +508,9 @@ export default class MainBackground {
       this.derivedStateProvider,
     );
 
-    this.taskSchedulerService = new BrowserTaskSchedulerServiceImplementation(
-      this.logService,
-      this.stateProvider,
-    );
+    this.taskSchedulerService = this.popupOnlyContext
+      ? new ForegroundTaskSchedulerService(this.logService, this.stateProvider)
+      : new BackgroundTaskSchedulerService(this.logService, this.stateProvider);
     this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.scheduleNextSyncInterval, () =>
       this.fullSync(),
     );

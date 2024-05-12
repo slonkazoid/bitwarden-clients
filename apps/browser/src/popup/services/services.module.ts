@@ -110,10 +110,10 @@ import { BrowserCryptoService } from "../../platform/services/browser-crypto.ser
 import { BrowserEnvironmentService } from "../../platform/services/browser-environment.service";
 import BrowserLocalStorageService from "../../platform/services/browser-local-storage.service";
 import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
-import { BrowserTaskSchedulerServiceImplementation } from "../../platform/services/browser-task-scheduler.service";
 import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
 import I18nService from "../../platform/services/i18n.service";
 import { ForegroundPlatformUtilsService } from "../../platform/services/platform-utils/foreground-platform-utils.service";
+import { ForegroundTaskSchedulerService } from "../../platform/services/task-scheduler/foreground-task-scheduler.service";
 import { ForegroundDerivedStateProvider } from "../../platform/state/foreground-derived-state.provider";
 import { BrowserStorageServiceProvider } from "../../platform/storage/browser-storage-service.provider";
 import { ForegroundMemoryStorageService } from "../../platform/storage/foreground-memory-storage.service";
@@ -611,11 +611,12 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: TaskSchedulerService,
-    useExisting: BrowserTaskSchedulerServiceImplementation,
+    useExisting: ForegroundTaskSchedulerService,
   }),
   safeProvider({
-    provide: BrowserTaskSchedulerServiceImplementation,
-    deps: [LogService, StateProvider],
+    provide: ForegroundTaskSchedulerService,
+    useFactory: getBgService<ForegroundTaskSchedulerService>("taskSchedulerService"),
+    deps: [],
   }),
 ];
 
