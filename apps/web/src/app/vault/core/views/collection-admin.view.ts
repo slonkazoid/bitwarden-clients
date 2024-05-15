@@ -62,19 +62,23 @@ export class CollectionAdminView extends CollectionView {
   }
 
   /**
-   * Whether the current user can edit the collection, including user and group access
+   * Returns true if the user can edit a collection (including user and group access) from the Admin Console.
    */
   override canEdit(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
-    return org?.flexibleCollections
-      ? org?.canEditAnyCollection(flexibleCollectionsV1Enabled) || this.manage
-      : org?.canEditAnyCollection(flexibleCollectionsV1Enabled) ||
-          (org?.canEditAssignedCollections && this.assigned);
+    return (
+      org?.canEditAnyCollection(flexibleCollectionsV1Enabled) ||
+      super.canEdit(org, flexibleCollectionsV1Enabled)
+    );
   }
 
-  override canDelete(org: Organization): boolean {
-    return org?.flexibleCollections
-      ? org?.canDeleteAnyCollection || (!org?.limitCollectionCreationDeletion && this.manage)
-      : org?.canDeleteAnyCollection || (org?.canDeleteAssignedCollections && this.assigned);
+  /**
+   * Returns true if the user can delete a collection from the Admin Console.
+   */
+  override canDelete(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
+    return (
+      org?.canDeleteAnyCollection(flexibleCollectionsV1Enabled) ||
+      super.canDelete(org, flexibleCollectionsV1Enabled)
+    );
   }
 
   /**
@@ -94,7 +98,14 @@ export class CollectionAdminView extends CollectionView {
   /**
    * Returns true if the user can view collection info and access in a read-only state from the Admin Console
    */
-  override canViewCollectionInfo(org: Organization | undefined): boolean {
+  override canViewCollectionInfo(
+    org: Organization | undefined,
+    flexibleCollectionsV1Enabled: boolean,
+  ): boolean {
+    if (!flexibleCollectionsV1Enabled) {
+      return false;
+    }
+
     if (this.isUnassignedCollection) {
       return false;
     }
