@@ -236,4 +236,76 @@ export class VaultItemsComponent {
         .map((item) => item.cipher),
     });
   }
+
+  protected showAssignToCollections(): boolean {
+    if (this.selection.selected.length === 0) {
+      return true;
+    }
+
+    // Check for personal items
+    const hasPersonalItems = this.hasPersonalItems();
+
+    const uniqueOrgIds = this.getUniqueOrganizationIds();
+
+    // Return false if items are from different organizations
+    if (uniqueOrgIds.size > 1) {
+      return false;
+    }
+
+    if (uniqueOrgIds.size === 0) {
+      return hasPersonalItems;
+    }
+
+    const organization = this.allOrganizations.find(
+      (o) => o.id === uniqueOrgIds.values().next().value,
+    );
+
+    if (organization.canEditAllCiphers(this.flexibleCollectionsV1Enabled, false)) {
+      return true;
+    }
+
+    return this.allCiphersHaveEditAccess() && hasPersonalItems;
+  }
+
+  protected showDelete(): boolean {
+    if (this.selection.selected.length === 0) {
+      return true;
+    }
+
+    // Check for personal items
+    const hasPersonalItems = this.hasPersonalItems();
+    const uniqueOrgIds = this.getUniqueOrganizationIds();
+
+    if (uniqueOrgIds.size === 0) {
+      return hasPersonalItems;
+    }
+
+    const organizations = Array.from(uniqueOrgIds).map((orgId) =>
+      this.allOrganizations.find((o) => o.id === orgId),
+    );
+
+    if (
+      organizations.every((org) => org?.canEditAllCiphers(this.flexibleCollectionsV1Enabled, false))
+    ) {
+      return true;
+    }
+
+    return this.allCiphersHaveEditAccess();
+  }
+
+  private hasPersonalItems(): boolean {
+    return this.selection.selected.some(({ cipher }) => cipher?.organizationId === null);
+  }
+
+  private allCiphersHaveEditAccess(): boolean {
+    return this.selection.selected.every(({ cipher }) => cipher?.edit);
+  }
+
+  private getUniqueOrganizationIds(): Set<string> {
+    return new Set(
+      this.selection.selected
+        .map(({ cipher }) => cipher?.organizationId)
+        .filter((organizationId) => organizationId !== null),
+    );
+  }
 }

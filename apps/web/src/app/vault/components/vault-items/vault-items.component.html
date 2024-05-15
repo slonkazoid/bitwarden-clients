@@ -81,11 +81,16 @@
               <i class="bwi bwi-fw bwi-folder" aria-hidden="true"></i>
               {{ "addToFolder" | i18n }}
             </button>
-            <button type="button" bitMenuItem>
+            <button
+              *ngIf="showAssignToCollections()"
+              type="button"
+              (click)="assignToCollections()"
+              bitMenuItem
+            >
               <i class="bwi bwi-fw bwi-collection" aria-hidden="true"></i>
               {{ "assignToCollections" | i18n }}
             </button>
-            <button type="button" bitMenuItem>
+            <button *ngIf="showDelete()" type="button" bitMenuItem>
               <span class="tw-text-danger">
                 <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
                 {{ (showBulkTrashOptions ? "permanentlyDeleteSelected" : "delete") | i18n }}
