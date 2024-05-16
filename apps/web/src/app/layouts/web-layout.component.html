@@ -1,0 +1,14 @@
+<bit-layout [variant]="variant">
+  <nav slot="sidebar" class="tw-flex tw-flex-col tw-h-full">
+    <ng-content select="[slot=sidebar]"></ng-content>
+
+    <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
+    <app-toggle-width></app-toggle-width>
+  </nav>
+
+  <app-payment-method-warnings
+    *ngIf="showPaymentMethodWarningBanners$ | async"
+  ></app-payment-method-warnings>
+
+  <ng-content></ng-content>
+</bit-layout>

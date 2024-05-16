@@ -8,13 +8,10 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
 import { Provider } from "@bitwarden/common/admin-console/models/domain/provider";
 import { canAccessBilling } from "@bitwarden/common/billing/abstractions/provider-billing.service.abstraction";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
-import { IconModule, LayoutComponent, NavigationModule } from "@bitwarden/components";
+import { IconModule, NavigationModule } from "@bitwarden/components";
 import { ProviderPortalLogo } from "@bitwarden/web-vault/app/admin-console/icons/provider-portal-logo";
-import { PaymentMethodWarningsModule } from "@bitwarden/web-vault/app/billing/shared";
-import { ProductSwitcherModule } from "@bitwarden/web-vault/app/layouts/product-switcher/product-switcher.module";
-import { ToggleWidthComponent } from "@bitwarden/web-vault/app/layouts/toggle-width.component";
+import { WebLayoutComponent } from "@bitwarden/web-vault/app/layouts/web-layout.component";
 
 @Component({
   selector: "providers-layout",
@@ -24,12 +21,9 @@ import { ToggleWidthComponent } from "@bitwarden/web-vault/app/layouts/toggle-wi
     CommonModule,
     RouterModule,
     JslibModule,
-    LayoutComponent,
+    WebLayoutComponent,
     IconModule,
     NavigationModule,
-    PaymentMethodWarningsModule,
-    ToggleWidthComponent,
-    ProductSwitcherModule,
   ],
 })
 export class ProvidersLayoutComponent implements OnInit, OnDestroy {
@@ -38,10 +32,6 @@ export class ProvidersLayoutComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   protected provider$: Observable<Provider>;
   protected canAccessBilling$: Observable<boolean>;
-
-  protected showPaymentMethodWarningBanners$ = this.configService.getFeatureFlag$(
-    FeatureFlag.ShowPaymentMethodWarningBanners,
-  );
 
   constructor(
     private route: ActivatedRoute,

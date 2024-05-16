@@ -1,9 +1,5 @@
-<bit-layout variant="secondary">
-  <nav
-    slot="sidebar"
-    *ngIf="organization$ | async as organization"
-    class="tw-flex tw-flex-col tw-h-full"
-  >
+<app-layout variant="secondary">
+  <ng-container slot="sidebar" *ngIf="organization$ | async as organization">
     <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'adminConsole' | i18n">
       <bit-icon [icon]="logo"></bit-icon>
     </a>
@@ -109,11 +105,7 @@
         *ngIf="organization.canManageScim"
       ></bit-nav-item>
     </bit-nav-group>
-
-    <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
-
-    <app-toggle-width></app-toggle-width>
-  </nav>
+  </ng-container>
 
   <ng-container *ngIf="organization$ | async as organization">
     <bit-banner
@@ -123,10 +115,7 @@
     >
       {{ "accessingUsingProvider" | i18n: organization.providerName }}
     </bit-banner>
-    <app-payment-method-warnings
-      *ngIf="showPaymentMethodWarningBanners$ | async"
-    ></app-payment-method-warnings>
   </ng-container>
 
   <router-outlet></router-outlet>
-</bit-layout>
+</app-layout>

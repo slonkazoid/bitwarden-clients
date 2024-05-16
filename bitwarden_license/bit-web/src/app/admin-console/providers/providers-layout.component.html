@@ -1,5 +1,5 @@
-<bit-layout variant="secondary">
-  <nav slot="sidebar" *ngIf="provider$ | async as provider" class="tw-flex tw-flex-col tw-h-full">
+<app-layout variant="secondary">
+  <ng-container slot="sidebar" *ngIf="provider$ | async as provider">
     <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'providerPortal' | i18n">
       <bit-icon [icon]="logo"></bit-icon>
     </a>
@@ -40,13 +40,7 @@
       route="settings"
       *ngIf="showSettingsTab(provider)"
     ></bit-nav-item>
+  </ng-container>
 
-    <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
-
-    <app-toggle-width></app-toggle-width>
-  </nav>
-  <app-payment-method-warnings
-    *ngIf="showPaymentMethodWarningBanners$ | async"
-  ></app-payment-method-warnings>
   <router-outlet></router-outlet>
-</bit-layout>
+</app-layout>

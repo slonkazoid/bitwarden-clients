@@ -1,5 +1,5 @@
-<bit-layout>
-  <nav slot="sidebar" class="tw-flex tw-flex-col tw-h-full">
+<app-layout>
+  <ng-container slot="sidebar">
     <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'passwordManager' | i18n">
       <bit-icon [icon]="logo"></bit-icon>
     </a>
@@ -32,13 +32,7 @@
         *ngIf="hasFamilySponsorshipAvailable$ | async"
       ></bit-nav-item>
     </bit-nav-group>
+  </ng-container>
 
-    <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
-
-    <app-toggle-width></app-toggle-width>
-  </nav>
-  <app-payment-method-warnings
-    *ngIf="showPaymentMethodWarningBanners$ | async"
-  ></app-payment-method-warnings>
   <router-outlet></router-outlet>
-</bit-layout>
+</app-layout>
