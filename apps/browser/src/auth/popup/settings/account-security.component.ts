@@ -16,6 +16,7 @@ import {
 } from "rxjs";
 
 import { FingerprintDialogComponent } from "@bitwarden/auth/angular";
+import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -30,6 +31,11 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import {
+  VaultTimeout,
+  VaultTimeoutOption,
+  VaultTimeoutStringType,
+} from "@bitwarden/common/types/vault-timeout.type";
 import { DialogService } from "@bitwarden/components";
 
 import { BiometricErrors, BiometricErrorTypes } from "../../../models/biometricErrors";
@@ -49,7 +55,7 @@ export class AccountSecurityComponent implements OnInit {
   protected readonly VaultTimeoutAction = VaultTimeoutAction;
 
   availableVaultTimeoutActions: VaultTimeoutAction[] = [];
-  vaultTimeoutOptions: any[];
+  vaultTimeoutOptions: VaultTimeoutOption[];
   vaultTimeoutPolicyCallout: Observable<{
     timeout: { hours: number; minutes: number };
     action: VaultTimeoutAction;
@@ -59,7 +65,7 @@ export class AccountSecurityComponent implements OnInit {
   accountSwitcherEnabled = false;
 
   form = this.formBuilder.group({
-    vaultTimeout: [null as number | null],
+    vaultTimeout: [null as VaultTimeout | null],
     vaultTimeoutAction: [VaultTimeoutAction.Lock],
     pin: [null as boolean | null],
     biometric: false,
@@ -71,6 +77,7 @@ export class AccountSecurityComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
+    private pinService: PinServiceAbstraction,
     private policyService: PolicyService,
     private formBuilder: FormBuilder,
     private platformUtilsService: PlatformUtilsService,
@@ -116,22 +123,32 @@ export class AccountSecurityComponent implements OnInit {
       { name: this.i18nService.t("thirtyMinutes"), value: 30 },
       { name: this.i18nService.t("oneHour"), value: 60 },
       { name: this.i18nService.t("fourHours"), value: 240 },
-      // { name: i18nService.t('onIdle'), value: -4 },
-      // { name: i18nService.t('onSleep'), value: -3 },
     ];
 
     if (showOnLocked) {
-      this.vaultTimeoutOptions.push({ name: this.i18nService.t("onLocked"), value: -2 });
+      this.vaultTimeoutOptions.push({
+        name: this.i18nService.t("onLocked"),
+        value: VaultTimeoutStringType.OnLocked,
+      });
     }
 
-    this.vaultTimeoutOptions.push({ name: this.i18nService.t("onRestart"), value: -1 });
-    this.vaultTimeoutOptions.push({ name: this.i18nService.t("never"), value: null });
+    this.vaultTimeoutOptions.push({
+      name: this.i18nService.t("onRestart"),
+      value: VaultTimeoutStringType.OnRestart,
+    });
+    this.vaultTimeoutOptions.push({
+      name: this.i18nService.t("never"),
+      value: VaultTimeoutStringType.Never,
+    });
 
-    let timeout = await this.vaultTimeoutSettingsService.getVaultTimeout();
-    if (timeout === -2 && !showOnLocked) {
-      timeout = -1;
+    const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
+
+    let timeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(activeAccount.id),
+    );
+    if (timeout === VaultTimeoutStringType.OnLocked && !showOnLocked) {
+      timeout = VaultTimeoutStringType.OnRestart;
     }
-    const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
     this.form.controls.vaultTimeout.valueChanges
       .pipe(
@@ -153,12 +170,14 @@ export class AccountSecurityComponent implements OnInit {
       )
       .subscribe();
 
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+
     const initialValues = {
       vaultTimeout: timeout,
       vaultTimeoutAction: await firstValueFrom(
-        this.vaultTimeoutSettingsService.vaultTimeoutAction$(),
+        this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(activeAccount.id),
       ),
-      pin: pinStatus !== "DISABLED",
+      pin: await this.pinService.isPinSet(userId),
       biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
       enableAutoBiometricsPrompt: await firstValueFrom(
         this.biometricStateService.promptAutomatically$,
@@ -200,7 +219,7 @@ export class AccountSecurityComponent implements OnInit {
         switchMap(() =>
           combineLatest([
             this.vaultTimeoutSettingsService.availableVaultTimeoutActions$(),
-            this.vaultTimeoutSettingsService.vaultTimeoutAction$(),
+            this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(activeAccount.id),
           ]),
         ),
         takeUntil(this.destroy$),
@@ -234,8 +253,8 @@ export class AccountSecurityComponent implements OnInit {
       });
   }
 
-  async saveVaultTimeout(previousValue: number, newValue: number) {
-    if (newValue == null) {
+  async saveVaultTimeout(previousValue: VaultTimeout, newValue: VaultTimeout) {
+    if (newValue === VaultTimeoutStringType.Never) {
       const confirmed = await this.dialogService.openSimpleDialog({
         title: { key: "warning" },
         content: { key: "neverLockWarning" },
@@ -259,11 +278,18 @@ export class AccountSecurityComponent implements OnInit {
       return;
     }
 
-    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
-      newValue,
-      await firstValueFrom(this.vaultTimeoutSettingsService.vaultTimeoutAction$()),
+    const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
+
+    const vaultTimeoutAction = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(activeAccount.id),
     );
-    if (newValue == null) {
+
+    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
+      activeAccount.id,
+      newValue,
+      vaultTimeoutAction,
+    );
+    if (newValue === VaultTimeoutStringType.Never) {
       this.messagingService.send("bgReseedStorage");
     }
   }
@@ -293,7 +319,10 @@ export class AccountSecurityComponent implements OnInit {
       return;
     }
 
+    const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
+
     await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
+      activeAccount.id,
       this.form.value.vaultTimeout,
       newValue,
     );

@@ -167,6 +167,11 @@ export class NativeMessagingBackground {
               cancelButtonText: null,
               type: "danger",
             });
+
+            if (this.resolver) {
+              this.resolver(message);
+            }
+
             break;
           case "verifyFingerprint": {
             if (this.sharedSecret == null) {
@@ -356,7 +361,7 @@ export class NativeMessagingBackground {
               const masterKey = new SymmetricCryptoKey(
                 Utils.fromB64ToArray(message.keyB64),
               ) as MasterKey;
-              const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
+              const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(
                 masterKey,
                 encUserKey,
               );

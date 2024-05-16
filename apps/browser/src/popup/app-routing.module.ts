@@ -27,6 +27,8 @@ import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.comp
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
+import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
+import { NotifcationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
@@ -46,7 +48,9 @@ import { PasswordHistoryComponent } from "../vault/popup/components/vault/passwo
 import { ShareComponent } from "../vault/popup/components/vault/share.component";
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
+import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
+import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
 import { FoldersComponent } from "../vault/popup/settings/folders.component";
 import { SyncComponent } from "../vault/popup/settings/sync.component";
@@ -54,7 +58,6 @@ import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.c
 
 import { extensionRefreshRedirect, extensionRefreshSwap } from "./extension-refresh-route-utils";
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
-import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
 import { OptionsComponent } from "./settings/options.component";
 import { TabsV2Component } from "./tabs-v2.component";
@@ -255,6 +258,12 @@ const routes: Routes = [
     data: { state: "account-security" },
   },
   {
+    path: "notifications",
+    component: NotifcationsSettingsComponent,
+    canActivate: [AuthGuard],
+    data: { state: "notifications" },
+  },
+  {
     path: "vault-settings",
     component: VaultSettingsComponent,
     canActivate: [AuthGuard],
@@ -301,6 +310,12 @@ const routes: Routes = [
     component: OptionsComponent,
     canActivate: [AuthGuard],
     data: { state: "options" },
+  },
+  {
+    path: "appearance",
+    component: AppearanceComponent,
+    canActivate: [AuthGuard],
+    data: { state: "appearance" },
   },
   {
     path: "clone-cipher",
@@ -355,12 +370,11 @@ const routes: Routes = [
         data: { state: "tabs_current" },
         runGuardsAndResolvers: "always",
       },
-      {
+      ...extensionRefreshSwap(VaultFilterComponent, VaultV2Component, {
         path: "vault",
-        component: VaultFilterComponent,
         canActivate: [AuthGuard],
         data: { state: "tabs_vault" },
-      },
+      }),
       {
         path: "generator",
         component: GeneratorComponent,
