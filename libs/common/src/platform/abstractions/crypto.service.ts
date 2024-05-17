@@ -5,7 +5,7 @@ import { ProfileProviderOrganizationResponse } from "../../admin-console/models/
 import { ProfileProviderResponse } from "../../admin-console/models/response/profile-provider.response";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
 import { OrganizationId, ProviderId, UserId } from "../../types/guid";
-import { UserKey, MasterKey, OrgKey, ProviderKey, PinKey, CipherKey } from "../../types/key";
+import { UserKey, MasterKey, OrgKey, ProviderKey, CipherKey } from "../../types/key";
 import { KeySuffixOptions, HashPurpose } from "../enums";
 import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 import { EncString } from "../models/domain/enc-string";
@@ -54,13 +54,23 @@ export abstract class CryptoService {
    * for encryption of data instead of the user key.
    */
   abstract isLegacyUser(masterKey?: MasterKey, userId?: string): Promise<boolean>;
+
+  /**
+   * Use for encryption/decryption of data in order to support legacy
+   * encryption models. It will return the user key if available,
+   * if not it will return the master key.
+   *
+   * @deprecated Please provide the userId of the user you want the user key for.
+   */
+  abstract getUserKeyWithLegacySupport(): Promise<UserKey>;
+
   /**
    * Use for encryption/decryption of data in order to support legacy
    * encryption models. It will return the user key if available,
    * if not it will return the master key.
    * @param userId The desired user
    */
-  abstract getUserKeyWithLegacySupport(userId?: string): Promise<UserKey>;
+  abstract getUserKeyWithLegacySupport(userId: UserId): Promise<UserKey>;
   /**
    * Retrieves the user key from storage
    * @param keySuffix The desired version of the user's key to retrieve
@@ -130,18 +140,6 @@ export abstract class CryptoService {
     userKey?: UserKey,
   ): Promise<[UserKey, EncString]>;
   /**
-   * Decrypts the user key with the provided master key
-   * @param masterKey The user's master key
-   * @param userKey The user's encrypted symmetric key
-   * @param userId The desired user
-   * @returns The user key
-   */
-  abstract decryptUserKeyWithMasterKey(
-    masterKey: MasterKey,
-    userKey?: EncString,
-    userId?: string,
-  ): Promise<UserKey>;
-  /**
    * Creates a master password hash from the user's master password. Can
    * be used for local authentication or for server authentication depending
    * on the hashPurpose provided.
@@ -169,10 +167,12 @@ export abstract class CryptoService {
    * organization keys currently in memory
    * @param orgs The organizations to set keys for
    * @param providerOrgs The provider organizations to set keys for
+   * @param userId The user id of the user to set the org keys for
    */
   abstract setOrgKeys(
     orgs: ProfileOrganizationResponse[],
     providerOrgs: ProfileProviderOrganizationResponse[],
+    userId: UserId,
   ): Promise<void>;
   abstract activeUserOrgKeys$: Observable<Record<OrganizationId, OrgKey>>;
   /**
@@ -200,7 +200,13 @@ export abstract class CryptoService {
    * @param providers The providers to set keys for
    */
   abstract activeUserProviderKeys$: Observable<Record<ProviderId, ProviderKey>>;
-  abstract setProviderKeys(orgs: ProfileProviderResponse[]): Promise<void>;
+
+  /**
+   * Stores the provider keys for a given user.
+   * @param orgs The provider orgs for which to save the keys from.
+   * @param userId The user id of the user for which to store the keys for.
+   */
+  abstract setProviderKeys(orgs: ProfileProviderResponse[], userId: UserId): Promise<void>;
   /**
    * @param providerId The desired provider
    * @returns The provider's symmetric key
@@ -228,7 +234,7 @@ export abstract class CryptoService {
    * Note: does not clear the private key if null is provided
    * @param encPrivateKey An encrypted private key
    */
-  abstract setPrivateKey(encPrivateKey: string): Promise<void>;
+  abstract setPrivateKey(encPrivateKey: string, userId: UserId): Promise<void>;
   /**
    * Returns the private key from memory. If not available, decrypts it
    * from storage and stores it in memory
@@ -247,15 +253,9 @@ export abstract class CryptoService {
    * @param key A key to encrypt the private key with. If not provided,
    * defaults to the user key
    * @returns A new keypair: [publicKey in Base64, encrypted privateKey]
+   * @throws If the provided key is a null-ish value.
    */
-  abstract makeKeyPair(key?: SymmetricCryptoKey): Promise<[string, EncString]>;
-  /**
-   * @param pin The user's pin
-   * @param salt The user's salt
-   * @param kdfConfig The user's kdf config
-   * @returns A key derived from the user's pin
-   */
-  abstract makePinKey(pin: string, salt: string, kdfConfig: KdfConfig): Promise<PinKey>;
+  abstract makeKeyPair(key: SymmetricCryptoKey): Promise<[string, EncString]>;
   /**
    * Clears the user's pin keys from storage
    * Note: This will remove the stored pin and as a result,
@@ -263,39 +263,6 @@ export abstract class CryptoService {
    * @param userId The desired user
    */
   abstract clearPinKeys(userId?: string): Promise<void>;
-  /**
-   * Decrypts the user key with their pin
-   * @param pin The user's PIN
-   * @param salt The user's salt
-   * @param kdfConfig The user's KDF config
-   * @param pinProtectedUserKey The user's PIN protected symmetric key, if not provided
-   * it will be retrieved from storage
-   * @returns The decrypted user key
-   */
-  abstract decryptUserKeyWithPin(
-    pin: string,
-    salt: string,
-    kdfConfig: KdfConfig,
-    protectedKeyCs?: EncString,
-  ): Promise<UserKey>;
-  /**
-   * Creates a new Pin key that encrypts the user key instead of the
-   * master key. Clears the old Pin key from state.
-   * @param masterPasswordOnRestart True if Master Password on Restart is enabled
-   * @param pin User's PIN
-   * @param email User's email
-   * @param kdfConfig User's KdfConfig
-   * @param oldPinKey The old Pin key from state (retrieved from different
-   * places depending on if Master Password on Restart was enabled)
-   * @returns The user key
-   */
-  abstract decryptAndMigrateOldPinKey(
-    masterPasswordOnRestart: boolean,
-    pin: string,
-    email: string,
-    kdfConfig: KdfConfig,
-    oldPinKey: EncString,
-  ): Promise<UserKey>;
   /**
    * @param keyMaterial The key material to derive the send key from
    * @returns A new send key
@@ -311,15 +278,17 @@ export abstract class CryptoService {
    * @param data The data to encrypt
    * @param publicKey The public key to use for encryption, if not provided, the user's public key will be used
    * @returns The encrypted data
+   * @throws If the given publicKey is a null-ish value.
    */
-  abstract rsaEncrypt(data: Uint8Array, publicKey?: Uint8Array): Promise<EncString>;
+  abstract rsaEncrypt(data: Uint8Array, publicKey: Uint8Array): Promise<EncString>;
   /**
    * Decrypts a value using RSA.
    * @param encValue The encrypted value to decrypt
-   * @param privateKeyValue The private key to use for decryption
+   * @param privateKey The private key to use for decryption
    * @returns The decrypted value
+   * @throws If the given privateKey is a null-ish value.
    */
-  abstract rsaDecrypt(encValue: string, privateKeyValue?: Uint8Array): Promise<Uint8Array>;
+  abstract rsaDecrypt(encValue: string, privateKey: Uint8Array): Promise<Uint8Array>;
   abstract randomNumber(min: number, max: number): Promise<number>;
   /**
    * Generates a new cipher key
@@ -337,16 +306,6 @@ export abstract class CryptoService {
     publicKey: string;
     privateKey: EncString;
   }>;
-
-  /**
-   * @deprecated Left for migration purposes. Use decryptUserKeyWithPin instead.
-   */
-  abstract decryptMasterKeyWithPin(
-    pin: string,
-    salt: string,
-    kdfConfig: KdfConfig,
-    protectedKeyCs?: EncString,
-  ): Promise<MasterKey>;
   /**
    * Previously, the master key was used for any additional key like the biometrics or pin key.
    * We have switched to using the user key for these purposes. This method is for clearing the state

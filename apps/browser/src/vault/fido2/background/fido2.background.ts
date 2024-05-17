@@ -1,14 +1,14 @@
 import { firstValueFrom, startWith } from "rxjs";
 import { pairwise } from "rxjs/operators";
 
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import {
   AssertCredentialParams,
   AssertCredentialResult,
   CreateCredentialParams,
   CreateCredentialResult,
   Fido2ClientService,
-} from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
+} from "@bitwarden/common/platform/abstractions/fido2/fido2-client.service.abstraction";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 
 import { BrowserApi } from "../../../platform/browser/browser-api";
@@ -70,13 +70,13 @@ export class Fido2Background implements Fido2BackgroundInterface {
    */
   async injectFido2ContentScriptsInAllTabs() {
     const tabs = await BrowserApi.tabsQuery({});
+
     for (let index = 0; index < tabs.length; index++) {
       const tab = tabs[index];
-      if (!tab.url?.startsWith("https")) {
-        continue;
-      }
 
-      void this.injectFido2ContentScripts(tab);
+      if (tab.url?.startsWith("https")) {
+        void this.injectFido2ContentScripts(tab);
+      }
     }
   }
 

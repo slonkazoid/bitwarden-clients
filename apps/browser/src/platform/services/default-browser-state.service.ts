@@ -1,13 +1,8 @@
-import { BehaviorSubject } from "rxjs";
-
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import {
-  AbstractStorageService,
-  AbstractMemoryStorageService,
-} from "@bitwarden/common/platform/abstractions/storage.service";
+import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/platform/models/domain/storage-options";
@@ -15,27 +10,19 @@ import { MigrationRunner } from "@bitwarden/common/platform/services/migration-r
 import { StateService as BaseStateService } from "@bitwarden/common/platform/services/state.service";
 
 import { Account } from "../../models/account";
-import { browserSession, sessionSync } from "../decorators/session-sync-observable";
 
 import { BrowserStateService } from "./abstractions/browser-state.service";
 
-@browserSession
 export class DefaultBrowserStateService
   extends BaseStateService<GlobalState, Account>
   implements BrowserStateService
 {
-  @sessionSync({
-    initializer: Account.fromJSON as any, // TODO: Remove this any when all any types are removed from Account
-    initializeAs: "record",
-  })
-  protected accountsSubject: BehaviorSubject<{ [userId: string]: Account }>;
-
   protected accountDeserializer = Account.fromJSON;
 
   constructor(
     storageService: AbstractStorageService,
     secureStorageService: AbstractStorageService,
-    memoryStorageService: AbstractMemoryStorageService,
+    memoryStorageService: AbstractStorageService,
     logService: LogService,
     stateFactory: StateFactory<GlobalState, Account>,
     accountService: AccountService,

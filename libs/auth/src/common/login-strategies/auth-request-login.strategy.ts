@@ -2,6 +2,7 @@ import { firstValueFrom, Observable, map, BehaviorSubject } from "rxjs";
 import { Jsonify } from "type-fest";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
@@ -64,6 +65,7 @@ export class AuthRequestLoginStrategy extends LoginStrategy {
     userDecryptionOptionsService: InternalUserDecryptionOptionsServiceAbstraction,
     private deviceTrustService: DeviceTrustServiceAbstraction,
     billingAccountProfileStateService: BillingAccountProfileStateService,
+    vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     kdfConfigService: KdfConfigService,
   ) {
     super(
@@ -80,6 +82,7 @@ export class AuthRequestLoginStrategy extends LoginStrategy {
       twoFactorService,
       userDecryptionOptionsService,
       billingAccountProfileStateService,
+      vaultTimeoutSettingsService,
       kdfConfigService,
     );
 
@@ -117,13 +120,12 @@ export class AuthRequestLoginStrategy extends LoginStrategy {
     return super.logInTwoFactor(twoFactor);
   }
 
-  protected override async setMasterKey(response: IdentityTokenResponse) {
+  protected override async setMasterKey(response: IdentityTokenResponse, userId: UserId) {
     const authRequestCredentials = this.cache.value.authRequestCredentials;
     if (
       authRequestCredentials.decryptedMasterKey &&
       authRequestCredentials.decryptedMasterKeyHash
     ) {
-      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
       await this.masterPasswordService.setMasterKey(
         authRequestCredentials.decryptedMasterKey,
         userId,
@@ -147,25 +149,28 @@ export class AuthRequestLoginStrategy extends LoginStrategy {
     if (authRequestCredentials.decryptedUserKey) {
       await this.cryptoService.setUserKey(authRequestCredentials.decryptedUserKey);
     } else {
-      await this.trySetUserKeyWithMasterKey();
+      await this.trySetUserKeyWithMasterKey(userId);
 
       // Establish trust if required after setting user key
       await this.deviceTrustService.trustDeviceIfRequired(userId);
     }
   }
 
-  private async trySetUserKeyWithMasterKey(): Promise<void> {
-    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+  private async trySetUserKeyWithMasterKey(userId: UserId): Promise<void> {
     const masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(userId));
     if (masterKey) {
-      const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+      const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
       await this.cryptoService.setUserKey(userKey);
     }
   }
 
-  protected override async setPrivateKey(response: IdentityTokenResponse): Promise<void> {
+  protected override async setPrivateKey(
+    response: IdentityTokenResponse,
+    userId: UserId,
+  ): Promise<void> {
     await this.cryptoService.setPrivateKey(
-      response.privateKey ?? (await this.createKeyPairForOldAccount()),
+      response.privateKey ?? (await this.createKeyPairForOldAccount(userId)),
+      userId,
     );
   }
 

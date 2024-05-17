@@ -1,12 +1,11 @@
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SelectItemView } from "@bitwarden/components";
 
-import {
-  ProjectPeopleAccessPoliciesView,
-  ServiceAccountGrantedPoliciesView,
-  ServiceAccountPeopleAccessPoliciesView,
-} from "../../../../models/view/access-policy.view";
-import { PotentialGranteeView } from "../../../../models/view/potential-grantee.view";
+import { PotentialGranteeView } from "../../../../models/view/access-policies/potential-grantee.view";
+import { ProjectPeopleAccessPoliciesView } from "../../../../models/view/access-policies/project-people-access-policies.view";
+import { ProjectServiceAccountsAccessPoliciesView } from "../../../../models/view/access-policies/project-service-accounts-access-policies.view";
+import { ServiceAccountGrantedPoliciesView } from "../../../../models/view/access-policies/service-account-granted-policies.view";
+import { ServiceAccountPeopleAccessPoliciesView } from "../../../../models/view/access-policies/service-account-people-access-policies.view";
 
 import { ApItemEnum, ApItemEnumUtil } from "./enums/ap-item.enum";
 import { ApPermissionEnum, ApPermissionEnumUtil } from "./enums/ap-permission.enum";
@@ -93,6 +92,29 @@ export function convertGrantedPoliciesToAccessPolicyItemViews(
         detailView.accessPolicy.write,
       ),
       readOnly: !detailView.hasPermission,
+    });
+  });
+  return accessPolicies;
+}
+
+export function convertProjectServiceAccountsViewToApItemViews(
+  value: ProjectServiceAccountsAccessPoliciesView,
+): ApItemViewType[] {
+  const accessPolicies: ApItemViewType[] = [];
+
+  value.serviceAccountAccessPolicies.forEach((accessPolicyView) => {
+    accessPolicies.push({
+      type: ApItemEnum.ServiceAccount,
+      icon: ApItemEnumUtil.itemIcon(ApItemEnum.ServiceAccount),
+      id: accessPolicyView.serviceAccountId,
+      accessPolicyId: accessPolicyView.id,
+      labelName: accessPolicyView.serviceAccountName,
+      listName: accessPolicyView.serviceAccountName,
+      permission: ApPermissionEnumUtil.toApPermissionEnum(
+        accessPolicyView.read,
+        accessPolicyView.write,
+      ),
+      readOnly: false,
     });
   });
   return accessPolicies;

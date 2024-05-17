@@ -9,10 +9,12 @@ import { OrganizationPlansComponent, TaxInfoComponent } from "@bitwarden/web-vau
 import { PaymentMethodWarningsModule } from "@bitwarden/web-vault/app/billing/shared";
 import { OssModule } from "@bitwarden/web-vault/app/oss.module";
 
+import { ProviderSubscriptionComponent } from "../../billing/providers";
 import {
   CreateClientOrganizationComponent,
-  ManageClientOrganizationSubscriptionComponent,
   ManageClientOrganizationsComponent,
+  ManageClientOrganizationNameComponent,
+  ManageClientOrganizationSubscriptionComponent,
 } from "../../billing/providers/clients";
 
 import { AddOrganizationComponent } from "./clients/add-organization.component";
@@ -61,7 +63,9 @@ import { SetupComponent } from "./setup/setup.component";
     UserAddEditComponent,
     CreateClientOrganizationComponent,
     ManageClientOrganizationsComponent,
+    ManageClientOrganizationNameComponent,
     ManageClientOrganizationSubscriptionComponent,
+    ProviderSubscriptionComponent,
   ],
   providers: [WebProviderService, ProviderPermissionsGuard],
 })

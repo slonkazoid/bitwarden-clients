@@ -67,7 +67,7 @@
     "message": "Número do passaporte"
   },
   "licenseNumber": {
-    "message": "Número da licença"
+    "message": "Número da carta de condução"
   },
   "email": {
     "message": "E-mail"
@@ -365,7 +365,7 @@
     "message": "Cidade / Localidade"
   },
   "stateProvince": {
-    "message": "Estado / Província"
+    "message": "Estado / Região"
   },
   "zipPostalCode": {
     "message": "Código postal"
@@ -1135,10 +1135,10 @@
     "message": "Pontuação mínima de complexidade"
   },
   "minNumbers": {
-    "message": "Números mínimos"
+    "message": "Mínimo de números"
   },
   "minSpecial": {
-    "message": "Caracteres especiais minímos",
+    "message": "Mínimo de caracteres especiais",
     "description": "Minimum special characters"
   },
   "ambiguous": {
@@ -1288,7 +1288,7 @@
     "message": "Definições da chave de encriptação alteradas"
   },
   "dangerZone": {
-    "message": "Zona de perigo"
+    "message": "Zona de risco"
   },
   "dangerZoneDesc": {
     "message": "Cuidado, estas ações são irreversíveis!"
@@ -1809,12 +1809,16 @@
   "unsecuredWebsitesFound": {
     "message": "Sites inseguros encontrados"
   },
-  "unsecuredWebsitesFoundDesc": {
+  "unsecuredWebsitesFoundReportDesc": {
     "message": "Encontrámos $COUNT$ itens no seu cofre com URIs não seguros. Deve alterar o esquema de URI para https:// se o site o permitir.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1830,12 +1834,16 @@
   "inactive2faFound": {
     "message": "Credenciais sem verificação de dois passos encontrados"
   },
-  "inactive2faFoundDesc": {
-    "message": "Encontrámos $COUNT$ site(s) no seu cofre que podem não ter a verificação de dois passos configurada (de acordo com 2fa.directory). Para proteger ainda mais essas contas, deve configurar a verificação de dois passos.",
+  "inactive2faFoundReportDesc": {
+    "message": "Encontrámos $COUNT$ site(s) no seu cofre que podem não estar configurados com a verificação de dois passos (de acordo com a 2fa.directory). Para proteger ainda mais estas contas, deve configurar a verificação de dois passos.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1854,12 +1862,16 @@
   "exposedPasswordsFound": {
     "message": "Palavras-passe expostas encontradas"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "Encontrámos $COUNT$ itens no seu cofre que têm palavras-passe que foram expostas em violações de dados conhecidas. Deve alterá-los para utilizar uma nova palavra-passe.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "Encontrámos $COUNT$ itens no seu cofre que têm palavras-passe que foram expostas em violações de dados conhecidas. Deve alterá-los para utilizarem uma nova palavra-passe.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1887,12 +1899,16 @@
   "weakPasswordsFound": {
     "message": "Palavras-passe fracas encontradas"
   },
-  "weakPasswordsFoundDesc": {
+  "weakPasswordsFoundReportDesc": {
     "message": "Encontrámos $COUNT$ itens no seu cofre com palavras-passe que não são fortes. Deve atualizá-los para utilizarem palavras-passe mais fortes.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1908,12 +1924,16 @@
   "reusedPasswordsFound": {
     "message": "Palavras-passe reutilizadas encontradas"
   },
-  "reusedPasswordsFoundDesc": {
+  "reusedPasswordsFoundReportDesc": {
     "message": "Encontrámos $COUNT$ palavras-passe que estão a ser reutilizadas no seu cofre. Deve alterá-las para um valor único.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -2767,6 +2787,12 @@
   },
   "all": {
     "message": "Todos"
+  },
+  "addAccess": {
+    "message": "Adicionar acesso"
+  },
+  "addAccessFilter": {
+    "message": "Adicionar filtro de acesso"
   },
   "refresh": {
     "message": "Atualizar"
@@ -3706,7 +3732,7 @@
     "description": "ex. Date this item was updated"
   },
   "dateCreated": {
-    "message": "Criado a",
+    "message": "Criado",
     "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
@@ -5782,6 +5808,108 @@
   "forwardedEmailDesc": {
     "message": "Gerar um alias de e-mail com um serviço de reencaminhamento externo."
   },
+  "forwarderError": {
+    "message": "Erro no $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Gerado pelo Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Site: $WEBSITE$. Gerado pelo Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Token da API de $SERVICENAME$ inválido",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Token da API de $SERVICENAME$ inválido: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Não foi possível obter o ID da conta de e-mail mascarada de $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Domínio de $SERVICENAME$ inválido.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "URL de $SERVICENAME$ inválido.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Ocorreu um erro desconhecido de $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Reencaminhador desconhecido: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Nome de domínio",
     "description": "Part of a URL."
@@ -5955,7 +6083,7 @@
     "message": "Ligado"
   },
   "off": {
-    "message": "Desligado"
+    "message": "Desativado"
   },
   "members": {
     "message": "Membros"
@@ -6460,6 +6588,9 @@
   "editGroupCollectionsDesc": {
     "message": "Conceder aos membros acesso às coleções adicionando-os a este grupo."
   },
+  "restrictedCollectionAssignmentDesc": {
+    "message": "Só pode atribuir coleções que gere."
+  },
   "accessAllCollectionsDesc": {
     "message": "Conceder acesso a todas as coleções atuais e futuras."
   },
@@ -6691,8 +6822,8 @@
   "selectGroups": {
     "message": "Selecionar grupos"
   },
-  "userPermissionOverrideHelper": {
-    "message": "As permissões definidas para um membro substituirão as permissões definidas pelo grupo desse membro"
+  "userPermissionOverrideHelperDesc": {
+    "message": "As permissões definidas para um membro substituirão as permissões definidas pelo grupo desse membro."
   },
   "noMembersOrGroupsAdded": {
     "message": "Não foram adicionados membros ou grupos"
@@ -6883,8 +7014,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Atualize as suas definições de encriptação para cumprir as novas recomendações de segurança e melhorar a proteção da conta."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Ao prosseguir, terminará todas as sessões ativas. Terá de iniciar sessão novamente e concluir a configuração da verificação de dois passos. Recomendamos que exporte o seu cofre antes de alterar as definições de encriptação para evitar a perda de dados."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Ao prosseguir, sairá de todas as sessões ativas. Terá de voltar a iniciar sessão e concluir a verificação de dois passos, caso exista. Recomendamos que exporte o seu cofre antes de alterar as definições de encriptação para evitar a perda de dados."
   },
   "secretsManager": {
     "message": "Gestor de Segredos"
@@ -7504,6 +7635,12 @@
   "readOnlyCollectionAccess": {
     "message": "Não tem acesso para gerir esta coleção."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Faltam permissões Pode gerir"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Conceda permissões Pode gerir para permitir a gestão completa da coleção, incluindo a eliminação da coleção."
+  },
   "grantCollectionAccess": {
     "message": "Conceder a grupos ou membros acesso a esta coleção."
   },
@@ -7609,14 +7746,11 @@
   "success": {
     "message": "Com sucesso"
   },
-  "viewCollection": {
-    "message": "Ver coleção"
-  },
   "restrictedGroupAccess": {
     "message": "Não se pode adicionar a si próprio a grupos."
   },
-  "restrictedCollectionAccess": {
-    "message": "Não se pode adicionar a si próprio a coleções."
+  "cannotAddYourselfToCollections": {
+    "message": "Não se pode adicionar a si próprio às coleções."
   },
   "assign": {
     "message": "Atribuir"
@@ -7938,8 +8072,8 @@
       }
     }
   },
-  "deleteProviderWarningDesc": {
-    "message": "É necessário desvincular todos os clientes antes de poder eliminar $ID$",
+  "deleteProviderWarningDescription": {
+    "message": "É necessário desvincular todos os clientes antes de poder eliminar $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -8049,5 +8183,50 @@
   },
   "collectionItemSelect": {
     "message": "Selecionar item da coleção"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Gira a faturação a partir do Portal do fornecedor"
+  },
+  "viewInfo": {
+    "message": "Ver informações"
+  },
+  "viewAccess": {
+    "message": "Ver acesso"
+  },
+  "noCollectionsSelected": {
+    "message": "Não selecionou nenhuma coleção."
+  },
+  "updateName": {
+    "message": "Atualizar nome"
+  },
+  "updatedOrganizationName": {
+    "message": "Nome da organização atualizado"
+  },
+  "providerPlan": {
+    "message": "Fornecedor de serviços geridos"
+  },
+  "orgSeats": {
+    "message": "Lugares da organização"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% de desconto",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "secureYourInfrastructure": {
+    "message": "Proteja a sua infraestrutura"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Proteja a sua família ou empresa"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
   }
 }

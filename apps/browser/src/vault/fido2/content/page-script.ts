@@ -1,4 +1,4 @@
-import { FallbackRequestedError } from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
+import { FallbackRequestedError } from "@bitwarden/common/platform/abstractions/fido2/fido2-client.service.abstraction";
 
 import { WebauthnUtils } from "../webauthn-utils";
 
@@ -6,9 +6,14 @@ import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
 
 (function (globalContext) {
-  if (globalContext.document.contentType !== "text/html") {
+  const shouldExecuteContentScript =
+    globalContext.document.contentType === "text/html" &&
+    globalContext.document.location.protocol === "https:";
+
+  if (!shouldExecuteContentScript) {
     return;
   }
+
   const BrowserPublicKeyCredential = globalContext.PublicKeyCredential;
   const BrowserNavigatorCredentials = navigator.credentials;
   const BrowserAuthenticatorAttestationResponse = globalContext.AuthenticatorAttestationResponse;

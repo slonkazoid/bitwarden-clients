@@ -1809,12 +1809,16 @@
   "unsecuredWebsitesFound": {
     "message": "Güvənli olmayan veb sayt tapıldı"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "Anbarınızda güvənli olmayan URI-lərə sahib $COUNT$ element tapıldı. Veb sayt icazə verirsə, onların URI sxemini https:// olaraq dəyişdirməlisiniz.",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "$VAULT$ daxilində güvənli olmayan URI-lərə sahib $COUNT$ element tapdıq. Veb sayt icazə verirsə, onların URI sxemini https:// olaraq dəyişdirməlisiniz.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1830,12 +1834,16 @@
   "inactive2faFound": {
     "message": "2FA olmayan hesablar tapıldı"
   },
-  "inactive2faFoundDesc": {
-    "message": "Anbarınızda (\"2fa.directory\"ə uyğun olaraq) iki addımlı kimlik doğrulama ilə konfiqurasiya edilmədiyini düşündüyümüz $COUNT$ veb sayt tapdıq. Bu hesabları daha çox qorumaq üçün iki addımlı girişi qurmalısınız.",
+  "inactive2faFoundReportDesc": {
+    "message": "$VAULT$ daxilində (\"2fa.directory\"ə uyğun olaraq) iki addımlı kimlik doğrulama ilə konfiqurasiya edilmədiyini düşündüyümüz $COUNT$ veb sayt tapdıq. Bu hesabları daha çox qorumaq üçün iki addımlı girişi qurmalısınız.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1854,12 +1862,16 @@
   "exposedPasswordsFound": {
     "message": "İfşa olunmuş parollar tapıldı"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "Anbarınızda, bilinən məlumat pozuntusunda parolları ifşa olunmuş $COUNT$ element tapdıq. Yeni bir parol istifadə etməzdən əvvəl onları dəyişdirməlisiniz.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "$VAULT$ daxilində, bilinən məlumat pozuntusunda parolları ifşa olunmuş $COUNT$ element tapdıq. Yeni bir parol istifadə etməzdən əvvəl onları dəyişdirməlisiniz.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1887,12 +1899,16 @@
   "weakPasswordsFound": {
     "message": "Zəif parol tapıldı"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "Anbarınızda, şifrələri güclü olmayan $COUNT$ element tapdıq. Güclü şifrələr istifadə etmək üçün onları güncəlləməlisiniz.",
+  "weakPasswordsFoundReportDesc": {
+    "message": "$VAULT$ daxilində, parolları güclü olmayan $COUNT$ element tapdıq. Güclü parollar istifadə etmək üçün onları güncəlləməlisiniz.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1908,12 +1924,16 @@
   "reusedPasswordsFound": {
     "message": "Təkrar istifadə olunmuş parollar tapıldı"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "Anbarınızda təkrar istifadə edilən $COUNT$ parol tapdıq. Onları unikal bir dəyərlə dəyişdirməlisiniz.",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "$VAULT$ daxilində təkrar istifadə edilən $COUNT$ parol tapdıq. Onları unikal bir dəyərlə dəyişdirməlisiniz.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -2767,6 +2787,12 @@
   },
   "all": {
     "message": "Hamısı"
+  },
+  "addAccess": {
+    "message": "Müraciət əlavə et"
+  },
+  "addAccessFilter": {
+    "message": "Müraciət filtri əlavə et"
   },
   "refresh": {
     "message": "Təzələ"
@@ -4247,7 +4273,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPasswordDontKnow": {
-    "message": "Şifrəni bilmirsiniz? Bu \"Send\"ə müraciət etmək üçün parolu göndərən şəxsdən istəyin.",
+    "message": "Parolu bilmirsiniz? Bu \"Send\"ə müraciət etmək üçün parolu göndərən şəxsdən istəyin.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendHiddenByDefault": {
@@ -5782,6 +5808,108 @@
   "forwardedEmailDesc": {
     "message": "Xarici yönləndirmə xidməti ilə e-poçt ləqəbi yaradın."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ xətası: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Bitwarden tərəfindən yaradılıb.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Veb sayt: $WEBSITE$. Bitwarden tərəfindən yaradılıb.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Yararsız $SERVICENAME$ API jetonu",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Yararsız $SERVICENAME$ API jetonu: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "$SERVICENAME$ maskalı e-poçt hesab kimliyi alına bilmir.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Yararsız $SERVICENAME$ domeni.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Yararsız $SERVICENAME$ url-si.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Bilinməyən $SERVICENAME$ xətası baş verdi.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Bilinməyən yönləndirici: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Host adı",
     "description": "Part of a URL."
@@ -6460,6 +6588,9 @@
   "editGroupCollectionsDesc": {
     "message": "Bu qrupa əlavə edərək kolleksiyalara müraciət icazəsi verin."
   },
+  "restrictedCollectionAssignmentDesc": {
+    "message": "You can only assign collections you manage."
+  },
   "accessAllCollectionsDesc": {
     "message": "Hazırkı və gələcəkdəki bütün kolleksiyalara müraciət icazəsi verin."
   },
@@ -6691,8 +6822,8 @@
   "selectGroups": {
     "message": "Qrupları seç"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Bir üzv üçün ayarlanan icazələr, həmin üzvün qrupu tərəfindən ayarlanan icazələri əvəz edəcək"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Permissions set for a member will replace permissions set by that member's group."
   },
   "noMembersOrGroupsAdded": {
     "message": "Heç bir üzv və ya qrup əlavə edilmədi"
@@ -6883,8 +7014,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Yeni güvənlik tövsiyələrini qarşılamaq və hesab qorumasını təkmilləşdirmək üçün şifrələmə ayarlarınızı güncəlləyin."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və iki addımlı giriş quraşdırmasını tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə ayarlarınızı dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Proses, bütün aktiv seanslardan çıxış etməyinizi təmin edəcək. Təkrar giriş etməyiniz və əgər varsa iki addımlı girişi tamamlamağınız lazımdır. Məlumat itkisinin qarşısını almaq üçün şifrələmə ayarlarınızı dəyişdirməzdən əvvəl anbarınızı xaricə köçürməyinizi tövsiyə edirik."
   },
   "secretsManager": {
     "message": "Sirr Meneceri"
@@ -7504,6 +7635,12 @@
   "readOnlyCollectionAccess": {
     "message": "Bu kolleksiyanı idarə etmək üçün müraciətiniz yoxdur."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "İdarə edə bilər icazələri əskikdir"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Kolleksiyanın silinməsi daxil olmaqla tam kolleksiya idarəetməsinə icazə vermək üçün \"İdarə edə bilər\" icazələrini verin."
+  },
   "grantCollectionAccess": {
     "message": "Qrup və ya üzvlərin bu kolleksiyaya müraciətinə icazə verin."
   },
@@ -7609,14 +7746,11 @@
   "success": {
     "message": "Uğurlu"
   },
-  "viewCollection": {
-    "message": "Kolleksiyaya bax"
-  },
   "restrictedGroupAccess": {
     "message": "Özünüzü qruplara əlavə edə bilməzsiniz."
   },
-  "restrictedCollectionAccess": {
-    "message": "Özünüzü kolleksiyalara əlavə edə bilməzsiniz."
+  "cannotAddYourselfToCollections": {
+    "message": "You cannot add yourself to collections."
   },
   "assign": {
     "message": "Təyin et"
@@ -7938,8 +8072,8 @@
       }
     }
   },
-  "deleteProviderWarningDesc": {
-    "message": "$ID$ silinməzdən əvvəl bütün müştəriləri (client) ayırmalısınız",
+  "deleteProviderWarningDescription": {
+    "message": "$ID$ silinməzdən əvvəl bütün müştəriləri (client) ayırmalısınız.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -7973,13 +8107,13 @@
     "message": "İnteqrasiyalar"
   },
   "integrationsDesc": {
-    "message": "Automatically sync secrets from Bitwarden Secrets Manager to a third-party service."
+    "message": "\"Bitwarden Sirr Meneceri\"ndəki sirləri avtomatik olaraq üçüncü tərəf xidmətlə sinxronlaşdır."
   },
   "sdks": {
     "message": "SDK-lar"
   },
   "sdksDesc": {
-    "message": "Use Bitwarden Secrets Manager SDK in the following programming languages to build your own applications."
+    "message": "Öz tətbiqlərinizi qurmaq üçün \"Bitwarden Sirr Meneceri SDK\"sını aşağıdakı proqramlaşdırma dillərində istifadə edin."
   },
   "setUpGithubActions": {
     "message": "Github Actions qur"
@@ -8049,5 +8183,50 @@
   },
   "collectionItemSelect": {
     "message": "Kolleksiya elementini seç"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Fakturanı \"Provayder Portalı\"ndan idarə et"
+  },
+  "viewInfo": {
+    "message": "Məlumata bax"
+  },
+  "viewAccess": {
+    "message": "Müraciətə bax"
+  },
+  "noCollectionsSelected": {
+    "message": "Heç bir kolleksiya seçməmisiniz."
+  },
+  "updateName": {
+    "message": "Adı güncəllə"
+  },
+  "updatedOrganizationName": {
+    "message": "Təşkilat adı güncəlləndi"
+  },
+  "providerPlan": {
+    "message": "İdarə edilən Xidmət Provayderi"
+  },
+  "orgSeats": {
+    "message": "Təşkilat yerləri"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% Endirim",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "secureYourInfrastructure": {
+    "message": "İnfrastrukturunuzu qoruyun"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Ailənizi və ya işinizi qoruyun"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
   }
 }

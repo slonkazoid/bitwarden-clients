@@ -1809,12 +1809,16 @@
   "unsecuredWebsitesFound": {
     "message": "セキュリティ保護されていないウェブサイトが見つかりました"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "セキュアでないURIが$COUNT$個のアイテムで見つかりました。ウェブサイトが対応しているならば、URIをhttps://形式に変更すべきです。",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "セキュアでない URI が $VAULT$ 内で $COUNT$ 個見つかりました。ウェブサイトが対応している場合は、URI を https:// 形式に変更すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1830,12 +1834,16 @@
   "inactive2faFound": {
     "message": "二段階認証を利用していないアイテムが見つかりました"
   },
-  "inactive2faFoundDesc": {
-    "message": "保管庫に $COUNT$ 個のウェブサイトがあり、2段階認証でのログインが設定されていない可能性があります (2fa.directory によれば)。これらのアカウントをさらに保護するには、2段階認証のログインを設定する必要があります。",
+  "inactive2faFoundReportDesc": {
+    "message": "$VAULT$ に $COUNT$ 個のウェブサイトがあり、(2fa.directory によれば) 2段階認証でのログインを設定できる可能性があります 。これらのアカウントをさらに保護するには、2段階認証のログインを設定してください。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1854,12 +1862,16 @@
   "exposedPasswordsFound": {
     "message": "流出したパスワードが見つかりました"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "既知のデータ流出で公開されていたパスワードが $COUNT$ 個のアイテムで見つかりました。これらは新しいパスワードへ変更すべきです。",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "既知の流出済みパスワードが $VAULT$ 内の $COUNT$ 個のアイテムで見つかりました。これらは新しいパスワードへ変更すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1887,12 +1899,16 @@
   "weakPasswordsFound": {
     "message": "脆弱なパスワードが見つかりました"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "保管庫内に$COUNT$個の強力でないパスワードが見つかりました。もっと強力なパスワードへ更新すべきです。",
+  "weakPasswordsFoundReportDesc": {
+    "message": "$VAULT$ 内に $COUNT$ 個の脆弱なパスワードが見つかりました。もっと強力なパスワードへ更新すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1908,12 +1924,16 @@
   "reusedPasswordsFound": {
     "message": "再利用しているパスワードが見つかりました。"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "$COUNT$個の再利用しているパスワードが見つかりました。それぞれ異なるパスワードへ変更すべきです。",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "$VAULT$ 内に $COUNT$ 個の再利用しているパスワードが見つかりました。それぞれ異なるパスワードへ変更すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -2767,6 +2787,12 @@
   },
   "all": {
     "message": "すべて"
+  },
+  "addAccess": {
+    "message": "アクセスを追加"
+  },
+  "addAccessFilter": {
+    "message": "アクセスフィルタを追加"
   },
   "refresh": {
     "message": "更新"
@@ -4506,7 +4532,7 @@
     "message": "権限"
   },
   "managerPermissions": {
-    "message": "権限の管理"
+    "message": "管理者権限"
   },
   "adminPermissions": {
     "message": "管理者権限"
@@ -5782,6 +5808,108 @@
   "forwardedEmailDesc": {
     "message": "外部転送サービスを使用してメールエイリアスを生成します。"
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ エラー: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "ウェブサイト: $WEBSITE$ Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "不正な$SERVICENAME$ API トークン",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "不正な$SERVICENAME$ API トークン: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "$SERVICENAME$ マスク済みメールアカウント ID を取得できませんでした。",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "不正な $SERVICENAME$ ドメインです。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "不正な $SERVICENAME$ URL です。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "不明な $SERVICENAME$ エラーが起きました。",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "不明な転送先: '$SERVICENAME$'",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "ホスト名",
     "description": "Part of a URL."
@@ -6460,6 +6588,9 @@
   "editGroupCollectionsDesc": {
     "message": "このグループに追加してコレクションへのアクセスを許可します。"
   },
+  "restrictedCollectionAssignmentDesc": {
+    "message": "You can only assign collections you manage."
+  },
   "accessAllCollectionsDesc": {
     "message": "現在および将来のすべてのコレクションへのアクセスを許可します。"
   },
@@ -6691,8 +6822,8 @@
   "selectGroups": {
     "message": "グループを選択"
   },
-  "userPermissionOverrideHelper": {
-    "message": "メンバーの権限設定は、そのメンバーのグループによって設定された権限に置き換えられます"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Permissions set for a member will replace permissions set by that member's group."
   },
   "noMembersOrGroupsAdded": {
     "message": "メンバーまたはグループが追加されていません"
@@ -6883,7 +7014,7 @@
   "updateLowKdfIterationsDesc": {
     "message": "新しいセキュリティの推奨事項に対応し、アカウントの保護を向上させるために、暗号化設定を更新してください。"
   },
-  "changeKdfLoggedOutWarning": {
+  "kdfSettingsChangeLogoutWarning": {
     "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
   },
   "secretsManager": {
@@ -7504,6 +7635,12 @@
   "readOnlyCollectionAccess": {
     "message": "このコレクションを管理する権限がありません。"
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "「管理可能」権限がありません"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "コレクションの削除を含む完全なコレクション管理を許可するには「管理可能」権限を許可してください。"
+  },
   "grantCollectionAccess": {
     "message": "グループまたはメンバーにこのコレクションへのアクセスを許可します。"
   },
@@ -7609,14 +7746,11 @@
   "success": {
     "message": "成功"
   },
-  "viewCollection": {
-    "message": "コレクションを表示"
-  },
   "restrictedGroupAccess": {
     "message": "あなた自身をグループに追加することはできません。"
   },
-  "restrictedCollectionAccess": {
-    "message": "コレクションに自分自身を追加することはできません。"
+  "cannotAddYourselfToCollections": {
+    "message": "You cannot add yourself to collections."
   },
   "assign": {
     "message": "割り当て"
@@ -7938,8 +8072,8 @@
       }
     }
   },
-  "deleteProviderWarningDesc": {
-    "message": "$ID$ を削除する前に、すべてのクライアントのリンクを解除してください",
+  "deleteProviderWarningDescription": {
+    "message": "$ID$ を削除するには、まずすべてのクライアントのリンクを解除してください。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -8049,5 +8183,50 @@
   },
   "collectionItemSelect": {
     "message": "コレクションのアイテムを選択"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "プロバイダーポータルからの請求を管理"
+  },
+  "viewInfo": {
+    "message": "情報を表示"
+  },
+  "viewAccess": {
+    "message": "アクセスを表示"
+  },
+  "noCollectionsSelected": {
+    "message": "コレクションが選択されていません。"
+  },
+  "updateName": {
+    "message": "名前を更新"
+  },
+  "updatedOrganizationName": {
+    "message": "組織名を更新済み"
+  },
+  "providerPlan": {
+    "message": "マネージドサービスプロバイダー"
+  },
+  "orgSeats": {
+    "message": "組織のシート"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$%割引",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "secureYourInfrastructure": {
+    "message": "Secure your infrastructure"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Protect your family or business"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
   }
 }

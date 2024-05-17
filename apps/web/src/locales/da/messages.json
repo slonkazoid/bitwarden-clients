@@ -1809,12 +1809,16 @@
   "unsecuredWebsitesFound": {
     "message": "Ikke-sikrede websteder fundet"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "$COUNT$ emner fundet i din boks med ikke-sikrede URI'er. Deres URI-protokoller bør ændres til https://, såfremt webstedet tillader det.",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "$COUNT$ emner fundet i $VAULT$ med ikke-sikreded URI'er. Hvis tilladt af webstedet, bør deres URI-protokol ændres til https://.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1830,12 +1834,16 @@
   "inactive2faFound": {
     "message": "Logins uden totrins-login fundet"
   },
-  "inactive2faFoundDesc": {
-    "message": "$COUNT$ websted(er) fundet i boksen, som muligvis ikke er opsat med totrins-login (jf. 2fa.directory). For yderligere at beskytte disse konti, bør totrins-login opsættes.",
+  "inactive2faFoundReportDesc": {
+    "message": "$COUNT$ websted(er) muligvis uden opsat med tofaktorgodkendelse (iflg. 2fa.directory) fundet i $VAULT$. For yderligere beskyttelse af disse konti bør tofaktorgodkendelse opsættes.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1854,12 +1862,16 @@
   "exposedPasswordsFound": {
     "message": "Kompromitterede adgangskoder fundet"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "$COUNT$ emner fundet i din boks med adgangskoder kompromitteret i kendte datalæk. En ny adgangskode bør opsættes for disse emner.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "$COUNT$ emner fundet i $VAULT$ med adgangskoder kompromitteret via kendte datalæk. Deres adgangskoder bør skiftes.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1887,12 +1899,16 @@
   "weakPasswordsFound": {
     "message": "Svage adgangskoder fundet"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "$COUNT$ emner fundet i din boks med adgangskoder, som ikke er stærke. Disse bør opdateres med stærkere adgangskoder.",
+  "weakPasswordsFoundReportDesc": {
+    "message": "$COUNT$ emner med svage adgangskoder fundet i $VAULT$. Disse bør skiftes til stærke adgangskoder.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1908,12 +1924,16 @@
   "reusedPasswordsFound": {
     "message": "Genbrugte adgangskoder fundet"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "Vi fandt $COUNT$ adgangskoder, der genbruges i din boks. Du bør ændre dem til unikke koder.",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "$COUNT$ adgangskoder, som genbruges, fundet i $VAULT$. Disse bør skiftes til unikke adgangskoder.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -2767,6 +2787,12 @@
   },
   "all": {
     "message": "Alle"
+  },
+  "addAccess": {
+    "message": "Tilføj adgang"
+  },
+  "addAccessFilter": {
+    "message": "Tilføj Adgangsfilter"
   },
   "refresh": {
     "message": "Opdater"
@@ -5782,6 +5808,108 @@
   "forwardedEmailDesc": {
     "message": "Generér et e-mail alias med en ekstern viderestillingstjeneste."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$-fejl: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Genereret af Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Websted: $WEBSITE$. Genereret af Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Ugyldigt $SERVICENAME$ API-token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Ugyldigt $SERVICENAME$ API-token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Kan ikke få $SERVICENAME$ maskeret e-mailkonto-ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Ugyldigt $SERVICENAME$-domæne.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Ugyldig $SERVICENAME$-URL.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Ukendt $SERVICENAME$-fejl opstod.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Ukendt videresender: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Værtsnavn",
     "description": "Part of a URL."
@@ -6460,6 +6588,9 @@
   "editGroupCollectionsDesc": {
     "message": "Tildel adgang til samlinger ved at føje dem til denne gruppe."
   },
+  "restrictedCollectionAssignmentDesc": {
+    "message": "Man kan kun tildele samlinger, man selv håndterer."
+  },
   "accessAllCollectionsDesc": {
     "message": "Tildel adgang til alle nuværende og fremtidige samlinger."
   },
@@ -6691,8 +6822,8 @@
   "selectGroups": {
     "message": "Vælg grupper"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Tilladelser angivet for et medlem vil erstatte tilladelser angivet af medlemmets gruppe"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Tilladelser angivet for et medlem vil erstatte tilladelser angivet af medlemmets gruppe."
   },
   "noMembersOrGroupsAdded": {
     "message": "Ingen medlemmer eller grupper tilføjet"
@@ -6883,8 +7014,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Opdatér krypteringsindstillingerne for at opfylde nye sikkerhedsanbefalinger og forbedre kontobeskyttelsen."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Fortsættes, logges man ud af alle aktive sessioner. Man vil skulle logge ind igen og færdiggøre opsætningen af totrinsindlogning. For at forhindre datatab anbefales det, at boksen eksporteres, inden krypteringsindstillingerne ændres."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Fortsættes, logges alle aktive sessioner af. Man vil skulle logge ind igen og færdiggøre opsætningen af totrinsindlogning. Eksport af boksen inden krypteringsindstillingerne ændres anbefales for at forhindre datatab."
   },
   "secretsManager": {
     "message": "Hemmelighedshåndtering"
@@ -7504,6 +7635,12 @@
   "readOnlyCollectionAccess": {
     "message": "Du har ikke adgang til at håndtere denne samling."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Manglende Kan håndtere tilladelser"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Tildel Kan håndtere tilladelser for at tillade fuld samlingshåndtering, herunder sletning af samling."
+  },
   "grantCollectionAccess": {
     "message": "Tildel grupper eller medlemmer adgang til denne samling."
   },
@@ -7609,13 +7746,10 @@
   "success": {
     "message": "Gennemført"
   },
-  "viewCollection": {
-    "message": "Vis samling"
-  },
   "restrictedGroupAccess": {
     "message": "Man kan ikke føje sig selv til grupper."
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "Man kan ikke føje sig selv til samlinger."
   },
   "assign": {
@@ -7938,8 +8072,8 @@
       }
     }
   },
-  "deleteProviderWarningDesc": {
-    "message": "Alle klienttilknytninger skal fjernes, før $ID$ kan slettes",
+  "deleteProviderWarningDescription": {
+    "message": "Alle klienttilknytninger skal fjernes, før $ID$ kan slettes.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -8049,5 +8183,50 @@
   },
   "collectionItemSelect": {
     "message": "Vælg samlingsemne"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Håndter fakturering via udbyderportalen"
+  },
+  "viewInfo": {
+    "message": "Se info"
+  },
+  "viewAccess": {
+    "message": "Se adgang"
+  },
+  "noCollectionsSelected": {
+    "message": "Der er ikke valgt nogen samlinger."
+  },
+  "updateName": {
+    "message": "Opdatér navn"
+  },
+  "updatedOrganizationName": {
+    "message": "Opdateret organisationsnavn"
+  },
+  "providerPlan": {
+    "message": "Administreret Tjenesteudbyder"
+  },
+  "orgSeats": {
+    "message": "Organisationspladser"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% rabat",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "secureYourInfrastructure": {
+    "message": "Sikr infrastrukturen"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Beskyt familien eller virksomheden"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Luk sikkerhedshuller med monitoreringsrapporter"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Vær opdateret mod sikkerhedssårbarheder ved at opgradere til en betalt abonnementstype for forbedret monitorering."
   }
 }

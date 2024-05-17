@@ -1,7 +1,7 @@
 import {
   AssertCredentialParams,
   CreateCredentialParams,
-} from "@bitwarden/common/vault/abstractions/fido2/fido2-client.service.abstraction";
+} from "@bitwarden/common/platform/abstractions/fido2/fido2-client.service.abstraction";
 
 import { sendExtensionMessage } from "../../../autofill/utils";
 import { Fido2PortName } from "../enums/fido2-port-name.enum";
@@ -15,7 +15,11 @@ import {
 import { MessageWithMetadata, Messenger } from "./messaging/messenger";
 
 (function (globalContext) {
-  if (globalContext.document.contentType !== "text/html") {
+  const shouldExecuteContentScript =
+    globalContext.document.contentType === "text/html" &&
+    globalContext.document.location.protocol === "https:";
+
+  if (!shouldExecuteContentScript) {
     return;
   }
 
