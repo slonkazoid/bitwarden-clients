@@ -1714,6 +1714,12 @@
   "biometricsNotSupportedDesc": {
     "message": "Browser biometrics is not supported on this device."
   },
+  "biometricsNotUnlockedTitle": {
+    "message": "User locked or logged out"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Please unlock this user in the desktop application and try again."
+  },
   "biometricsFailedTitle": {
     "message": "Biometrics failed"
   },
@@ -3148,5 +3154,8 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Error assigning target folder."
+  },
+  "new": {
+    "message": "New"
   }
 }

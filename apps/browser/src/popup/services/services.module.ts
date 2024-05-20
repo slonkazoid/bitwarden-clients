@@ -82,8 +82,6 @@ import {
 } from "@bitwarden/common/platform/state";
 // eslint-disable-next-line import/no-restricted-paths -- Used for dependency injection
 import { InlineDerivedStateProvider } from "@bitwarden/common/platform/state/implementations/inline-derived-state";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import { VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -197,9 +195,11 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: LogService,
-    useFactory: (platformUtilsService: PlatformUtilsService) =>
-      new ConsoleLogService(platformUtilsService.isDev()),
-    deps: [PlatformUtilsService],
+    useFactory: () => {
+      const isDev = process.env.ENV === "development";
+      return new ConsoleLogService(isDev);
+    },
+    deps: [],
   }),
   safeProvider({
     provide: EnvironmentService,
@@ -288,7 +288,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: OffscreenDocumentService,
     useClass: DefaultOffscreenDocumentService,
-    deps: [],
+    deps: [LogService],
   }),
   safeProvider({
     provide: PlatformUtilsService,
@@ -316,11 +316,6 @@ const safeProviders: SafeProvider[] = [
       );
     },
     deps: [ToastService, OffscreenDocumentService],
-  }),
-  safeProvider({
-    provide: PasswordGenerationServiceAbstraction,
-    useFactory: getBgService<PasswordGenerationServiceAbstraction>("passwordGenerationService"),
-    deps: [],
   }),
   safeProvider({
     provide: SyncService,
@@ -481,11 +476,6 @@ const safeProviders: SafeProvider[] = [
       TokenService,
       MigrationRunner,
     ],
-  }),
-  safeProvider({
-    provide: UsernameGenerationServiceAbstraction,
-    useFactory: getBgService<UsernameGenerationServiceAbstraction>("usernameGenerationService"),
-    deps: [],
   }),
   safeProvider({
     provide: BaseStateServiceAbstraction,
