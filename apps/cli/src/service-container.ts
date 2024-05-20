@@ -56,6 +56,7 @@ import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstract
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import {
   BiometricStateService,
   DefaultBiometricStateService,
@@ -72,6 +73,7 @@ import { ContainerService } from "@bitwarden/common/platform/services/container.
 import { CryptoService } from "@bitwarden/common/platform/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
+import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import { FileUploadService } from "@bitwarden/common/platform/services/file-upload/file-upload.service";
 import { KeyGenerationService } from "@bitwarden/common/platform/services/key-generation.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
@@ -239,6 +241,7 @@ export class ServiceContainer {
   providerApiService: ProviderApiServiceAbstraction;
   userAutoUnlockKeyService: UserAutoUnlockKeyService;
   kdfConfigService: KdfConfigServiceAbstraction;
+  taskSchedulerService: TaskSchedulerService;
 
   constructor() {
     let p = null;
@@ -534,6 +537,7 @@ export class ServiceContainer {
       this.stateProvider,
     );
 
+    this.taskSchedulerService = new DefaultTaskSchedulerService(this.logService);
     this.loginStrategyService = new LoginStrategyService(
       this.accountService,
       this.masterPasswordService,
@@ -559,6 +563,7 @@ export class ServiceContainer {
       this.billingAccountProfileStateService,
       this.vaultTimeoutSettingsService,
       this.kdfConfigService,
+      this.taskSchedulerService,
     );
 
     this.authService = new AuthService(
@@ -633,6 +638,7 @@ export class ServiceContainer {
       this.authService,
       this.vaultTimeoutSettingsService,
       this.stateEventRunnerService,
+      this.taskSchedulerService,
       lockedCallback,
       null,
     );
@@ -715,6 +721,7 @@ export class ServiceContainer {
       this.stateProvider,
       this.logService,
       this.authService,
+      this.taskSchedulerService,
     );
 
     this.eventCollectionService = new EventCollectionService(
