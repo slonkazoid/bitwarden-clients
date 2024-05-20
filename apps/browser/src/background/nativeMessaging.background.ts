@@ -167,6 +167,11 @@ export class NativeMessagingBackground {
               cancelButtonText: null,
               type: "danger",
             });
+
+            if (this.resolver) {
+              this.resolver(message);
+            }
+
             break;
           case "verifyFingerprint": {
             if (this.sharedSecret == null) {
@@ -311,6 +316,15 @@ export class NativeMessagingBackground {
           this.messagingService.send("showDialog", {
             title: { key: "biometricsNotSupportedTitle" },
             content: { key: "biometricsNotSupportedDesc" },
+            acceptButtonText: { key: "ok" },
+            cancelButtonText: null,
+            type: "danger",
+          });
+          break;
+        } else if (message.response === "not unlocked") {
+          this.messagingService.send("showDialog", {
+            title: { key: "biometricsNotUnlockedTitle" },
+            content: { key: "biometricsNotUnlockedDesc" },
             acceptButtonText: { key: "ok" },
             cancelButtonText: null,
             type: "danger",

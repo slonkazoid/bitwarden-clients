@@ -82,8 +82,6 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
-  getEmail: (options?: StorageOptions) => Promise<string>;
-  setEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getEnableBrowserIntegration: (options?: StorageOptions) => Promise<boolean>;
   setEnableBrowserIntegration: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableBrowserIntegrationFingerprint: (options?: StorageOptions) => Promise<boolean>;
@@ -118,8 +116,4 @@ export abstract class StateService<T extends Account = Account> {
   getGeneratorOptions: (options?: StorageOptions) => Promise<GeneratorOptions>;
   setGeneratorOptions: (value: GeneratorOptions, options?: StorageOptions) => Promise<void>;
   getUserId: (options?: StorageOptions) => Promise<string>;
-  getVaultTimeout: (options?: StorageOptions) => Promise<number>;
-  setVaultTimeout: (value: number, options?: StorageOptions) => Promise<void>;
-  getVaultTimeoutAction: (options?: StorageOptions) => Promise<string>;
-  setVaultTimeoutAction: (value: string, options?: StorageOptions) => Promise<void>;
 }

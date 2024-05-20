@@ -347,23 +347,6 @@ export class StateService<
       : await this.secureStorageService.save(DDG_SHARED_KEY, value, options);
   }
 
-  async getEmail(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.profile?.email;
-  }
-
-  async setEmail(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    account.profile.email = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-  }
-
   async getEnableBrowserIntegration(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
@@ -569,49 +552,6 @@ export class StateService<
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.profile?.userId;
-  }
-
-  async getVaultTimeout(options?: StorageOptions): Promise<number> {
-    const accountVaultTimeout = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.settings?.vaultTimeout;
-    return accountVaultTimeout;
-  }
-
-  async setVaultTimeout(value: number, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-    account.settings.vaultTimeout = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-  }
-
-  async getVaultTimeoutAction(options?: StorageOptions): Promise<string> {
-    const accountVaultTimeoutAction = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.settings?.vaultTimeoutAction;
-    return (
-      accountVaultTimeoutAction ??
-      (
-        await this.getGlobals(
-          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-        )
-      )?.vaultTimeoutAction
-    );
-  }
-
-  async setVaultTimeoutAction(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-    account.settings.vaultTimeoutAction = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
   }
 
   protected async getGlobals(options: StorageOptions): Promise<TGlobalState> {

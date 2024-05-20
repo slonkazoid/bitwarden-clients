@@ -1,5 +1,5 @@
 import * as bigInt from "big-integer";
-import { Observable, filter, firstValueFrom, map } from "rxjs";
+import { Observable, combineLatest, filter, firstValueFrom, map, zip } from "rxjs";
 
 import { PinServiceAbstraction } from "../../../../auth/src/common/abstractions";
 import { EncryptedOrganizationKeyData } from "../../admin-console/models/data/encrypted-organization-key.data";
@@ -11,6 +11,7 @@ import { KdfConfigService } from "../../auth/abstractions/kdf-config.service";
 import { InternalMasterPasswordServiceAbstraction } from "../../auth/abstractions/master-password.service.abstraction";
 import { KdfConfig } from "../../auth/models/domain/kdf-config";
 import { Utils } from "../../platform/misc/utils";
+import { VAULT_TIMEOUT } from "../../services/vault-timeout/vault-timeout-settings.state";
 import { CsprngArray } from "../../types/csprng";
 import { OrganizationId, ProviderId, UserId } from "../../types/guid";
 import {
@@ -22,6 +23,7 @@ import {
   UserPrivateKey,
   UserPublicKey,
 } from "../../types/key";
+import { VaultTimeoutStringType } from "../../types/vault-timeout.type";
 import { CryptoFunctionService } from "../abstractions/crypto-function.service";
 import { CryptoService as CryptoServiceAbstraction } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
@@ -95,13 +97,12 @@ export class CryptoService implements CryptoServiceAbstraction {
     // User Asymmetric Key Pair
     this.activeUserEncryptedPrivateKeyState = stateProvider.getActive(USER_ENCRYPTED_PRIVATE_KEY);
     this.activeUserPrivateKeyState = stateProvider.getDerived(
-      this.activeUserEncryptedPrivateKeyState.combinedState$.pipe(
-        filter(([_userId, key]) => key != null),
+      zip(this.activeUserEncryptedPrivateKeyState.state$, this.activeUserKey$).pipe(
+        filter(([, userKey]) => !!userKey),
       ),
       USER_PRIVATE_KEY,
       {
         encryptService: this.encryptService,
-        getUserKey: (userId) => this.getUserKey(userId),
       },
     );
     this.activeUserPrivateKey$ = this.activeUserPrivateKeyState.state$; // may be null
@@ -114,27 +115,34 @@ export class CryptoService implements CryptoServiceAbstraction {
     );
     this.activeUserPublicKey$ = this.activeUserPublicKeyState.state$; // may be null
 
-    // Organization keys
-    this.activeUserEncryptedOrgKeysState = stateProvider.getActive(
-      USER_ENCRYPTED_ORGANIZATION_KEYS,
-    );
-    this.activeUserOrgKeysState = stateProvider.getDerived(
-      this.activeUserEncryptedOrgKeysState.state$.pipe(filter((keys) => keys != null)),
-      USER_ORGANIZATION_KEYS,
-      { cryptoService: this },
-    );
-    this.activeUserOrgKeys$ = this.activeUserOrgKeysState.state$; // null handled by `derive` function
-
     // Provider keys
     this.activeUserEncryptedProviderKeysState = stateProvider.getActive(
       USER_ENCRYPTED_PROVIDER_KEYS,
     );
     this.activeUserProviderKeysState = stateProvider.getDerived(
-      this.activeUserEncryptedProviderKeysState.state$.pipe(filter((keys) => keys != null)),
+      zip(
+        this.activeUserEncryptedProviderKeysState.state$.pipe(filter((keys) => keys != null)),
+        this.activeUserPrivateKey$,
+      ).pipe(filter(([, privateKey]) => !!privateKey)),
       USER_PROVIDER_KEYS,
-      { encryptService: this.encryptService, cryptoService: this },
+      { encryptService: this.encryptService },
     );
     this.activeUserProviderKeys$ = this.activeUserProviderKeysState.state$; // null handled by `derive` function
+
+    // Organization keys
+    this.activeUserEncryptedOrgKeysState = stateProvider.getActive(
+      USER_ENCRYPTED_ORGANIZATION_KEYS,
+    );
+    this.activeUserOrgKeysState = stateProvider.getDerived(
+      zip(
+        this.activeUserEncryptedOrgKeysState.state$.pipe(filter((keys) => keys != null)),
+        this.activeUserPrivateKey$,
+        this.activeUserProviderKeys$,
+      ).pipe(filter(([, privateKey]) => !!privateKey)),
+      USER_ORGANIZATION_KEYS,
+      { encryptService: this.encryptService },
+    );
+    this.activeUserOrgKeys$ = this.activeUserOrgKeysState.state$; // null handled by `derive` function
   }
 
   async setUserKey(key: UserKey, userId?: UserId): Promise<void> {
@@ -272,11 +280,18 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   // TODO: Move to MasterPasswordService
   async getOrDeriveMasterKey(password: string, userId?: UserId) {
-    userId ??= await firstValueFrom(this.stateProvider.activeUserId$);
-    let masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(userId));
+    const [resolvedUserId, email] = await firstValueFrom(
+      combineLatest([this.accountService.activeAccount$, this.accountService.accounts$]).pipe(
+        map(([activeAccount, accounts]) => {
+          userId ??= activeAccount?.id;
+          return [userId, accounts[userId]?.email];
+        }),
+      ),
+    );
+    let masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(resolvedUserId));
     return (masterKey ||= await this.makeMasterKey(
       password,
-      await this.stateService.getEmail({ userId: userId }),
+      email,
       await this.kdfConfigService.getKdfConfig(),
     ));
   }
@@ -654,17 +669,14 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
 
     try {
-      const [userId, encPrivateKey] = await firstValueFrom(
-        this.activeUserEncryptedPrivateKeyState.combinedState$,
-      );
+      const encPrivateKey = await firstValueFrom(this.activeUserEncryptedPrivateKeyState.state$);
       if (encPrivateKey == null) {
         return false;
       }
 
       // Can decrypt private key
-      const privateKey = await USER_PRIVATE_KEY.derive([userId, encPrivateKey], {
+      const privateKey = await USER_PRIVATE_KEY.derive([encPrivateKey, key], {
         encryptService: this.encryptService,
-        getUserKey: () => Promise.resolve(key),
       });
 
       if (privateKey == null) {
@@ -773,8 +785,14 @@ export class CryptoService implements CryptoServiceAbstraction {
     let shouldStoreKey = false;
     switch (keySuffix) {
       case KeySuffixOptions.Auto: {
-        const vaultTimeout = await this.stateService.getVaultTimeout({ userId: userId });
-        shouldStoreKey = vaultTimeout == null;
+        // TODO: Sharing the UserKeyDefinition is temporary to get around a circ dep issue between
+        // the VaultTimeoutSettingsSvc and this service.
+        // This should be fixed as part of the PM-7082 - Auto Key Service work.
+        const vaultTimeout = await firstValueFrom(
+          this.stateProvider.getUserState$(VAULT_TIMEOUT, userId),
+        );
+
+        shouldStoreKey = vaultTimeout == VaultTimeoutStringType.Never;
         break;
       }
       case KeySuffixOptions.Pin: {

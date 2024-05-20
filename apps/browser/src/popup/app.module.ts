@@ -14,6 +14,7 @@ import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
+import { UserVerificationDialogComponent } from "@bitwarden/auth/angular";
 import { AvatarModule, ButtonModule, ToastModule } from "@bitwarden/components";
 import { ExportScopeCalloutComponent } from "@bitwarden/vault-export-ui";
 
@@ -40,11 +41,13 @@ import { AutofillComponent } from "../autofill/popup/settings/autofill.component
 import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
 import { NotifcationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
+import { PopOutComponent } from "../platform/popup/components/pop-out.component";
 import { HeaderComponent } from "../platform/popup/header.component";
 import { PopupFooterComponent } from "../platform/popup/layout/popup-footer.component";
 import { PopupHeaderComponent } from "../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../platform/popup/layout/popup-page.component";
 import { PopupTabNavigationComponent } from "../platform/popup/layout/popup-tab-navigation.component";
+import { PopupSectionHeaderComponent } from "../platform/popup/popup-section-header/popup-section-header.component";
 import { FilePopoutCalloutComponent } from "../tools/popup/components/file-popout-callout.component";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
@@ -80,7 +83,6 @@ import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.c
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { PopOutComponent } from "./components/pop-out.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
 import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
@@ -117,10 +119,14 @@ import "../platform/popup/locales";
     AccountComponent,
     ButtonModule,
     ExportScopeCalloutComponent,
+    PopOutComponent,
     PopupPageComponent,
     PopupTabNavigationComponent,
     PopupFooterComponent,
     PopupHeaderComponent,
+    UserVerificationDialogComponent,
+    PopupSectionHeaderComponent,
+    CurrentAccountComponent,
   ],
   declarations: [
     ActionButtonsComponent,
@@ -155,7 +161,6 @@ import "../platform/popup/locales";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordHistoryComponent,
-    PopOutComponent,
     PremiumComponent,
     RegisterComponent,
     SendAddEditComponent,
@@ -184,7 +189,6 @@ import "../platform/popup/locales";
     HelpAndFeedbackComponent,
     AutofillComponent,
     EnvironmentSelectorComponent,
-    CurrentAccountComponent,
     AccountSwitcherComponent,
     VaultV2Component,
   ],
