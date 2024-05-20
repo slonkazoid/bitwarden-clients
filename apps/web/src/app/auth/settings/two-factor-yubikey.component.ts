@@ -1,5 +1,5 @@
 import { DIALOG_DATA, DialogConfig } from "@angular/cdk/dialog";
-import { Component, Inject } from "@angular/core";
+import { Component, EventEmitter, Inject, Output } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -25,6 +25,7 @@ interface Key {
   templateUrl: "two-factor-yubikey.component.html",
 })
 export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
+  @Output() onChangeStatus = new EventEmitter<boolean>();
   type = TwoFactorProviderType.Yubikey;
   keyValues: Key[];
   nfc = false;
@@ -120,6 +121,7 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
 
   private processResponse(response: TwoFactorYubiKeyResponse) {
     this.enabled = response.enabled;
+    this.onChangeStatus.emit(this.enabled);
 
     this.keyValues = [
       { key: response.key1, existingKey: this.padRight(response.key1) },
