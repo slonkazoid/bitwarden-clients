@@ -776,9 +776,14 @@ export class CipherService implements CipherServiceAbstraction {
   async saveCollectionsWithServer(cipher: Cipher): Promise<Cipher> {
     const request = new CipherCollectionsRequest(cipher.collectionIds);
     const response = await this.apiService.putCipherCollections(cipher.id, request);
-    const data = new CipherData(response);
+    // The response will now check for an unavailable value. This value determines whether
+    // the user still has Can Manage access to the item after updating.
+    if (response.unavailable) {
+      await this.delete(cipher.id);
+      return;
+    }
+    const data = new CipherData(response.cipher);
     const updated = await this.upsert(data);
-    // Collection updates don't change local data
     return new Cipher(updated[cipher.id as CipherId], cipher.localData);
   }
 
@@ -1117,14 +1122,15 @@ export class CipherService implements CipherServiceAbstraction {
     await this.restore({ id: id, revisionDate: response.revisionDate });
   }
 
-  async restoreManyWithServer(
-    ids: string[],
-    organizationId: string = null,
-    asAdmin = false,
-  ): Promise<void> {
+  /**
+   * No longer using an asAdmin Param. Org Vault bulkRestore will assess if an item is unassigned or editable
+   * The Org Vault will pass those ids an array as well as the orgId when calling bulkRestore
+   */
+  async restoreManyWithServer(ids: string[], orgId: string = null): Promise<void> {
     let response;
-    if (asAdmin) {
-      const request = new CipherBulkRestoreRequest(ids, organizationId);
+
+    if (orgId) {
+      const request = new CipherBulkRestoreRequest(ids, orgId);
       response = await this.apiService.putRestoreManyCiphersAdmin(request);
     } else {
       const request = new CipherBulkRestoreRequest(ids);

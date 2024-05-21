@@ -2789,10 +2789,10 @@
     "message": "Све"
   },
   "addAccess": {
-    "message": "Add Access"
+    "message": "Додај приступ"
   },
   "addAccessFilter": {
-    "message": "Add Access Filter"
+    "message": "Додај филтер приступа"
   },
   "refresh": {
     "message": "Освежи"
@@ -3564,6 +3564,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Подешавање ваше претплате резултираће прорисаним променама у вашим новчаним вредностима. Ако ново позвани корисници прелази ваше лиценце за претплату, одмах ћете добити прорисану накнаду за додатни корисник."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Ако желите да додате додатна"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "седишта без понуде у пакету, контактирајте"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Подешавање ваше претплате резултираће прорисаним променама у вашим новчаним вредностима. Ако ново позвани корисници прелази ваше лиценце за претплату, одмах ћете добити прорисану накнаду за додатни корисник док ваши лимит $MAX$ није достигнут.",
@@ -5808,6 +5814,108 @@
   "forwardedEmailDesc": {
     "message": "Генеришите псеудоним е-поште помоћу екстерне услуге прослеђивања."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ грешка: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Генерисао Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Вебсајт: $WEBSITE$. Генерисао Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Погрешан АПИ токен $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Погрешан АПИ токен $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Није могуће добити ИД налога маскираног имејла $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Погрешан домен $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Погрешан УРЛ $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Непозната грешка $SERVICENAME$-а.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Непознати шпедитер: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Име домаћина",
     "description": "Part of a URL."
@@ -6486,7 +6594,7 @@
   "editGroupCollectionsDesc": {
     "message": "Grant access to collections by adding them to this group."
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "Можете да доделите само колекције којима управљате."
   },
   "accessAllCollectionsDesc": {
@@ -6720,8 +6828,8 @@
   "selectGroups": {
     "message": "Изаберите групе"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Permissions set for a member will replace permissions set by that member's group"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Дозволе постављене за члана ће заменити дозволе које је поставила група тог члана."
   },
   "noMembersOrGroupsAdded": {
     "message": "Нема додатих чланова или група"
@@ -6912,8 +7020,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Ажурирајте подешавања шифровања да бисте испунили нове безбедносне препоруке и побољшали заштиту налога."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Ако наставите, одјавићете се са свих активних сесија. Мораћете поново да се пријавите и завршите подешавање пријаве у два корака. Препоручујемо да извезете трезор пре него што промените подешавања шифровања да бисте спречили губитак података."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Ако наставите, одјавићете се са свих активних сесија. Мораћете поново да се пријавите и завршитепријаве у два корака, ако имате. Препоручујемо да извезете трезор пре него што промените подешавања шифровања да бисте спречили губитак података."
   },
   "secretsManager": {
     "message": "Менаџер тајни"
@@ -7533,6 +7641,12 @@
   "readOnlyCollectionAccess": {
     "message": "Немате приступ за управљање овом колекцијом."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Фале дозволе „Може да управља“"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Додатје дозволе „Може да управља“ да би се омогућило потпуно управљање наплатом укључујући брисање колекције."
+  },
   "grantCollectionAccess": {
     "message": "Одобрите групама или члановима приступ овој колекцији."
   },
@@ -7638,13 +7752,10 @@
   "success": {
     "message": "Успех"
   },
-  "viewCollection": {
-    "message": "Преглед колекције"
-  },
   "restrictedGroupAccess": {
     "message": "Не можете да се додате у групе."
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "Не можете да се додате у колекције."
   },
   "assign": {
@@ -8081,5 +8192,47 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Управљајте наплатом из Provider Portal"
+  },
+  "viewInfo": {
+    "message": "Прикажи информације"
+  },
+  "viewAccess": {
+    "message": "Прикажи приступ"
+  },
+  "noCollectionsSelected": {
+    "message": "Нисте изабрали ниједну колекцију."
+  },
+  "updateName": {
+    "message": "Ажурирајте име"
+  },
+  "updatedOrganizationName": {
+    "message": "Ажурирано име организације"
+  },
+  "providerPlan": {
+    "message": "Управљени провајдери сервиса"
+  },
+  "orgSeats": {
+    "message": "Седиста организације"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% попуста",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "secureYourInfrastructure": {
+    "message": "Обезбедите своју инфраструктуру"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Заштитите своју породицу или посао"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Затворите безбедносне празнине извештајима о надгледању"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Будите испред безбедносних пропуста надоградњом на плаћени план за побољшано праћење."
   }
 }
