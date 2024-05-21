@@ -1,6 +1,7 @@
 import { ReportBreach } from "./icons/report-breach.icon";
 import { ReportExposedPasswords } from "./icons/report-exposed-passwords.icon";
 import { ReportInactiveTwoFactor } from "./icons/report-inactive-two-factor.icon";
+import { MemberAccess } from "./icons/report-member-access.icon";
 import { ReportReusedPasswords } from "./icons/report-reused-passwords.icon";
 import { ReportUnsecuredWebsites } from "./icons/report-unsecured-websites.icon";
 import { ReportWeakPasswords } from "./icons/report-weak-passwords.icon";
@@ -59,6 +60,6 @@ export const reports: Record<ReportType, ReportWithoutVariant> = {
     title: "memberAccessReport",
     description: "memberAccessReportDesc",
     route: "member-access-report",
-    icon: ReportBreach,
+    icon: MemberAccess,
   },
 };
