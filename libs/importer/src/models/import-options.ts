@@ -10,7 +10,7 @@ export const featuredImportOptions = [
   { id: "dashlanecsv", name: "Dashlane (csv)" },
   { id: "firefoxcsv", name: "Firefox (csv)" },
   { id: "keepass2xml", name: "KeePass 2 (xml)" },
-  { id: "lastpasscsv", name: "LastPass (csv)" },
+  { id: "lastpasscsv", name: "LastPass" },
   { id: "safaricsv", name: "Safari and macOS (csv)" },
   { id: "1password1pux", name: "1Password (1pux/json)" },
 ] as const;
@@ -29,7 +29,7 @@ export const regularImportOptions = [
   { id: "enpassjson", name: "Enpass (json)" },
   { id: "protonpass", name: "ProtonPass (zip/json)" },
   { id: "safeincloudxml", name: "SafeInCloud (xml)" },
-  { id: "pwsafexml", name: "Password Safe (xml)" },
+  { id: "pwsafexml", name: "Password Safe - pwsafe.org (xml)" },
   { id: "stickypasswordxml", name: "Sticky Password (xml)" },
   { id: "msecurecsv", name: "mSecure (csv)" },
   { id: "truekeycsv", name: "True Key (csv)" },

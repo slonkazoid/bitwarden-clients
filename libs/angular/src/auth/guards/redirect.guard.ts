@@ -1,8 +1,9 @@
 import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 
@@ -22,13 +23,15 @@ const defaultRoutes: RedirectRoutes = {
 
 /**
  * Guard that consolidates all redirection logic, should be applied to root route.
+ *
+ * TODO: This should return Observable<boolean | UrlTree> once we can get rid of all the promises
  */
 export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActivateFn {
   const routes = { ...defaultRoutes, ...overrides };
   return async (route) => {
     const authService = inject(AuthService);
     const cryptoService = inject(CryptoService);
-    const deviceTrustCryptoService = inject(DeviceTrustCryptoServiceAbstraction);
+    const deviceTrustService = inject(DeviceTrustServiceAbstraction);
     const router = inject(Router);
 
     const authStatus = await authService.getAuthStatus();
@@ -43,8 +46,8 @@ export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActiv
 
     // If locked, TDE is enabled, and the user hasn't decrypted yet, then redirect to the
     // login decryption options component.
-    const tdeEnabled = await deviceTrustCryptoService.supportsDeviceTrust();
-    const everHadUserKey = await cryptoService.getEverHadUserKey();
+    const tdeEnabled = await firstValueFrom(deviceTrustService.supportsDeviceTrust$);
+    const everHadUserKey = await firstValueFrom(cryptoService.everHadUserKey$);
     if (authStatus === AuthenticationStatus.Locked && tdeEnabled && !everHadUserKey) {
       return router.createUrlTree([routes.notDecrypted], { queryParams: route.queryParams });
     }

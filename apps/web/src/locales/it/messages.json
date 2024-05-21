@@ -578,6 +578,9 @@
   "access": {
     "message": "Accesso"
   },
+  "accessLevel": {
+    "message": "Livello di accesso"
+  },
   "loggedOut": {
     "message": "Uscito"
   },
@@ -610,6 +613,96 @@
   },
   "loginWithMasterPassword": {
     "message": "Accedi con password principale"
+  },
+  "readingPasskeyLoading": {
+    "message": "Lettura passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Mantieni questa finestra aperta e segui le istruzioni del tuo browser."
+  },
+  "useADifferentLogInMethod": {
+    "message": "Usa un altro metodo di accesso"
+  },
+  "loginWithPasskey": {
+    "message": "Accedi con passkey"
+  },
+  "invalidPasskeyPleaseTryAgain": {
+    "message": "Passkey non valida. Riprova."
+  },
+  "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
+    "message": "La 2FA per le passkey non è supportata. Aggiorna l'app per accedere."
+  },
+  "loginWithPasskeyInfo": {
+    "message": "Usa una passkey che ti farà accedere automaticamente senza una password. L'autenticazione biometrica, come il riconoscimento facciale o l'impronta digitale, o un altro metodo di sicurezza FIDO2 verificherà la tua identità."
+  },
+  "newPasskey": {
+    "message": "Nuova passkey"
+  },
+  "learnMoreAboutPasswordless": {
+    "message": "Ulteriori informazioni sull'autenticazione senza password"
+  },
+  "creatingPasskeyLoading": {
+    "message": "Creando la passkey..."
+  },
+  "creatingPasskeyLoadingInfo": {
+    "message": "Mantieni questa finestra aperta e segui le istruzioni del tuo browser."
+  },
+  "errorCreatingPasskey": {
+    "message": "Errore durante la creazione della passkey"
+  },
+  "errorCreatingPasskeyInfo": {
+    "message": "Si è verificato un problema durante la creazione della tua passkey."
+  },
+  "passkeySuccessfullyCreated": {
+    "message": "Passkey creata!"
+  },
+  "customPasskeyNameInfo": {
+    "message": "Dai un nome alla tua passkey per aiutarti a riconoscerla."
+  },
+  "useForVaultEncryption": {
+    "message": "Usa per la crittografia della cassaforte"
+  },
+  "useForVaultEncryptionInfo": {
+    "message": "Accedi e sblocca sui dispositivi supportati senza la tua password principale. Segui le istruzioni del tuo browser per completare la configurazione."
+  },
+  "useForVaultEncryptionErrorReadingPasskey": {
+    "message": "Errore durante la lettura della passkey. Riprova o disattiva questa opzione."
+  },
+  "encryptionNotSupported": {
+    "message": "Crittografia non supportata"
+  },
+  "enablePasskeyEncryption": {
+    "message": "Configura crittografia"
+  },
+  "usedForEncryption": {
+    "message": "Usata per la crittografia"
+  },
+  "loginWithPasskeyEnabled": {
+    "message": "Accesso con passkey attivato"
+  },
+  "passkeySaved": {
+    "message": "$NAME$ salvato",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Personal yubikey"
+      }
+    }
+  },
+  "passkeyRemoved": {
+    "message": "Passkey rimossa"
+  },
+  "removePasskey": {
+    "message": "Rimuovi passkey"
+  },
+  "removePasskeyInfo": {
+    "message": "Se tutte le passkey sono rimosse, non potrai accedere a nuovi dispositivi senza la tua password principale."
+  },
+  "passkeyLimitReachedInfo": {
+    "message": "Limite di passkey raggiunto. Rimuovi una passkey per aggiungerne un'altra."
+  },
+  "tryAgain": {
+    "message": "Riprova"
   },
   "createAccount": {
     "message": "Crea account"
@@ -964,19 +1057,22 @@
     "message": "Conferma esportazione dei segreti"
   },
   "exportWarningDesc": {
-    "message": "Questa esportazione contiene i dati della tua cassaforte in un formato non criptato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo."
+    "message": "Questa esportazione contiene i dati della tua cassaforte in un formato non crittografato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo."
   },
   "exportSecretsWarningDesc": {
-    "message": "Questa esportazione contiene i dati dei tuoi segreti in un formato non criptato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo."
+    "message": "Questa esportazione contiene i dati dei tuoi segreti in un formato non crittografato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo."
   },
   "encExportKeyWarningDesc": {
-    "message": "Questa esportazione cripta i tuoi dati usando la chiave di criptografia del tuo account. Se cambi la chiave di criptografia del tuo account, non potrai più decifrare il file esportato e dovrai eseguire una nuova esportazione."
+    "message": "Questa esportazione crittografa i tuoi dati usando la chiave di crittografia del tuo account. Se cambi la chiave di crittografia del tuo account, non potrai più decifrare il file esportato e dovrai eseguire una nuova esportazione."
   },
   "encExportAccountWarningDesc": {
-    "message": "Le chiavi di criptografia dell'account sono uniche per ogni account Bitwarden, quindi non puoi importare un file di esportazione criptato in un account diverso."
+    "message": "Le chiavi di cifratura dell'account sono uniche per ogni account utente Bitwarden, quindi non è possibile importare un'esportazione cifrata in un account diverso."
   },
   "export": {
     "message": "Esporta"
+  },
+  "exportFrom": {
+    "message": "Esporta da"
   },
   "exportVault": {
     "message": "Esporta cassaforte"
@@ -1006,10 +1102,10 @@
     "message": "Conferma password del file"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Usa la chiave di criptografia dell'account, derivata dal nome utente e dalla password principale del tuo account, per criptare il file di esportazione e limitare l'importazione solo all'account Bitwarden corrente."
+    "message": "Usa la chiave di crittografia dell'account, derivata dal nome utente e dalla password principale del tuo account, per crittografare il file di esportazione e limitare l'importazione solo all'account Bitwarden corrente."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Imposta una password del file per criptare il file esportato e importarlo in qualsiasi account Bitwarden usando la password per decriptarlo."
+    "message": "Imposta una password del file per crittografare il file esportato e importarlo in qualsiasi account Bitwarden usando la password per decrittografarlo."
   },
   "exportTypeHeading": {
     "message": "Tipo di esportazione"
@@ -1053,6 +1149,9 @@
   },
   "length": {
     "message": "Lunghezza"
+  },
+  "passwordMinLength": {
+    "message": "Lunghezza minima della password"
   },
   "uppercase": {
     "message": "Maiuscole (A-Z)",
@@ -1143,7 +1242,7 @@
     "message": "Conferma nuova password principale"
   },
   "encKeySettings": {
-    "message": "Impostazioni chiave di criptografia"
+    "message": "Impostazioni chiave di crittografia"
   },
   "kdfAlgorithm": {
     "message": "Algoritmo KDF"
@@ -1186,7 +1285,7 @@
     "message": "Cambia KDF"
   },
   "encKeySettingsChanged": {
-    "message": "Impostazioni chiave di criptografia salvate"
+    "message": "Impostazioni chiave di crittografia salvate"
   },
   "dangerZone": {
     "message": "Zona pericolosa"
@@ -1251,6 +1350,22 @@
   "importData": {
     "message": "Importa dati"
   },
+  "onboardingImportDataDetailsPartOne": {
+    "message": "Se non hai dati da importare, puoi invece creare un ",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLink": {
+    "message": "nuovo elemento",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsPartTwoNoOrgs": {
+    "message": ".",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead."
+  },
+  "onboardingImportDataDetailsPartTwoWithOrgs": {
+    "message": ". Potresti dover attendere finché l'amministratore non conferma l'appartenenza all'organizzazione.",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. You may need to wait until your administrator confirms your organization membership."
+  },
   "importError": {
     "message": "Errore di importazione"
   },
@@ -1261,7 +1376,7 @@
     "message": "Dati importati"
   },
   "importSuccessNumberOfItems": {
-    "message": "Un totale di $AMOUNT$ elementi è stato importato.",
+    "message": "$AMOUNT$ elementi sono stati importati.",
     "placeholders": {
       "amount": {
         "content": "$1",
@@ -1282,13 +1397,13 @@
     }
   },
   "importFormatError": {
-    "message": "I dati non sono formattati correttamente. Ricontrolla il file di importazione riprova."
+    "message": "I dati non sono formattati correttamente. Controlla il file di importazione e riprova."
   },
   "importNothingError": {
     "message": "Non è stato importato niente."
   },
   "importEncKeyError": {
-    "message": "Errore durante la decriptografia del file esportato. La chiave di criptografia non corrisponde alla chiave di criptografia usata per esportare i dati."
+    "message": "Errore durante la decrittografia del file esportato. La chiave di crittografia non corrisponde alla chiave di crittografia usata per esportare i dati."
   },
   "importDestination": {
     "message": "Destinazione dell'importazione"
@@ -1363,13 +1478,6 @@
   },
   "faviconDesc": {
     "message": "Mostra un piccolo logo riconoscibile accanto a ogni login."
-  },
-  "enableFullWidth": {
-    "message": "Disposizione a larghezza piena",
-    "description": "Allows scaling the web vault UI's width"
-  },
-  "enableFullWidthDesc": {
-    "message": "Consenti alla cassaforte web di sfruttare tutta la larghezza della finestra del browser."
   },
   "default": {
     "message": "Predefinito"
@@ -1478,6 +1586,9 @@
   },
   "manage": {
     "message": "Gestisci"
+  },
+  "canManage": {
+    "message": "Può gestire"
   },
   "disable": {
     "message": "Disattiva"
@@ -1693,17 +1804,21 @@
     "message": "Siti web non sicuri"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "Gli indirizzi che cominciano con http:// non usano la migliore criptografia disponibile. Modifica gli URI di accesso per questi account usando https:// per più sicurezza."
+    "message": "Gli indirizzi che cominciano con http:// non usano la migliore crittografia disponibile. Modifica gli URI di accesso per questi account usando https:// per più sicurezza."
   },
   "unsecuredWebsitesFound": {
     "message": "Siti web non protetti trovati"
   },
-  "unsecuredWebsitesFoundDesc": {
+  "unsecuredWebsitesFoundReportDesc": {
     "message": "Abbiamo trovato $COUNT$ elementi nella tua cassaforte con URI non protetti. Dovresti cambiare il loro schema URL in https:// se il sito lo consente.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1719,12 +1834,16 @@
   "inactive2faFound": {
     "message": "Login senza verifica in due passaggi trovati"
   },
-  "inactive2faFoundDesc": {
+  "inactive2faFoundReportDesc": {
     "message": "Abbiamo trovato $COUNT$ siti web nella tua cassaforte che potrebbero non essere configurati con la verifica in due passaggi (secondo 2fa.directory). Per proteggere ulteriormente questi account, abilita la verifica in due passaggi.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1743,12 +1862,16 @@
   "exposedPasswordsFound": {
     "message": "Password esposte trovate"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "Abbiamo trovato $COUNT$ elementi nella tua cassaforte contenenti password che sono state esposte in violazioni di dati. Dovresti modificarli per usare una nuova password.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "Abbiamo trovato $COUNT$ elementi nella tua cassaforte che hanno password che sono state esposte a violazioni di dati note. Dovresti cambiarli per usare una nuova password.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1776,12 +1899,16 @@
   "weakPasswordsFound": {
     "message": "Password deboli trovate"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "Abbiamo trovato $COUNT$ elementi nella tua cassaforte con password deboli. Aggiornali usando password più sicure.",
+  "weakPasswordsFoundReportDesc": {
+    "message": "Abbiamo trovato $COUNT$ elementi nella tua cassaforte con password che non sono forti. Dovresti aggiornarli per usare password più forti.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1797,12 +1924,16 @@
   "reusedPasswordsFound": {
     "message": "Password riutilizzate trovate"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "Abbiamo trovato $COUNT$ password riutilizzate nella tua cassaforte. Cambiale in modo che ognuna sia unica.",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "Abbiamo trovato $COUNT$ password che vengono riutilizzate nella tua cassaforte. Dovresti cambiarli in un valore univoco.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1922,7 +2053,7 @@
     "message": "Passa a Premium e sblocca alcune funzionalità utili."
   },
   "premiumSignUpStorage": {
-    "message": "1 GB di spazio di archiviazione criptato per gli allegati."
+    "message": "1 GB di spazio di archiviazione crittografato per gli allegati."
   },
   "premiumSignUpTwoStepOptions": {
     "message": "Opzioni di verifica in due passaggi proprietarie come YubiKey e Duo."
@@ -1952,7 +2083,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Passa a Premium per solo $PRICE$/anno, o condividi Premium con $FAMILYPLANUSERCOUNT$ utenti e ottieni condivisione in famiglia illimitata con il ",
+    "message": "Passa a Premium per soli $PRICE$ /anno o ottieni un account Premium per $FAMILYPLANUSERCOUNT$ utenti e condivisione in famiglia senza limiti con il ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1993,7 +2124,7 @@
     "message": "# di GB aggiuntivi"
   },
   "additionalStorageIntervalDesc": {
-    "message": "Il tuo piano include $SIZE$ di archiviazione criptata. Puoi aggiungere ulteriore spazio di archiviazione per $PRICE$ per GB /$INTERVAL$.",
+    "message": "Il tuo piano include $SIZE$ di spazio archiviazione crittografato. Puoi aggiungere più spazio di archiviazione per $PRICE$ per GB /$INTERVAL$.",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -2125,7 +2256,7 @@
     "message": "Rimuovi spazio di archiviazione"
   },
   "subscriptionStorage": {
-    "message": "Il tuo abbonamento ha un totale di $MAX_STORAGE$ GB di spazio di archiviazione cifrato. Stai usando $USED_STORAGE$ GB di spazio.",
+    "message": "Il tuo abbonamento ha un totale di $MAX_STORAGE$ GB di spazio di archiviazione crittografato. Stai usando $USED_STORAGE$ GB di spazio.",
     "placeholders": {
       "max_storage": {
         "content": "$1",
@@ -2210,6 +2341,9 @@
   },
   "contactSupport": {
     "message": "Contatta assistenza clienti"
+  },
+  "contactSupportShort": {
+    "message": "Contatta l'assistenza"
   },
   "updatedPaymentMethod": {
     "message": "Metodo di pagamento aggiornato."
@@ -2312,6 +2446,9 @@
   "planDescTeams": {
     "message": "Per le imprese e altre organizzazioni di gruppi."
   },
+  "planNameTeamsStarter": {
+    "message": "Teams Starter"
+  },
   "planNameEnterprise": {
     "message": "Enterprise"
   },
@@ -2376,7 +2513,7 @@
     "message": "Crea raccolte illimitate"
   },
   "gbEncryptedFileStorage": {
-    "message": "$SIZE$ di spazio di archiviazione criptato",
+    "message": "$SIZE$ di spazio di archiviazione crittografato",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -2416,6 +2553,15 @@
   },
   "trialThankYou": {
     "message": "Grazie per esserti iscritto a Bitwarden con il piano $PLAN$!",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialSecretsManagerThankYou": {
+    "message": "Grazie per esserti iscritto al Secrets Manager di Bitwarden con il piano $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2526,13 +2672,13 @@
     "message": "Quando un membro è revocato, non ha più accesso ai dati dell'organizzazione. Per ripristinare rapidamente l'accesso dei membri, usa la scheda Revocati."
   },
   "removeUserConfirmationKeyConnector": {
-    "message": "Attenzione! Questo utente richiede Key Connector per gestire la sua criptografia. Rimuovere questo utente dalla tua organizzazione disattiverà il suo account in modo irreversibile. Questa azione non può essere annullata. Vuoi procedere?"
+    "message": "Attenzione! Questo utente richiede Key Connector per gestire la sua crittografia. Rimuovere questo utente dalla tua organizzazione disattiverà il suo account in modo irreversibile. Questa azione non può essere annullata. Vuoi procedere?"
   },
   "externalId": {
     "message": "ID esterno"
   },
   "externalIdDesc": {
-    "message": "L'ID esterno è un riferimento non criptato usato da Bitwarden Directory Connector e API."
+    "message": "L'ID esterno è un riferimento non crittografato usato da Bitwarden Directory Connector e API."
   },
   "nestCollectionUnder": {
     "message": "Annida raccolta sotto"
@@ -2642,6 +2788,12 @@
   "all": {
     "message": "Tutti"
   },
+  "addAccess": {
+    "message": "Aggiungi accesso"
+  },
+  "addAccessFilter": {
+    "message": "Aggiungi filtro di accesso"
+  },
   "refresh": {
     "message": "Aggiorna"
   },
@@ -2672,11 +2824,14 @@
   "webVault": {
     "message": "Cassaforte web"
   },
+  "cli": {
+    "message": "CLI"
+  },
   "bitWebVault": {
     "message": "Cassaforte web Bitwarden"
   },
   "bitSecretsManager": {
-    "message": "Gestore dei Segreti Bitwarden"
+    "message": "Bitwarden Secrets Manager"
   },
   "loggedIn": {
     "message": "Accesso effettuato"
@@ -2704,6 +2859,9 @@
   },
   "incorrectCode": {
     "message": "Codice errato"
+  },
+  "incorrectPin": {
+    "message": "PIN errato"
   },
   "exportedVault": {
     "message": "Cassaforte esportata"
@@ -3357,7 +3515,7 @@
     "message": "Imposta un limite di slot utenti per il tuo abbonamento. Una volta raggiunto questo limite, non potrai invitare nuovi membri."
   },
   "limitSmSubscriptionDesc": {
-    "message": "Imposta un limite di slot per il tuo abbonamento al Gestore dei Segreti. Una volta raggiunto questo limite, non potrai invitare nuovi membri."
+    "message": "Imposta un limite di slot per il tuo abbonamento al Secrets Manager. Una volta raggiunto questo limite, non potrai invitare nuovi membri."
   },
   "maxSeatLimit": {
     "message": "Numero massimo di slot (facoltativo)",
@@ -3395,6 +3553,9 @@
   "subscriptionUpdated": {
     "message": "Abbonamento aggiornato"
   },
+  "subscribedToSecretsManager": {
+    "message": "Abbonamento aggiornato. Ora hai accesso al Secrets Manager."
+  },
   "additionalOptions": {
     "message": "Opzioni aggiuntive"
   },
@@ -3404,12 +3565,27 @@
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Le modifiche al tuo abbonamento comporteranno modifiche corrispondenti al totale di fatturazione. Se i nuovi utenti invitati superano gli slot del tuo abbonamento, riceverai subito un addebito corrispondente per gli utenti aggiuntivi."
   },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Se vuoi aggiungere ulteriori"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "slot senza l'offerta in bundle, contatta"
+  },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Le modifiche al tuo abbonamento comporteranno modifiche corrispondenti al totale di fatturazione. Se i nuovi utenti invitati superano gli slot del tuo abbonamento, riceverai subito un addebito corrispondente per gli utenti aggiuntivi finché il limite di $MAX$ slot non è raggiunto.",
     "placeholders": {
       "max": {
         "content": "$1",
         "example": "50"
+      }
+    }
+  },
+  "subscriptionUserSeatsWithoutAdditionalSeatsOption": {
+    "message": "Puoi invitare fino a $COUNT$ membri senza costi aggiuntivi. Contatta l'assistenza clienti per aggiornare il tuo piano e invitare più membri.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
       }
     }
   },
@@ -3422,12 +3598,12 @@
       }
     }
   },
-  "subscriptionFamiliesPlan": {
-    "message": "Non puoi invitare più di $COUNT$ utenti senza aggiornare il tuo piano. Contatta l'assistenza clienti per aggiornare.",
+  "subscriptionUpgrade": {
+    "message": "Non puoi invitare più di $COUNT$ utenti senza aggiornare il tuo piano.",
     "placeholders": {
       "count": {
         "content": "$1",
-        "example": "6"
+        "example": "2"
       }
     }
   },
@@ -3474,16 +3650,16 @@
     "message": "Chiave aggiornata"
   },
   "updateEncryptionKey": {
-    "message": "Aggiorna chiave di criptografia"
+    "message": "Aggiorna chiave di crittografia"
   },
   "updateEncryptionSchemeDesc": {
-    "message": "Abbiamo modificato lo schema di criptografia per fornire una maggiore sicurezza. Aggiorna la tua chiave di criptografia inserendo la tua password principale."
+    "message": "Abbiamo modificato lo schema di crittografia per fornire una maggiore sicurezza. Aggiorna la tua chiave di crittografia inserendo la tua password principale."
   },
   "updateEncryptionKeyWarning": {
-    "message": "Dopo aver aggiornato la tua chiave di criptografia, devi uscire ed entrare di nuovo in tutte le app Bitwarden che stai usando (come l'app mobile o l'estensione del browser). Se non si esce e rientra (per scaricare la nuova chiave di criptografia) i dati della tua cassaforte potrebbero essere danneggiati. Cercheremo di farti uscire automaticamente, ma potrebbe esserci un ritardo."
+    "message": "Dopo aver aggiornato la tua chiave di crittografia, devi uscire ed entrare di nuovo in tutte le app Bitwarden che stai usando (come l'app mobile o l'estensione del browser). Se non si esce e rientra (per scaricare la nuova chiave di crittografia) i dati della tua cassaforte potrebbero essere danneggiati. Cercheremo di farti uscire automaticamente, ma potrebbe esserci un ritardo."
   },
   "updateEncryptionKeyExportWarning": {
-    "message": "Anche le esportazioni criptate che hai salvato non saranno più valide."
+    "message": "Anche le esportazioni crittografate che hai salvato non saranno più valide."
   },
   "subscription": {
     "message": "Abbonamento"
@@ -3572,6 +3748,18 @@
   "organizationIsDisabled": {
     "message": "Organizzazione disabilitata"
   },
+  "secretsAccessSuspended": {
+    "message": "Non è possibile accedere alle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per assistenza."
+  },
+  "secretsCannotCreate": {
+    "message": "Non è possibile creare segreti nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per assistenza."
+  },
+  "projectsCannotCreate": {
+    "message": "Non è possibile creare progetti nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per assistenza."
+  },
+  "serviceAccountsCannotCreate": {
+    "message": "Non è possibile creare account di servizio nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per assistenza."
+  },
   "disabledOrganizationFilterError": {
     "message": "Non è possibile accedere agli elementi nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per assistenza."
   },
@@ -3613,33 +3801,33 @@
     "message": "Password debole identificata. Usa una password forte per proteggere il tuo account. Sei sicuro di voler usare una password debole?"
   },
   "rotateAccountEncKey": {
-    "message": "Ruota anche la chiave di criptografia del mio account"
+    "message": "Ruota anche la chiave di crittografia del mio account"
   },
   "rotateEncKeyTitle": {
-    "message": "Ruota chiave di criptografia"
+    "message": "Ruota chiave di crittografia"
   },
   "rotateEncKeyConfirmation": {
-    "message": "Sei sicuro di voler ruotare la chiave di criptografia del tuo account?"
+    "message": "Sei sicuro di voler ruotare la chiave di crittografia del tuo account?"
   },
   "attachmentsNeedFix": {
     "message": "Questo elemento ha vecchi file allegati che devono essere corretti."
   },
   "attachmentFixDescription": {
-    "message": "Questo allegato usa una criptografia obsoleta. Seleziona \"Correggi\" per scaricare, criptografare di nuovo, e caricare di nuovo l'allegato."
+    "message": "Questo allegato usa una crittografia obsoleta. Seleziona \"Correggi\" per scaricare, crittografare di nuovo, e caricare di nuovo l'allegato."
   },
   "fix": {
     "message": "Correggi",
     "description": "This is a verb. ex. 'Fix The Car'"
   },
   "oldAttachmentsNeedFixDesc": {
-    "message": "Ci sono vecchi file allegati nella tua cassaforte che devono essere corretti prima di poter ruotare la chiave di criptografia del tuo account."
+    "message": "Ci sono vecchi file allegati nella tua cassaforte che devono essere corretti prima di poter ruotare la chiave di crittografia del tuo account."
   },
   "yourAccountsFingerprint": {
     "message": "Frase impronta del tuo account",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintEnsureIntegrityVerify": {
-    "message": "Per garantire l'integrità delle tue chiavi di criptografia, verifica la frase impronta dell'utente prima di continuare.",
+    "message": "Per garantire l'integrità delle tue chiavi di crittografia, verifica la frase impronta dell'utente prima di continuare.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "fingerprintMatchInfo": {
@@ -3689,15 +3877,6 @@
   },
   "couldNotChargeCardPayInvoice": {
     "message": "Non siamo riusciti ad addebitare la tua carta. Visualizza e paga la fattura non pagata qui sotto."
-  },
-  "inAppPurchase": {
-    "message": "Acquisto in-app"
-  },
-  "cannotPerformInAppPurchase": {
-    "message": "Non puoi eseguire questa azione usando un metodo di acquisto in-app."
-  },
-  "manageSubscriptionFromStore": {
-    "message": "Devi gestire il tuo abbonamento dall'app dove hai effettuato l'acquisto in-app."
   },
   "minLength": {
     "message": "Lunghezza minima"
@@ -3881,9 +4060,6 @@
   "setMasterPassword": {
     "message": "Imposta password principale"
   },
-  "ssoCompleteRegistration": {
-    "message": "Per completare l'accesso con SSO, imposta una password principale per accedere e proteggere la cassaforte."
-  },
   "identifier": {
     "message": "Identificativo"
   },
@@ -3899,8 +4075,29 @@
   "ssoHandOff": {
     "message": "Ora puoi chiudere questa scheda e continuare nell'estensione."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "Hai effettuato l'accesso"
+  },
+  "thisWindowWillCloseIn5Seconds": {
+    "message": "Questa finestra si chiuderà automaticamente tra 5 secondi"
+  },
   "includeAllTeamsFeatures": {
     "message": "Tutte le funzionalità Teams e in più:"
+  },
+  "includeAllTeamsStarterFeatures": {
+    "message": "Tutte le funzionalità Teams Starter e in più:"
+  },
+  "chooseMonthlyOrAnnualBilling": {
+    "message": "Scegli la fatturazione mensile o annuale"
+  },
+  "abilityToAddMoreThanNMembers": {
+    "message": "Possibilità di aggiungere più di $COUNT$ membri",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
   },
   "includeSsoAuthentication": {
     "message": "Autenticazione SSO tramite SAML2.0 e OpenID Connect"
@@ -3917,8 +4114,9 @@
   "ssoIdentifier": {
     "message": "Identificativo SSO"
   },
-  "ssoIdentifierHint": {
-    "message": "Fornisci questo ID ai tuoi membri per accedere con SSO."
+  "ssoIdentifierHintPartOne": {
+    "message": "Fornisci questo ID ai tuoi membri per accedere con SSO. Per saltare questo passaggio, configura la ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Provide this ID to your members to login with SSO. To bypass this step, set up Domain verification'"
   },
   "unlinkSso": {
     "message": "Scollega SSO"
@@ -4088,8 +4286,8 @@
     "message": "Questo Send è nascosto per impostazione predefinita. Modifica la sua visibilità usando questo pulsante.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
-  "downloadFile": {
-    "message": "Scarica file"
+  "downloadAttachments": {
+    "message": "Scarica allegati"
   },
   "sendAccessUnavailable": {
     "message": "Il Send a cui stai provando ad accedere non esiste o non è più disponibile.",
@@ -4479,8 +4677,8 @@
     "message": "per provarlo oggi.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bitwarden Send or sign up to **try it today.**'"
   },
-  "sendCreatorIdentifier": {
-    "message": "L'utente Bitwarden $USER_IDENTIFIER$ ha condiviso questo con te",
+  "sendAccessCreatorIdentifier": {
+    "message": "Il membro di Bitwarden $USER_IDENTIFIER$ ha condiviso questo con te",
     "placeholders": {
       "user_identifier": {
         "content": "$1",
@@ -4610,7 +4808,7 @@
     "message": "Amministrazione del recupero dell'account"
   },
   "accountRecoveryPolicyDesc": {
-    "message": "In base al metodo di criptografia, recupera gli account quando le password principali o i dispositivi fidati sono dimenticati o persi."
+    "message": "In base al metodo di crittografia, recupera gli account quando le password principali o i dispositivi fidati sono dimenticati o persi."
   },
   "accountRecoveryPolicyWarning": {
     "message": "Gli account esistenti con password principali richiederanno ai membri di registrarsi autonomamente prima che gli amministratori possano recuperare i loro account. L'iscrizione automatica attiverà il recupero dell'account per i nuovi membri."
@@ -4784,8 +4982,14 @@
   "newClientOrganizationDesc": {
     "message": "Crea una nuova organizzazione cliente a cui sarai associato come il fornitore. Potrai accedere e gestire questa organizzazione."
   },
+  "newClient": {
+    "message": "Nuovo client"
+  },
   "addExistingOrganization": {
     "message": "Aggiungi organizzazione esistente"
+  },
+  "addNewOrganization": {
+    "message": "Aggiungi nuova organizzazione"
   },
   "myProvider": {
     "message": "Il mio fornitore"
@@ -5037,6 +5241,12 @@
   "spValidateCertificates": {
     "message": "Convalida certificati"
   },
+  "spUniqueEntityId": {
+    "message": "Imposta un ID entità SP univoco"
+  },
+  "spUniqueEntityIdDesc": {
+    "message": "Genera un identificatore univoco per la tua organizzazione"
+  },
   "idpEntityId": {
     "message": "ID entità"
   },
@@ -5245,16 +5455,16 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "memberDecryptionOption": {
-    "message": "Opzioni di decriptografia membro"
+    "message": "Opzioni di decrittografia membro"
   },
   "memberDecryptionPassDesc": {
-    "message": "Una volta autenticati, i membri decriptograferanno i dati della cassaforte con le loro password principali."
+    "message": "Una volta autenticati, i membri decrittograferanno i dati della cassaforte con le loro password principali."
   },
   "keyConnector": {
     "message": "Key Connector"
   },
   "memberDecryptionKeyConnectorDescStart": {
-    "message": "Connetti la tua autenticazione con SSO al tuo server self-hosted di decriptografia. Usando questa opzione, i membri non avranno bisogno di inserire la loro password principale per decriptografare i dati della cassaforte. Le",
+    "message": "Connetti la tua autenticazione con SSO al tuo server self-hosted di decrittografia. Usando questa opzione, i membri non avranno bisogno di inserire la loro password principale per decrittografare i dati della cassaforte. Le",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescLink": {
@@ -5262,11 +5472,11 @@
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "memberDecryptionKeyConnectorDescEnd": {
-    "message": "sono necessarie per configurare la decriptografia del Key Connector. Contatta l'assistenza clienti per aiuto nella configurazione.",
+    "message": "sono necessarie per configurare la decrittografia del Key Connector. Contatta l'assistenza clienti per aiuto nella configurazione.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
-    "message": "\"Autenticazione con SSO e decriptografia Key Connector\" è attivato. Questa politica sarà applicata solo ai proprietari e agli amministratori."
+    "message": "\"Autenticazione con SSO e decrittografia Key Connector\" è attivato. Questa politica sarà applicata solo ai proprietari e agli amministratori."
   },
   "enabledSso": {
     "message": "SSO attivato"
@@ -5281,7 +5491,7 @@
     "message": "Key Connector disattivato"
   },
   "keyConnectorWarning": {
-    "message": "Quando i membri iniziano a usare il Key Connector, la tua organizzazione non può tornare a usare la decriptografia della password principale. Procedi solo se sai come distribuire e gestire un server delle chiavi."
+    "message": "Quando i membri iniziano a usare il Key Connector, la tua organizzazione non può tornare a usare la decrittografia della password principale. Procedi solo se sai come distribuire e gestire un server delle chiavi."
   },
   "migratedKeyConnector": {
     "message": "Migrato al Key Connector"
@@ -5405,6 +5615,19 @@
   },
   "required": {
     "message": "obbligatorio"
+  },
+  "charactersCurrentAndMaximum": {
+    "message": "$CURRENT$ caratteri su $MAX$",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "max": {
+        "content": "$2",
+        "example": "100"
+      }
+    }
   },
   "characterMaximum": {
     "message": "Massimo $MAX$ caratteri",
@@ -5591,6 +5814,108 @@
   "forwardedEmailDesc": {
     "message": "Genera un alias email con un servizio di inoltro esterno."
   },
+  "forwarderError": {
+    "message": "Errore $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generato da Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Sito web: $WEBSITE$. Generato da Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Token API $SERVICENAME$ non valido",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Token API $SERVICENAME$ non valido: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Impossibile ottenere l'ID dell'account email mascherato di $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Dominio $SERVICENAME$ non valido.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "URL $SERVICENAME$ non valido.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Errore di $SERVICENAME$ sconosciuto.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Mittente sconosciuto: \"$SERVICENAME$\".",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Nome host",
     "description": "Part of a URL."
@@ -5748,11 +6073,23 @@
       }
     }
   },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Avvia DUO e segui i passaggi per finire di accedere."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Per il tuo account è richiesta la verifica in due passaggi DUO."
+  },
+  "launchDuo": {
+    "message": "Avvia DUO"
+  },
   "turnOn": {
     "message": "Attiva"
   },
   "on": {
     "message": "Attivo"
+  },
+  "off": {
+    "message": "No"
   },
   "members": {
     "message": "Membri"
@@ -6257,6 +6594,9 @@
   "editGroupCollectionsDesc": {
     "message": "Concedi accesso alle raccolte aggiungendo gli utenti a questo gruppo."
   },
+  "restrictedCollectionAssignmentDesc": {
+    "message": "Puoi assegnare solo le raccolte che gestisci."
+  },
   "accessAllCollectionsDesc": {
     "message": "Concedi accesso a tutte le raccolte esistenti e future."
   },
@@ -6443,11 +6783,44 @@
       }
     }
   },
-  "membersColumnHeader": {
-    "message": "Membro/gruppo"
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Verifica necessaria per questa azione. Imposta un PIN per continuare."
   },
-  "groupAndMemberColumnHeader": {
+  "setPin": {
+    "message": "Imposta PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verifica con i dati biometrici"
+  },
+  "awaitingConfirmation": {
+    "message": "In attesa di conferma"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Impossibile completare i dati biometrici."
+  },
+  "needADifferentMethod": {
+    "message": "Usa un altro metodo?"
+  },
+  "useMasterPassword": {
+    "message": "Usa password principale"
+  },
+  "usePin": {
+    "message": "Usa PIN"
+  },
+  "useBiometrics": {
+    "message": "Usa dati biometrici"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Inserisci il codice di verifica che è stato inviato alla tua email."
+  },
+  "resendCode": {
+    "message": "Invia codice di nuovo"
+  },
+  "memberColumnHeader": {
     "message": "Membro"
+  },
+  "groupSlashMemberColumnHeader": {
+    "message": "Gruppo/Membro"
   },
   "selectGroupsAndMembers": {
     "message": "Seleziona gruppi e membri"
@@ -6455,8 +6828,8 @@
   "selectGroups": {
     "message": "Seleziona gruppi"
   },
-  "userPermissionOverrideHelper": {
-    "message": "I permessi impostati per un membro sostituiranno i permessi impostati dal gruppo di quel membro"
+  "userPermissionOverrideHelperDesc": {
+    "message": "I permessi impostati per un membro sostituiranno i permessi impostati dal gruppo di quel membro."
   },
   "noMembersOrGroupsAdded": {
     "message": "Nessun membro o gruppo aggiunto"
@@ -6500,6 +6873,24 @@
       }
     }
   },
+  "teamsStarterPlanInvLimitReachedManageBilling": {
+    "message": "I piani Teams Starter possono avere fino a $SEATCOUNT$ membri. Aggiorna il tuo piano per invitare più membri.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "teamsStarterPlanInvLimitReachedNoManageBilling": {
+    "message": "I piani Teams Starter possono avere fino a $SEATCOUNT$ membri. Contatta il proprietario della tua organizzazione per aggiornare il tuo piano e invitare più membri.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "freeOrgMaxCollectionReachedManageBilling": {
     "message": "Le organizzazioni gratis possono avere fino a $COLLECTIONCOUNT$ raccolte. Aggiorna a un piano a pagamento per creare più raccolte.",
     "placeholders": {
@@ -6528,7 +6919,7 @@
     "message": "Esportando dati segreti dell'organizzazione"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "Solo i dati del Gestore dei Segreti associato a $ORGANIZATION$ saranno esportati. Gli elementi in altri prodotti o in altre organizzazioni non saranno inclusi.",
+    "message": "Solo i dati del Secrets Manager associato a $ORGANIZATION$ saranno esportati. Gli elementi in altri prodotti o in altre organizzazioni non saranno inclusi.",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6627,22 +7018,19 @@
     "message": "Iterazioni KDF basse"
   },
   "updateLowKdfIterationsDesc": {
-    "message": "Aggiorna le tue impostazioni di criptografia per soddisfare le nuove raccomandazioni sulla sicurezza e migliorare la protezione del tuo account."
+    "message": "Aggiorna le tue impostazioni di crittografia per soddisfare le nuove raccomandazioni sulla sicurezza e migliorare la protezione del tuo account."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Procedere ti farà uscire da tutte le sessioni attive. Dovrai accedere di nuovo e completare la configurazione della verifica in due passaggi. Ti consigliamo di esportare la tua cassaforte prima di cambiare le impostazioni di criptografia per prevenire perdite di dati."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Procedere ti farà uscire da tutte le sessioni attive. Dovrai accedere di nuovo e completare la verifica in due passaggi, se impostata. Ti consigliamo di esportare la tua cassaforte prima di cambiare le impostazioni di crittografia per prevenire perdite di dati."
   },
   "secretsManager": {
-    "message": "Gestore dei Segreti"
-  },
-  "secretsManagerBeta": {
-    "message": "Beta del Gestore dei Segreti"
+    "message": "Secrets Manager"
   },
   "secretsManagerAccessDescription": {
-    "message": "Attiva l'accesso dell'utente al Gestore dei Segreti."
+    "message": "Attiva l'accesso dell'utente al Secrets Manager."
   },
   "userAccessSecretsManagerGA": {
-    "message": "Questo utente può accedere al Gestore dei Segreti"
+    "message": "Questo utente può accedere al Secrets Manager"
   },
   "important": {
     "message": "Importante:"
@@ -6685,6 +7073,9 @@
     "message": "SDK",
     "description": "Software Development Kit"
   },
+  "createAnAccount": {
+    "message": "Crea un account"
+  },
   "createSecret": {
     "message": "Crea un segreto"
   },
@@ -6699,7 +7090,7 @@
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
-    "message": "CLI del Gestore dei Segreti"
+    "message": "CLI del Secrets Manager"
   },
   "importSecrets": {
     "message": "Importa segreti"
@@ -6740,12 +7131,6 @@
   },
   "selectionIsRequired": {
     "message": "Selezione obbligatoria."
-  },
-  "secretsManagerSubscriptionDesc": {
-    "message": "Abilita l'accesso degli utenti al Gestore dei Segreti gratis durante il programma beta. Puoi concedere agli utenti l'accesso alla beta da Membri."
-  },
-  "secretsManagerEnable": {
-    "message": "Abilita la beta del Gestore di Segreti"
   },
   "saPeopleWarningTitle": {
     "message": "Token di accesso ancora disponibili"
@@ -6818,12 +7203,6 @@
   "enforceOnLoginDesc": {
     "message": "Obbliga i membri esistenti a cambiare le loro password"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
-  },
   "smProjectDeleteAccessRestricted": {
     "message": "Non hai l'autorizzazione per eliminare questo progetto",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
@@ -6857,13 +7236,13 @@
     "message": "Approva con password principale"
   },
   "trustedDeviceEncryption": {
-    "message": "Criptografia dispositivo fidato"
+    "message": "Crittografia dispositivo fidato"
   },
   "trustedDevices": {
     "message": "Dispositivi fidati"
   },
   "memberDecryptionOptionTdeDescriptionPartOne": {
-    "message": "Una volta autenticati, i membri decriptograferanno i dati della cassaforte usando una chiave memorizzata sul proprio dispositivo. La",
+    "message": "Una volta autenticati, i membri decrittograferanno i dati della cassaforte usando una chiave memorizzata sul proprio dispositivo. La",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
   "memberDecryptionOptionTdeDescriptionLinkOne": {
@@ -6890,6 +7269,14 @@
     "message": "con registrazione automatica si attiverà quando questa opzione è usata.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
   },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Le autorizzazioni della tua organizzazione sono state aggiornate, obbligandoti a impostare una password principale.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "La tua organizzazione ti obbliga di impostare di una password principale.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
   "notFound": {
     "message": "$RESOURCE$ non trovato",
     "placeholders": {
@@ -6899,6 +7286,10 @@
       }
     }
   },
+  "verificationRequired": {
+    "message": "Verifica necessaria",
+    "description": "Default title for the user verification dialog."
+  },
   "recoverAccount": {
     "message": "Recupera account"
   },
@@ -6906,18 +7297,18 @@
     "message": "L'utente ha aggiornato una password emessa tramite il recupero dell'account."
   },
   "activatedAccessToSecretsManager": {
-    "message": "Accesso al Gestore dei Segreti attivato",
+    "message": "Accesso al Secrets Manager attivato",
     "description": "Confirmation message that one or more users gained access to Secrets Manager"
   },
   "activateAccess": {
     "message": "Attiva accesso"
   },
   "bulkEnableSecretsManagerDescription": {
-    "message": "Concedi ai seguenti membri l'accesso al Gestore dei Segreti. Il ruolo concesso nel gestore di password si applicherà al Gestore dei Segreti.",
+    "message": "Concedi ai seguenti membri l'accesso al Secrets Manager. Il ruolo concesso nel password manager si applicherà al Secrets Manager.",
     "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
   },
   "activateSecretsManager": {
-    "message": "Attiva Gestore dei Segreti"
+    "message": "Attiva Secrets Manager"
   },
   "yourOrganizationsFingerprint": {
     "message": "Frase impronta della tua organizzazione",
@@ -7007,8 +7398,20 @@
       }
     }
   },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerFor": {
+    "message": "Inizia la tua prova gratis di 7 giorni del Secrets Manager di Bitwarden per $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
   "next": {
     "message": "Avanti"
+  },
+  "ssoLoginIsRequired": {
+    "message": "Il login SSO è obbligatorio"
   },
   "selectedRegionFlag": {
     "message": "Bandiera della regione selezionata"
@@ -7042,14 +7445,14 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendsNoItemsMessage": {
-    "message": "Usa Send per condividere informazioni criptate in modo sicuro con chiunque.",
+    "message": "Usa Send per condividere informazioni crittografate in modo sicuro con chiunque.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "inviteUsers": {
     "message": "Invita utenti"
   },
   "secretsManagerForPlan": {
-    "message": "Gestore dei Segreti per $PLAN$",
+    "message": "Secrets Manager per $PLAN$",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -7096,11 +7499,11 @@
       }
     }
   },
-  "addSecretsManager": {
-    "message": "Aggiungi Gestore dei Segreti"
+  "subscribeToSecretsManager": {
+    "message": "Iscriviti al Secrets Manager"
   },
   "addSecretsManagerUpgradeDesc": {
-    "message": "Aggiungi il Gestore dei Segreti al tuo piano aggiornato per mantenere l'accesso a tutti i secret creati con il tuo piano precedente."
+    "message": "Aggiungi il Secrets Manager al tuo piano aggiornato per mantenere l'accesso a tutti i segreti creati con il tuo piano precedente."
   },
   "additionalServiceAccounts": {
     "message": "Account di servizio aggiuntivi"
@@ -7123,14 +7526,29 @@
       }
     }
   },
+  "collectionManagement": {
+    "message": "Gestione della raccolta"
+  },
+  "collectionManagementDesc": {
+    "message": "Gestisci il comportamento delle raccolte per l'organizzazione"
+  },
+  "limitCollectionCreationDeletionDesc": {
+    "message": "Limita la creazione e l'eliminazione delle raccolte a proprietari e amministratori"
+  },
+  "allowAdminAccessToAllCollectionItemsDesc": {
+    "message": "Proprietari e amministratori possono gestire tutte le raccolte e gli elementi"
+  },
+  "updatedCollectionManagement": {
+    "message": "Impostazione di gestione della raccolta aggiornata"
+  },
   "passwordManagerPlanPrice": {
-    "message": "Prezzo del piano del gestore di password"
+    "message": "Prezzo del piano del Password Manager"
   },
   "secretsManagerPlanPrice": {
-    "message": "Prezzo del piano del Gestore dei Segreti"
+    "message": "Prezzo del piano del Secrets Manager"
   },
   "passwordManager": {
-    "message": "Gestore di password"
+    "message": "Password Manager"
   },
   "freeOrganization": {
     "message": "Organizzazione gratis"
@@ -7150,24 +7568,14 @@
   "loggedInExclamation": {
     "message": "Accesso effettuato!"
   },
-  "smBetaEndedDesc": {
-    "message": "La beta del Gestore dei Segreti è terminata in $BETA_ENDING_DATE$. Ti rimangono $DAYS$ giorni per aggiungere il Gestore dei Segreti al tuo abbonamento a pagamento e mantenere l'accesso ai dati del Gestore dei Segreti. Contatta l'assistenza per aggiungere il Gestore dei Segreti al tuo abbonamento.",
-    "placeholders": {
-      "beta_ending_date": {
-        "content": "$1",
-        "example": "August 1, 2023"
-      },
-      "days": {
-        "content": "$2",
-        "example": "11"
-      }
-    }
-  },
-  "betaEnding": {
-    "message": "Termine della beta"
-  },
   "beta": {
     "message": "Beta"
+  },
+  "assignCollectionAccess": {
+    "message": "Assegna accesso alla raccolta"
+  },
+  "editedCollections": {
+    "message": "Raccolte modificate"
   },
   "baseUrl": {
     "message": "URL del server"
@@ -7178,10 +7586,653 @@
   "alreadyHaveAccount": {
     "message": "Hai già un account?"
   },
-  "customBillingStart": {
-    "message": "La fatturazione personalizzata non è riflessa. Visita la "
+  "skipToContent": {
+    "message": "Vai al contenuto"
   },
-  "customBillingEnd": {
-    "message": " pagina per l'ultima fatturazione."
+  "managePermissionRequired": {
+    "message": "Almeno un membro o gruppo deve avere l'autorizzazione \"può gestire\"."
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "La passkey non sarà copiata"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "La passkey non sarà copiata nell'elemento clonato. Vuoi continuare a clonare questo elemento?"
+  },
+  "modifiedCollectionManagement": {
+    "message": "Modificata l'impostazione di gestione della raccolta $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
+  "seeDetailedInstructions": {
+    "message": "Consulta le istruzioni dettagliate sul nostro sito di assistenza su",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "installBrowserExtension": {
+    "message": "Installa estensione per browser"
+  },
+  "installBrowserExtensionDetails": {
+    "message": "Usa l'estensione per salvare rapidamente gli accessi e riempire automaticamente i moduli senza aprire il sito web."
+  },
+  "projectAccessUpdated": {
+    "message": "Accesso al progetto aggiornato"
+  },
+  "unexpectedErrorSend": {
+    "message": "Si è verificato un errore imprevisto durante il caricamento di questo Send. Riprova più tardi."
+  },
+  "seatLimitReached": {
+    "message": "Il limite degli slot è stato raggiunto"
+  },
+  "contactYourProvider": {
+    "message": "Contatta il tuo fornitore per acquistare slot aggiuntivi."
+  },
+  "seatLimitReachedContactYourProvider": {
+    "message": "Il limite degli slot è stato raggiunto. Contatta il tuo fornitore per acquistare slot aggiuntivi."
+  },
+  "collectionAccessRestricted": {
+    "message": "L'accesso alla raccolta è limitato"
+  },
+  "readOnlyCollectionAccess": {
+    "message": "Non hai accesso alla gestione di questa raccolta."
+  },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Autorizzazione Può gestire mancante"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Concedi l'autorizzazione Può gestire per consentire la gestione completa della raccolta, inclusa l'eliminazione della raccolta."
+  },
+  "grantCollectionAccess": {
+    "message": "Consenti a gruppi o membri di accedere a questa raccolta."
+  },
+  "grantCollectionAccessMembersOnly": {
+    "message": "Concedi ai membri l'accesso a questa raccolta."
+  },
+  "adminCollectionAccess": {
+    "message": "Gli amministratori possono accedere e gestire le raccolte."
+  },
+  "serviceAccountAccessUpdated": {
+    "message": "Accesso all'account di servizio aggiornato"
+  },
+  "commonImportFormats": {
+    "message": "Formati comuni",
+    "description": "Label indicating the most common import formats"
+  },
+  "maintainYourSubscription": {
+    "message": "Per mantenere il tuo abbonamento a $ORG$, ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Example Inc."
+      }
+    }
+  },
+  "addAPaymentMethod": {
+    "message": "aggiungi un metodo di pagamento",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
+  },
+  "collectionEnhancementsDesc": {
+    "message": "Aggiungi nuove impostazioni e autorizzazioni per una maggiore flessibilità. Sostituisci il ruolo di Manager con l'autorizzazione \"può gestire\" e introduci opzioni per consentire agli utenti di creare raccolte e limitare l'accesso alle raccolte agli amministratori.",
+    "description": "This describes new features and improvements for user roles and collections"
+  },
+  "collectionEnhancementsLearnMore": {
+    "message": "Ulteriori informazioni sulla gestione delle raccolte"
+  },
+  "organizationInformation": {
+    "message": "Informazioni sull'organizzazione"
+  },
+  "confirmationDetails": {
+    "message": "Dettagli di conferma"
+  },
+  "smFreeTrialThankYou": {
+    "message": "Grazie per esserti iscritto al Secrets Manager di Bitwarden!"
+  },
+  "smFreeTrialConfirmationEmail": {
+    "message": "Abbiamo inviato un'email di conferma al tuo indirizzo email: "
+  },
+  "confirmCollectionEnhancementsDialogTitle": {
+    "message": "Questa azione è irreversibile"
+  },
+  "confirmCollectionEnhancementsDialogContent": {
+    "message": "Attivando questa funzionalità, il ruolo di manager sarà sostituito dall'autorizzazione Può gestire. L'operazione richiederà alcuni istanti. Non apportare modifiche all'organizzazione fino a quando non è finita. Sei sicuro di voler procedere?"
+  },
+  "sorryToSeeYouGo": {
+    "message": "Siamo spiacenti di vederti andare! Aiutaci a migliorare Bitwarden condividendo il motivo per cui stai annullando.",
+    "description": "A message shown to users as part of an offboarding survey asking them to provide more information on their subscription cancelation."
+  },
+  "selectCancellationReason": {
+    "message": "Seleziona un motivo per l'annullamento",
+    "description": "Used as a form field label for a select input on the offboarding survey."
+  },
+  "anyOtherFeedback": {
+    "message": "C'è qualche altro feedback che vorresti condividere?",
+    "description": "Used as a form field label for a textarea input on the offboarding survey."
+  },
+  "missingFeatures": {
+    "message": "Funzionalità mancanti",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "movingToAnotherTool": {
+    "message": "Passo a un altro strumento",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "tooDifficultToUse": {
+    "message": "Troppo difficile da usare",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "notUsingEnough": {
+    "message": "Non lo uso abbastanza",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "tooExpensive": {
+    "message": "Troppo costoso",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "freeForOneYear": {
+    "message": "Gratis per un anno"
+  },
+  "newWebApp": {
+    "message": "Benvenuto nel nuovo e migliorato sito web. Scopri cosa è cambiato."
+  },
+  "releaseBlog": {
+    "message": "Leggi il blog post"
+  },
+  "adminConsole": {
+    "message": "Console Amministrativa"
+  },
+  "providerPortal": {
+    "message": "Portale Fornitori"
+  },
+  "success": {
+    "message": "Successo"
+  },
+  "restrictedGroupAccess": {
+    "message": "Non puoi aggiungerti da solo ai gruppi."
+  },
+  "cannotAddYourselfToCollections": {
+    "message": "Non puoi aggiungerti da solo alle raccolte."
+  },
+  "assign": {
+    "message": "Assegna"
+  },
+  "assignToCollections": {
+    "message": "Assegna alle raccolte"
+  },
+  "assignToTheseCollections": {
+    "message": "Assegna a queste raccolte"
+  },
+  "bulkCollectionAssignmentDialogDescription": {
+    "message": "Seleziona le raccolte con cui questi elementi saranno condivisi. Una volta un elemento è aggiornato in una raccolta, la modifica si rifletterà in tutte le raccolte. Solo i membri dell'organizzazione con accesso a queste raccolte potranno visualizzare gli elementi."
+  },
+  "selectCollectionsToAssign": {
+    "message": "Seleziona le raccolte da assegnare"
+  },
+  "noCollectionsAssigned": {
+    "message": "Nessuna raccolta è stata assegnata"
+  },
+  "successfullyAssignedCollections": {
+    "message": "Raccolte assegnate"
+  },
+  "bulkCollectionAssignmentWarning": {
+    "message": "Hai selezionato $TOTAL_COUNT$ elementi. Non puoi aggiornare $READONLY_COUNT$ elementi perché non hai l'autorizzazione per modificarli.",
+    "placeholders": {
+      "total_count": {
+        "content": "$1",
+        "example": "10"
+      },
+      "readonly_count": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "items": {
+    "message": "Elementi"
+  },
+  "assignedSeats": {
+    "message": "Slot assegnati"
+  },
+  "assigned": {
+    "message": "Assegnato"
+  },
+  "used": {
+    "message": "Usato"
+  },
+  "remaining": {
+    "message": "Rimanenti"
+  },
+  "unlinkOrganization": {
+    "message": "Scollega organizzazione"
+  },
+  "manageSeats": {
+    "message": "GESTISCI SLOT"
+  },
+  "manageSeatsDescription": {
+    "message": "Le modifiche agli slot si rifletteranno nel prossimo ciclo di fatturazione."
+  },
+  "unassignedSeatsDescription": {
+    "message": "Posti in abbonamento non assegnati"
+  },
+  "purchaseSeatDescription": {
+    "message": "Slot aggiuntivi acquistati"
+  },
+  "assignedSeatCannotUpdate": {
+    "message": "Gli slot assegnati non possono essere aggiornati. Contatta il proprietario della tua organizzazione per ricevere assistenza."
+  },
+  "subscriptionUpdateFailed": {
+    "message": "Aggiornamento dell'abbonamento fallito"
+  },
+  "trial": {
+    "message": "Prova",
+    "description": "A subscription status label."
+  },
+  "pastDue": {
+    "message": "Arretrato",
+    "description": "A subscription status label"
+  },
+  "subscriptionExpired": {
+    "message": "Abbonamento scaduto",
+    "description": "The date header used when a subscription is past due."
+  },
+  "pastDueWarningForChargeAutomatically": {
+    "message": "Hai un periodo di grazia di $DAYS$ giorni dalla data di scadenza dell'abbonamento per mantenerlo. Risolvi le fatture scadute entro il $SUSPENSION_DATE$.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they are charged automatically."
+  },
+  "pastDueWarningForSendInvoice": {
+    "message": "Hai un periodo di grazia di $DAYS$ giorni dalla data di scadenza della prima fattura non pagata per mantenere il tuo abbonamento. Risolvi le fatture scadute entro il $SUSPENSION_DATE$.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they pay via invoice."
+  },
+  "unpaidInvoice": {
+    "message": "Fattura non pagata",
+    "description": "The header of a warning box shown to a user whose subscription is unpaid."
+  },
+  "toReactivateYourSubscription": {
+    "message": "Per riattivare il tuo abbonamento, risolvi le fatture arretrate.",
+    "description": "The body of a warning box shown to a user whose subscription is unpaid."
+  },
+  "cancellationDate": {
+    "message": "Data di cancellazione",
+    "description": "The date header used when a subscription is cancelled."
+  },
+  "machineAccountsCannotCreate": {
+    "message": "Non è possibile creare account macchina nelle organizzazioni disabilitate. Contatta il proprietario della tua organizzazione per assistenza."
+  },
+  "machineAccount": {
+    "message": "Account macchina",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "machineAccounts": {
+    "message": "Account macchina",
+    "description": "The title for the section that deals with machine accounts."
+  },
+  "newMachineAccount": {
+    "message": "Nuovo account macchina",
+    "description": "Title for creating a new machine account."
+  },
+  "machineAccountsNoItemsMessage": {
+    "message": "Crea un nuovo account macchina per iniziare ad automatizzare le credenziali dei segreti.",
+    "description": "Message to encourage the user to start creating machine accounts."
+  },
+  "machineAccountsNoItemsTitle": {
+    "message": "Niente da mostrare per ora",
+    "description": "Title to indicate that there are no machine accounts to display."
+  },
+  "deleteMachineAccounts": {
+    "message": "Elimina account macchina",
+    "description": "Title for the action to delete one or multiple machine accounts."
+  },
+  "deleteMachineAccount": {
+    "message": "Elimina account macchina",
+    "description": "Title for the action to delete a single machine account."
+  },
+  "viewMachineAccount": {
+    "message": "Visualizza account macchina",
+    "description": "Action to view the details of a machine account."
+  },
+  "deleteMachineAccountDialogMessage": {
+    "message": "L'eliminazione dell'account macchina $MACHINE_ACCOUNT$ è permanente e irreversibile.",
+    "placeholders": {
+      "machine_account": {
+        "content": "$1",
+        "example": "Machine account name"
+      }
+    }
+  },
+  "deleteMachineAccountsDialogMessage": {
+    "message": "L'eliminazione degli account macchina è permanente e irreversibile."
+  },
+  "deleteMachineAccountsConfirmMessage": {
+    "message": "Elimina $COUNT$ account macchina",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteMachineAccountToast": {
+    "message": "Account macchina eliminato"
+  },
+  "deleteMachineAccountsToast": {
+    "message": "Account macchina eliminati"
+  },
+  "searchMachineAccounts": {
+    "message": "Cerca account macchina",
+    "description": "Placeholder text for searching machine accounts."
+  },
+  "editMachineAccount": {
+    "message": "Modifica account macchina",
+    "description": "Title for editing a machine account."
+  },
+  "machineAccountName": {
+    "message": "Nome account macchina",
+    "description": "Label for the name of a machine account"
+  },
+  "machineAccountCreated": {
+    "message": "Account macchina creato",
+    "description": "Notifies that a new machine account has been created"
+  },
+  "machineAccountUpdated": {
+    "message": "Account macchina aggiornato",
+    "description": "Notifies that a machine account has been updated"
+  },
+  "projectMachineAccountsDescription": {
+    "message": "Concedi agli account macchina di accedere a questo progetto."
+  },
+  "projectMachineAccountsSelectHint": {
+    "message": "Digita o seleziona account macchina"
+  },
+  "projectEmptyMachineAccountAccessPolicies": {
+    "message": "Aggiungi account macchina per concedere l'accesso"
+  },
+  "machineAccountPeopleDescription": {
+    "message": "Consenti a gruppi o persone di accedere a questo account macchina."
+  },
+  "machineAccountProjectsDescription": {
+    "message": "Assegna progetti a questo account macchina. "
+  },
+  "createMachineAccount": {
+    "message": "Crea un account macchina"
+  },
+  "maPeopleWarningMessage": {
+    "message": "Rimuovere persone da un account macchina non rimuove i token di accesso che hanno creato. Per ragioni di sicurezza, consigliamo di revocare i token di accesso creati da persone rimosse da un account macchina."
+  },
+  "smAccessRemovalWarningMaTitle": {
+    "message": "Rimuovi accesso a questo account macchina"
+  },
+  "smAccessRemovalWarningMaMessage": {
+    "message": "Questa azione rimuoverà il tuo accesso all'account macchina."
+  },
+  "machineAccountsIncluded": {
+    "message": "$COUNT$ account macchina inclusi",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalMachineAccountCost": {
+    "message": "$COST$ al mese per account macchina aggiuntivi",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "additionalMachineAccounts": {
+    "message": "Account macchina aggiuntivi"
+  },
+  "includedMachineAccounts": {
+    "message": "Il tuo piano include $COUNT$ account macchina.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalMachineAccounts": {
+    "message": "Puoi aggiungere più account macchina a $COST$ al mese.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "limitMachineAccounts": {
+    "message": "Limita gli account macchina (facoltativo)"
+  },
+  "limitMachineAccountsDesc": {
+    "message": "Imposta un limite per i tuoi account macchina. Una volta raggiunto questo limite, non potrai creare nuovi account macchina."
+  },
+  "machineAccountLimit": {
+    "message": "Limite account macchina (facoltativo)"
+  },
+  "maxMachineAccountCost": {
+    "message": "Costo massimo potenziale dell'account macchina"
+  },
+  "machineAccountAccessUpdated": {
+    "message": "Accesso all'account macchina aggiornato"
+  },
+  "restrictedGroupAccessDesc": {
+    "message": "Non puoi aggiungerti a un gruppo."
+  },
+  "unassignedItemsBannerSelfHost": {
+    "message": "Avviso: dal 2 maggio 2024, gli elementi dell'organizzazione non assegnati non saranno più visibili nella tua visualizzazione Tutte le Cassaforti su tutti i dispositivi e saranno accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili."
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Avviso: gli elementi dell'organizzazione non assegnati non sono più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e sono ora accessibili solo tramite la Console di amministrazione."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Avviso: dal 2 maggio 2024, gli elementi dell'organizzazione non assegnati non saranno più visibili nella tua visualizzazione Tutte le Cassaforti su tutti i dispositivi e saranno accessibili solo tramite la Console di amministrazione."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Assegna questi elementi ad una raccolta dalla",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "per renderli visibili.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "Elimina fornitore"
+  },
+  "deleteProviderConfirmation": {
+    "message": "La cancellazione di un fornitore è permanente e irreversibile. Inserisci la tua password principale per confermare l'eliminazione del fornitore e di tutti i dati associati."
+  },
+  "deleteProviderName": {
+    "message": "Impossibile eliminare $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDescription": {
+    "message": "Devi scollegare tutti i client prima di poter eliminare $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Fornitore eliminato"
+  },
+  "providerDeletedDesc": {
+    "message": "Il fornitore e tutti i dati associati sono stati eliminati."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "Hai richiesto di eliminare il questo fornitore. Clicca qui sotto per confermare."
+  },
+  "deleteProviderWarning": {
+    "message": "L'eliminazione del fornitore è permanente. Questa azione non è reversibile."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Errore nell'assegnazione della raccolta di destinazione."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Errore nell'assegnazione della cartella di destinazione."
+  },
+  "integrationsAndSdks": {
+    "message": "Integrazioni e SDK",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Integrazioni"
+  },
+  "integrationsDesc": {
+    "message": "Sincronizza automaticamente i segreti da Bitwarden Secrets Manager a un servizio di terze parti."
+  },
+  "sdks": {
+    "message": "SDK"
+  },
+  "sdksDesc": {
+    "message": "Usa l'SDK di Bitwarden Secrets Manager nei seguenti linguaggi di programmazione per creare le tue applicazioni."
+  },
+  "setUpGithubActions": {
+    "message": "Configura GitHub Actions"
+  },
+  "setUpGitlabCICD": {
+    "message": "Configura GitLab CI/CD"
+  },
+  "setUpAnsible": {
+    "message": "Configura Ansible"
+  },
+  "cSharpSDKRepo": {
+    "message": "Visualizza la repository C#"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "Visualizza la repository C++"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "Visualizza la repository JS WebAssembly"
+  },
+  "javaSDKRepo": {
+    "message": "Visualizza la repository Java"
+  },
+  "pythonSDKRepo": {
+    "message": "Visualizza la repository Python"
+  },
+  "phpSDKRepo": {
+    "message": "Visualizza la repository php"
+  },
+  "rubySDKRepo": {
+    "message": "Visualizza la repository Ruby"
+  },
+  "goSDKRepo": {
+    "message": "Visualizza la repository Go"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Crea una nuova organizzazione cliente da gestire come fornitore. Gli slot aggiuntivi saranno riflessi nel prossimo ciclo di fatturazione."
+  },
+  "selectAPlan": {
+    "message": "Seleziona un piano"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "Sconto del 35%"
+  },
+  "monthPerMember": {
+    "message": "mese per membro"
+  },
+  "seats": {
+    "message": "Slot"
+  },
+  "addOrganization": {
+    "message": "Aggiungi organizzazione"
+  },
+  "createdNewClient": {
+    "message": "Nuovo cliente creato con successo"
+  },
+  "noAccess": {
+    "message": "Nessun accesso"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "Questa raccolta è accessibile solo dalla console di amministrazione"
+  },
+  "organizationOptionsMenu": {
+    "message": "Attiva/Disattiva Menu Organizzazione"
+  },
+  "vaultItemSelect": {
+    "message": "Seleziona elemento della cassaforte"
+  },
+  "collectionItemSelect": {
+    "message": "Seleziona elemento della raccolta"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Gestisci la fatturazione dal Portale del Fornitore"
+  },
+  "viewInfo": {
+    "message": "Visualizza informazioni"
+  },
+  "viewAccess": {
+    "message": "Visualizza accesso"
+  },
+  "noCollectionsSelected": {
+    "message": "Non hai selezionato alcuna raccolta."
+  },
+  "updateName": {
+    "message": "Aggiorna nome"
+  },
+  "updatedOrganizationName": {
+    "message": "Nome dell'organizzazione aggiornato"
+  },
+  "providerPlan": {
+    "message": "Fornitore di servizi gestiti"
+  },
+  "orgSeats": {
+    "message": "Slot dell'organizzazione"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% di sconto",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "secureYourInfrastructure": {
+    "message": "Proteggi la tua infrastruttura"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Proteggi la tua famiglia o azienda"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Colma le lacune di sicurezza con i rapporti di monitoraggio"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stai al passo con le vulnerabilità della sicurezza passando a un piano a pagamento per un monitoraggio più avanzato."
   }
 }

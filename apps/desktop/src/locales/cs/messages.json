@@ -403,6 +403,9 @@
   "length": {
     "message": "Délka"
   },
+  "passwordMinLength": {
+    "message": "Minimální délka hesla"
+  },
   "uppercase": {
     "message": "Velká písmena (A-Z)"
   },
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "Váš účet byl vytvořen! Můžete se přihlásit."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "Byli jste úspěšně přihlášeni"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Toto okno můžete zavřít"
   },
   "masterPassSent": {
     "message": "Poslali jsme vám e-mail s nápovědou k hlavnímu heslu."
@@ -791,8 +800,11 @@
   "changeMasterPass": {
     "message": "Změnit hlavní heslo"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Hlavní heslo si můžete změnit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?"
+  "continueToWebApp": {
+    "message": "Pokračovat do webové aplikace?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Hlavní heslo můžete změnit ve webové aplikaci Bitwardenu."
   },
   "fingerprintPhrase": {
     "message": "Fráze otisku prstu",
@@ -1389,6 +1401,9 @@
   "invalidPin": {
     "message": "Neplatný PIN kód."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "Příliš mnoho neplatných pokusů o zadání PINu. Odhlášeno."
+  },
   "unlockWithWindowsHello": {
     "message": "Odemknout pomocí Windows Hello"
   },
@@ -1533,8 +1548,17 @@
   "setMasterPassword": {
     "message": "Nastavit hlavní heslo"
   },
-  "ssoCompleteRegistration": {
-    "message": "Chcete-li dokončit přihlášení pomocí SSO, nastavte hlavní přístupové heslo k Vašemu trezoru."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Oprávnění Vaší organizace byla aktualizována. To vyžaduje nastavení hlavního hesla.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Vaše organizace vyžaduje nastavení hlavního hesla.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Je vyžadováno ověření",
+    "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
     "message": "Aktuální hlavní heslo"
@@ -1608,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "Integrace prohlížeče není podporována"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Chyba při povolování integrace prohlížeče"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "Vyskytla se chyba při povolování integrace prohlížeče."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "Integrace prohlížeče je podporována jen ve verzi pro Mac App Store."
   },
@@ -1622,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Přidá další vrstvu zabezpečení vyžadováním ověření frází otisků prstů při vytvoření propojení mezi plochou a prohlížečem. Pokud je povoleno, vyžaduje to zásah uživatele a ověření pokaždé, když je navázáno spojení."
+  },
+  "enableHardwareAcceleration": {
+    "message": "Používat hardwarovou akceleraci"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "Ve výchozím nastavení je toto nastavení zapnuto. Vypněte jen v případě problémů s grafikou. Je vyžadováno restartování."
   },
   "approve": {
     "message": "Schválit"
@@ -1661,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Zásady organizace ovlivňují možnosti vlastnictví."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Zásady organizace zablokovaly importování položek do Vašeho osobního trezoru."
   },
   "allSends": {
     "message": "Všechny Sends",
@@ -1857,6 +1896,42 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny."
+  },
+  "tryAgain": {
+    "message": "Zkusit znovu"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Pro tuto akci je vyžadováno ověření. Nastavte PIN kód pro pokračování."
+  },
+  "setPin": {
+    "message": "Nastavit PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Ověřit pomocí biometrie"
+  },
+  "awaitingConfirmation": {
+    "message": "Čeká na potvrzení"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Nelze dokončit biometrii."
+  },
+  "needADifferentMethod": {
+    "message": "Potřebujete jinou metodu?"
+  },
+  "useMasterPassword": {
+    "message": "Použít hlavní heslo"
+  },
+  "usePin": {
+    "message": "Použít PIN"
+  },
+  "useBiometrics": {
+    "message": "Použít biometrii"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Zadejte ověřovací kód, který byl odeslán do Vašeho e-mailu."
+  },
+  "resendCode": {
+    "message": "Znovu odeslat kód"
   },
   "hours": {
     "message": "hodin"
@@ -2056,6 +2131,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Vygeneruje alias e-mailu pomocí externí přeposílací služby."
+  },
+  "forwarderError": {
+    "message": "Chyba $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Vygenerováno Bitwardenem.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Webová stránka: $WEBSITE$. Vygenerováno Bitwardenem.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Neplatný token API $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Neplatný token API $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Nelze získat maskované ID e-mailového účtu $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Neplatná doména $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Neplatné URL $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Došlo k neznámé chybě $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Neznámý přeposílatel: $SERVICENAME$.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Název hostitele",
@@ -2280,12 +2457,6 @@
   "loggingInOn": {
     "message": "Přihlašování na"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
-  },
   "selfHostedServer": {
     "message": "vlastní hosting"
   },
@@ -2416,7 +2587,240 @@
   "submenu": {
     "message": "Podmenu"
   },
+  "skipToContent": {
+    "message": "Přeskočit na obsah"
+  },
+  "typePasskey": {
+    "message": "Přístupový klíč"
+  },
+  "passkeyNotCopied": {
+    "message": "Přístupový klíč nebude zkopírován"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "Přístupový klíč nebude zkopírován do duplikované položky. Chete pokračovat v duplikování této položky?"
+  },
   "aliasDomain": {
     "message": "Doména aliasu"
+  },
+  "importData": {
+    "message": "Importovat data",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Chyba importu"
+  },
+  "importErrorDesc": {
+    "message": "Vyskytl se problém s daty, které jste se pokusili importovat. Vyřešte níže uvedené chyby ve zdrojovém souboru a zkuste to znovu."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Vyřešte chyby níže a zkuste to znovu."
+  },
+  "description": {
+    "message": "Popis"
+  },
+  "importSuccess": {
+    "message": "Data byla úspěšně importována"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Bylo importováno celkem $AMOUNT$ položek.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Celkem"
+  },
+  "importWarning": {
+    "message": "Importujete data do organizace $ORGANIZATION$. Vaše data mohou být sdílena s členy této organizace. Chcete pokračovat?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Spusťte DUO a pro dokončení přihlášení postupujte podle kroků."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Pro Váš účet je vyžadováno dvoufázové přihlášení DUO."
+  },
+  "launchDuo": {
+    "message": "Spustit DUO v prohlížeči"
+  },
+  "importFormatError": {
+    "message": "Data nemají správný formát. Zkontrolujte importovaný soubor a zkuste to znovu."
+  },
+  "importNothingError": {
+    "message": "Nebylo nic importováno."
+  },
+  "importEncKeyError": {
+    "message": "Chyba při dešifrování exportovaného souboru. Váš šifrovací klíč se neshoduje s klíčem použitým během exportu dat."
+  },
+  "invalidFilePassword": {
+    "message": "Neplatné heslo souboru, použijte heslo zadané při vytvoření souboru exportu."
+  },
+  "importDestination": {
+    "message": "Cíl importu"
+  },
+  "learnAboutImportOptions": {
+    "message": "Více o volbách importu"
+  },
+  "selectImportFolder": {
+    "message": "Zvolte složku"
+  },
+  "selectImportCollection": {
+    "message": "Zvolte kolekci"
+  },
+  "importTargetHint": {
+    "message": "Pokud chcete obsah importovaného souboru přesunout do složky $DESTINATION$, vyberte tuto volbu",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Soubor obsahuje nepřiřazené položky."
+  },
+  "selectFormat": {
+    "message": "Vyberte formát importovaného souboru"
+  },
+  "selectImportFile": {
+    "message": "Vyberte soubor pro import"
+  },
+  "chooseFile": {
+    "message": "Vybrat soubor"
+  },
+  "noFileChosen": {
+    "message": "Není vybrán žádný soubor"
+  },
+  "orCopyPasteFileContents": {
+    "message": "nebo zkopírujte a vložte obsah souboru"
+  },
+  "instructionsFor": {
+    "message": "Instrukce pro $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Potvrdit import trezoru"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Tento soubor je chráněn heslem. Zadejte heslo souboru pro import dat."
+  },
+  "confirmFilePassword": {
+    "message": "Potvrzení hesla souboru"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Vícefázové ověření zrušeno"
+  },
+  "noLastPassDataFound": {
+    "message": "Nebyla nalezena žádná data LastPass"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Nesprávné uživatelské jméno nebo heslo"
+  },
+  "incorrectPassword": {
+    "message": "Nesprávné heslo"
+  },
+  "incorrectCode": {
+    "message": "Nesprávný kód"
+  },
+  "incorrectPin": {
+    "message": "Nesprávný PIN"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Vícefaktorové ověření se nezdařilo"
+  },
+  "includeSharedFolders": {
+    "message": "Zahrnout sdílené složky"
+  },
+  "lastPassEmail": {
+    "message": "E-mail LastPass"
+  },
+  "importingYourAccount": {
+    "message": "Importování Vašeho účtu..."
+  },
+  "lastPassMFARequired": {
+    "message": "Je vyžadováno vícefaktorové ověření LastPass"
+  },
+  "lastPassMFADesc": {
+    "message": "Zadejte jednorázový kód z Vaší ověřovací aplikace"
+  },
+  "lastPassOOBDesc": {
+    "message": "Schvalte žádost o přihlášení ve Vaší ověřovací aplikaci nebo zadejte jednorázové heslo."
+  },
+  "passcode": {
+    "message": "Heslo"
+  },
+  "lastPassMasterPassword": {
+    "message": "Hlavní heslo LastPass"
+  },
+  "lastPassAuthRequired": {
+    "message": "Je vyžadováno ověření LastPass"
+  },
+  "awaitingSSO": {
+    "message": "Čeká se na ověření SSO"
+  },
+  "awaitingSSODesc": {
+    "message": "Pokračujte v přihlášení pomocí přihlašovacích údajů Vaší společnosti."
+  },
+  "seeDetailedInstructions": {
+    "message": "Podívejte se na podrobné pokyny na našem webu s nápovědou na",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Importovat přímo z LastPass"
+  },
+  "importFromCSV": {
+    "message": "Importovat z CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Zkuste to znovu nebo vyhledejte e-mail od LastPass pro ověření, že jste to Vy."
+  },
+  "collection": {
+    "message": "Kolekce"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Vložte YubiKey spojený s Vaším účtem LastPass do USB portu Vašeho počítače a stiskněte jeho tlačítko."
+  },
+  "commonImportFormats": {
+    "message": "Společné formáty",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Úspěch"
+  },
+  "troubleshooting": {
+    "message": "Řešení problémů"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Zakázat hardwarovou akceleraci a restartovat"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Povolit hardwarovou akceleraci a restartovat"
+  },
+  "removePasskey": {
+    "message": "Odebrat přístupový klíč"
+  },
+  "passkeyRemoved": {
+    "message": "Přístupový klíč byl odebrán"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Chyba při přiřazování cílové kolekce."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Chyba při přiřazování cílové složky."
   }
 }

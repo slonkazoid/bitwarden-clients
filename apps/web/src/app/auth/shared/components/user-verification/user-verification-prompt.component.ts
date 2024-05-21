@@ -2,19 +2,18 @@ import { DialogConfig, DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
-import { UserVerificationPromptComponent as BaseUserVerificationPrompt } from "@bitwarden/angular/auth/components/user-verification-prompt.component";
-import { ModalConfig } from "@bitwarden/angular/services/modal.service";
+import {
+  UserVerificationPromptComponent as BaseUserVerificationPrompt,
+  UserVerificationPromptParams,
+} from "@bitwarden/angular/auth/components/user-verification-prompt.component";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
-export interface UserVerificationPromptParams {
-  confirmDescription: string;
-  confirmButtonText: string;
-  modalTitle: string;
-}
-
+/**
+ * @deprecated Jan 24, 2024: Use new libs/auth UserVerificationDialogComponent instead.
+ */
 @Component({
   templateUrl: "user-verification-prompt.component.html",
 })
@@ -25,18 +24,9 @@ export class UserVerificationPromptComponent extends BaseUserVerificationPrompt 
     userVerificationService: UserVerificationService,
     formBuilder: FormBuilder,
     platformUtilsService: PlatformUtilsService,
-    i18nService: I18nService
+    i18nService: I18nService,
   ) {
-    // TODO: Remove when BaseUserVerificationPrompt has support for CL
-    const modalConfig: ModalConfig = { data };
-    super(
-      null,
-      modalConfig,
-      userVerificationService,
-      formBuilder,
-      platformUtilsService,
-      i18nService
-    );
+    super(null, data, userVerificationService, formBuilder, platformUtilsService, i18nService);
   }
 
   override close(success: boolean) {
@@ -51,10 +41,10 @@ export class UserVerificationPromptComponent extends BaseUserVerificationPrompt 
  */
 export const openUserVerificationPrompt = (
   dialogService: DialogService,
-  config: DialogConfig<UserVerificationPromptParams>
+  config: DialogConfig<UserVerificationPromptParams>,
 ) => {
   return dialogService.open<boolean, UserVerificationPromptParams>(
     UserVerificationPromptComponent,
-    config
+    config,
   );
 };

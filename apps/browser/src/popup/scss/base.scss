@@ -6,12 +6,6 @@
   margin: 0;
 }
 
-html {
-  &.cdk-global-scrollblock {
-    position: unset;
-  }
-}
-
 html,
 body {
   font-family: $font-family-sans-serif;
@@ -23,6 +17,8 @@ body {
 body {
   width: 375px !important;
   height: 600px !important;
+  position: relative;
+  min-height: 100vh;
   overflow: hidden;
   color: $text-color;
   background-color: $background-color;
@@ -72,7 +68,7 @@ img {
   border: none;
 }
 
-a {
+a:not(popup-page a, popup-tab-navigation a) {
   text-decoration: none;
 
   @include themify($themes) {
@@ -175,16 +171,28 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb,
   }
 }
 
-header {
-  min-height: 44px;
-  max-height: 44px;
+header:not(bit-callout header, bit-dialog header, popup-page header) {
+  height: 44px;
   display: flex;
-  border-bottom: 1px solid #000000;
 
-  @include themify($themes) {
-    color: themed("headerColor");
-    background-color: themed("headerBackgroundColor");
-    border-bottom-color: themed("headerBorderColor");
+  &:not(.no-theme) {
+    border-bottom: 1px solid #000000;
+
+    @include themify($themes) {
+      color: themed("headerColor");
+      background-color: themed("headerBackgroundColor");
+      border-bottom-color: themed("headerBorderColor");
+    }
+  }
+
+  .header-content {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .header-content > .right,
+  .header-content > .right > .right {
+    height: 100%;
   }
 
   .left,
@@ -218,7 +226,7 @@ header {
   }
 
   app-pop-out > button,
-  div > button,
+  div > button:not(app-current-account button):not(.home-acc-switcher-btn),
   div > a {
     border: none;
     padding: 0 10px;
@@ -230,13 +238,8 @@ header {
     height: 100%;
     white-space: pre;
 
-    @include themify($themes) {
-      color: themed("headerColor");
-      background-color: themed("headerBackgroundColor");
-    }
-
-    &:hover,
-    &:focus {
+    &:not(.home-acc-switcher-btn):hover,
+    &:not(.home-acc-switcher-btn):focus {
       @include themify($themes) {
         background-color: themed("headerBackgroundHoverColor");
         color: themed("headerColor");
@@ -445,7 +448,7 @@ app-root {
   }
 }
 
-main {
+main:not(popup-page main) {
   position: absolute;
   top: 44px;
   bottom: 0;

@@ -403,6 +403,9 @@
   "length": {
     "message": "אורך"
   },
+  "passwordMinLength": {
+    "message": "אורך סיסמה מזערי"
+  },
   "uppercase": {
     "message": "אותיות גדולות (A-Z)"
   },
@@ -476,7 +479,7 @@
     "message": "גודל הקובץ המירבי הוא 500 מגה."
   },
   "encryptionKeyMigrationRequired": {
-    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
+    "message": "נדרשת הסבת מפתח הצפנה. נא להיכנס דרך הכספת לאתרים כדי לעדכן את מפתח ההצפנה שלך."
   },
   "editedFolder": {
     "message": "תיקייה שנשמרה"
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "החשבון החדש שלך נוצר בהצלחה! כעת ניתן להתחבר למערכת."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "נכנסת בהצלחה"
+  },
+  "youMayCloseThisWindow": {
+    "message": "אפשר לסגור את החלון הזה"
   },
   "masterPassSent": {
     "message": "שלחנו לך אימייל עם רמז לסיסמה הראשית."
@@ -791,8 +800,11 @@
   "changeMasterPass": {
     "message": "החלף סיסמה ראשית"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "באפשרותך לשנות את הסיסמה הראשית שלך דרך הכספת באתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?"
+  "continueToWebApp": {
+    "message": "Continue to web app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "You can change your master password on the Bitwarden web app."
   },
   "fingerprintPhrase": {
     "message": "סיסמת טביעת אצבע",
@@ -1389,11 +1401,14 @@
   "invalidPin": {
     "message": "קוד PIN לא תקין."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "יותר מדי ניסיונות שגויים להקלדת קוד אישי. יצאת מהמערכת."
+  },
   "unlockWithWindowsHello": {
     "message": "שחרור נעילה עם Windows Hello"
   },
   "additionalWindowsHelloSettings": {
-    "message": "Additional Windows Hello settings"
+    "message": "הגדרות נוספות של Windows Hello"
   },
   "windowsHelloConsentMessage": {
     "message": "אימות עבור Bitwarden."
@@ -1402,7 +1417,7 @@
     "message": "שחרור נעילה עם Touch ID"
   },
   "additionalTouchIdSettings": {
-    "message": "Additional Touch ID settings"
+    "message": "הגדרות Touch ID נוספות"
   },
   "touchIdConsentMessage": {
     "message": "פתח את הכספת שלך"
@@ -1414,10 +1429,10 @@
     "message": "הצג בקשה של Touch ID בפתיחת האפליקציה"
   },
   "requirePasswordOnStart": {
-    "message": "Require password or PIN on app start"
+    "message": "לדרוש סיסמה או קוד אישי עם הפעלת היישום"
   },
   "recommendedForSecurity": {
-    "message": "Recommended for security."
+    "message": "מומלץ לשיפור אבטחת מידע."
   },
   "lockWithMasterPassOnRestart": {
     "message": "נעל בעזרת הסיסמה הראשית בהפעלה מחדש"
@@ -1493,7 +1508,7 @@
     "message": "יש לבצע אימות מחדש כדי לגשת לכספת שוב."
   },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
-    "message": "Set up an unlock method to change your vault timeout action."
+    "message": "יש להגדיר שיטת שחרור נעילה כדי לשנות את פעולת תום הזמן של הכספת שלך."
   },
   "lock": {
     "message": "נעילה",
@@ -1533,8 +1548,17 @@
   "setMasterPassword": {
     "message": "הגדרת סיסמה ראשית"
   },
-  "ssoCompleteRegistration": {
-    "message": "כדי להשלים את הכניסה עם SSO, נא להגדיר סיסמה ראשית כדי לגשת ולהגן על הכספת שלך."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Your organization permissions were updated, requiring you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Your organization requires you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "נדרש אימות",
+    "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
     "message": "Current master password"
@@ -1608,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "שילוב הדפדפן אינו נתמך"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Error enabling browser integration"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "An error has occurred while enabling browser integration."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "למצער, אינטגרצייה עם הדפדפן בשלב זה נתמכת רק על ידי גרסת חנות האפליקציות של מקינטוש."
   },
@@ -1622,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "הפעל שכבת אבטחה נוספת באמצעות בקשת אימות טביעות אצבע בעת יצירת קישור בין שולחן העבודה לדפדפן. כשהוא מופעל, זה דורש התערבות ואימות משתמש בכל פעם שנוצר חיבור."
+  },
+  "enableHardwareAcceleration": {
+    "message": "להשתמש בהאצת חומרה"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "ההגדרה הזאת פעילה כברירת מחדל. יש לכבות רק אם יש כל מיני תקלות גרפיות. צריך להפעיל מחדש."
   },
   "approve": {
     "message": "לְאַשֵׁר"
@@ -1661,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "מדיניות ארגון מסויימת משפיעה על אפשרויות הבעלות."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "An organization policy has blocked importing items into your individual vault."
   },
   "allSends": {
     "message": "כל השליחות",
@@ -1857,6 +1896,42 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
+  "tryAgain": {
+    "message": "לנסות שוב"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "צריך אימות לביצוע הפעולה הזאת. נא להגדיר קוד אישי כדי להמשיך."
+  },
+  "setPin": {
+    "message": "הגדרת קוד אישי"
+  },
+  "verifyWithBiometrics": {
+    "message": "אימות עם זיהוי ביומטרי"
+  },
+  "awaitingConfirmation": {
+    "message": "בהמתנה לאישור"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "לא ניתן להשלים את האימות הביומטרי."
+  },
+  "needADifferentMethod": {
+    "message": "עדיף שיטה אחרת?"
+  },
+  "useMasterPassword": {
+    "message": "להשתמש בסיסמה ראשית"
+  },
+  "usePin": {
+    "message": "להשתמש בקוד אישי"
+  },
+  "useBiometrics": {
+    "message": "להשתמש בזיהוי ביומטרי"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "נא למלא את קוד האימות שנשלח לכתובת הדוא״ל שלך."
+  },
+  "resendCode": {
+    "message": "שליחת הקוד מחדש"
   },
   "hours": {
     "message": "שעות"
@@ -2057,6 +2132,108 @@
   "forwardedEmailDesc": {
     "message": "צור כינוי דוא\"ל באמצעות שירות שליחת דוא\"ל חיצוני."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "שם מארח",
     "description": "Part of a URL."
@@ -2229,7 +2406,7 @@
     "message": "Check known data breaches for this password"
   },
   "important": {
-    "message": "Important:"
+    "message": "חשוב:"
   },
   "masterPasswordHint": {
     "message": "Your master password cannot be recovered if you forget it!"
@@ -2279,12 +2456,6 @@
   },
   "loggingInOn": {
     "message": "Logging in on"
-  },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
   },
   "selfHostedServer": {
     "message": "self-hosted"
@@ -2416,7 +2587,240 @@
   "submenu": {
     "message": "Submenu"
   },
+  "skipToContent": {
+    "message": "Skip to content"
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey will not be copied"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
+  },
   "aliasDomain": {
     "message": "Alias domain"
+  },
+  "importData": {
+    "message": "Import data",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Import error"
+  },
+  "importErrorDesc": {
+    "message": "There was a problem with the data you tried to import. Please resolve the errors listed below in your source file and try again."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resolve the errors below and try again."
+  },
+  "description": {
+    "message": "Description"
+  },
+  "importSuccess": {
+    "message": "Data successfully imported"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Total"
+  },
+  "importWarning": {
+    "message": "You are importing data to $ORGANIZATION$. Your data may be shared with members of this organization. Do you want to proceed?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "launchDuo": {
+    "message": "Launch Duo in Browser"
+  },
+  "importFormatError": {
+    "message": "Data is not formatted correctly. Please check your import file and try again."
+  },
+  "importNothingError": {
+    "message": "Nothing was imported."
+  },
+  "importEncKeyError": {
+    "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
+  },
+  "invalidFilePassword": {
+    "message": "Invalid file password, please use the password you entered when you created the export file."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
+  },
+  "selectFormat": {
+    "message": "Select the format of the import file"
+  },
+  "selectImportFile": {
+    "message": "Select the import file"
+  },
+  "chooseFile": {
+    "message": "Choose File"
+  },
+  "noFileChosen": {
+    "message": "No file chosen"
+  },
+  "orCopyPasteFileContents": {
+    "message": "or copy/paste the import file contents"
+  },
+  "instructionsFor": {
+    "message": "$NAME$ Instructions",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Confirm vault import"
+  },
+  "confirmVaultImportDesc": {
+    "message": "This file is password-protected. Please enter the file password to import data."
+  },
+  "confirmFilePassword": {
+    "message": "Confirm file password"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Multifactor authentication cancelled"
+  },
+  "noLastPassDataFound": {
+    "message": "No LastPass data found"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Incorrect username or password"
+  },
+  "incorrectPassword": {
+    "message": "סיסמה שגויה"
+  },
+  "incorrectCode": {
+    "message": "קוד שגוי"
+  },
+  "incorrectPin": {
+    "message": "קוד אישי שגוי"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Multifactor authentication failed"
+  },
+  "includeSharedFolders": {
+    "message": "Include shared folders"
+  },
+  "lastPassEmail": {
+    "message": "LastPass Email"
+  },
+  "importingYourAccount": {
+    "message": "Importing your account..."
+  },
+  "lastPassMFARequired": {
+    "message": "LastPass multifactor authentication required"
+  },
+  "lastPassMFADesc": {
+    "message": "Enter your one-time passcode from your authentication app"
+  },
+  "lastPassOOBDesc": {
+    "message": "Approve the login request in your authentication app or enter a one-time passcode."
+  },
+  "passcode": {
+    "message": "Passcode"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass master password"
+  },
+  "lastPassAuthRequired": {
+    "message": "LastPass authentication required"
+  },
+  "awaitingSSO": {
+    "message": "Awaiting SSO authentication"
+  },
+  "awaitingSSODesc": {
+    "message": "Please continue to log in using your company credentials."
+  },
+  "seeDetailedInstructions": {
+    "message": "See detailed instructions on our help site at",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Import directly from LastPass"
+  },
+  "importFromCSV": {
+    "message": "Import from CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Try again or look for an email from LastPass to verify it's you."
+  },
+  "collection": {
+    "message": "Collection"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Insert the YubiKey associated with your LastPass account into your computer's USB port, then touch its button."
+  },
+  "commonImportFormats": {
+    "message": "תסדירים נפוצים",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Success"
+  },
+  "troubleshooting": {
+    "message": "Troubleshooting"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Disable hardware acceleration and restart"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Enable hardware acceleration and restart"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
   }
 }

@@ -2,13 +2,13 @@ import { Component, Input } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
+import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/auth/components/register.component";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
+import { LoginStrategyServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -25,6 +25,7 @@ import { DialogService } from "@bitwarden/components";
 })
 export class RegisterFormComponent extends BaseRegisterComponent {
   @Input() queryParamEmail: string;
+  @Input() queryParamFromOrgInvite: boolean;
   @Input() enforcedPolicyOptions: MasterPasswordPolicyOptions;
   @Input() referenceDataValue: ReferenceEventRequest;
 
@@ -34,7 +35,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
   constructor(
     formValidationErrorService: FormValidationErrorsService,
     formBuilder: UntypedFormBuilder,
-    authService: AuthService,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     i18nService: I18nService,
     cryptoService: CryptoService,
@@ -46,12 +47,12 @@ export class RegisterFormComponent extends BaseRegisterComponent {
     environmentService: EnvironmentService,
     logService: LogService,
     auditService: AuditService,
-    dialogService: DialogService
+    dialogService: DialogService,
   ) {
     super(
       formValidationErrorService,
       formBuilder,
-      authService,
+      loginStrategyService,
       router,
       i18nService,
       cryptoService,
@@ -62,14 +63,13 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       environmentService,
       logService,
       auditService,
-      dialogService
+      dialogService,
     );
   }
 
   async ngOnInit() {
     await super.ngOnInit();
     this.referenceData = this.referenceDataValue;
-
     if (this.queryParamEmail) {
       this.formGroup.get("email")?.setValue(this.queryParamEmail);
     }
@@ -87,13 +87,13 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       !this.policyService.evaluateMasterPassword(
         this.passwordStrengthResult.score,
         this.formGroup.value.masterPassword,
-        this.enforcedPolicyOptions
+        this.enforcedPolicyOptions,
       )
     ) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPasswordPolicyRequirementsNotMet")
+        this.i18nService.t("masterPasswordPolicyRequirementsNotMet"),
       );
       return;
     }

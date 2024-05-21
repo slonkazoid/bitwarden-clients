@@ -52,6 +52,8 @@ describe("AccessSelectorComponent", () => {
   let fixture: ComponentFixture<TestableAccessSelectorComponent>;
 
   beforeEach(() => {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     TestBed.configureTestingModule({
       imports: [
         ButtonModule,
@@ -138,7 +140,7 @@ describe("AccessSelectorComponent", () => {
       expect(mockChange.mock.lastCall[0]).toHaveProperty("[0].id", "123");
       expect(mockChange.mock.lastCall[0]).toHaveProperty(
         "[0].permission",
-        CollectionPermission.Edit
+        CollectionPermission.Edit,
       );
     });
 
@@ -246,7 +248,7 @@ describe("AccessSelectorComponent", () => {
         // Assert
         const colHeading = fixture.nativeElement.querySelector("#permissionColHeading");
         expect(!!colHeading).toEqual(shouldShowColumn);
-      }
+      },
     );
   });
 });

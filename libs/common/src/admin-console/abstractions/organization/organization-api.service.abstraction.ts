@@ -3,9 +3,9 @@ import { OrganizationSsoRequest } from "../../../auth/models/request/organizatio
 import { SecretVerificationRequest } from "../../../auth/models/request/secret-verification.request";
 import { ApiKeyResponse } from "../../../auth/models/response/api-key.response";
 import { OrganizationSsoResponse } from "../../../auth/models/response/organization-sso.response";
+import { ExpandedTaxInfoUpdateRequest } from "../../../billing/models/request/expanded-tax-info-update.request";
 import { OrganizationSmSubscriptionUpdateRequest } from "../../../billing/models/request/organization-sm-subscription-update.request";
 import { OrganizationSubscriptionUpdateRequest } from "../../../billing/models/request/organization-subscription-update.request";
-import { OrganizationTaxInfoUpdateRequest } from "../../../billing/models/request/organization-tax-info-update.request";
 import { PaymentRequest } from "../../../billing/models/request/payment.request";
 import { SecretsManagerSubscribeRequest } from "../../../billing/models/request/sm-subscribe.request";
 import { BillingResponse } from "../../../billing/models/response/billing.response";
@@ -18,6 +18,7 @@ import { StorageRequest } from "../../../models/request/storage.request";
 import { VerifyBankRequest } from "../../../models/request/verify-bank.request";
 import { ListResponse } from "../../../models/response/list.response";
 import { OrganizationApiKeyType } from "../../enums";
+import { OrganizationCollectionManagementUpdateRequest } from "../../models/request/organization-collection-management-update.request";
 import { OrganizationCreateRequest } from "../../models/request/organization-create.request";
 import { OrganizationKeysRequest } from "../../models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "../../models/request/organization-update.request";
@@ -41,16 +42,15 @@ export class OrganizationApiServiceAbstraction {
   upgrade: (id: string, request: OrganizationUpgradeRequest) => Promise<PaymentResponse>;
   updatePasswordManagerSeats: (
     id: string,
-    request: OrganizationSubscriptionUpdateRequest
+    request: OrganizationSubscriptionUpdateRequest,
   ) => Promise<void>;
   updateSecretsManagerSubscription: (
     id: string,
-    request: OrganizationSmSubscriptionUpdateRequest
+    request: OrganizationSmSubscriptionUpdateRequest,
   ) => Promise<void>;
   updateSeats: (id: string, request: SeatRequest) => Promise<PaymentResponse>;
   updateStorage: (id: string, request: StorageRequest) => Promise<PaymentResponse>;
   verifyBank: (id: string, request: VerifyBankRequest) => Promise<void>;
-  cancel: (id: string) => Promise<void>;
   reinstate: (id: string) => Promise<void>;
   leave: (id: string) => Promise<void>;
   delete: (id: string, request: SecretVerificationRequest) => Promise<void>;
@@ -59,11 +59,11 @@ export class OrganizationApiServiceAbstraction {
   getOrCreateApiKey: (id: string, request: OrganizationApiKeyRequest) => Promise<ApiKeyResponse>;
   getApiKeyInformation: (
     id: string,
-    organizationApiKeyType?: OrganizationApiKeyType
+    organizationApiKeyType?: OrganizationApiKeyType,
   ) => Promise<ListResponse<OrganizationApiKeyInformationResponse>>;
   rotateApiKey: (id: string, request: OrganizationApiKeyRequest) => Promise<ApiKeyResponse>;
   getTaxInfo: (id: string) => Promise<TaxInfoResponse>;
-  updateTaxInfo: (id: string, request: OrganizationTaxInfoUpdateRequest) => Promise<void>;
+  updateTaxInfo: (id: string, request: ExpandedTaxInfoUpdateRequest) => Promise<void>;
   getKeys: (id: string) => Promise<OrganizationKeysResponse>;
   updateKeys: (id: string, request: OrganizationKeysRequest) => Promise<OrganizationKeysResponse>;
   getSso: (id: string) => Promise<OrganizationSsoResponse>;
@@ -71,6 +71,11 @@ export class OrganizationApiServiceAbstraction {
   selfHostedSyncLicense: (id: string) => Promise<void>;
   subscribeToSecretsManager: (
     id: string,
-    request: SecretsManagerSubscribeRequest
+    request: SecretsManagerSubscribeRequest,
   ) => Promise<ProfileOrganizationResponse>;
+  updateCollectionManagement: (
+    id: string,
+    request: OrganizationCollectionManagementUpdateRequest,
+  ) => Promise<OrganizationResponse>;
+  enableCollectionEnhancements: (id: string) => Promise<void>;
 }

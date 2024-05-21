@@ -1,17 +1,16 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ActivatedRoute } from "@angular/router";
-// eslint-disable-next-line no-restricted-imports
-import { Substitute } from "@fluffy-spoon/substitute";
 import { mock, MockProxy } from "jest-mock-extended";
 
 import { I18nPipe } from "@bitwarden/angular/platform/pipes/i18n.pipe";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import { GeneratorComponent } from "./generator.component";
 
@@ -23,20 +22,18 @@ describe("GeneratorComponent", () => {
   beforeEach(() => {
     platformUtilsServiceMock = mock<PlatformUtilsService>();
 
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     TestBed.configureTestingModule({
       declarations: [GeneratorComponent, I18nPipe],
       providers: [
         {
           provide: PasswordGenerationServiceAbstraction,
-          useClass: Substitute.for<PasswordGenerationServiceAbstraction>(),
+          useValue: mock<PasswordGenerationServiceAbstraction>(),
         },
         {
           provide: UsernameGenerationServiceAbstraction,
-          useClass: Substitute.for<UsernameGenerationServiceAbstraction>(),
-        },
-        {
-          provide: StateService,
-          useClass: Substitute.for<StateService>(),
+          useValue: mock<UsernameGenerationServiceAbstraction>(),
         },
         {
           provide: PlatformUtilsService,
@@ -44,15 +41,23 @@ describe("GeneratorComponent", () => {
         },
         {
           provide: I18nService,
-          useClass: Substitute.for<I18nService>(),
+          useValue: mock<I18nService>(),
         },
         {
           provide: ActivatedRoute,
-          useClass: Substitute.for<ActivatedRoute>(),
+          useValue: mock<ActivatedRoute>(),
         },
         {
           provide: LogService,
-          useClass: Substitute.for<LogService>(),
+          useValue: mock<LogService>(),
+        },
+        {
+          provide: CipherService,
+          useValue: mock<CipherService>(),
+        },
+        {
+          provide: AccountService,
+          useValue: mock<AccountService>(),
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

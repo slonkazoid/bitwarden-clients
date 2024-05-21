@@ -10,10 +10,13 @@ import {
   providedIn: "root",
 })
 export class OrganizationRedirectGuard implements CanActivate {
-  constructor(private router: Router, private organizationService: OrganizationService) {}
+  constructor(
+    private router: Router,
+    private organizationService: OrganizationService,
+  ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const org = this.organizationService.get(route.params.organizationId);
+    const org = await this.organizationService.get(route.params.organizationId);
 
     const customRedirect = route.data?.autoRedirectCallback;
     if (customRedirect) {

@@ -1,12 +1,17 @@
 import { Component, NgZone } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/auth/components/login.component";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import {
+  LoginStrategyServiceAbstraction,
+  LoginEmailServiceAbstraction,
+} from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
+import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -29,7 +34,7 @@ export class LoginComponent extends BaseLoginComponent {
   constructor(
     devicesApiService: DevicesApiServiceAbstraction,
     appIdService: AppIdService,
-    authService: AuthService,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
@@ -43,12 +48,14 @@ export class LoginComponent extends BaseLoginComponent {
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
     route: ActivatedRoute,
-    loginService: LoginService
+    loginEmailService: LoginEmailServiceAbstraction,
+    ssoLoginService: SsoLoginServiceAbstraction,
+    webAuthnLoginService: WebAuthnLoginServiceAbstraction,
   ) {
     super(
       devicesApiService,
       appIdService,
-      authService,
+      loginStrategyService,
       router,
       platformUtilsService,
       i18nService,
@@ -61,7 +68,9 @@ export class LoginComponent extends BaseLoginComponent {
       formBuilder,
       formValidationErrorService,
       route,
-      loginService
+      loginEmailService,
+      ssoLoginService,
+      webAuthnLoginService,
     );
     super.onSuccessfulLogin = async () => {
       await syncService.fullSync(true);
@@ -70,18 +79,24 @@ export class LoginComponent extends BaseLoginComponent {
     this.showPasswordless = flagEnabled("showPasswordless");
 
     if (this.showPasswordless) {
-      this.formGroup.controls.email.setValue(this.loginService.getEmail());
-      this.formGroup.controls.rememberEmail.setValue(this.loginService.getRememberEmail());
+      this.formGroup.controls.email.setValue(this.loginEmailService.getEmail());
+      this.formGroup.controls.rememberEmail.setValue(this.loginEmailService.getRememberEmail());
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.validateEmail();
     }
   }
 
   settings() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["environment"]);
   }
 
   async launchSsoBrowser() {
-    await this.loginService.saveEmailSettings();
+    // Save off email for SSO
+    await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
+    await this.loginEmailService.saveEmailSettings();
     // Generate necessary sso params
     const passwordOptions: any = {
       type: "password",
@@ -99,10 +114,11 @@ export class LoginComponent extends BaseLoginComponent {
     const codeVerifierHash = await this.cryptoFunctionService.hash(codeVerifier, "sha256");
     const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
 
-    await this.stateService.setSsoCodeVerifier(codeVerifier);
-    await this.stateService.setSsoState(state);
+    await this.ssoLoginService.setCodeVerifier(codeVerifier);
+    await this.ssoLoginService.setSsoState(state);
 
-    let url = this.environmentService.getWebVaultUrl();
+    const env = await firstValueFrom(this.environmentService.environment$);
+    let url = env.getWebVaultUrl();
     if (url == null) {
       url = "https://vault.bitwarden.com";
     }
@@ -120,7 +136,7 @@ export class LoginComponent extends BaseLoginComponent {
         "&codeChallenge=" +
         codeChallenge +
         "&email=" +
-        encodeURIComponent(this.formGroup.controls.email.value)
+        encodeURIComponent(this.formGroup.controls.email.value),
     );
   }
 }

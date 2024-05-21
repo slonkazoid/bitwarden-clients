@@ -14,6 +14,7 @@ import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.s
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
 import { DialogService, NoItemsModule, SearchModule, TableDataSource } from "@bitwarden/components";
 
+import { HeaderModule } from "../../layouts/header/header.module";
 import { SharedModule } from "../../shared";
 
 import { AddEditComponent } from "./add-edit.component";
@@ -24,7 +25,7 @@ const BroadcasterSubscriptionId = "SendComponent";
 @Component({
   selector: "app-send",
   standalone: true,
-  imports: [SharedModule, SearchModule, NoItemsModule],
+  imports: [SharedModule, SearchModule, NoItemsModule, HeaderModule],
   templateUrl: "send.component.html",
 })
 export class SendComponent extends BaseSendComponent {
@@ -54,7 +55,7 @@ export class SendComponent extends BaseSendComponent {
     private broadcasterService: BroadcasterService,
     logService: LogService,
     sendApiService: SendApiService,
-    dialogService: DialogService
+    dialogService: DialogService,
   ) {
     super(
       sendService,
@@ -66,7 +67,7 @@ export class SendComponent extends BaseSendComponent {
       policyService,
       logService,
       sendApiService,
-      dialogService
+      dialogService,
     );
   }
 
@@ -76,6 +77,8 @@ export class SendComponent extends BaseSendComponent {
 
     // Broadcaster subscription - load if sync completes in the background
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.ngZone.run(async () => {
         switch (message.command) {
           case "syncCompleted":
@@ -89,6 +92,7 @@ export class SendComponent extends BaseSendComponent {
   }
 
   ngOnDestroy() {
+    this.dialogService.closeAll();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 

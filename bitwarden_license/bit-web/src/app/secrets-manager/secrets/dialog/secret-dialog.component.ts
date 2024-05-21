@@ -29,6 +29,7 @@ export interface SecretOperation {
   operation: OperationType;
   projectId?: string;
   secretId?: string;
+  organizationEnabled: boolean;
 }
 
 @Component({
@@ -66,7 +67,7 @@ export class SecretDialogComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private projectService: ProjectService,
     private dialogService: DialogService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
   ) {}
 
   async ngOnInit() {
@@ -86,7 +87,7 @@ export class SecretDialogComponent implements OnInit {
       this.formGroup.get("project").setValue(this.data.projectId);
     }
 
-    if (this.organizationService.get(this.data.organizationId)?.isAdmin) {
+    if ((await this.organizationService.get(this.data.organizationId))?.isAdmin) {
       this.formGroup.get("project").removeValidators(Validators.required);
       this.formGroup.get("project").updateValueAndValidity();
     }
@@ -163,6 +164,11 @@ export class SecretDialogComponent implements OnInit {
   }
 
   submit = async () => {
+    if (!this.data.organizationEnabled) {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("secretsCannotCreate"));
+      return;
+    }
+
     this.formGroup.markAllAsTouched();
 
     if (this.formGroup.invalid) {
@@ -202,12 +208,14 @@ export class SecretDialogComponent implements OnInit {
         data: {
           secrets: secretListView,
         },
-      }
+      },
     );
 
     // If the secret is deleted, chain close this dialog after the delete dialog
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     lastValueFrom(dialogRef.closed).then(
-      (closeData) => closeData !== undefined && this.dialogRef.close()
+      (closeData) => closeData !== undefined && this.dialogRef.close(),
     );
   }
 

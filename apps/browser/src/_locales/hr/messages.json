@@ -3,12 +3,12 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden - besplatni upravitelj lozinki",
+    "message": "Bitwarden Password Manager",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Bitwarden je siguran i besplatan upravitelj lozinki za sve tvoje uređaje.",
-    "description": "Extension description"
+    "message": "At home, at work, or on the go, Bitwarden easily secures all your passwords, passkeys, and sensitive information",
+    "description": "Extension description, MUST be less than 112 characters (Safari restriction)"
   },
   "loginOrCreateNewAccount": {
     "message": "Prijavi se ili stvori novi račun za pristup svojem sigurnom trezoru."
@@ -92,13 +92,13 @@
     "message": "Auto-ispuna"
   },
   "autoFillLogin": {
-    "message": "Auto-fill login"
+    "message": "Auto-ispuna prijave"
   },
   "autoFillCard": {
-    "message": "Auto-fill card"
+    "message": "Auto-ispuna kartice"
   },
   "autoFillIdentity": {
-    "message": "Auto-fill identity"
+    "message": "Auto-ispuna identiteta"
   },
   "generatePasswordCopied": {
     "message": "Generiraj lozinku (i kopiraj)"
@@ -110,19 +110,19 @@
     "message": "Nema podudarajućih prijava"
   },
   "noCards": {
-    "message": "No cards"
+    "message": "Nema kartica"
   },
   "noIdentities": {
-    "message": "No identities"
+    "message": "Nema identiteta"
   },
   "addLoginMenu": {
-    "message": "Add login"
+    "message": "Dodaj prijavu"
   },
   "addCardMenu": {
-    "message": "Add card"
+    "message": "Dodaj karticu"
   },
   "addIdentityMenu": {
-    "message": "Add identity"
+    "message": "Dodaj identitet"
   },
   "unlockVaultMenu": {
     "message": "Otključaj svoj trezor"
@@ -171,6 +171,12 @@
   },
   "changeMasterPassword": {
     "message": "Promjeni glavnu lozinku"
+  },
+  "continueToWebApp": {
+    "message": "Continue to web app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "You can change your master password on the Bitwarden web app."
   },
   "fingerprintPhrase": {
     "message": "Jedinstvena fraza",
@@ -268,6 +274,9 @@
   "length": {
     "message": "Duljina"
   },
+  "passwordMinLength": {
+    "message": "Minimalna duljina lozinke"
+  },
   "uppercase": {
     "message": "Velika slova (A - Z)"
   },
@@ -323,6 +332,9 @@
   "password": {
     "message": "Lozinka"
   },
+  "totp": {
+    "message": "Tajna autentifikatora"
+  },
   "passphrase": {
     "message": "Frazna lozinka"
   },
@@ -362,8 +374,20 @@
   "other": {
     "message": "Ostalo"
   },
+  "unlockMethods": {
+    "message": "Unlock options"
+  },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
     "message": "Za promjenu vremena isteka trezora, odredi način otključavanja."
+  },
+  "unlockMethodNeeded": {
+    "message": "Postavi način otključavanja u Postavkama"
+  },
+  "sessionTimeoutHeader": {
+    "message": "Session timeout"
+  },
+  "otherOptions": {
+    "message": "Other options"
   },
   "rateExtension": {
     "message": "Ocijeni proširenje"
@@ -404,6 +428,9 @@
   },
   "lockNow": {
     "message": "Zaključaj sada"
+  },
+  "lockAll": {
+    "message": "Zaključaj sve"
   },
   "immediately": {
     "message": "Odmah"
@@ -481,6 +508,12 @@
   "newAccountCreated": {
     "message": "Tvoj novi račun je kreiran! Sada se možeš prijaviti."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "You successfully logged in"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
+  },
   "masterPassSent": {
     "message": "Poslali smo e-poštu s podsjetnikom glavne lozinke."
   },
@@ -502,6 +535,18 @@
   },
   "autofillError": {
     "message": "Nije moguće auto-ispuniti odabranu prijavu na ovoj stranici. Umjesto toga kopiraj/zalijepi podatke."
+  },
+  "totpCaptureError": {
+    "message": "Nije moguće skenirati QR kod s trenutne web stranice"
+  },
+  "totpCaptureSuccess": {
+    "message": "Ključ autentifikatora je dodan"
+  },
+  "totpCapture": {
+    "message": "Skenirajte QR kod autentifikatora s trenutne web stranice"
+  },
+  "copyTOTP": {
+    "message": "Kopiraj ključ autentifikatora (TOTP)"
   },
   "loggedOut": {
     "message": "Odjavljen"
@@ -526,12 +571,6 @@
   },
   "addedFolder": {
     "message": "Mapa dodana"
-  },
-  "changeMasterPass": {
-    "message": "Promjeni glavnu lozinku"
-  },
-  "changeMasterPasswordConfirmation": {
-    "message": "Svoju glavnu lozinku možeš promijeniti na web trezoru. Želiš li sada posjetiti bitwarden.com?"
   },
   "twoStepLoginConfirmation": {
     "message": "Prijava dvostrukom autentifikacijom čini tvoj račun još sigurnijim tako što će zahtijevati da potvrdiš prijavu putem drugog uređaja pomoću sigurnosnog koda, autentifikatorske aplikacije, SMS-om, pozivom ili e-poštom. Prijavu dvostrukom autentifikacijom možeš omogućiti na web trezoru. Želiš li sada posjetiti bitwarden.com?"
@@ -619,6 +658,9 @@
   "addLoginNotificationDesc": {
     "message": "Upit za dodavanje prijave pojavljuje se kada se otkrije prva prijava na neko web mjesto. Bitwarden će te pitatati želiš li uneseno korisničko ime i lozinku spremiti u svoj trezor."
   },
+  "addLoginNotificationDescAlt": {
+    "message": "Pitaj za dodavanje stavke ako nije pronađena u tvojem trezoru. Primjenjuje se na sve prijavljene račune."
+  },
   "showCardsCurrentTab": {
     "message": "Prikaži platne kartice"
   },
@@ -651,6 +693,15 @@
   "changedPasswordNotificationDesc": {
     "message": "Upitaj za ažuriranje lozinke prijave ako se otkrije promjena na web stranici."
   },
+  "changedPasswordNotificationDescAlt": {
+    "message": "Pitaj za ažuriranje lozinke za prijavu kada se otkrije promjena na web stranici. Primjenjuje se na sve prijavljene račune."
+  },
+  "enableUsePasskeys": {
+    "message": "Pitaj za spremanje i korištenje pristupnih ključeva"
+  },
+  "usePasskeysDesc": {
+    "message": "Pitaj za spremanje novih pristupnih ključeva ili se prijavi pomoću pristupnih ključeva pohranjenih u tvojem trezoru. Primjenjuje se na sve prijavljene račune."
+  },
   "notificationChangeDesc": {
     "message": "Želiš li ovu lozinku ažurirati u Bitwarden-u?"
   },
@@ -669,6 +720,9 @@
   "contextMenuItemDesc": {
     "message": "Koristi sekundarni klik za pristup generatoru lozinki i pripadajućim prijavama trenunte web stranice. "
   },
+  "contextMenuItemDescAlt": {
+    "message": "Koristi sekundarni klik za pristup generiranju lozinki i odgovarajućim prijavama za mrežno mjesto. Primjenjuje se na sve prijavljene račune."
+  },
   "defaultUriMatchDetection": {
     "message": "Zadano otkrivanje URI podudaranja",
     "description": "Default URI match detection for auto-fill."
@@ -681,6 +735,9 @@
   },
   "themeDesc": {
     "message": "Promijeni temu boja."
+  },
+  "themeDescAlt": {
+    "message": "Promijeni boju aplikacije. Primjenjuje se na sve prijavljene račune."
   },
   "dark": {
     "message": "Tamna",
@@ -1002,6 +1059,31 @@
   "environmentSaved": {
     "message": "URL-ovi okoline su spremljeni."
   },
+  "showAutoFillMenuOnFormFields": {
+    "message": "Prikaži izbornik za auto-ispunu u poljima obrasca",
+    "description": "Represents the message for allowing the user to enable the auto-fill overlay"
+  },
+  "showAutoFillMenuOnFormFieldsDescAlt": {
+    "message": "Primjenjuje se na sve prijavljene račune."
+  },
+  "turnOffBrowserBuiltInPasswordManagerSettings": {
+    "message": "Isključite postavke upravitelja zaporki ugrađene u preglednik kako biste izbjegli sukobe."
+  },
+  "turnOffBrowserBuiltInPasswordManagerSettingsLink": {
+    "message": "Uredi postavke preglednika."
+  },
+  "autofillOverlayVisibilityOff": {
+    "message": "Isključeno",
+    "description": "Overlay setting select option for disabling autofill overlay"
+  },
+  "autofillOverlayVisibilityOnFieldFocus": {
+    "message": "Kada je odabrano polje (u fokusu)",
+    "description": "Overlay appearance select option for showing the field on focus of the input element"
+  },
+  "autofillOverlayVisibilityOnButtonClick": {
+    "message": "Kada je odabrana ikona auto-ispune",
+    "description": "Overlay appearance select option for showing the field on click of the overlay icon"
+  },
   "enableAutoFillOnPageLoad": {
     "message": "Auto-ispuna kod učitavanja"
   },
@@ -1047,9 +1129,6 @@
   "commandLockVaultDesc": {
     "message": "Zaključaj trezor"
   },
-  "privateModeWarning": {
-    "message": "Podrška za privatni način rada je eksperimentalna, a neke su značajke ograničene."
-  },
   "customFields": {
     "message": "Prilagođena polja"
   },
@@ -1093,6 +1172,9 @@
   },
   "faviconDesc": {
     "message": "Prikaži prepoznatljivu sliku pored svake prijave."
+  },
+  "faviconDescAlt": {
+    "message": "Prikaži prepoznatljivu sliku pokraj svake prijave. Primjenjuje se na sve prijavljene račune."
   },
   "enableBadgeCounter": {
     "message": "Prikaži značku brojača"
@@ -1423,6 +1505,9 @@
   "invalidPin": {
     "message": "Nerispravan PIN."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "Too many invalid PIN entry attempts. Logging out."
+  },
   "unlockWithBiometrics": {
     "message": "Otključaj biometrijom"
   },
@@ -1629,6 +1714,12 @@
   "biometricsNotSupportedDesc": {
     "message": "Biometrija preglednika nije podržana na ovom uređaju."
   },
+  "biometricsNotUnlockedTitle": {
+    "message": "User locked or logged out"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Please unlock this user in the desktop application and try again."
+  },
   "biometricsFailedTitle": {
     "message": "Biometrija neuspješna"
   },
@@ -1653,18 +1744,24 @@
   "personalOwnershipPolicyInEffect": {
     "message": "Pravila organizacije utječu na tvoje mogućnosti vlasništva. "
   },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Organizacijsko pravilo onemogućuje uvoz stavki u tvoj osobni trezor."
+  },
   "excludedDomains": {
     "message": "Izuzete domene"
   },
   "excludedDomainsDesc": {
     "message": "Bitwarden neće pitati treba li spremiti prijavne podatke za ove domene. Za primjenu promjena, potrebno je osvježiti stranicu."
   },
+  "excludedDomainsDescAlt": {
+    "message": "Bitwarden neće tražiti spremanje podataka za prijavu za ove domene za sve prijavljene račune. Moraš osvježiti stranicu kako bi promjene stupile na snagu."
+  },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ nije valjana domena",
     "placeholders": {
       "domain": {
         "content": "$1",
-        "example": "googlecom"
+        "example": "google.com"
       }
     }
   },
@@ -1919,8 +2016,21 @@
   "selectFolder": {
     "message": "Odaberi mapu..."
   },
-  "ssoCompleteRegistration": {
-    "message": "Za dovršetak jedinstvene prijave na razini tvrtke (SSO), postavi glavnu lozinku za pristup i zaštitu tvog trezora."
+  "noFoldersFound": {
+    "message": "No folders found",
+    "description": "Used as a message within the notification bar when no folders are found"
+  },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Moraš postaviti glavnu lozinku jer su dopuštenja tvoje organizacije ažurirana.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Tvoja organizacija zahtijeva da postaviš glavnu lozinku.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Verification required",
+    "description": "Default title for the user verification dialog."
   },
   "hours": {
     "message": "sat(i)"
@@ -2073,6 +2183,108 @@
   "forwardedEmailDesc": {
     "message": "Generiraj pseudonim e-pošte s vanjskom uslugom prosljeđivanja."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Naziv poslužitelja",
     "description": "Part of a URL."
@@ -2216,7 +2428,7 @@
     "message": "Kako auto-ispuniti"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Odaberi stavku s ove stranice ili koristi prečac $COMMAND$",
+    "message": "Odaberi stavku s ovog zaslona, upotrijebi prečac $COMMAND$ ili istraži druge opcije u postavkama.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2225,7 +2437,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Odaberi stavku s ove stranice ili namjesti prečac u postavkama."
+    "message": "Odaberi stavku s ovog zaslona ili istraži druge opcije u postavkama."
   },
   "gotIt": {
     "message": "U redu"
@@ -2287,12 +2499,6 @@
   "eu": {
     "message": "EU",
     "description": "European Union"
-  },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
   },
   "accessDenied": {
     "message": "Pristup odbijen. Nemaš prava vidjeti ovu stranicu."
@@ -2431,6 +2637,38 @@
     "message": "Sažmi/Proširi",
     "description": "Toggling an expand/collapse state."
   },
+  "filelessImport": {
+    "message": "Uvesti svoje podatke u Bitwarden?",
+    "description": "Default notification title for triggering a fileless import."
+  },
+  "lpFilelessImport": {
+    "message": "Zaštititi svoje LastPass podatke i uvesti ih u Bitwarden?",
+    "description": "LastPass specific notification title for triggering a fileless import."
+  },
+  "lpCancelFilelessImport": {
+    "message": "Spremi kao nekriptiranu datoteku",
+    "description": "LastPass specific notification button text for cancelling a fileless import."
+  },
+  "startFilelessImport": {
+    "message": "Uvezi u Bitwarden",
+    "description": "Notification button text for starting a fileless import."
+  },
+  "importing": {
+    "message": "Uvoženje...",
+    "description": "Notification message for when an import is in progress."
+  },
+  "dataSuccessfullyImported": {
+    "message": "Podaci su uspješno uvezeni!",
+    "description": "Notification message for when an import has completed successfully."
+  },
+  "dataImportFailed": {
+    "message": "Greška pri uvozu. Provjerite konzolu za detalje.",
+    "description": "Notification message for when an import has failed."
+  },
+  "importNetworkError": {
+    "message": "Došlo je do mrežne greške tijekom uvoza.",
+    "description": "Notification message for when an import has failed due to a network error."
+  },
   "aliasDomain": {
     "message": "Alias domene"
   },
@@ -2445,5 +2683,479 @@
   "turnOffMasterPasswordPromptToEditField": {
     "message": "Isključi traženje glavne lozinke za promjenu ovog polja",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
+  },
+  "skipToContent": {
+    "message": "Skoči na sadržaj"
+  },
+  "bitwardenOverlayButton": {
+    "message": "Tipka izbornika Bitwarden auto-ispune",
+    "description": "Page title for the iframe containing the overlay button"
+  },
+  "toggleBitwardenVaultOverlay": {
+    "message": "U/isključivanje izbornika Bitwarden auto-ispune",
+    "description": "Screen reader and tool tip label for the overlay button"
+  },
+  "bitwardenVault": {
+    "message": "Izbornik Bitwarden auto-ispune",
+    "description": "Page title in overlay"
+  },
+  "unlockYourAccountToViewMatchingLogins": {
+    "message": "Otklučaj svoj račun za prikaz podudarnih prijava",
+    "description": "Text to display in overlay when the account is locked."
+  },
+  "unlockAccount": {
+    "message": "Otključaj račun",
+    "description": "Button text to display in overlay when the account is locked."
+  },
+  "fillCredentialsFor": {
+    "message": "Unesi vjerodajnice za",
+    "description": "Screen reader text for when overlay item is in focused"
+  },
+  "partialUsername": {
+    "message": "Djelomično korisničko ime",
+    "description": "Screen reader text for when a login item is focused where a partial username is displayed. SR will announce this phrase before reading the text of the partial username"
+  },
+  "noItemsToShow": {
+    "message": "Nema stavki za prikaz",
+    "description": "Text to show in overlay if there are no matching items"
+  },
+  "newItem": {
+    "message": "Nova stavka",
+    "description": "Button text to display in overlay when there are no matching items"
+  },
+  "addNewVaultItem": {
+    "message": "Dodaj novu stavku trezora",
+    "description": "Screen reader text (aria-label) for new item button in overlay"
+  },
+  "bitwardenOverlayMenuAvailable": {
+    "message": "Dostupan je Bitwarden izbornik auto-ispune. Pritisni tipku sa strelicom prema dolje za odabir.",
+    "description": "Screen reader text for announcing when the overlay opens on the page"
+  },
+  "turnOn": {
+    "message": "Uključi"
+  },
+  "ignore": {
+    "message": "Zanemari"
+  },
+  "importData": {
+    "message": "Uvezi podatke",
+    "description": "Used for the header of the import dialog, the import button and within the file-password-prompt"
+  },
+  "importError": {
+    "message": "Greška prilikom uvoza"
+  },
+  "importErrorDesc": {
+    "message": "Postoji problem s podacima za uvoz. Potrebno je razriješiti doljenavedene greške u izvornoj datoteci i pokušati ponovno."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Popravi navedene greške i pokušaj ponovo."
+  },
+  "description": {
+    "message": "Opis"
+  },
+  "importSuccess": {
+    "message": "Uvoz podataka u trezor je uspio"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Ukupno je uvezeno $AMOUNT$ stavaka.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "tryAgain": {
+    "message": "Try again"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Verification required for this action. Set a PIN to continue."
+  },
+  "setPin": {
+    "message": "Set PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verify with biometrics"
+  },
+  "awaitingConfirmation": {
+    "message": "Awaiting confirmation"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Could not complete biometrics."
+  },
+  "needADifferentMethod": {
+    "message": "Need a different method?"
+  },
+  "useMasterPassword": {
+    "message": "Use master password"
+  },
+  "usePin": {
+    "message": "Use PIN"
+  },
+  "useBiometrics": {
+    "message": "Use biometrics"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Enter the verification code that was sent to your email."
+  },
+  "resendCode": {
+    "message": "Resend code"
+  },
+  "total": {
+    "message": "Ukupno"
+  },
+  "importWarning": {
+    "message": "Uvoziš podatke u $ORGANIZATION$. Tvoji podaci možda će biti podijeljeni s članovima ove organizacije. Želiš li svejedno uvesti podatke?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "popoutTheExtensionToCompleteLogin": {
+    "message": "Popout the extension to complete login."
+  },
+  "popoutExtension": {
+    "message": "Popout extension"
+  },
+  "launchDuo": {
+    "message": "Launch Duo"
+  },
+  "importFormatError": {
+    "message": "Podaci nisu ispravno formatirani. Provjeri uvoznu datoteku i pokušaj ponovno."
+  },
+  "importNothingError": {
+    "message": "Ništa nije uvezeno."
+  },
+  "importEncKeyError": {
+    "message": "Greška u dešifriranju izvozne datoteke. Ovaj ključ za šifriranje ne odgovara ključu za šifriranje korištenom pri izvozu datoteke."
+  },
+  "invalidFilePassword": {
+    "message": "Nesipravna lozinka datoteke. Unesi lozinku izvozne datoteke."
+  },
+  "importDestination": {
+    "message": "Odredište uvoza"
+  },
+  "learnAboutImportOptions": {
+    "message": "Više o mogućnostima uvoza"
+  },
+  "selectImportFolder": {
+    "message": "Odaberi mapu"
+  },
+  "selectImportCollection": {
+    "message": "Odaberi zbirku"
+  },
+  "importTargetHint": {
+    "message": "Odaberi ovu opciju ako sadržaj uvezene datoteke želiš spremiti u $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Datoteka sadrži nedodijeljene stavke."
+  },
+  "selectFormat": {
+    "message": "Odaberi format datoteke za uvoz"
+  },
+  "selectImportFile": {
+    "message": "Odaberi datoteku za uvoz"
+  },
+  "chooseFile": {
+    "message": "Odaberi datoteku"
+  },
+  "noFileChosen": {
+    "message": "Nije odabrana datoteka"
+  },
+  "orCopyPasteFileContents": {
+    "message": "ili kopiraj/zalijepi sadržaj uvozne datoteke"
+  },
+  "instructionsFor": {
+    "message": "$NAME$ upute",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Potvrdi uvoz trezora"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Ova je datoteka zaštićena lozinkom. Unesi lozinku za nastavak uvoza."
+  },
+  "confirmFilePassword": {
+    "message": "Potvrdi lozinku datoteke"
+  },
+  "typePasskey": {
+    "message": "Pristupni ključ"
+  },
+  "passkeyNotCopied": {
+    "message": "Pristupni ključ neće biti kopiran"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "Pristupni ključ se neće kopirati u kloniranu stavku. Želiš li nastaviti klonirati ovu stavku?"
+  },
+  "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword": {
+    "message": "Ishodišna stranica zahtijeva verifikaciju. Ova značajka još nije implementirana za račune bez glavne lozinke."
+  },
+  "logInWithPasskey": {
+    "message": "Prijava pristupnim ključem?"
+  },
+  "passkeyAlreadyExists": {
+    "message": "Za ovu aplikaciju već postoji pristupni ključ."
+  },
+  "noPasskeysFoundForThisApplication": {
+    "message": "Za ovu aplikaciju nema pristupnih ključeva."
+  },
+  "noMatchingPasskeyLogin": {
+    "message": "Nema odgovarajuće prijavu za ovu stranicu."
+  },
+  "confirm": {
+    "message": "Autoriziraj"
+  },
+  "savePasskey": {
+    "message": "Spremi pristupni ključ"
+  },
+  "savePasskeyNewLogin": {
+    "message": "Spremi pristupni ključ kao novu prijavu"
+  },
+  "choosePasskey": {
+    "message": "Odaberi prijavu za spremanje ovog pristupnog ključa"
+  },
+  "passkeyItem": {
+    "message": "Stavka pristupnog ključa"
+  },
+  "overwritePasskey": {
+    "message": "Prebriši pristupni ključ?"
+  },
+  "overwritePasskeyAlert": {
+    "message": "Ova stavka već sadrži pristupni ključ. Sigurno želiš prebrisati trenutni pristupni ključ?"
+  },
+  "featureNotSupported": {
+    "message": "Značajka još nije podržana"
+  },
+  "yourPasskeyIsLocked": {
+    "message": "Za korištenje pristpnog ključa potrebna je autentifikacija. Potvrdi svoj identitet."
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Multifaktorska autentifikacija otkazana"
+  },
+  "noLastPassDataFound": {
+    "message": "Nisu nađeni LastPass podaci"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Neispravno korisničko ime ili lozinka"
+  },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
+  },
+  "incorrectPin": {
+    "message": "Incorrect PIN"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Multifaktorska autentifikacija nije uspjela"
+  },
+  "includeSharedFolders": {
+    "message": "Uključi dijeljene mape"
+  },
+  "lastPassEmail": {
+    "message": "LastPass e-pošta"
+  },
+  "importingYourAccount": {
+    "message": "Uvoz tvog računa..."
+  },
+  "lastPassMFARequired": {
+    "message": "Potrebna LastPass multifaktorska autenfikacija"
+  },
+  "lastPassMFADesc": {
+    "message": "Unesi svoj jednokratni kôd iz aplikacije za autentifikaciju"
+  },
+  "lastPassOOBDesc": {
+    "message": "Odobri svoj zahtjev za prijavu u svojoj aplikaciji za autentifikaciju ili unesi jednokratni kôd."
+  },
+  "passcode": {
+    "message": "Šifra"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass glavna lozinka"
+  },
+  "lastPassAuthRequired": {
+    "message": "Potrebna LastPass autentifikacija"
+  },
+  "awaitingSSO": {
+    "message": "Čekanje SSO autentifikacije"
+  },
+  "awaitingSSODesc": {
+    "message": "Prijavi se koristeći pristupne podatke svoje tvrtke."
+  },
+  "seeDetailedInstructions": {
+    "message": "Detaljne upute za pomoć pronađi na našoj stranici za pomoć na",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Uvezi direktno iz LastPass-a"
+  },
+  "importFromCSV": {
+    "message": "Uvezi iz CSV-a"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Pokušaj ponovno ili pogledaj e-poštu od LastPass-a za potvrdu."
+  },
+  "collection": {
+    "message": "Zbirka"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Umetni YubiKey pridružen svojem LastPass računu u USB priključak račuanala, a zatim dodirni njegovu tipku."
+  },
+  "switchAccount": {
+    "message": "Promijeni račun"
+  },
+  "switchAccounts": {
+    "message": "Promijeni račune"
+  },
+  "switchToAccount": {
+    "message": "Promijeni na račun"
+  },
+  "activeAccount": {
+    "message": "Aktivni račun"
+  },
+  "availableAccounts": {
+    "message": "Dostupni računi"
+  },
+  "accountLimitReached": {
+    "message": "Dosegnuto je ograničenje računa. Odjavite se s računa da biste dodali drugi."
+  },
+  "active": {
+    "message": "Aktivan"
+  },
+  "locked": {
+    "message": "Zaključan"
+  },
+  "unlocked": {
+    "message": "Otključan"
+  },
+  "server": {
+    "message": "Poslužitelj"
+  },
+  "hostedAt": {
+    "message": "domaćin na"
+  },
+  "useDeviceOrHardwareKey": {
+    "message": "Koristite svoj uređaj ili hardverski ključ"
+  },
+  "justOnce": {
+    "message": "Samo jednom"
+  },
+  "alwaysForThisSite": {
+    "message": "Uvijek za ovu stranicu"
+  },
+  "domainAddedToExcludedDomains": {
+    "message": "$DOMAIN$ dodano u izuzete domene.",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "google.com"
+      }
+    }
+  },
+  "commonImportFormats": {
+    "message": "Common formats",
+    "description": "Label indicating the most common import formats"
+  },
+  "overrideDefaultBrowserAutofillTitle": {
+    "message": "Make Bitwarden your default password manager?",
+    "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
+  },
+  "overrideDefaultBrowserAutofillDescription": {
+    "message": "Ignoring this option may cause conflicts between the Bitwarden auto-fill menu and your browser's.",
+    "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
+  },
+  "overrideDefaultBrowserAutoFillSettings": {
+    "message": "Make Bitwarden your default password manager",
+    "description": "Label for the setting that allows overriding the default browser autofill settings"
+  },
+  "privacyPermissionAdditionNotGrantedTitle": {
+    "message": "Unable to set Bitwarden as the default password manager",
+    "description": "Title for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+  },
+  "privacyPermissionAdditionNotGrantedDescription": {
+    "message": "You must grant browser privacy permissions to Bitwarden to set it as the default password manager.",
+    "description": "Description for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+  },
+  "makeDefault": {
+    "message": "Make default",
+    "description": "Button text for the setting that allows overriding the default browser autofill settings"
+  },
+  "saveCipherAttemptSuccess": {
+    "message": "Credentials saved successfully!",
+    "description": "Notification message for when saving credentials has succeeded."
+  },
+  "updateCipherAttemptSuccess": {
+    "message": "Credentials updated successfully!",
+    "description": "Notification message for when updating credentials has succeeded."
+  },
+  "saveCipherAttemptFailed": {
+    "message": "Error saving credentials. Check console for details.",
+    "description": "Notification message for when saving credentials has failed."
+  },
+  "success": {
+    "message": "Success"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Notice: Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Notice: On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and will only be accessible via the Admin Console."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Assign these items to a collection from the",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "to make them visible.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "adminConsole": {
+    "message": "Admin Console"
+  },
+  "accountSecurity": {
+    "message": "Account security"
+  },
+  "notifications": {
+    "message": "Notifications"
+  },
+  "appearance": {
+    "message": "Appearance"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
+  },
+  "new": {
+    "message": "New"
   }
 }

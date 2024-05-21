@@ -1,5 +1,6 @@
 import { Jsonify } from "type-fest";
 
+import { AllowedFeatureFlagTypes } from "../../../enums/feature-flag.enum";
 import {
   ServerConfigData,
   ThirdPartyServerConfigData,
@@ -7,7 +8,6 @@ import {
 } from "../../models/data/server-config.data";
 
 const dayInMilliseconds = 24 * 3600 * 1000;
-const eighteenHoursInMilliseconds = 18 * 3600 * 1000;
 
 export class ServerConfig {
   version: string;
@@ -15,7 +15,7 @@ export class ServerConfig {
   server?: ThirdPartyServerConfigData;
   environment?: EnvironmentServerConfigData;
   utcDate: Date;
-  featureStates: { [key: string]: string } = {};
+  featureStates: { [key: string]: AllowedFeatureFlagTypes } = {};
 
   constructor(serverConfigData: ServerConfigData) {
     this.version = serverConfigData.version;
@@ -36,10 +36,6 @@ export class ServerConfig {
 
   isValid(): boolean {
     return this.getAgeInMilliseconds() <= dayInMilliseconds;
-  }
-
-  expiresSoon(): boolean {
-    return this.getAgeInMilliseconds() >= eighteenHoursInMilliseconds;
   }
 
   static fromJSON(obj: Jsonify<ServerConfig>): ServerConfig {

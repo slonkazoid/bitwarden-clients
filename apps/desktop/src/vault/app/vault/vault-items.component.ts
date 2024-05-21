@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { distinctUntilChanged } from "rxjs";
 
 import { VaultItemsComponent as BaseVaultItemsComponent } from "@bitwarden/angular/vault/components/vault-items.component";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
@@ -16,13 +17,15 @@ export class VaultItemsComponent extends BaseVaultItemsComponent {
   constructor(
     searchService: SearchService,
     searchBarService: SearchBarService,
-    cipherService: CipherService
+    cipherService: CipherService,
   ) {
     super(searchService, cipherService);
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    searchBarService.searchText$.subscribe((searchText) => {
+    searchBarService.searchText$.pipe(distinctUntilChanged()).subscribe((searchText) => {
       this.searchText = searchText;
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.search(200);
     });
   }

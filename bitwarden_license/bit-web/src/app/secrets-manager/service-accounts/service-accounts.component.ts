@@ -2,13 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, Observable, startWith, switchMap } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import {
   ServiceAccountSecretsDetailsView,
   ServiceAccountView,
 } from "../models/view/service-account.view";
-import { AccessPolicyService } from "../shared/access-policies/access-policy.service";
 
 import {
   ServiceAccountDeleteDialogComponent,
@@ -30,24 +30,28 @@ export class ServiceAccountsComponent implements OnInit {
   protected search: string;
 
   private organizationId: string;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private dialogService: DialogService,
-    private accessPolicyService: AccessPolicyService,
-    private serviceAccountService: ServiceAccountService
+    private serviceAccountService: ServiceAccountService,
+    private organizationService: OrganizationService,
   ) {}
 
   ngOnInit() {
     this.serviceAccounts$ = combineLatest([
       this.route.params,
       this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
-      this.accessPolicyService.serviceAccountAccessPolicyChanges$.pipe(startWith(null)),
     ]).pipe(
       switchMap(async ([params]) => {
         this.organizationId = params.organizationId;
+        this.organizationEnabled = (
+          await this.organizationService.get(params.organizationId)
+        )?.enabled;
+
         return await this.getServiceAccounts();
-      })
+      }),
     );
   }
 
@@ -56,6 +60,7 @@ export class ServiceAccountsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -66,6 +71,7 @@ export class ServiceAccountsComponent implements OnInit {
         organizationId: this.organizationId,
         serviceAccountId: serviceAccountId,
         operation: OperationType.Edit,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -77,7 +83,7 @@ export class ServiceAccountsComponent implements OnInit {
         data: {
           serviceAccounts: event,
         },
-      }
+      },
     );
   }
 

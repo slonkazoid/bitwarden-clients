@@ -1,11 +1,15 @@
+import { Jsonify } from "type-fest";
+
+import { CollectionId, OrganizationId } from "../../../types/guid";
 import { CollectionDetailsResponse } from "../response/collection.response";
 
 export class CollectionData {
-  id: string;
-  organizationId: string;
+  id: CollectionId;
+  organizationId: OrganizationId;
   name: string;
   externalId: string;
   readOnly: boolean;
+  manage: boolean;
   hidePasswords: boolean;
 
   constructor(response: CollectionDetailsResponse) {
@@ -14,6 +18,11 @@ export class CollectionData {
     this.name = response.name;
     this.externalId = response.externalId;
     this.readOnly = response.readOnly;
+    this.manage = response.manage;
     this.hidePasswords = response.hidePasswords;
+  }
+
+  static fromJSON(obj: Jsonify<CollectionData>) {
+    return Object.assign(new CollectionData(new CollectionDetailsResponse({})), obj);
   }
 }

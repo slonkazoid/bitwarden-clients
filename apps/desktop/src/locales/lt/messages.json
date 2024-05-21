@@ -403,6 +403,9 @@
   "length": {
     "message": "Ilgis"
   },
+  "passwordMinLength": {
+    "message": "Minimalus slaptažodžio ilgis"
+  },
   "uppercase": {
     "message": "Didžiosiomis (A-Z)"
   },
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "Jūsų paskyra sukurta! Galite prisijungti."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "You successfully logged in"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
   },
   "masterPassSent": {
     "message": "Išsiuntėme jums el. laišką su pagrindinio slaptažodžio užuomina."
@@ -791,8 +800,11 @@
   "changeMasterPass": {
     "message": "Keisti pagrindinį slaptažodį"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Pagrindinį slaptažodį galite pakeisti bitwarden.com žiniatinklio saugykloje. Ar norite dabar apsilankyti svetainėje?"
+  "continueToWebApp": {
+    "message": "Continue to web app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "You can change your master password on the Bitwarden web app."
   },
   "fingerprintPhrase": {
     "message": "Piršto antspaudo frazė",
@@ -1389,6 +1401,9 @@
   "invalidPin": {
     "message": "Neteisingas PIN kodas."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "Per daug netinkamų PIN kodo įvedimo bandymų. Atsijungiama."
+  },
   "unlockWithWindowsHello": {
     "message": "Atrakinti naudojant Windows Hello"
   },
@@ -1533,8 +1548,17 @@
   "setMasterPassword": {
     "message": "Nustatyti pagrindinį slaptažodį"
   },
-  "ssoCompleteRegistration": {
-    "message": "Kad užbaigtumėte prisijungimą naudodami SSO, nustatykite pagrindinį slaptažodį, kad galėtumėte pasiekti ir apsaugoti savo saugyklą."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Dėl organizacijos leidimų atnaujinimo, jums reikia nustatyti pagrindinį slaptažodį.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Jūsų organizacija reikalauja nustatyti pagrindinį slaptažodį.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Reikalingas patvirtinimas",
+    "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
     "message": "Dabartinis pagrindinis slaptažodis"
@@ -1608,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "Naršyklės integravimas nepalaikomas"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Error enabling browser integration"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "An error has occurred while enabling browser integration."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "Deja, bet naršyklės integravimas kol kas palaikomas tik Mac App Store versijoje."
   },
@@ -1622,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Pridėkite papildomą apsaugos sluoksnį reikalaudami piršto antspaudo frazės patvirtinimo kuriant ryšį tarp savo darbalaukio ir naršyklės. Tam reikalingas vartotojo veiksmas ir patvirtinimas kiekvieną kartą prisijungus."
+  },
+  "enableHardwareAcceleration": {
+    "message": "Use hardware acceleration"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "By default this setting is ON. Turn OFF only if you experience graphical issues. Restart is required."
   },
   "approve": {
     "message": "Patvirtinti"
@@ -1661,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Organizacijos politika turi įtakos jūsų nuosavybės galimybėms."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Organizacijos politika blokavo elementų importavimą į jūsų individualią saugyklą."
   },
   "allSends": {
     "message": "Visi Sendai",
@@ -1857,6 +1896,42 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Jūsų pagrindinis slaptažodis neatitinka vieno ar kelių organizacijos slaptažodžiui keliamų reikalavimų. Norėdami prisijungti prie saugyklos, jūs turite atnaujinti savo pagrindinį slaptažodį. Jeigu nuspręsite tęsti, jūs būsite atjungti nuo dabartinės sesijos ir jums reikės vėl prisijungti. Visos aktyvios sesijos kituose įrenginiuose gali išlikti aktyvios iki vienos valandos."
+  },
+  "tryAgain": {
+    "message": "Bandyti dar kartą"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Šiam veiksmui reikalingas patikrinimas. Norėdamas (-a) tęsti, nustatykite PIN."
+  },
+  "setPin": {
+    "message": "Nustatyti PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Patvirtinti naudojant biometrinius duomenis"
+  },
+  "awaitingConfirmation": {
+    "message": "Laukiama patvirtinimo"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Nepavyko atlikti biometrinių duomenų."
+  },
+  "needADifferentMethod": {
+    "message": "Reikia kito metodo?"
+  },
+  "useMasterPassword": {
+    "message": "Naudoti pagrindinį slaptažodį"
+  },
+  "usePin": {
+    "message": "Naudoti PIN"
+  },
+  "useBiometrics": {
+    "message": "Naudoti biometrinius duomenis"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Įveskite patvirtinimo kodą, kuris buvo išsiųstas į jūsų el. paštą."
+  },
+  "resendCode": {
+    "message": "Siųsti kodą dar kartą"
   },
   "hours": {
     "message": "Valandų"
@@ -2056,6 +2131,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Sugeneruoti el. pašto slapyvardį su išorine persiuntimo paslauga."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Pagrindinio kompiuterio vardas",
@@ -2280,12 +2457,6 @@
   "loggingInOn": {
     "message": "Prisijungiama prie"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
-  },
   "selfHostedServer": {
     "message": "savarankiškai sukurtas"
   },
@@ -2416,7 +2587,240 @@
   "submenu": {
     "message": "Submeniu"
   },
+  "skipToContent": {
+    "message": "Pereiti prie turinio"
+  },
+  "typePasskey": {
+    "message": "Prieigos raktas"
+  },
+  "passkeyNotCopied": {
+    "message": "Prieigos raktas nebus kopijuotas"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "Prieigos raktas nebus nukopijuotas į nuklonuotą elementą. Ar norite tęsti šio elemento klonavimą?"
+  },
   "aliasDomain": {
     "message": "Alias domenas"
+  },
+  "importData": {
+    "message": "Importuoti duomenis",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Importavimo klaida"
+  },
+  "importErrorDesc": {
+    "message": "Kilo problema su duomenimis, kuriuos bandėte importuoti. Prašome pataisyti klaidas, išvardytas apačioje esančiam pradiniame faile ir pabandyti iš naujo."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Ištaisykite klaidas ir pabandykite iš naujo."
+  },
+  "description": {
+    "message": "Aprašymas"
+  },
+  "importSuccess": {
+    "message": "Duomenys sėkmingai importuoti"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Iš viso importuoti $AMOUNT$ elementai.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Iš viso"
+  },
+  "importWarning": {
+    "message": "Jūs importuojate duomenis į $ORGANIZATION$. Jūsų duomenimis gali būti pasidalinta tarp šios organizacijos narių. Ar norite tęsti?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "launchDuo": {
+    "message": "Launch Duo in Browser"
+  },
+  "importFormatError": {
+    "message": "Duomenys neteisingai suformatuoti. Prašome patikrinti savo importuojamą failą ir pabandyti iš naujo."
+  },
+  "importNothingError": {
+    "message": "Niekas nebuvo importuota."
+  },
+  "importEncKeyError": {
+    "message": "Kilo klaida iššifruojant eksportuotą failą. Jūsų šifravimo raktas nesutampa su šifravimo raktu, naudotu eksportuoti duomenis."
+  },
+  "invalidFilePassword": {
+    "message": "Netinkamas failo slaptažodis, prašome naudoti tą slaptažodį, kurį įvedėte kurdami eksportuojamą failą."
+  },
+  "importDestination": {
+    "message": "Importavimo vieta"
+  },
+  "learnAboutImportOptions": {
+    "message": "Sužinoti apie importavimo pasirinkimus"
+  },
+  "selectImportFolder": {
+    "message": "Pasirinkti aplanką"
+  },
+  "selectImportCollection": {
+    "message": "Pasirinkti rinkinį"
+  },
+  "importTargetHint": {
+    "message": "Pasirinkite šį pasirinkimą jei norite jog importuoto failo turinys būtų perkeltas į $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Faile yra nepriskirtų elementų."
+  },
+  "selectFormat": {
+    "message": "Pasirinkti importuojamo failo formatą"
+  },
+  "selectImportFile": {
+    "message": "Pasirinkti importuojamą failą"
+  },
+  "chooseFile": {
+    "message": "Pasirinkti failą"
+  },
+  "noFileChosen": {
+    "message": "Nepasirinktas joks failas"
+  },
+  "orCopyPasteFileContents": {
+    "message": "arba kopijuokite/įklijuokite importuojamo failo turinį"
+  },
+  "instructionsFor": {
+    "message": "$NAME$ Instrukcijos",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Patvirtinti saugyklos importavimą"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Failas yra apsaugotas slaptažodžiu. Norint importuoti duomenis, prašome įvesti failo slaptažodį."
+  },
+  "confirmFilePassword": {
+    "message": "Patvirtinti failo slaptažodį"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Kelių veiksnių autentifikacija atšaukta"
+  },
+  "noLastPassDataFound": {
+    "message": "Nerasti jokie LastPass duomenys"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Neteisingas naudotojo vardas arba slaptažodis"
+  },
+  "incorrectPassword": {
+    "message": "Neteisingas slaptažodis"
+  },
+  "incorrectCode": {
+    "message": "Neteisingas kodas"
+  },
+  "incorrectPin": {
+    "message": "Neteisingas PIN"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Kelių veiksnių autentifikacija nepavyko"
+  },
+  "includeSharedFolders": {
+    "message": "Įtraukti bendrinamus aplankus"
+  },
+  "lastPassEmail": {
+    "message": "LastPass el. paštas"
+  },
+  "importingYourAccount": {
+    "message": "Jūsų paskyra importuojama..."
+  },
+  "lastPassMFARequired": {
+    "message": "Privalomas LastPass kelių veiksnių autentifikavimas"
+  },
+  "lastPassMFADesc": {
+    "message": "Įveskite savo vienkartinį prieigos kodą iš autentifikavimo programėlės"
+  },
+  "lastPassOOBDesc": {
+    "message": "Patvirtinkite prisijungimo prašymą savo autentifikavimo programėlėje arba įveskite vienkartinį prieigos kodą."
+  },
+  "passcode": {
+    "message": "Prieigos kodas"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass pagrindinis slaptažodis"
+  },
+  "lastPassAuthRequired": {
+    "message": "Privalomas LastPass autentifikavimas"
+  },
+  "awaitingSSO": {
+    "message": "Laukiama SSO autentifikavimo"
+  },
+  "awaitingSSODesc": {
+    "message": "Prašome toliau prisijungti naudojant savo įmonės prisijungimo duomenis."
+  },
+  "seeDetailedInstructions": {
+    "message": "Peržiūrėkite detalias instrukcijas mūsų pagalbos tinklalapyje, esančiam",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Importuoti tiesiai iš LastPass"
+  },
+  "importFromCSV": {
+    "message": "Importuoti iš CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Pabandykite iš naujo arba ieškokite el. laiško iš LastPass kad patvirtintumėte, jog čia jūs."
+  },
+  "collection": {
+    "message": "Rinkinys"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Įkiškite su LastPass paskyra susietą YubiKey į kompiuterio USB jungtį, tada palieskite jo mygtuką."
+  },
+  "commonImportFormats": {
+    "message": "Dažni formatai",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Success"
+  },
+  "troubleshooting": {
+    "message": "Troubleshooting"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Disable hardware acceleration and restart"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Enable hardware acceleration and restart"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
   }
 }

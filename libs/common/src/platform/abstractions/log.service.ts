@@ -1,9 +1,9 @@
-import { LogLevelType } from "../../enums";
+import { LogLevelType } from "../enums/log-level-type.enum";
 
 export abstract class LogService {
-  debug: (message: string) => void;
-  info: (message: string) => void;
-  warning: (message: string) => void;
-  error: (message: string) => void;
-  write: (level: LogLevelType, message: string) => void;
+  abstract debug(message?: any, ...optionalParams: any[]): void;
+  abstract info(message?: any, ...optionalParams: any[]): void;
+  abstract warning(message?: any, ...optionalParams: any[]): void;
+  abstract error(message?: any, ...optionalParams: any[]): void;
+  abstract write(level: LogLevelType, message?: any, ...optionalParams: any[]): void;
 }

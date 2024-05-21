@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { map, Observable, Subject, takeUntil } from "rxjs";
+import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
 
-import { notAllowedValueAsync } from "@bitwarden/angular/validators/notAllowedValueAsync.validator";
+import { notAllowedValueAsync } from "@bitwarden/angular/admin-console/validators/not-allowed-value-async.validator";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { PlanSponsorshipType } from "@bitwarden/common/billing/enums/";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 interface RequestSponsorshipForm {
@@ -43,7 +43,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
     private syncService: SyncService,
     private organizationService: OrganizationService,
     private formBuilder: FormBuilder,
-    private stateService: StateService
+    private accountService: AccountService,
   ) {
     this.sponsorshipForm = this.formBuilder.group<RequestSponsorshipForm>({
       selectedSponsorshipOrgId: new FormControl("", {
@@ -52,7 +52,10 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
       sponsorshipEmail: new FormControl("", {
         validators: [Validators.email],
         asyncValidators: [
-          notAllowedValueAsync(async () => await this.stateService.getEmail(), true),
+          notAllowedValueAsync(
+            () => firstValueFrom(this.accountService.activeAccount$.pipe(map((a) => a?.email))),
+            true,
+          ),
         ],
         updateOn: "blur",
       }),
@@ -61,7 +64,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.availableSponsorshipOrgs$ = this.organizationService.organizations$.pipe(
-      map((orgs) => orgs.filter((o) => o.familySponsorshipAvailable))
+      map((orgs) => orgs.filter((o) => o.familySponsorshipAvailable)),
     );
 
     this.availableSponsorshipOrgs$.pipe(takeUntil(this._destroy)).subscribe((orgs) => {
@@ -75,7 +78,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
     this.anyOrgsAvailable$ = this.availableSponsorshipOrgs$.pipe(map((orgs) => orgs.length > 0));
 
     this.activeSponsorshipOrgs$ = this.organizationService.organizations$.pipe(
-      map((orgs) => orgs.filter((o) => o.familySponsorshipFriendlyName !== null))
+      map((orgs) => orgs.filter((o) => o.familySponsorshipFriendlyName !== null)),
     );
 
     this.anyActiveSponsorships$ = this.activeSponsorshipOrgs$.pipe(map((orgs) => orgs.length > 0));
@@ -95,12 +98,14 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
         sponsoredEmail: this.sponsorshipForm.value.sponsorshipEmail,
         planSponsorshipType: PlanSponsorshipType.FamiliesForEnterprise,
         friendlyName: this.sponsorshipForm.value.sponsorshipEmail,
-      }
+      },
     );
 
     await this.formPromise;
     this.platformUtilsService.showToast("success", null, this.i18nService.t("sponsorshipCreated"));
     this.formPromise = null;
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.resetForm();
     await this.forceReload();
   }

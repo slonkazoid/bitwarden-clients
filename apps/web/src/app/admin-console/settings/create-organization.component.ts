@@ -6,12 +6,13 @@ import { PlanType } from "@bitwarden/common/billing/enums";
 import { ProductType } from "@bitwarden/common/enums";
 
 import { OrganizationPlansComponent } from "../../billing";
+import { HeaderModule } from "../../layouts/header/header.module";
 import { SharedModule } from "../../shared";
 
 @Component({
   templateUrl: "create-organization.component.html",
   standalone: true,
-  imports: [SharedModule, OrganizationPlansComponent],
+  imports: [SharedModule, OrganizationPlansComponent, HeaderModule],
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class CreateOrganizationComponent implements OnInit {
@@ -29,6 +30,9 @@ export class CreateOrganizationComponent implements OnInit {
       } else if (qParams.plan === "teams") {
         this.orgPlansComponent.plan = PlanType.TeamsAnnually;
         this.orgPlansComponent.product = ProductType.Teams;
+      } else if (qParams.plan === "teamsStarter") {
+        this.orgPlansComponent.plan = PlanType.TeamsStarter;
+        this.orgPlansComponent.product = ProductType.TeamsStarter;
       } else if (qParams.plan === "enterprise") {
         this.orgPlansComponent.plan = PlanType.EnterpriseAnnually;
         this.orgPlansComponent.product = ProductType.Enterprise;

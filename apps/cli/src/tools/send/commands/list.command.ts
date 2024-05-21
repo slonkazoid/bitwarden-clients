@@ -1,3 +1,5 @@
+import { firstValueFrom } from "rxjs";
+
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
@@ -10,7 +12,7 @@ export class SendListCommand {
   constructor(
     private sendService: SendService,
     private environmentService: EnvironmentService,
-    private searchService: SearchService
+    private searchService: SearchService,
   ) {}
 
   async run(cmdOptions: Record<string, any>): Promise<Response> {
@@ -21,7 +23,8 @@ export class SendListCommand {
       sends = this.searchService.searchSends(sends, normalizedOptions.search);
     }
 
-    const webVaultUrl = this.environmentService.getWebVaultUrl();
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const webVaultUrl = env.getWebVaultUrl();
     const res = new ListResponse(sends.map((s) => new SendResponse(s, webVaultUrl)));
     return Response.success(res);
   }

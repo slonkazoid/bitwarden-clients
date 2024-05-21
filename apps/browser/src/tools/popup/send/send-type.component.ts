@@ -18,8 +18,8 @@ import { SendService } from "@bitwarden/common/tools/send/services/send.service.
 import { DialogService } from "@bitwarden/components";
 
 import { BrowserComponentState } from "../../../models/browserComponentState";
-import { BrowserStateService } from "../../../platform/services/abstractions/browser-state.service";
-import { PopupUtilsService } from "../../../popup/services/popup-utils.service";
+import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
+import { BrowserSendStateService } from "../services/browser-send-state.service";
 
 const ComponentId = "SendTypeComponent";
 
@@ -42,8 +42,7 @@ export class SendTypeComponent extends BaseSendComponent {
     ngZone: NgZone,
     policyService: PolicyService,
     searchService: SearchService,
-    private popupUtils: PopupUtilsService,
-    private stateService: BrowserStateService,
+    private stateService: BrowserSendStateService,
     private route: ActivatedRoute,
     private location: Location,
     private changeDetectorRef: ChangeDetectorRef,
@@ -51,7 +50,7 @@ export class SendTypeComponent extends BaseSendComponent {
     private router: Router,
     logService: LogService,
     sendApiService: SendApiService,
-    dialogService: DialogService
+    dialogService: DialogService,
   ) {
     super(
       sendService,
@@ -63,7 +62,7 @@ export class SendTypeComponent extends BaseSendComponent {
       policyService,
       logService,
       sendApiService,
-      dialogService
+      dialogService,
     );
     super.onSuccessfulLoad = async () => {
       this.selectType(this.type);
@@ -102,18 +101,26 @@ export class SendTypeComponent extends BaseSendComponent {
 
       // Restore state and remove reference
       if (this.applySavedState && this.state != null) {
-        window.setTimeout(() => this.popupUtils.setContentScrollY(window, this.state?.scrollY), 0);
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        BrowserPopupUtils.setContentScrollY(window, this.state?.scrollY);
       }
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.stateService.setBrowserSendTypeComponentState(null);
     });
 
     // Refresh Send list if sync completed in background
     this.broadcasterService.subscribe(ComponentId, (message: any) => {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.ngZone.run(async () => {
         switch (message.command) {
           case "syncCompleted":
             if (message.successfully) {
               this.refreshTimeout = window.setTimeout(() => {
+                // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 this.refresh();
               }, 500);
             }
@@ -133,12 +140,16 @@ export class SendTypeComponent extends BaseSendComponent {
       window.clearTimeout(this.refreshTimeout);
     }
     // Save state
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.saveState();
     // Unsubscribe
     this.broadcasterService.unsubscribe(ComponentId);
   }
 
   async selectSend(s: SendView) {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/edit-send"], { queryParams: { sendId: s.id } });
   }
 
@@ -146,6 +157,8 @@ export class SendTypeComponent extends BaseSendComponent {
     if (this.disableSend) {
       return;
     }
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/add-send"], { queryParams: { type: this.type } });
   }
 
@@ -153,6 +166,8 @@ export class SendTypeComponent extends BaseSendComponent {
     if (this.disableSend) {
       return;
     }
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super.removePassword(s);
   }
 
@@ -163,7 +178,7 @@ export class SendTypeComponent extends BaseSendComponent {
 
   private async saveState() {
     this.state = {
-      scrollY: this.popupUtils.getContentScrollY(window),
+      scrollY: BrowserPopupUtils.getContentScrollY(window),
       searchText: this.searchText,
     };
     await this.stateService.setBrowserSendTypeComponentState(this.state);

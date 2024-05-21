@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-escape */
 import * as path from "path";
 
+import { Buffer as BufferLib } from "buffer/";
 import { Observable, of, switchMap } from "rxjs";
 import { getHostname, parse } from "tldts";
 import { Merge } from "type-fest";
@@ -9,7 +10,7 @@ import { CryptoService } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
 import { I18nService } from "../abstractions/i18n.service";
 
-const nodeURL = typeof window === "undefined" ? require("url") : null;
+const nodeURL = typeof self === "undefined" ? require("url") : null;
 
 declare global {
   /* eslint-disable-next-line no-var */
@@ -145,13 +146,7 @@ export class Utils {
   }
 
   static fromBufferToUtf8(buffer: ArrayBuffer): string {
-    if (Utils.isNode) {
-      return Buffer.from(buffer).toString("utf8");
-    } else {
-      const bytes = new Uint8Array(buffer);
-      const encodedString = String.fromCharCode.apply(null, bytes);
-      return decodeURIComponent(escape(encodedString));
-    }
+    return BufferLib.from(buffer).toString("utf8");
   }
 
   static fromBufferToByteString(buffer: ArrayBuffer): string {
@@ -168,6 +163,43 @@ export class Utils {
         .call(bytes, (x: number) => ("00" + x.toString(16)).slice(-2))
         .join("");
     }
+  }
+
+  /**
+   * Converts a hex string to an ArrayBuffer.
+   * Note: this doesn't need any Node specific code as parseInt() / ArrayBuffer / Uint8Array
+   * work the same in Node and the browser.
+   * @param {string} hexString - A string of hexadecimal characters.
+   * @returns {ArrayBuffer} The ArrayBuffer representation of the hex string.
+   */
+  static hexStringToArrayBuffer(hexString: string): ArrayBuffer {
+    // Check if the hexString has an even length, as each hex digit represents half a byte (4 bits),
+    // and it takes two hex digits to represent a full byte (8 bits).
+    if (hexString.length % 2 !== 0) {
+      throw "HexString has to be an even length";
+    }
+
+    // Create an ArrayBuffer with a length that is half the length of the hex string,
+    // because each pair of hex digits will become a single byte.
+    const arrayBuffer = new ArrayBuffer(hexString.length / 2);
+
+    // Create a Uint8Array view on top of the ArrayBuffer (each position represents a byte)
+    // as ArrayBuffers cannot be edited directly.
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    // Loop through the bytes
+    for (let i = 0; i < uint8Array.length; i++) {
+      // Extract two hex characters (1 byte)
+      const hexByte = hexString.substr(i * 2, 2);
+
+      // Convert hexByte into a decimal value from base 16. (ex: ff --> 255)
+      const byteValue = parseInt(hexByte, 16);
+
+      // Place the byte value into the uint8Array
+      uint8Array[i] = byteValue;
+    }
+
+    return arrayBuffer;
   }
 
   static fromUrlB64ToB64(urlB64Str: string): string {
@@ -221,11 +253,10 @@ export class Utils {
     });
   }
 
+  static guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
   static isGuid(id: string) {
-    return RegExp(
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
-      "i"
-    ).test(id);
+    return RegExp(Utils.guidRegex, "i").test(id);
   }
 
   static getHostname(uriString: string): string {
@@ -289,7 +320,10 @@ export class Utils {
     }
 
     try {
-      const parseResult = parse(uriString, { validHosts: this.validHosts });
+      const parseResult = parse(uriString, {
+        validHosts: this.validHosts,
+        allowPrivateDomains: true,
+      });
       if (parseResult != null && parseResult.hostname != null) {
         if (parseResult.hostname === "localhost" || parseResult.isIp) {
           return parseResult.hostname;
@@ -320,7 +354,7 @@ export class Utils {
       }
       map.set(
         decodeURIComponent(parts[0]).toLowerCase(),
-        parts[1] == null ? "" : decodeURIComponent(parts[1])
+        parts[1] == null ? "" : decodeURIComponent(parts[1]),
       );
     });
     return map;
@@ -328,7 +362,7 @@ export class Utils {
 
   static getSortFunction<T>(
     i18nService: I18nService,
-    prop: { [K in keyof T]: T[K] extends string ? K : never }[keyof T]
+    prop: { [K in keyof T]: T[K] extends string ? K : never }[keyof T],
   ): (a: T, b: T) => number {
     return (a, b) => {
       if (a[prop] == null && b[prop] != null) {
@@ -481,7 +515,7 @@ export class Utils {
   /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */
   static merge<Destination, Source>(
     destination: Destination,
-    source: Source
+    source: Source,
   ): Merge<Destination, Source> {
     return Object.assign(destination, source) as unknown as Merge<Destination, Source>;
   }
@@ -494,7 +528,7 @@ export class Utils {
   static encodeRFC3986URIComponent(str: string): string {
     return encodeURIComponent(str).replace(
       /[!'()*]/g,
-      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
     );
   }
 
@@ -512,10 +546,10 @@ export class Utils {
     ((a) => {
       if (
         /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
-          a
+          a,
         ) ||
         /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(
-          a.substr(0, 4)
+          a.substr(0, 4),
         )
       ) {
         mobile = true;

@@ -20,6 +20,9 @@
         <th bitCell class="tw-w-2/5" *ngIf="showOwner">{{ "owner" | i18n }}</th>
         <th bitCell class="tw-w-2/5" *ngIf="showCollections">{{ "collections" | i18n }}</th>
         <th bitCell class="tw-w-2/5" *ngIf="showGroups">{{ "groups" | i18n }}</th>
+        <th bitCell class="tw-w-2/5" *ngIf="showPermissionsColumn">
+          {{ "permission" | i18n }}
+        </th>
         <th bitCell class="tw-w-12 tw-text-right">
           <button
             [disabled]="disabled || isEmpty"
@@ -33,6 +36,24 @@
             <button *ngIf="bulkMoveAllowed" type="button" bitMenuItem (click)="bulkMoveToFolder()">
               <i class="bwi bwi-fw bwi-folder" aria-hidden="true"></i>
               {{ "moveSelected" | i18n }}
+            </button>
+            <button
+              *ngIf="showAdminActions && showBulkEditCollectionAccess"
+              type="button"
+              bitMenuItem
+              (click)="bulkEditCollectionAccess()"
+            >
+              <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+              {{ "access" | i18n }}
+            </button>
+            <button
+              *ngIf="showAdminActions && bulkAssignToCollectionsAllowed"
+              type="button"
+              bitMenuItem
+              (click)="assignToCollections()"
+            >
+              <i class="bwi bwi-fw bwi-collection" aria-hidden="true"></i>
+              {{ "assignToCollections" | i18n }}
             </button>
             <button
               *ngIf="bulkMoveAllowed"
@@ -58,7 +79,7 @@
       </tr>
     </ng-container>
     <ng-template body let-rows$>
-      <ng-container *cdkVirtualFor="let item of rows$">
+      <ng-container *cdkVirtualFor="let item of rows$; templateCacheSize: 0">
         <tr
           *ngIf="item.collection"
           bitRow
@@ -70,15 +91,23 @@
           [showCollections]="showCollections"
           [showGroups]="showGroups"
           [organizations]="allOrganizations"
+          [showPermissionsColumn]="showPermissionsColumn"
           [groups]="allGroups"
           [canDeleteCollection]="canDeleteCollection(item.collection)"
           [canEditCollection]="canEditCollection(item.collection)"
+          [canViewCollectionInfo]="canViewCollectionInfo(item.collection)"
+          [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled"
+          [restrictProviderAccess]="restrictProviderAccess"
           [checked]="selection.isSelected(item)"
           (checkedToggled)="selection.toggle(item)"
           (onEvent)="event($event)"
         ></tr>
+        <!--
+          addAccessStatus check here so ciphers do not show if user
+          has filtered for collections with addAccess
+        -->
         <tr
-          *ngIf="item.cipher"
+          *ngIf="item.cipher && (!addAccessToggle || (addAccessToggle && addAccessStatus !== 1))"
           bitRow
           appVaultCipherRow
           alignContent="middle"
@@ -89,10 +118,8 @@
           [showGroups]="showGroups"
           [showPremiumFeatures]="showPremiumFeatures"
           [useEvents]="useEvents"
-          [cloneable]="
-            (item.cipher.organizationId && cloneableOrganizationCiphers) ||
-            item.cipher.organizationId == null
-          "
+          [viewingOrgVault]="viewingOrgVault"
+          [cloneable]="canClone(item)"
           [organizations]="allOrganizations"
           [collections]="allCollections"
           [checked]="selection.isSelected(item)"

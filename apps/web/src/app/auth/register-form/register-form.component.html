@@ -11,7 +11,13 @@
     <div class="tw-mb-3">
       <bit-form-field>
         <bit-label>{{ "emailAddress" | i18n }}</bit-label>
-        <input id="register-form_input_email" bitInput type="email" formControlName="email" />
+        <input
+          id="register-form_input_email"
+          bitInput
+          type="email"
+          formControlName="email"
+          [attr.readonly]="queryParamFromOrgInvite ? true : null"
+        />
         <bit-hint>{{ "emailAddressDesc" | i18n }}</bit-hint>
       </bit-form-field>
     </div>
@@ -109,11 +115,11 @@
 
       <bit-label for="register-form-input-accept-policies">
         {{ "acceptPolicies" | i18n }}<br />
-        <a href="https://bitwarden.com/terms/" target="_blank" rel="noopener">{{
+        <a href="https://bitwarden.com/terms/" target="_blank" rel="noreferrer">{{
           "termsOfService" | i18n
         }}</a
         >,
-        <a href="https://bitwarden.com/privacy/" target="_blank" rel="noopener">{{
+        <a href="https://bitwarden.com/privacy/" target="_blank" rel="noreferrer">{{
           "privacyPolicy" | i18n
         }}</a>
       </bit-label>

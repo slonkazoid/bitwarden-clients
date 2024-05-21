@@ -1,4 +1,5 @@
-import * as program from "commander";
+import { OptionValues } from "commander";
+import { firstValueFrom } from "rxjs";
 
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -16,12 +17,12 @@ export class SendGetCommand extends DownloadCommand {
     private sendService: SendService,
     private environmentService: EnvironmentService,
     private searchService: SearchService,
-    cryptoService: CryptoService
+    cryptoService: CryptoService,
   ) {
     super(cryptoService);
   }
 
-  async run(id: string, options: program.OptionValues) {
+  async run(id: string, options: OptionValues) {
     const serveCommand = process.env.BW_SERVE === "true";
     if (serveCommand && !Utils.isGuid(id)) {
       return Response.badRequest("`" + id + "` is not a GUID.");
@@ -32,7 +33,8 @@ export class SendGetCommand extends DownloadCommand {
       return Response.notFound();
     }
 
-    const webVaultUrl = this.environmentService.getWebVaultUrl();
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const webVaultUrl = env.getWebVaultUrl();
     let filter = (s: SendView) => true;
     let selector = async (s: SendView): Promise<Response> =>
       Response.success(new SendResponse(s, webVaultUrl));

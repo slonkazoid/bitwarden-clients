@@ -403,6 +403,9 @@
   "length": {
     "message": "Longitud"
   },
+  "passwordMinLength": {
+    "message": "Longitud mínima de la contraseña"
+  },
   "uppercase": {
     "message": "Mayúsculas (A-Z)"
   },
@@ -476,7 +479,7 @@
     "message": "El tamaño máximo de archivo es de 500MB."
   },
   "encryptionKeyMigrationRequired": {
-    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
+    "message": "Se requiere migración de la clave de cifrado. Por favor, inicia sesión a través de la caja fuerte web para actualizar su clave de cifrado."
   },
   "editedFolder": {
     "message": "Carpeta editada"
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "¡Tu nueva cuenta ha sido creada! Ahora puedes acceder."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "Has iniciado sesión correctamente"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Puedes cerrar esta ventana"
   },
   "masterPassSent": {
     "message": "Te hemos enviado un correo electrónico con la pista de tu contraseña maestra."
@@ -791,8 +800,11 @@
   "changeMasterPass": {
     "message": "Cambiar contraseña maestra"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Puedes cambiar tu contraseña maestra en la caja fuerte web de bitwarden.com. ¿Quieres visitar ahora el sitio web?"
+  "continueToWebApp": {
+    "message": "¿Continuar a la aplicación web?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Puedes cambiar tu contraseña maestra en la aplicación web de Bitwarden."
   },
   "fingerprintPhrase": {
     "message": "Frase de huella digital",
@@ -1078,7 +1090,7 @@
     "message": "1GB de espacio en disco cifrado."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+    "message": "Opciones de inicio de sesión con autenticación de dos pasos propietarios como YubiKey y Duo."
   },
   "premiumSignUpReports": {
     "message": "Higiene de contraseña, salud de la cuenta e informes de violaciones de datos para mantener tu caja fuerte segura."
@@ -1389,6 +1401,9 @@
   "invalidPin": {
     "message": "Código PIN inválido."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "Demasiados intentos de entrada de PIN no válidos. Cerrando sesión."
+  },
   "unlockWithWindowsHello": {
     "message": "Desbloquear con Windows Hello"
   },
@@ -1493,7 +1508,7 @@
     "message": "Cerrar sesión en la caja fuerte requiere que vuelvas a autenticarte para acceder nuevamente a ella."
   },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
-    "message": "Set up an unlock method to change your vault timeout action."
+    "message": "Configura un método de desbloqueo para cambiar el tiempo de espera de tu caja fuerte."
   },
   "lock": {
     "message": "Bloquear",
@@ -1533,8 +1548,17 @@
   "setMasterPassword": {
     "message": "Establecer contraseña maestra"
   },
-  "ssoCompleteRegistration": {
-    "message": "Para completar el inicio de sesión con SSO, por favor establezca una contraseña maestra para acceder y proteger su caja fuerte."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Los permisos de tu organización han sido actualizados, requiriendo que establezcas una contraseña maestra.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Tu organización requiere que establezcas una contraseña maestra.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Verificación requerida",
+    "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
     "message": "Contraseña maestra actual"
@@ -1608,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "La integración con el navegador no está soportada"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Error al habilitar la integración del navegador"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "Se ha producido un error mientras se habilitaba la integración del navegador."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "Por desgracia la integración del navegador sólo está soportada por ahora en la versión de la Mac App Store."
   },
@@ -1622,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Requiere una capa adicional de seguridad mediante el solicitar la frase de validación de huella dactilar al establecer un enlace entre el escritorio y el navegador. Cuando se activa, requiere intervención del usuario y verificación cada vez que se establece una conexión."
+  },
+  "enableHardwareAcceleration": {
+    "message": "Utilizar aceleración de hardware"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "Por defecto esta opción está activada. Desactívala solo si experimentas problemas gráficos. Es necesario reiniciar."
   },
   "approve": {
     "message": "Aprobar"
@@ -1661,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Una política de organización está afectando a sus opciones de propiedad."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Una política organizacional ha bloqueado la importación de elementos a su caja fuerte personal."
   },
   "allSends": {
     "message": "Todos los Send",
@@ -1858,6 +1897,42 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Su contraseña maestra no cumple con una o más de las políticas de su organización. Para acceder a la caja fuerte, debe actualizar su contraseña maestra ahora. Proceder le desconectará de su sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora."
   },
+  "tryAgain": {
+    "message": "Intentar de nuevo"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Se requiere verificación para esta acción. Establece un PIN para continuar."
+  },
+  "setPin": {
+    "message": "Establecer PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verificar biométricamente"
+  },
+  "awaitingConfirmation": {
+    "message": "Esperando confirmación"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "No se pudieron completar los datos biométricos."
+  },
+  "needADifferentMethod": {
+    "message": "¿Necesitas un método diferente?"
+  },
+  "useMasterPassword": {
+    "message": "Utilizar la contraseña maestra"
+  },
+  "usePin": {
+    "message": "Usar PIN"
+  },
+  "useBiometrics": {
+    "message": "Usar datos biométricos"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Introduce el código de verificación que ha sido enviado a tu correo electrónico."
+  },
+  "resendCode": {
+    "message": "Reenviar código"
+  },
   "hours": {
     "message": "Horas"
   },
@@ -1985,7 +2060,7 @@
     "message": "Exportando caja fuerte personal"
   },
   "exportingIndividualVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
+    "message": "Solo los elementos individuales de la caja fuerte asociados con $EMAIL$ serán exportados. No se incluirán los elementos de la caja fuerte de la organización. Solo la información de los elementos de la caja fuerte será exportada y no se incluirán los archivos adjuntos asociados.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2057,6 +2132,108 @@
   "forwardedEmailDesc": {
     "message": "Generar un alias de correo electrónico con un servicio de reenvío externo."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generado por Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Sitio web: $WEBSITE$. Generado por Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Token de API $SERVICENAME$ no válido",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Token de API $SERVICENAME$ no válido: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "No se puede obtener el ID de la cuenta de correo electrónico enmascarado de $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Dominio $SERVICENAME$ no válido.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "URL $SERVICENAME$ no válida.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Se ha producido un error desconocido de $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Redirigidor desconocido: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Nombre del host",
     "description": "Part of a URL."
@@ -2110,7 +2287,7 @@
     "message": "Iniciar sesión con otro dispositivo"
   },
   "loginInitiated": {
-    "message": "Login initiated"
+    "message": "Inicio de sesión iniciado"
   },
   "notificationSentDevice": {
     "message": "Se ha enviado una notificación a tu dispositivo."
@@ -2250,83 +2427,77 @@
     "message": "Actualización de ajustes recomendados"
   },
   "deviceApprovalRequired": {
-    "message": "Device approval required. Select an approval option below:"
+    "message": "Se requiere aprobación del dispositivo. Selecciona una opción de aprobación a continuación:"
   },
   "rememberThisDevice": {
-    "message": "Remember this device"
+    "message": "Recordar este dispositivo"
   },
   "uncheckIfPublicDevice": {
-    "message": "Uncheck if using a public device"
+    "message": "Desmarca si estás usando un dispositivo público"
   },
   "approveFromYourOtherDevice": {
-    "message": "Approve from your other device"
+    "message": "Aprobar desde tu otro dispositivo"
   },
   "requestAdminApproval": {
-    "message": "Request admin approval"
+    "message": "Solicitar aprobación del administrador"
   },
   "approveWithMasterPassword": {
-    "message": "Approve with master password"
+    "message": "Aprobar con contraseña maestra"
   },
   "region": {
-    "message": "Region"
+    "message": "Región"
   },
   "ssoIdentifierRequired": {
-    "message": "Organization SSO identifier is required."
+    "message": "Se requiere un identificador único de inicio de sesión de la organización."
   },
   "eu": {
-    "message": "EU",
+    "message": "Unión Europea",
     "description": "European Union"
   },
   "loggingInOn": {
-    "message": "Logging in on"
-  },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
+    "message": "Iniciando sesión en"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "autoalojado"
   },
   "accessDenied": {
     "message": "Acceso denegado. No tiene permiso para ver esta página."
   },
   "accountSuccessfullyCreated": {
-    "message": "Account successfully created!"
+    "message": "¡Cuenta creada con éxito!"
   },
   "adminApprovalRequested": {
-    "message": "Admin approval requested"
+    "message": "Aprobación del administrador solicitada"
   },
   "adminApprovalRequestSentToAdmins": {
-    "message": "Your request has been sent to your admin."
+    "message": "Tu solicitud ha sido enviada a tu administrador."
   },
   "youWillBeNotifiedOnceApproved": {
-    "message": "You will be notified once approved."
+    "message": "Se te notificará una vez aprobado."
   },
   "troubleLoggingIn": {
-    "message": "Trouble logging in?"
+    "message": "¿Tienes problemas para iniciar sesión?"
   },
   "loginApproved": {
-    "message": "Login approved"
+    "message": "Inicio de sesión aprobado"
   },
   "userEmailMissing": {
-    "message": "User email missing"
+    "message": "Falta el correo electrónico del usuario"
   },
   "deviceTrusted": {
-    "message": "Device trusted"
+    "message": "Dispositivo de confianza"
   },
   "inputRequired": {
-    "message": "Input is required."
+    "message": "La entrada requerida."
   },
   "required": {
-    "message": "required"
+    "message": "requerido"
   },
   "search": {
-    "message": "Search"
+    "message": "Buscar"
   },
   "inputMinLength": {
-    "message": "Input must be at least $COUNT$ characters long.",
+    "message": "La entrada debe tener al menos $COUNT$ caracteres.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2335,7 +2506,7 @@
     }
   },
   "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
+    "message": "La entrada no debe exceder los $COUNT$ caracteres de longitud.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2344,7 +2515,7 @@
     }
   },
   "inputForbiddenCharacters": {
-    "message": "The following characters are not allowed: $CHARACTERS$",
+    "message": "Los siguientes caracteres no están permitidos: $CHARACTERS$",
     "placeholders": {
       "characters": {
         "content": "$1",
@@ -2353,7 +2524,7 @@
     }
   },
   "inputMinValue": {
-    "message": "Input value must be at least $MIN$.",
+    "message": "El valor de entrada debe ser de al lo menos $MIN$.",
     "placeholders": {
       "min": {
         "content": "$1",
@@ -2362,7 +2533,7 @@
     }
   },
   "inputMaxValue": {
-    "message": "Input value must not exceed $MAX$.",
+    "message": "El valor de entrada no debe exceder $MAX$.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -2371,17 +2542,17 @@
     }
   },
   "multipleInputEmails": {
-    "message": "1 or more emails are invalid"
+    "message": "Una o más direcciones de correo electrónico no son válidas"
   },
   "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
+    "message": "La entrada no debe contener únicamente espacios en blanco.",
     "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "inputEmail": {
-    "message": "Input is not an email address."
+    "message": "La entrada no es una dirección de correo electrónico."
   },
   "fieldsNeedAttention": {
-    "message": "$COUNT$ field(s) above need your attention.",
+    "message": "$COUNT$ campo(s) anterior(es) necesitan su atención.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2390,22 +2561,22 @@
     }
   },
   "selectPlaceholder": {
-    "message": "-- Select --"
+    "message": "-- Selecciona --"
   },
   "multiSelectPlaceholder": {
-    "message": "-- Type to filter --"
+    "message": "-- Escribe para filtrar --"
   },
   "multiSelectLoading": {
-    "message": "Retrieving options..."
+    "message": "Recuperando opciones..."
   },
   "multiSelectNotFound": {
-    "message": "No items found"
+    "message": "No se encontraron elementos"
   },
   "multiSelectClearAll": {
-    "message": "Clear all"
+    "message": "Limpiar todo"
   },
   "plusNMore": {
-    "message": "+ $QUANTITY$ more",
+    "message": "+ $QUANTITY$ más",
     "placeholders": {
       "quantity": {
         "content": "$1",
@@ -2414,9 +2585,242 @@
     }
   },
   "submenu": {
-    "message": "Submenu"
+    "message": "Submenú"
+  },
+  "skipToContent": {
+    "message": "Saltar al contenido"
+  },
+  "typePasskey": {
+    "message": "Clave de acceso"
+  },
+  "passkeyNotCopied": {
+    "message": "La clave de acceso no se copiará"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "La clave de acceso no se copiará al elemento clonado. ¿Quieres continuar clonando este elemento?"
   },
   "aliasDomain": {
-    "message": "Alias domain"
+    "message": "Alias de dominio"
+  },
+  "importData": {
+    "message": "Importar datos",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Error de importación"
+  },
+  "importErrorDesc": {
+    "message": "Hubo un problema con los datos que intentaste importar. Por favor, resuelve los errores listados a continuación en tu archivo de origen e inténtalo de nuevo."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resuelve los errores que aparecen a continuación e inténtalo de nuevo."
+  },
+  "description": {
+    "message": "Descripción"
+  },
+  "importSuccess": {
+    "message": "Datos importados correctamente"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Se importaron un total de $AMOUNT$ elementos.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Total"
+  },
+  "importWarning": {
+    "message": "Estás importando datos a $ORGANIZATION$. Tus datos pueden ser compartidos con miembros de esta organización. ¿Quieres continuar?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Inicia Duo y sigue los pasos para terminar de iniciar sesión."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Se requiere el inicio de sesión en dos pasos de Duo para tu cuenta."
+  },
+  "launchDuo": {
+    "message": "Inicia Duo en el navegador"
+  },
+  "importFormatError": {
+    "message": "Los datos no están formateados correctamente. Por favor, comprueba tu archivo de importación e inténtalo de nuevo."
+  },
+  "importNothingError": {
+    "message": "No se ha importado nada."
+  },
+  "importEncKeyError": {
+    "message": "Error al descifrar el archivo exportado. Tu clave de cifrado no coincide con la clave de cifrado utilizada para exportar los datos."
+  },
+  "invalidFilePassword": {
+    "message": "Contraseña de archivo no válida, por favor utiliza la contraseña que introdujiste cuando creaste el archivo de exportación."
+  },
+  "importDestination": {
+    "message": "Destino de importación"
+  },
+  "learnAboutImportOptions": {
+    "message": "Aprende acerca de tus opciones de importación"
+  },
+  "selectImportFolder": {
+    "message": "Escoge una carpeta"
+  },
+  "selectImportCollection": {
+    "message": "Escoge una colección"
+  },
+  "importTargetHint": {
+    "message": "Selecciona esta opción si quieres que el contenido del archivo importado se mueva a un $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "El archivo contiene elementos no asignados."
+  },
+  "selectFormat": {
+    "message": "Selecciona el formato del archivo de importación"
+  },
+  "selectImportFile": {
+    "message": "Selecciona el archivo de importación"
+  },
+  "chooseFile": {
+    "message": "Escoge el archivo"
+  },
+  "noFileChosen": {
+    "message": "No se ha elegido nungún archivo"
+  },
+  "orCopyPasteFileContents": {
+    "message": "o copia/pega el contenido del archivo de importación"
+  },
+  "instructionsFor": {
+    "message": "Instrucciones para $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Confirma la importación de la caja fuerte"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Este archivo está protegido por contraseña. Por favor, introduce la contraseña del archivo para importar los datos."
+  },
+  "confirmFilePassword": {
+    "message": "Confirma la contraseña del archivo"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Autenticación multifactor cancelada"
+  },
+  "noLastPassDataFound": {
+    "message": "No se encontraron datos de LastPass"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Nombre de usuario o contraseña incorrectos"
+  },
+  "incorrectPassword": {
+    "message": "Contraseña incorrecta"
+  },
+  "incorrectCode": {
+    "message": "Código incorrecto"
+  },
+  "incorrectPin": {
+    "message": "PIN incorrecto"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Falló la autenticación multifactor"
+  },
+  "includeSharedFolders": {
+    "message": "Incluir carpetas compartidas"
+  },
+  "lastPassEmail": {
+    "message": "Correo electrónico de LastPass"
+  },
+  "importingYourAccount": {
+    "message": "Importando tu cuenta..."
+  },
+  "lastPassMFARequired": {
+    "message": "Se requiere autenticación multifactor de LastPass"
+  },
+  "lastPassMFADesc": {
+    "message": "Introduce el código de acceso de un solo uso desde la aplicación de autenticación"
+  },
+  "lastPassOOBDesc": {
+    "message": "Aprueba la solicitud de inicio de sesión en tu aplicación de autenticación o introduce un código de acceso de una sola vez."
+  },
+  "passcode": {
+    "message": "Código de acceso"
+  },
+  "lastPassMasterPassword": {
+    "message": "Contraseña maestra de LastPass"
+  },
+  "lastPassAuthRequired": {
+    "message": "Se requiere autenticación de LastPass"
+  },
+  "awaitingSSO": {
+    "message": "Esperando autenticación SSO"
+  },
+  "awaitingSSODesc": {
+    "message": "Por favor, continua para iniciar sesión usando las credenciales de tu empresa."
+  },
+  "seeDetailedInstructions": {
+    "message": "Consulte las instrucciones detalladas en nuestro sitio de ayuda en",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Importar directamente desde LastPass"
+  },
+  "importFromCSV": {
+    "message": "Importar desde CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Inténtalo de nuevo o busca un correo electrónico de LastPass para verificar que eres tú."
+  },
+  "collection": {
+    "message": "Colección"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Inserta la YubiKey asociada a tu cuenta de LastPass en el puerto USB de tu ordenador y, pulsa su botón."
+  },
+  "commonImportFormats": {
+    "message": "Formatos comunes",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Éxito"
+  },
+  "troubleshooting": {
+    "message": "Resolución de problemas"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Desactivar la aceleración de hardware y reiniciar"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Activar la aceleración de hardware y reiniciar"
+  },
+  "removePasskey": {
+    "message": "Eliminar clave de acceso"
+  },
+  "passkeyRemoved": {
+    "message": "Clave de acceso eliminada"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error al asignar la colección de destino."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error al asignar la carpeta de destino."
   }
 }

@@ -30,6 +30,7 @@ export enum EventType {
   Cipher_SoftDeleted = 1115,
   Cipher_Restored = 1116,
   Cipher_ClientToggledCardNumberVisible = 1117,
+  Cipher_ClientToggledTOTPSeedVisible = 1118,
 
   Collection_Created = 1300,
   Collection_Updated = 1301,
@@ -64,6 +65,7 @@ export enum EventType {
   Organization_EnabledKeyConnector = 1606,
   Organization_DisabledKeyConnector = 1607,
   Organization_SponsorshipsSynced = 1608,
+  Organization_CollectionManagementUpdated = 1609,
 
   Policy_Updated = 1700,
 

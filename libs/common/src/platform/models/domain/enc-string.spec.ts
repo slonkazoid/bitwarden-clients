@@ -1,15 +1,11 @@
-// eslint-disable-next-line no-restricted-imports
-import { Substitute, Arg } from "@fluffy-spoon/substitute";
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { EncryptionType } from "../../../enums";
+import { makeStaticByteArray } from "../../../../spec";
 import { EncryptService } from "../../../platform/abstractions/encrypt.service";
-import {
-  OrgKey,
-  SymmetricCryptoKey,
-  UserKey,
-} from "../../../platform/models/domain/symmetric-crypto-key";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import { UserKey, OrgKey } from "../../../types/key";
 import { CryptoService } from "../../abstractions/crypto.service";
+import { EncryptionType } from "../../enums";
 import { ContainerService } from "../../services/container.service";
 
 import { EncString } from "./enc-string";
@@ -64,16 +60,21 @@ describe("EncString", () => {
     describe("decrypt", () => {
       const encString = new EncString(EncryptionType.Rsa2048_OaepSha256_B64, "data");
 
-      const cryptoService = Substitute.for<CryptoService>();
-      cryptoService.getOrgKey(null).resolves(null);
+      const cryptoService = mock<CryptoService>();
+      cryptoService.hasUserKey.mockResolvedValue(true);
+      cryptoService.getUserKeyWithLegacySupport.mockResolvedValue(
+        new SymmetricCryptoKey(makeStaticByteArray(32)) as UserKey,
+      );
 
-      const encryptService = Substitute.for<EncryptService>();
-      encryptService.decryptToUtf8(encString, Arg.any()).resolves("decrypted");
+      const encryptService = mock<EncryptService>();
+      encryptService.decryptToUtf8
+        .calledWith(encString, expect.anything())
+        .mockResolvedValue("decrypted");
 
       beforeEach(() => {
         (window as any).bitwardenContainerService = new ContainerService(
           cryptoService,
-          encryptService
+          encryptService,
         );
       });
 
@@ -85,7 +86,7 @@ describe("EncString", () => {
 
       it("result should be cached", async () => {
         const decrypted = await encString.decrypt(null);
-        encryptService.received(1).decryptToUtf8(Arg.any(), Arg.any());
+        expect(encryptService.decryptToUtf8).toBeCalledTimes(1);
 
         expect(decrypted).toBe("decrypted");
       });
@@ -202,7 +203,7 @@ describe("EncString", () => {
 
       (window as any).bitwardenContainerService = new ContainerService(
         cryptoService,
-        encryptService
+        encryptService,
       );
     });
 
@@ -211,7 +212,7 @@ describe("EncString", () => {
 
       (window as any).bitwardenContainerService = new ContainerService(
         cryptoService,
-        encryptService
+        encryptService,
       );
 
       const decrypted = await encString.decrypt(null);

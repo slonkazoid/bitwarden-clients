@@ -3,8 +3,8 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
 import { CipherContextMenuHandler } from "./cipher-context-menu-handler";
 import { MainContextMenuHandler } from "./main-context-menu-handler";
@@ -18,6 +18,7 @@ describe("CipherContextMenuHandler", () => {
 
   beforeEach(() => {
     mainContextMenuHandler = mock();
+    mainContextMenuHandler.initRunning = false;
     authService = mock();
     cipherService = mock();
 
@@ -29,6 +30,14 @@ describe("CipherContextMenuHandler", () => {
   afterEach(() => jest.resetAllMocks());
 
   describe("update", () => {
+    it("skips updating if the init process for the mainContextMenuHandler is running", async () => {
+      mainContextMenuHandler.initRunning = true;
+
+      await sut.update("https://test.com");
+
+      expect(authService.getAuthStatus).not.toHaveBeenCalled();
+    });
+
     it("locked, updates for no access", async () => {
       authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Locked);
 
@@ -120,19 +129,19 @@ describe("CipherContextMenuHandler", () => {
       expect(mainContextMenuHandler.loadOptions).toHaveBeenCalledWith(
         "Test Cipher (Test Username)",
         "5",
-        loginCipher
+        loginCipher,
       );
 
       expect(mainContextMenuHandler.loadOptions).toHaveBeenCalledWith(
         "Test Reprompt Cipher (Test Username)",
         "6",
-        repromptLoginCipher
+        repromptLoginCipher,
       );
 
       expect(mainContextMenuHandler.loadOptions).toHaveBeenCalledWith(
         "Test Card Cipher",
         "7",
-        cardCipher
+        cardCipher,
       );
     });
   });

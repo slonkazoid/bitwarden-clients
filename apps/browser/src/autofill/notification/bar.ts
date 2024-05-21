@@ -1,19 +1,42 @@
-import type { Jsonify } from "type-fest";
-
+import { ThemeType } from "@bitwarden/common/platform/enums";
+import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import type { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
+
+import { FilelessImportPort, FilelessImportType } from "../../tools/enums/fileless-import.enums";
+import { AdjustNotificationBarMessageData } from "../background/abstractions/notification.background";
+
+import {
+  NotificationBarWindowMessageHandlers,
+  NotificationBarWindowMessage,
+  NotificationBarIframeInitData,
+} from "./abstractions/notification-bar";
 
 require("./bar.scss");
 
-document.addEventListener("DOMContentLoaded", () => {
-  // delay 50ms so that we get proper body dimensions
-  setTimeout(load, 50);
-});
+const logService = new ConsoleLogService(false);
+let notificationBarIframeInitData: NotificationBarIframeInitData = {};
+let windowMessageOrigin: string;
+const notificationBarWindowMessageHandlers: NotificationBarWindowMessageHandlers = {
+  initNotificationBar: ({ message }) => initNotificationBar(message),
+  saveCipherAttemptCompleted: ({ message }) => handleSaveCipherAttemptCompletedMessage(message),
+};
 
+globalThis.addEventListener("load", load);
 function load() {
-  const theme = getQueryVariable("theme");
-  document.documentElement.classList.add("theme_" + theme);
+  setupWindowMessageListener();
+  postMessageToParent({ command: "initNotificationBar" });
+}
 
-  const isVaultLocked = getQueryVariable("isVaultLocked") == "true";
+function initNotificationBar(message: NotificationBarWindowMessage) {
+  const { initData } = message;
+  if (!initData) {
+    return;
+  }
+
+  notificationBarIframeInitData = initData;
+  const { isVaultLocked } = notificationBarIframeInitData;
+  setNotificationBarTheme();
+
   (document.getElementById("logo") as HTMLImageElement).src = isVaultLocked
     ? chrome.runtime.getURL("images/icon38_locked.png")
     : chrome.runtime.getURL("images/icon38.png");
@@ -30,18 +53,14 @@ function load() {
     notificationChangeDesc: chrome.i18n.getMessage("notificationChangeDesc"),
     notificationUnlock: chrome.i18n.getMessage("notificationUnlock"),
     notificationUnlockDesc: chrome.i18n.getMessage("notificationUnlockDesc"),
+    filelessImport: chrome.i18n.getMessage("filelessImport"),
+    lpFilelessImport: chrome.i18n.getMessage("lpFilelessImport"),
+    cancelFilelessImport: chrome.i18n.getMessage("no"),
+    lpCancelFilelessImport: chrome.i18n.getMessage("lpCancelFilelessImport"),
+    startFilelessImport: chrome.i18n.getMessage("startFilelessImport"),
   };
 
-  const logoLink = document.getElementById("logo-link") as HTMLAnchorElement;
-  logoLink.title = i18n.appName;
-
-  // Update logo link to user's regional domain
-  const webVaultURL = getQueryVariable("webVaultURL");
-  const newVaultURL = webVaultURL && decodeURIComponent(webVaultURL);
-
-  if (newVaultURL && newVaultURL !== logoLink.href) {
-    logoLink.href = newVaultURL;
-  }
+  setupLogoLink(i18n);
 
   // i18n for "Add" template
   const addTemplate = document.getElementById("template-add") as HTMLTemplateElement;
@@ -74,6 +93,7 @@ function load() {
 
   changeTemplate.content.getElementById("change-text").textContent = i18n.notificationChangeDesc;
 
+  // i18n for "Unlock" (unlock extension) template
   const unlockTemplate = document.getElementById("template-unlock") as HTMLTemplateElement;
 
   const unlockButton = unlockTemplate.content.getElementById("unlock-vault");
@@ -81,16 +101,35 @@ function load() {
 
   unlockTemplate.content.getElementById("unlock-text").textContent = i18n.notificationUnlockDesc;
 
+  // i18n for "Fileless Import" (fileless-import) template
+  const isLpImport = initData.importType === FilelessImportType.LP;
+  const importTemplate = document.getElementById("template-fileless-import") as HTMLTemplateElement;
+
+  const startImportButton = importTemplate.content.getElementById("start-fileless-import");
+  startImportButton.textContent = i18n.startFilelessImport;
+
+  const cancelImportButton = importTemplate.content.getElementById("cancel-fileless-import");
+  cancelImportButton.textContent = isLpImport
+    ? i18n.lpCancelFilelessImport
+    : i18n.cancelFilelessImport;
+
+  importTemplate.content.getElementById("fileless-import-text").textContent = isLpImport
+    ? i18n.lpFilelessImport
+    : i18n.filelessImport;
+
   // i18n for body content
   const closeButton = document.getElementById("close-button");
   closeButton.title = i18n.close;
 
-  if (getQueryVariable("type") === "add") {
+  const notificationType = initData.type;
+  if (initData.type === "add") {
     handleTypeAdd();
-  } else if (getQueryVariable("type") === "change") {
+  } else if (notificationType === "change") {
     handleTypeChange();
-  } else if (getQueryVariable("type") === "unlock") {
+  } else if (notificationType === "unlock") {
     handleTypeUnlock();
+  } else if (notificationType === "fileless-import") {
+    handleTypeFilelessImport();
   }
 
   closeButton.addEventListener("click", (e) => {
@@ -100,22 +139,8 @@ function load() {
     });
   });
 
-  window.addEventListener("resize", adjustHeight);
+  globalThis.addEventListener("resize", adjustHeight);
   adjustHeight();
-}
-
-function getQueryVariable(variable: string) {
-  const query = window.location.search.substring(1);
-  const vars = query.split("&");
-
-  for (let i = 0; i < vars.length; i++) {
-    const pair = vars[i].split("=");
-    if (pair[0] === variable) {
-      return pair[1];
-    }
-  }
-
-  return null;
 }
 
 function handleTypeAdd() {
@@ -126,11 +151,7 @@ function handleTypeAdd() {
     e.preventDefault();
 
     // If Remove Individual Vault policy applies, "Add" opens the edit tab
-    sendPlatformMessage({
-      command: "bgAddSave",
-      folder: getSelectedFolder(),
-      edit: removeIndividualVault(),
-    });
+    sendSaveCipherMessage(removeIndividualVault(), getSelectedFolder());
   });
 
   if (removeIndividualVault()) {
@@ -142,11 +163,7 @@ function handleTypeAdd() {
   editButton.addEventListener("click", (e) => {
     e.preventDefault();
 
-    sendPlatformMessage({
-      command: "bgAddSave",
-      folder: getSelectedFolder(),
-      edit: true,
-    });
+    sendSaveCipherMessage(true, getSelectedFolder());
   });
 
   const neverButton = document.getElementById("never-save");
@@ -166,21 +183,49 @@ function handleTypeChange() {
   changeButton.addEventListener("click", (e) => {
     e.preventDefault();
 
-    sendPlatformMessage({
-      command: "bgChangeSave",
-      edit: false,
-    });
+    sendSaveCipherMessage(false);
   });
 
   const editButton = document.getElementById("change-edit");
   editButton.addEventListener("click", (e) => {
     e.preventDefault();
 
-    sendPlatformMessage({
-      command: "bgChangeSave",
-      edit: true,
-    });
+    sendSaveCipherMessage(true);
   });
+}
+
+function sendSaveCipherMessage(edit: boolean, folder?: string) {
+  sendPlatformMessage({
+    command: "bgSaveCipher",
+    folder,
+    edit,
+  });
+}
+
+function handleSaveCipherAttemptCompletedMessage(message: NotificationBarWindowMessage) {
+  const addSaveButtonContainers = document.querySelectorAll(".add-change-cipher-buttons");
+  const notificationBarOuterWrapper = document.getElementById("notification-bar-outer-wrapper");
+  if (message?.error) {
+    addSaveButtonContainers.forEach((element) => {
+      element.textContent = chrome.i18n.getMessage("saveCipherAttemptFailed");
+      element.classList.add("error-message");
+      notificationBarOuterWrapper.classList.add("error-event");
+    });
+
+    logService.error(`Error encountered when saving credentials: ${message.error}`);
+    return;
+  }
+  const messageName =
+    notificationBarIframeInitData.type === "add"
+      ? "saveCipherAttemptSuccess"
+      : "updateCipherAttemptSuccess";
+
+  addSaveButtonContainers.forEach((element) => {
+    element.textContent = chrome.i18n.getMessage(messageName);
+    element.classList.add("success-message");
+    notificationBarOuterWrapper.classList.add("success-event");
+  });
+  setTimeout(() => sendPlatformMessage({ command: "bgCloseNotificationBar" }), 1250);
 }
 
 function handleTypeUnlock() {
@@ -189,9 +234,59 @@ function handleTypeUnlock() {
   const unlockButton = document.getElementById("unlock-vault");
   unlockButton.addEventListener("click", (e) => {
     sendPlatformMessage({
-      command: "bgReopenPromptForLogin",
+      command: "bgReopenUnlockPopout",
     });
   });
+}
+
+/**
+ * Sets up a port to communicate with the fileless importer content script.
+ * This connection to the background script is used to trigger the action of
+ * downloading the CSV file from the LP importer or importing the data into
+ * the Bitwarden vault.
+ */
+function handleTypeFilelessImport() {
+  const importType = notificationBarIframeInitData.importType;
+  const port = chrome.runtime.connect({ name: FilelessImportPort.NotificationBar });
+  setContent(document.getElementById("template-fileless-import") as HTMLTemplateElement);
+
+  const startFilelessImportButton = document.getElementById("start-fileless-import");
+  const startFilelessImport = () => {
+    port.postMessage({ command: "startFilelessImport", importType });
+    document.getElementById("fileless-import-buttons").textContent =
+      chrome.i18n.getMessage("importing");
+    startFilelessImportButton.removeEventListener("click", startFilelessImport);
+  };
+  startFilelessImportButton.addEventListener("click", startFilelessImport);
+
+  const cancelFilelessImportButton = document.getElementById("cancel-fileless-import");
+  cancelFilelessImportButton.addEventListener("click", () => {
+    port.postMessage({ command: "cancelFilelessImport", importType });
+  });
+
+  const handlePortMessage = (msg: any) => {
+    if (msg.command !== "filelessImportCompleted" && msg.command !== "filelessImportFailed") {
+      return;
+    }
+
+    port.disconnect();
+
+    const filelessImportButtons = document.getElementById("fileless-import-buttons");
+    const notificationBarOuterWrapper = document.getElementById("notification-bar-outer-wrapper");
+
+    if (msg.command === "filelessImportCompleted") {
+      filelessImportButtons.textContent = chrome.i18n.getMessage("dataSuccessfullyImported");
+      filelessImportButtons.classList.add("success-message");
+      notificationBarOuterWrapper.classList.add("success-event");
+      return;
+    }
+
+    filelessImportButtons.textContent = chrome.i18n.getMessage("dataImportFailed");
+    filelessImportButtons.classList.add("error-message");
+    notificationBarOuterWrapper.classList.add("error-event");
+    logService.error(`Error Encountered During Import: ${msg.importErrorMessage}`);
+  };
+  port.onMessage.addListener(handlePortMessage);
 }
 
 function setContent(template: HTMLTemplateElement) {
@@ -204,31 +299,34 @@ function setContent(template: HTMLTemplateElement) {
   content.appendChild(newElement);
 }
 
-function sendPlatformMessage(msg: Record<string, unknown>) {
-  chrome.runtime.sendMessage(msg);
+function sendPlatformMessage(
+  msg: Record<string, unknown>,
+  responseCallback?: (response: any) => void,
+) {
+  chrome.runtime.sendMessage(msg, (response) => {
+    if (responseCallback) {
+      responseCallback(response);
+    }
+  });
 }
 
 function loadFolderSelector() {
-  const responseFoldersCommand = "notificationBarGetFoldersList";
-
-  chrome.runtime.onMessage.addListener((msg) => {
-    if (msg.command !== responseFoldersCommand || msg.data == null) {
+  const populateFolderData = (folderData: FolderView[]) => {
+    const select = document.getElementById("select-folder");
+    if (!folderData?.length) {
+      select.appendChild(new Option(chrome.i18n.getMessage("noFoldersFound"), null, true));
+      select.setAttribute("disabled", "true");
       return;
     }
 
-    const folders = msg.data.folders as Jsonify<FolderView[]>;
-    const select = document.getElementById("select-folder");
     select.appendChild(new Option(chrome.i18n.getMessage("selectFolder"), null, true));
-    folders.forEach((folder) => {
+    folderData.forEach((folder: FolderView) => {
       // Select "No Folder" (id=null) folder by default
       select.appendChild(new Option(folder.name, folder.id || "", false));
     });
-  });
+  };
 
-  sendPlatformMessage({
-    command: "bgGetDataForTab",
-    responseCommand: responseFoldersCommand,
-  });
+  sendPlatformMessage({ command: "bgGetFolderData" }, populateFolderData);
 }
 
 function getSelectedFolder(): string {
@@ -236,14 +334,64 @@ function getSelectedFolder(): string {
 }
 
 function removeIndividualVault(): boolean {
-  return getQueryVariable("removeIndividualVault") == "true";
+  return notificationBarIframeInitData.removeIndividualVault;
 }
 
 function adjustHeight() {
+  const data: AdjustNotificationBarMessageData = {
+    height: document.querySelector("body").scrollHeight,
+  };
   sendPlatformMessage({
     command: "bgAdjustNotificationBar",
-    data: {
-      height: document.querySelector("body").scrollHeight,
-    },
+    data,
   });
+}
+
+function setupWindowMessageListener() {
+  globalThis.addEventListener("message", handleWindowMessage);
+}
+
+function handleWindowMessage(event: MessageEvent) {
+  if (!windowMessageOrigin) {
+    windowMessageOrigin = event.origin;
+  }
+
+  if (event.origin !== windowMessageOrigin) {
+    return;
+  }
+
+  const message = event.data as NotificationBarWindowMessage;
+  const handler = notificationBarWindowMessageHandlers[message.command];
+  if (!handler) {
+    return;
+  }
+
+  handler({ message });
+}
+
+function setupLogoLink(i18n: Record<string, string>) {
+  const logoLink = document.getElementById("logo-link") as HTMLAnchorElement;
+  logoLink.title = i18n.appName;
+  const setWebVaultUrlLink = (webVaultURL: string) => {
+    const newVaultURL = webVaultURL && decodeURIComponent(webVaultURL);
+    if (newVaultURL && newVaultURL !== logoLink.href) {
+      logoLink.href = newVaultURL;
+    }
+  };
+  sendPlatformMessage({ command: "getWebVaultUrlForNotification" }, setWebVaultUrlLink);
+}
+
+function setNotificationBarTheme() {
+  let theme = notificationBarIframeInitData.theme;
+  if (theme === ThemeType.System) {
+    theme = globalThis.matchMedia("(prefers-color-scheme: dark)").matches
+      ? ThemeType.Dark
+      : ThemeType.Light;
+  }
+
+  document.documentElement.classList.add(`theme_${theme}`);
+}
+
+function postMessageToParent(message: NotificationBarWindowMessage) {
+  globalThis.parent.postMessage(message, windowMessageOrigin || "*");
 }

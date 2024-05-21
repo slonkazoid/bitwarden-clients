@@ -5,7 +5,7 @@ const queryShown = query(
   [style({ position: "fixed", width: "100%", height: "100%" })],
   {
     optional: true,
-  }
+  },
 );
 
 // ref: https://github.com/angular/angular/issues/15477
@@ -20,7 +20,7 @@ export function queryTranslate(
   axis: string,
   from: number,
   to: number,
-  zIndex = 1000
+  zIndex = 1000,
 ) {
   return query(
     ":" + direction,
@@ -32,7 +32,7 @@ export function queryTranslate(
       }),
       animate(speed + " ease-in-out", style({ transform: "translate" + axis + "(" + to + "%)" })),
     ],
-    { optional: true }
+    { optional: true },
   );
 }
 
@@ -144,7 +144,7 @@ export const routerTransition = trigger("routerTransition", [
   transition("view-cipher => edit-cipher, view-cipher => cipher-password-history", inSlideUp),
   transition(
     "edit-cipher => view-cipher, cipher-password-history => view-cipher, edit-cipher => tabs",
-    outSlideDown
+    outSlideDown,
   ),
 
   transition("view-cipher => clone-cipher", inSlideUp),
@@ -161,11 +161,11 @@ export const routerTransition = trigger("routerTransition", [
 
   transition(
     "add-cipher => generator, edit-cipher => generator, clone-cipher => generator",
-    inSlideUp
+    inSlideUp,
   ),
   transition(
     "generator => add-cipher, generator => edit-cipher, generator => clone-cipher",
-    outSlideDown
+    outSlideDown,
   ),
 
   transition("edit-cipher => attachments, edit-cipher => collections", inSlideLeft),
@@ -174,23 +174,34 @@ export const routerTransition = trigger("routerTransition", [
   transition("clone-cipher => attachments, clone-cipher => collections", inSlideLeft),
   transition("attachments => clone-cipher, collections => clone-cipher", outSlideRight),
 
-  transition("tabs => export", inSlideLeft),
-  transition("export => tabs", outSlideRight),
+  transition("tabs => account-security", inSlideLeft),
+  transition("account-security => tabs", outSlideRight),
 
-  transition("tabs => folders", inSlideLeft),
-  transition("folders => tabs", outSlideRight),
+  // Vault settings
+  transition("tabs => vault-settings", inSlideLeft),
+  transition("vault-settings => tabs", outSlideRight),
+
+  transition("vault-settings => import", inSlideLeft),
+  transition("import => vault-settings", outSlideRight),
+
+  transition("vault-settings => export", inSlideLeft),
+  transition("export => vault-settings", outSlideRight),
+
+  transition("vault-settings => folders", inSlideLeft),
+  transition("folders => vault-settings", outSlideRight),
 
   transition("folders => edit-folder, folders => add-folder", inSlideUp),
   transition("edit-folder => folders, add-folder => folders", outSlideDown),
 
-  transition("tabs => sync", inSlideLeft),
-  transition("sync => tabs", outSlideRight),
-
-  transition("tabs => excluded-domains", inSlideLeft),
-  transition("excluded-domains => tabs", outSlideRight),
+  transition("vault-settings => sync", inSlideLeft),
+  transition("sync => vault-settings", outSlideRight),
 
   transition("tabs => options", inSlideLeft),
   transition("options => tabs", outSlideRight),
+
+  // Appearance settings
+  transition("tabs => appearance", inSlideLeft),
+  transition("appearance => tabs", outSlideRight),
 
   transition("tabs => premium", inSlideLeft),
   transition("premium => tabs", outSlideRight),
@@ -209,6 +220,18 @@ export const routerTransition = trigger("routerTransition", [
   transition("tabs => edit-send, send-type => edit-send", inSlideUp),
   transition("edit-send => tabs, edit-send => send-type", outSlideDown),
 
+  // Notification settings
+  transition("tabs => notifications", inSlideLeft),
+  transition("notifications => tabs", outSlideRight),
+
+  transition("notifications => excluded-domains", inSlideLeft),
+  transition("excluded-domains => notifications", outSlideRight),
+
   transition("tabs => autofill", inSlideLeft),
   transition("autofill => tabs", outSlideRight),
+
+  transition("* => account-switcher", inSlideUp),
+  transition("account-switcher => *", outSlideDown),
+
+  transition("lock => *", outSlideDown),
 ]);

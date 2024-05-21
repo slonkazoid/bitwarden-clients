@@ -4,20 +4,25 @@ import { MigrationHelper } from "./migration-helper";
 
 export const IRREVERSIBLE = new Error("Irreversible migration");
 
-export type VersionFrom<T> = T extends Migrator<infer TFrom, number>
-  ? TFrom extends NonNegativeInteger<TFrom>
-    ? TFrom
-    : never
-  : never;
-export type VersionTo<T> = T extends Migrator<number, infer TTo>
-  ? TTo extends NonNegativeInteger<TTo>
-    ? TTo
-    : never
-  : never;
+export type VersionFrom<T> =
+  T extends Migrator<infer TFrom, number>
+    ? TFrom extends NonNegativeInteger<TFrom>
+      ? TFrom
+      : never
+    : never;
+export type VersionTo<T> =
+  T extends Migrator<number, infer TTo>
+    ? TTo extends NonNegativeInteger<TTo>
+      ? TTo
+      : never
+    : never;
 export type Direction = "up" | "down";
 
 export abstract class Migrator<TFrom extends number, TTo extends number> {
-  constructor(public fromVersion: TFrom, public toVersion: TTo) {
+  constructor(
+    public fromVersion: TFrom,
+    public toVersion: TTo,
+  ) {
     if (fromVersion == null || toVersion == null) {
       throw new Error("Invalid migration");
     }

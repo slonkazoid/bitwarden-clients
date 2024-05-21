@@ -10,8 +10,11 @@ import {
   Subject,
   switchMap,
   takeUntil,
+  map,
+  concatMap,
 } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
@@ -33,7 +36,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private organizationId: string;
   private projectId: string;
-
+  private organizationEnabled: boolean;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -42,34 +45,45 @@ export class ProjectComponent implements OnInit, OnDestroy {
     private router: Router,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private organizationService: OrganizationService,
   ) {}
 
   ngOnInit(): void {
     // Update project if it is edited
     const currentProjectEdited = this.projectService.project$.pipe(
       filter((p) => p?.id === this.projectId),
-      startWith(null)
+      startWith(null),
     );
 
     this.project$ = combineLatest([this.route.params, currentProjectEdited]).pipe(
       switchMap(([params, _]) => this.projectService.getByProjectId(params.projectId)),
       catchError(() => {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.router.navigate(["/sm", this.organizationId, "projects"]).then(() => {
           this.platformUtilsService.showToast(
             "error",
             null,
-            this.i18nService.t("notFound", this.i18nService.t("project"))
+            this.i18nService.t("notFound", this.i18nService.t("project")),
           );
         });
         return EMPTY;
-      })
+      }),
     );
 
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.organizationId = params.organizationId;
-      this.projectId = params.projectId;
-    });
+    const projectId$ = this.route.params.pipe(map((p) => p.projectId));
+    const organization$ = this.route.params.pipe(
+      concatMap((params) => this.organizationService.get$(params.organizationId)),
+    );
+
+    combineLatest([projectId$, organization$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([projectId, organization]) => {
+        this.organizationId = organization.id;
+        this.projectId = projectId;
+        this.organizationEnabled = organization.enabled;
+      });
   }
 
   ngOnDestroy(): void {
@@ -82,6 +96,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
+        organizationEnabled: this.organizationEnabled,
         projectId: this.projectId,
       },
     });

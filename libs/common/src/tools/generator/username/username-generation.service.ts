@@ -1,7 +1,10 @@
+import { from } from "rxjs";
+
 import { ApiService } from "../../../abstractions/api.service";
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { StateService } from "../../../platform/abstractions/state.service";
 import { EFFLongWordList } from "../../../platform/misc/wordlist";
+import { UsernameGenerationServiceAbstraction } from "../abstractions/username-generation.service.abstraction";
 
 import {
   AnonAddyForwarder,
@@ -14,10 +17,10 @@ import {
   SimpleLoginForwarder,
 } from "./email-forwarders";
 import { UsernameGeneratorOptions } from "./username-generation-options";
-import { UsernameGenerationServiceAbstraction } from "./username-generation.service.abstraction";
 
 const DefaultOptions: UsernameGeneratorOptions = {
   type: "word",
+  website: null,
   wordCapitalize: true,
   wordIncludeNumber: true,
   subaddressType: "random",
@@ -26,13 +29,14 @@ const DefaultOptions: UsernameGeneratorOptions = {
   forwardedAnonAddyDomain: "anonaddy.me",
   forwardedAnonAddyBaseUrl: "https://app.addy.io",
   forwardedForwardEmailDomain: "hideaddress.net",
+  forwardedSimpleLoginBaseUrl: "https://app.simplelogin.io",
 };
 
 export class UsernameGenerationService implements UsernameGenerationServiceAbstraction {
   constructor(
     private cryptoService: CryptoService,
     private stateService: StateService,
-    private apiService: ApiService
+    private apiService: ApiService,
   ) {}
 
   generateUsername(options: UsernameGeneratorOptions): Promise<string> {
@@ -128,6 +132,7 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     if (o.forwardedService === "simplelogin") {
       forwarder = new SimpleLoginForwarder();
       forwarderOptions.apiKey = o.forwardedSimpleLoginApiKey;
+      forwarderOptions.simplelogin.baseUrl = o.forwardedSimpleLoginBaseUrl;
     } else if (o.forwardedService === "anonaddy") {
       forwarder = new AnonAddyForwarder();
       forwarderOptions.apiKey = o.forwardedAnonAddyApiToken;
@@ -153,6 +158,10 @@ export class UsernameGenerationService implements UsernameGenerationServiceAbstr
     }
 
     return forwarder.generate(this.apiService, forwarderOptions);
+  }
+
+  getOptions$() {
+    return from(this.getOptions());
   }
 
   async getOptions(): Promise<UsernameGeneratorOptions> {

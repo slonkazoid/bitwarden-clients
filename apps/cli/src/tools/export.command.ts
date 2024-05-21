@@ -1,14 +1,16 @@
-import * as program from "commander";
+import { OptionValues } from "commander";
 import * as inquirer from "inquirer";
 
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { EventType } from "@bitwarden/common/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import {
   ExportFormat,
   EXPORT_FORMATS,
   VaultExportServiceAbstraction,
-} from "@bitwarden/exporter/vault-export";
+} from "@bitwarden/vault-export-core";
 
 import { Response } from "../models/response";
 import { CliUtils } from "../utils";
@@ -16,25 +18,33 @@ import { CliUtils } from "../utils";
 export class ExportCommand {
   constructor(
     private exportService: VaultExportServiceAbstraction,
-    private policyService: PolicyService
+    private policyService: PolicyService,
+    private eventCollectionService: EventCollectionService,
   ) {}
 
-  async run(options: program.OptionValues): Promise<Response> {
+  async run(options: OptionValues): Promise<Response> {
     if (
       options.organizationid == null &&
       (await this.policyService.policyAppliesToUser(PolicyType.DisablePersonalVaultExport))
     ) {
       return Response.badRequest(
-        "One or more organization policies prevents you from exporting your personal vault."
+        "One or more organization policies prevents you from exporting your personal vault.",
       );
     }
 
-    const format = options.format ?? "csv";
+    let password = options.password;
+
+    // has password and format is 'json' => should have the same behaviour as 'encrypted_json'
+    // format is 'undefined' => Defaults to 'csv'
+    // Any other case => returns the options.format
+    const format =
+      password && options.format == "json" ? "encrypted_json" : options.format ?? "csv";
+
     if (!this.isSupportedExportFormat(format)) {
       return Response.badRequest(
         `'${format}' is not a supported export format. Supported formats: ${EXPORT_FORMATS.join(
-          ", "
-        )}.`
+          ", ",
+        )}.`,
       );
     }
 
@@ -44,31 +54,35 @@ export class ExportCommand {
 
     let exportContent: string = null;
     try {
+      if (format === "encrypted_json") {
+        password = await this.promptPassword(password);
+      }
+
       exportContent =
-        format === "encrypted_json"
-          ? await this.getProtectedExport(options.password, options.organizationid)
-          : await this.getUnprotectedExport(format, options.organizationid);
+        options.organizationid == null
+          ? await this.exportService.getExport(format, password)
+          : await this.exportService.getOrganizationExport(
+              options.organizationid,
+              format,
+              password,
+            );
+
+      const eventType = options.organizationid
+        ? EventType.Organization_ClientExportedVault
+        : EventType.User_ClientExportedVault;
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.eventCollectionService.collect(eventType, null, true, options.organizationid);
     } catch (e) {
       return Response.error(e);
     }
     return await this.saveFile(exportContent, options, format);
   }
 
-  private async getProtectedExport(passwordOption: string | boolean, organizationId?: string) {
-    const password = await this.promptPassword(passwordOption);
-    return password == null
-      ? await this.exportService.getExport("encrypted_json", organizationId)
-      : await this.exportService.getPasswordProtectedExport(password, organizationId);
-  }
-
-  private async getUnprotectedExport(format: ExportFormat, organizationId?: string) {
-    return this.exportService.getExport(format, organizationId);
-  }
-
   private async saveFile(
     exportContent: string,
-    options: program.OptionValues,
-    format: ExportFormat
+    options: OptionValues,
+    format: ExportFormat,
   ): Promise<Response> {
     try {
       const fileName = this.getFileName(format, options.organizationid != null ? "org" : null);

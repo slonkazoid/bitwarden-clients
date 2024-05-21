@@ -1,6 +1,8 @@
 import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
@@ -41,7 +43,8 @@ export class AttachmentsComponent implements OnInit {
     protected logService: LogService,
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
-    protected dialogService: DialogService
+    protected dialogService: DialogService,
+    protected billingAccountProfileStateService: BillingAccountProfileStateService,
   ) {}
 
   async ngOnInit() {
@@ -55,7 +58,7 @@ export class AttachmentsComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("selectFile")
+        this.i18nService.t("selectFile"),
       );
       return;
     }
@@ -65,7 +68,7 @@ export class AttachmentsComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("maxFileSize")
+        this.i18nService.t("maxFileSize"),
       );
       return;
     }
@@ -74,7 +77,7 @@ export class AttachmentsComponent implements OnInit {
       this.formPromise = this.saveCipherAttachment(files[0]);
       this.cipherDomain = await this.formPromise;
       this.cipher = await this.cipherDomain.decrypt(
-        await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain)
+        await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain),
       );
       this.platformUtilsService.showToast("success", null, this.i18nService.t("attachmentSaved"));
       this.onUploadedAttachment.emit();
@@ -130,7 +133,7 @@ export class AttachmentsComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("premiumRequired"),
-        this.i18nService.t("premiumRequiredDesc")
+        this.i18nService.t("premiumRequiredDesc"),
       );
       return;
     }
@@ -140,7 +143,7 @@ export class AttachmentsComponent implements OnInit {
       const attachmentDownloadResponse = await this.apiService.getAttachmentData(
         this.cipher.id,
         attachment.id,
-        this.emergencyAccessId
+        this.emergencyAccessId,
       );
       url = attachmentDownloadResponse.url;
     } catch (e) {
@@ -182,10 +185,12 @@ export class AttachmentsComponent implements OnInit {
   protected async init() {
     this.cipherDomain = await this.loadCipher();
     this.cipher = await this.cipherDomain.decrypt(
-      await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain)
+      await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain),
     );
 
-    const canAccessPremium = await this.stateService.getCanAccessPremium();
+    const canAccessPremium = await firstValueFrom(
+      this.billingAccountProfileStateService.hasPremiumFromAnySource$,
+    );
     this.canAccessAttachments = canAccessPremium || this.cipher.organizationId != null;
 
     if (!this.canAccessAttachments) {
@@ -197,7 +202,9 @@ export class AttachmentsComponent implements OnInit {
       });
 
       if (confirmed) {
-        this.platformUtilsService.launchUri("https://vault.bitwarden.com/#/?premium=purchase");
+        this.platformUtilsService.launchUri(
+          "https://vault.bitwarden.com/#/settings/subscription/premium",
+        );
       }
     }
   }
@@ -231,10 +238,10 @@ export class AttachmentsComponent implements OnInit {
             this.cipherDomain,
             attachment.fileName,
             decBuf,
-            admin
+            admin,
           );
           this.cipher = await this.cipherDomain.decrypt(
-            await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain)
+            await this.cipherService.getKeyForCipherKeyDecryption(this.cipherDomain),
           );
 
           // 3. Delete old
@@ -251,7 +258,7 @@ export class AttachmentsComponent implements OnInit {
           this.platformUtilsService.showToast(
             "success",
             null,
-            this.i18nService.t("attachmentSaved")
+            this.i18nService.t("attachmentSaved"),
           );
           this.onReuploadedAttachment.emit();
         } catch (e) {

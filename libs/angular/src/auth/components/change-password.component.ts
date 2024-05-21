@@ -1,10 +1,12 @@
 import { Directive, OnDestroy, OnInit } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, firstValueFrom, map, takeUntil } from "rxjs";
 
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
-import { KdfType } from "@bitwarden/common/enums";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -12,11 +14,11 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { MasterKey, UserKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { UserKey, MasterKey } from "@bitwarden/common/types/key";
 import { DialogService } from "@bitwarden/components";
 
-import { PasswordColorText } from "../../shared/components/password-strength/password-strength.component";
+import { PasswordColorText } from "../../tools/password-strength/password-strength.component";
 
 @Directive()
 export class ChangePasswordComponent implements OnInit, OnDestroy {
@@ -31,7 +33,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   minimumLength = Utils.minimumPasswordLength;
 
   protected email: string;
-  protected kdf: KdfType;
   protected kdfConfig: KdfConfig;
 
   protected destroy$ = new Subject<void>();
@@ -44,17 +45,22 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     protected stateService: StateService,
-    protected dialogService: DialogService
+    protected dialogService: DialogService,
+    protected kdfConfigService: KdfConfigService,
+    protected masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    protected accountService: AccountService,
   ) {}
 
   async ngOnInit() {
-    this.email = await this.stateService.getEmail();
+    this.email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
     this.policyService
       .masterPasswordPolicyOptions$()
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (enforcedPasswordPolicyOptions) =>
-          (this.enforcedPolicyOptions ??= enforcedPasswordPolicyOptions)
+          (this.enforcedPolicyOptions ??= enforcedPasswordPolicyOptions),
       );
   }
 
@@ -72,24 +78,22 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const email = await this.stateService.getEmail();
-    if (this.kdf == null) {
-      this.kdf = await this.stateService.getKdfType();
-    }
+    const email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
     if (this.kdfConfig == null) {
-      this.kdfConfig = await this.stateService.getKdfConfig();
+      this.kdfConfig = await this.kdfConfigService.getKdfConfig();
     }
 
     // Create new master key
     const newMasterKey = await this.cryptoService.makeMasterKey(
       this.masterPassword,
       email.trim().toLowerCase(),
-      this.kdf,
-      this.kdfConfig
+      this.kdfConfig,
     );
     const newMasterKeyHash = await this.cryptoService.hashMasterKey(
       this.masterPassword,
-      newMasterKey
+      newMasterKey,
     );
 
     let newProtectedUserKey: [UserKey, EncString] = null;
@@ -112,7 +116,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   async performSubmitActions(
     newMasterKeyHash: string,
     newMasterKey: MasterKey,
-    newUserKey: [UserKey, EncString]
+    newUserKey: [UserKey, EncString],
   ) {
     // Override in sub-class
   }
@@ -122,7 +126,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPasswordRequired")
+        this.i18nService.t("masterPasswordRequired"),
       );
       return false;
     }
@@ -130,7 +134,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPasswordMinimumlength", this.minimumLength)
+        this.i18nService.t("masterPasswordMinimumlength", this.minimumLength),
       );
       return false;
     }
@@ -138,7 +142,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassDoesntMatch")
+        this.i18nService.t("masterPassDoesntMatch"),
       );
       return false;
     }
@@ -150,13 +154,13 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       !this.policyService.evaluateMasterPassword(
         strengthResult.score,
         this.masterPassword,
-        this.enforcedPolicyOptions
+        this.enforcedPolicyOptions,
       )
     ) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPasswordPolicyRequirementsNotMet")
+        this.i18nService.t("masterPasswordPolicyRequirementsNotMet"),
       );
       return false;
     }

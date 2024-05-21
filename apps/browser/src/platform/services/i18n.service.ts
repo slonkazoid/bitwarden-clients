@@ -1,12 +1,18 @@
 import { I18nService as BaseI18nService } from "@bitwarden/common/platform/services/i18n.service";
+import { GlobalStateProvider } from "@bitwarden/common/platform/state";
 
 export default class I18nService extends BaseI18nService {
-  constructor(systemLanguage: string) {
-    super(systemLanguage, null, async (formattedLocale: string) => {
-      // Deprecated
-      const file = await fetch(this.localesDirectory + formattedLocale + "/messages.json");
-      return await file.json();
-    });
+  constructor(systemLanguage: string, globalStateProvider: GlobalStateProvider) {
+    super(
+      systemLanguage,
+      null,
+      async (formattedLocale: string) => {
+        // Deprecated
+        const file = await fetch(this.localesDirectory + formattedLocale + "/messages.json");
+        return await file.json();
+      },
+      globalStateProvider,
+    );
 
     // Please leave 'en' where it is, as it's our fallback language in case no translation can be found
     this.supportedTranslationLocales = [
@@ -19,6 +25,7 @@ export default class I18nService extends BaseI18nService {
       "bs",
       "ca",
       "cs",
+      "cy",
       "da",
       "de",
       "el",
@@ -31,6 +38,7 @@ export default class I18nService extends BaseI18nService {
       "fi",
       "fil",
       "fr",
+      "gl",
       "he",
       "hi",
       "hr",
@@ -45,9 +53,13 @@ export default class I18nService extends BaseI18nService {
       "lt",
       "lv",
       "ml",
+      "mr",
+      "my",
       "nb",
+      "ne",
       "nl",
       "nn",
+      "or",
       "pl",
       "pt-BR",
       "pt-PT",
@@ -58,6 +70,7 @@ export default class I18nService extends BaseI18nService {
       "sl",
       "sr",
       "sv",
+      "te",
       "th",
       "tr",
       "uk",

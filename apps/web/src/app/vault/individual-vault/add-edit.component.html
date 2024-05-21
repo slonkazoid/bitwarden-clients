@@ -191,6 +191,40 @@
               </button>
             </div>
           </div>
+          <ng-container *ngIf="cipher.login.hasFido2Credentials">
+            <div class="tw-flex tw-flex-row">
+              <div class="tw-mb-4 tw-w-1/2">
+                <label for="loginFido2credential">{{ "typePasskey" | i18n }}</label>
+                <div
+                  class="tw-flex tw-flex-row"
+                  tabindex="0"
+                  attr.aria-label="{{ 'typePasskey' | i18n }} {{
+                    fido2CredentialCreationDateValue
+                  }}"
+                >
+                  <input
+                    id="loginFido2credential"
+                    class="form-control"
+                    type="text"
+                    name="Login.Fido2credential"
+                    [value]="fido2CredentialCreationDateValue"
+                    appInputVerbatim
+                    disabled
+                    readonly
+                  />
+                  <button
+                    type="button"
+                    class="tw-items-center tw-border-none tw-bg-transparent tw-text-danger tw-ml-3"
+                    appA11yTitle="{{ 'removePasskey' | i18n }}"
+                    (click)="removePasskey()"
+                    *ngIf="!cipher.isDeleted && !viewOnly"
+                  >
+                    <i class="bwi bwi-lg bwi-minus-circle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
           <div class="tw-flex tw-flex-row">
             <div class="tw-mb-4 tw-w-1/2">
               <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
@@ -248,7 +282,7 @@
                   href="#"
                   appStopClick
                   bitBadge
-                  badgeType="primary"
+                  variant="primary"
                   class="tw-ml-4"
                   (click)="upgradeOrganization()"
                   *ngIf="
@@ -288,7 +322,7 @@
                 >
                 <button
                   type="button"
-                  class="tw-items-center tw-border-none tw-bg-transparent tw-text-primary-500"
+                  class="tw-items-center tw-border-none tw-bg-transparent tw-text-primary-600"
                   appA11yTitle="{{ 'copyVerificationCode' | i18n }}"
                   (click)="copy(totpCode, 'verificationCodeTotp', 'TOTP')"
                 >
@@ -302,10 +336,10 @@
               role="group"
               class="row"
               *ngFor="let u of cipher.login.uris; let i = index; trackBy: trackByFunction"
-              attr.aria-label="{{ 'uriPosition' | i18n : i + 1 }}"
+              attr.aria-label="{{ 'uriPosition' | i18n: i + 1 }}"
             >
               <div class="col-7 form-group">
-                <label for="loginUri{{ i }}">{{ "uriPosition" | i18n : i + 1 }}</label>
+                <label for="loginUri{{ i }}">{{ "uriPosition" | i18n: i + 1 }}</label>
                 <div class="input-group">
                   <input
                     class="form-control"
@@ -347,7 +381,7 @@
                     class="ml-auto"
                     href="https://bitwarden.com/help/uri-match-detection/"
                     target="_blank"
-                    rel="noopener"
+                    rel="noreferrer"
                     appA11yTitle="{{ 'learnMore' | i18n }}"
                   >
                     <i class="bwi bwi-question-circle" aria-hidden="true"></i>
@@ -874,15 +908,15 @@
           <div class="small text-muted mt-4">
             <div>
               <b class="font-weight-semibold">{{ "dateUpdated" | i18n }}:</b>
-              {{ cipher.revisionDate | date : "medium" }}
+              {{ cipher.revisionDate | date: "medium" }}
             </div>
             <div *ngIf="cipher.creationDate">
               <b class="font-weight-semibold">{{ "dateCreated" | i18n }}:</b>
-              {{ cipher.creationDate | date : "medium" }}
+              {{ cipher.creationDate | date: "medium" }}
             </div>
             <div *ngIf="showRevisionDate">
               <b class="font-weight-semibold">{{ "datePasswordUpdated" | i18n }}:</b>
-              {{ cipher.passwordRevisionDisplayDate | date : "medium" }}
+              {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
             </div>
             <div *ngIf="hasPasswordHistory">
               <b class="font-weight-semibold">{{ "passwordHistory" | i18n }}:</b>
@@ -892,7 +926,7 @@
             </div>
             <div class="ml-3" *ngIf="viewingPasswordHistory">
               <div *ngFor="let ph of cipher.passwordHistory">
-                {{ ph.lastUsedDate | date : "short" }} -
+                {{ ph.lastUsedDate | date: "short" }} -
                 <bit-color-password [password]="ph.password"></bit-color-password>
               </div>
             </div>
@@ -915,7 +949,7 @@
             }}</label>
             <a
               target="_blank"
-              rel="noopener"
+              rel="noreferrer"
               appA11yTitle="{{ 'learnMore' | i18n }}"
               href="https://bitwarden.com/help/managing-items/#protect-individual-items"
             >

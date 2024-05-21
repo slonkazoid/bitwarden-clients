@@ -1,12 +1,13 @@
 import { ApiService } from "../../abstractions/api.service";
-import { DeviceResponse } from "../../abstractions/devices/responses/device.response";
 import { ListResponse } from "../../models/response/list.response";
 import { Utils } from "../../platform/misc/utils";
-import { TrustedDeviceKeysRequest } from "../../services/devices/requests/trusted-device-keys.request";
+import { DeviceResponse } from "../abstractions/devices/responses/device.response";
 import { DevicesApiServiceAbstraction } from "../abstractions/devices-api.service.abstraction";
 import { SecretVerificationRequest } from "../models/request/secret-verification.request";
 import { UpdateDevicesTrustRequest } from "../models/request/update-devices-trust.request";
 import { ProtectedDeviceResponse } from "../models/response/protected-device.response";
+
+import { TrustedDeviceKeysRequest } from "./devices/requests/trusted-device-keys.request";
 
 export class DevicesApiServiceImplementation implements DevicesApiServiceAbstraction {
   constructor(private apiService: ApiService) {}
@@ -22,7 +23,7 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
       (headers) => {
         headers.set("X-Device-Identifier", deviceIdentifier);
         headers.set("X-Request-Email", Utils.fromUtf8ToUrlB64(email));
-      }
+      },
     );
     return r as boolean;
   }
@@ -37,7 +38,7 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
       `/devices/identifier/${deviceIdentifier}`,
       null,
       true,
-      true
+      true,
     );
     return new DeviceResponse(r);
   }
@@ -51,12 +52,12 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
     deviceIdentifier: string,
     devicePublicKeyEncryptedUserKey: string,
     userKeyEncryptedDevicePublicKey: string,
-    deviceKeyEncryptedDevicePrivateKey: string
+    deviceKeyEncryptedDevicePrivateKey: string,
   ): Promise<DeviceResponse> {
     const request = new TrustedDeviceKeysRequest(
       devicePublicKeyEncryptedUserKey,
       userKeyEncryptedDevicePublicKey,
-      deviceKeyEncryptedDevicePrivateKey
+      deviceKeyEncryptedDevicePrivateKey,
     );
 
     const result = await this.apiService.send(
@@ -64,32 +65,39 @@ export class DevicesApiServiceImplementation implements DevicesApiServiceAbstrac
       `/devices/${deviceIdentifier}/keys`,
       request,
       true,
-      true
+      true,
     );
 
     return new DeviceResponse(result);
   }
 
-  async updateTrust(updateDevicesTrustRequestModel: UpdateDevicesTrustRequest): Promise<void> {
+  async updateTrust(
+    updateDevicesTrustRequestModel: UpdateDevicesTrustRequest,
+    deviceIdentifier: string,
+  ): Promise<void> {
     await this.apiService.send(
       "POST",
       "/devices/update-trust",
       updateDevicesTrustRequestModel,
       true,
-      false
+      false,
+      null,
+      (headers) => {
+        headers.set("Device-Identifier", deviceIdentifier);
+      },
     );
   }
 
   async getDeviceKeys(
     deviceIdentifier: string,
-    secretVerificationRequest: SecretVerificationRequest
+    secretVerificationRequest: SecretVerificationRequest,
   ): Promise<ProtectedDeviceResponse> {
     const result = await this.apiService.send(
       "POST",
       `/devices/${deviceIdentifier}/retrieve-keys`,
       secretVerificationRequest,
       true,
-      true
+      true,
     );
     return new ProtectedDeviceResponse(result);
   }

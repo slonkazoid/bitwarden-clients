@@ -6,12 +6,23 @@ import { SharedModule } from "../../../app/shared";
 import { CardComponent } from "../card.component";
 
 import { LoginDecryptionOptionsComponent } from "./login-decryption-options/login-decryption-options.component";
-import { LoginWithDeviceComponent } from "./login-with-device.component";
+import { LoginViaAuthRequestComponent } from "./login-via-auth-request.component";
+import { LoginViaWebAuthnComponent } from "./login-via-webauthn/login-via-webauthn.component";
 import { LoginComponent } from "./login.component";
 
 @NgModule({
   imports: [SharedModule, CheckboxModule, CardComponent],
-  declarations: [LoginComponent, LoginWithDeviceComponent, LoginDecryptionOptionsComponent],
-  exports: [LoginComponent, LoginWithDeviceComponent, LoginDecryptionOptionsComponent],
+  declarations: [
+    LoginComponent,
+    LoginViaAuthRequestComponent,
+    LoginDecryptionOptionsComponent,
+    LoginViaWebAuthnComponent,
+  ],
+  exports: [
+    LoginComponent,
+    LoginViaAuthRequestComponent,
+    LoginDecryptionOptionsComponent,
+    LoginViaWebAuthnComponent,
+  ],
 })
 export class LoginModule {}

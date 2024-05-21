@@ -30,6 +30,7 @@ export class SsoConfigApi extends BaseResponse {
       api.acrValues = view.openId.acrValues;
       api.expectedReturnAcrValue = view.openId.expectedReturnAcrValue;
     } else if (api.configType === SsoType.Saml2) {
+      api.spUniqueEntityId = view.saml.spUniqueEntityId;
       api.spNameIdFormat = view.saml.spNameIdFormat;
       api.spOutboundSigningAlgorithm = view.saml.spOutboundSigningAlgorithm;
       api.spSigningBehavior = view.saml.spSigningBehavior;
@@ -72,6 +73,7 @@ export class SsoConfigApi extends BaseResponse {
   expectedReturnAcrValue: string;
 
   // SAML
+  spUniqueEntityId: boolean;
   spNameIdFormat: Saml2NameIdFormat;
   spOutboundSigningAlgorithm: string;
   spSigningBehavior: Saml2SigningBehavior;
@@ -113,6 +115,7 @@ export class SsoConfigApi extends BaseResponse {
     this.acrValues = this.getResponseProperty("AcrValues");
     this.expectedReturnAcrValue = this.getResponseProperty("ExpectedReturnAcrValue");
 
+    this.spUniqueEntityId = this.getResponseProperty("SpUniqueEntityId");
     this.spNameIdFormat = this.getResponseProperty("SpNameIdFormat");
     this.spOutboundSigningAlgorithm = this.getResponseProperty("SpOutboundSigningAlgorithm");
     this.spSigningBehavior = this.getResponseProperty("SpSigningBehavior");
@@ -127,10 +130,10 @@ export class SsoConfigApi extends BaseResponse {
     this.idpX509PublicCert = this.getResponseProperty("IdpX509PublicCert");
     this.idpOutboundSigningAlgorithm = this.getResponseProperty("IdpOutboundSigningAlgorithm");
     this.idpAllowUnsolicitedAuthnResponse = this.getResponseProperty(
-      "IdpAllowUnsolicitedAuthnResponse"
+      "IdpAllowUnsolicitedAuthnResponse",
     );
     this.idpDisableOutboundLogoutRequests = this.getResponseProperty(
-      "IdpDisableOutboundLogoutRequests"
+      "IdpDisableOutboundLogoutRequests",
     );
     this.idpWantAuthnRequestsSigned = this.getResponseProperty("IdpWantAuthnRequestsSigned");
   }

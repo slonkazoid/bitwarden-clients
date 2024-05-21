@@ -2,20 +2,22 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards";
-import { Provider } from "@bitwarden/common/models/domain/provider";
+import { Provider } from "@bitwarden/common/admin-console/models/domain/provider";
 import { ProvidersComponent } from "@bitwarden/web-vault/app/admin-console/providers/providers.component";
 import { FrontendLayoutComponent } from "@bitwarden/web-vault/app/layouts/frontend-layout.component";
+import { UserLayoutComponent } from "@bitwarden/web-vault/app/layouts/user-layout.component";
+
+import { ProviderSubscriptionComponent, hasConsolidatedBilling } from "../../billing/providers";
+import { ManageClientOrganizationsComponent } from "../../billing/providers/clients";
 
 import { ClientsComponent } from "./clients/clients.component";
 import { CreateOrganizationComponent } from "./clients/create-organization.component";
 import { ProviderPermissionsGuard } from "./guards/provider-permissions.guard";
 import { AcceptProviderComponent } from "./manage/accept-provider.component";
 import { EventsComponent } from "./manage/events.component";
-import { ManageComponent } from "./manage/manage.component";
 import { PeopleComponent } from "./manage/people.component";
 import { ProvidersLayoutComponent } from "./providers-layout.component";
 import { AccountComponent } from "./settings/account.component";
-import { SettingsComponent } from "./settings/settings.component";
 import { SetupProviderComponent } from "./setup/setup-provider.component";
 import { SetupComponent } from "./setup/setup.component";
 
@@ -23,7 +25,15 @@ const routes: Routes = [
   {
     path: "",
     canActivate: [AuthGuard],
-    component: ProvidersComponent,
+    component: UserLayoutComponent,
+    children: [
+      {
+        path: "",
+        canActivate: [AuthGuard],
+        component: ProvidersComponent,
+        data: { titleId: "providers" },
+      },
+    ],
   },
   {
     path: "",
@@ -58,8 +68,13 @@ const routes: Routes = [
           { path: "clients/create", component: CreateOrganizationComponent },
           { path: "clients", component: ClientsComponent, data: { titleId: "clients" } },
           {
+            path: "manage-client-organizations",
+            canActivate: [hasConsolidatedBilling],
+            component: ManageClientOrganizationsComponent,
+            data: { titleId: "clients" },
+          },
+          {
             path: "manage",
-            component: ManageComponent,
             children: [
               {
                 path: "",
@@ -87,8 +102,26 @@ const routes: Routes = [
             ],
           },
           {
+            path: "billing",
+            canActivate: [hasConsolidatedBilling],
+            data: { providerPermissions: (provider: Provider) => provider.isProviderAdmin },
+            children: [
+              {
+                path: "",
+                pathMatch: "full",
+                redirectTo: "subscription",
+              },
+              {
+                path: "subscription",
+                component: ProviderSubscriptionComponent,
+                data: {
+                  titleId: "subscription",
+                },
+              },
+            ],
+          },
+          {
             path: "settings",
-            component: SettingsComponent,
             children: [
               {
                 path: "",

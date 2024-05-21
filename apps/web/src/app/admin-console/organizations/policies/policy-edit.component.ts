@@ -1,7 +1,6 @@
 import {
   ChangeDetectorRef,
   Component,
-  ComponentFactoryResolver,
   EventEmitter,
   Input,
   Output,
@@ -45,17 +44,15 @@ export class PolicyEditComponent {
     private policyApiService: PolicyApiServiceAbstraction,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private cdr: ChangeDetectorRef,
-    private logService: LogService
+    private logService: LogService,
   ) {}
 
   async ngAfterViewInit() {
     await this.load();
     this.loading = false;
 
-    const factory = this.componentFactoryResolver.resolveComponentFactory(this.policy.component);
-    this.policyComponent = this.policyFormRef.createComponent(factory)
+    this.policyComponent = this.policyFormRef.createComponent(this.policy.component)
       .instance as BasePolicyComponent;
     this.policyComponent.policy = this.policy;
     this.policyComponent.policyResponse = this.policyResponse;
@@ -67,7 +64,7 @@ export class PolicyEditComponent {
     try {
       this.policyResponse = await this.policyApiService.getPolicy(
         this.organizationId,
-        this.policy.type
+        this.policy.type,
       );
     } catch (e) {
       if (e.statusCode === 404) {
@@ -91,13 +88,13 @@ export class PolicyEditComponent {
       this.formPromise = this.policyApiService.putPolicy(
         this.organizationId,
         this.policy.type,
-        request
+        request,
       );
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("editedPolicyId", this.i18nService.t(this.policy.name))
+        this.i18nService.t("editedPolicyId", this.i18nService.t(this.policy.name)),
       );
       this.onSavedPolicy.emit();
     } catch (e) {

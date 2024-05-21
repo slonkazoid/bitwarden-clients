@@ -23,7 +23,7 @@ const orgFactory = (props: Partial<Organization> = {}) =>
       enabled: true,
       type: OrganizationUserType.Admin,
     },
-    props
+    props,
   );
 
 describe("Organization Permissions Guard", () => {
@@ -52,7 +52,7 @@ describe("Organization Permissions Guard", () => {
       organizationService,
       mock<PlatformUtilsService>(),
       mock<I18nService>(),
-      mock<SyncService>()
+      mock<SyncService>(),
     );
   });
 
@@ -66,7 +66,7 @@ describe("Organization Permissions Guard", () => {
 
   it("permits navigation if no permissions are specified", async () => {
     const org = orgFactory();
-    organizationService.get.calledWith(org.id).mockReturnValue(org);
+    organizationService.get.calledWith(org.id).mockResolvedValue(org);
 
     const actual = await organizationPermissionsGuard.canActivate(route, state);
 
@@ -81,7 +81,7 @@ describe("Organization Permissions Guard", () => {
     };
 
     const org = orgFactory();
-    organizationService.get.calledWith(org.id).mockReturnValue(org);
+    organizationService.get.calledWith(org.id).mockResolvedValue(org);
 
     const actual = await organizationPermissionsGuard.canActivate(route, state);
 
@@ -104,7 +104,7 @@ describe("Organization Permissions Guard", () => {
       });
 
       const org = orgFactory();
-      organizationService.get.calledWith(org.id).mockReturnValue(org);
+      organizationService.get.calledWith(org.id).mockResolvedValue(org);
 
       const actual = await organizationPermissionsGuard.canActivate(route, state);
 
@@ -124,7 +124,7 @@ describe("Organization Permissions Guard", () => {
         }),
       });
       const org = orgFactory();
-      organizationService.get.calledWith(org.id).mockReturnValue(org);
+      organizationService.get.calledWith(org.id).mockResolvedValue(org);
 
       const actual = await organizationPermissionsGuard.canActivate(route, state);
 
@@ -141,7 +141,7 @@ describe("Organization Permissions Guard", () => {
         type: OrganizationUserType.Admin,
         enabled: false,
       });
-      organizationService.get.calledWith(org.id).mockReturnValue(org);
+      organizationService.get.calledWith(org.id).mockResolvedValue(org);
 
       const actual = await organizationPermissionsGuard.canActivate(route, state);
 
@@ -153,7 +153,7 @@ describe("Organization Permissions Guard", () => {
         type: OrganizationUserType.Owner,
         enabled: false,
       });
-      organizationService.get.calledWith(org.id).mockReturnValue(org);
+      organizationService.get.calledWith(org.id).mockResolvedValue(org);
 
       const actual = await organizationPermissionsGuard.canActivate(route, state);
 

@@ -1,5 +1,9 @@
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { DefaultPassphraseGenerationOptions } from "@bitwarden/common/tools/generator/passphrase";
+import {
+  DefaultPasswordGenerationOptions,
+  PasswordGenerationServiceAbstraction,
+} from "@bitwarden/common/tools/generator/password";
 import { PasswordGeneratorOptions } from "@bitwarden/common/tools/generator/password/password-generator-options";
 
 import { Response } from "../models/response";
@@ -9,7 +13,7 @@ import { CliUtils } from "../utils";
 export class GenerateCommand {
   constructor(
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
-    private stateService: StateService
+    private stateService: StateService,
   ) {}
 
   async run(cmdOptions: Record<string, any>): Promise<Response> {
@@ -63,12 +67,27 @@ class Options {
     this.capitalize = CliUtils.convertBooleanOption(passedOptions?.capitalize);
     this.includeNumber = CliUtils.convertBooleanOption(passedOptions?.includeNumber);
     this.ambiguous = CliUtils.convertBooleanOption(passedOptions?.ambiguous);
-    this.length = CliUtils.convertNumberOption(passedOptions?.length, 14);
+    this.length = CliUtils.convertNumberOption(
+      passedOptions?.length,
+      DefaultPasswordGenerationOptions.length,
+    );
     this.type = passedOptions?.passphrase ? "passphrase" : "password";
-    this.separator = CliUtils.convertStringOption(passedOptions?.separator, "-");
-    this.words = CliUtils.convertNumberOption(passedOptions?.words, 3);
-    this.minNumber = CliUtils.convertNumberOption(passedOptions?.minNumber, 1);
-    this.minSpecial = CliUtils.convertNumberOption(passedOptions?.minSpecial, 1);
+    this.separator = CliUtils.convertStringOption(
+      passedOptions?.separator,
+      DefaultPassphraseGenerationOptions.wordSeparator,
+    );
+    this.words = CliUtils.convertNumberOption(
+      passedOptions?.words,
+      DefaultPassphraseGenerationOptions.numWords,
+    );
+    this.minNumber = CliUtils.convertNumberOption(
+      passedOptions?.minNumber,
+      DefaultPasswordGenerationOptions.minNumber,
+    );
+    this.minSpecial = CliUtils.convertNumberOption(
+      passedOptions?.minSpecial,
+      DefaultPasswordGenerationOptions.minSpecial,
+    );
 
     if (!this.uppercase && !this.lowercase && !this.special && !this.number) {
       this.lowercase = true;
@@ -83,6 +102,8 @@ class Options {
     }
     if (this.separator === "space") {
       this.separator = " ";
+    } else if (this.separator === "empty") {
+      this.separator = "";
     } else if (this.separator != null && this.separator.length > 1) {
       this.separator = this.separator[0];
     }

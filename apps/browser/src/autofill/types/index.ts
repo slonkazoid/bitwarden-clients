@@ -1,6 +1,7 @@
 import { Region } from "@bitwarden/common/platform/abstractions/environment.service";
 import { VaultTimeoutAction } from "@bitwarden/common/src/enums/vault-timeout-action.enum";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { VaultTimeout } from "@bitwarden/common/types/vault-timeout.type";
+import { CipherType } from "@bitwarden/common/vault/enums";
 
 export type UserSettings = {
   avatarColor: string | null;
@@ -31,13 +32,7 @@ export type UserSettings = {
     utcDate: string;
     version: string;
   };
-  settings: {
-    equivalentDomains: string[][];
-  };
-  neverDomains?: { [key: string]: any };
-  disableAddLoginNotification?: boolean;
-  disableChangedPasswordNotification?: boolean;
-  vaultTimeout: number;
+  vaultTimeout: VaultTimeout;
   vaultTimeoutAction: VaultTimeoutAction;
 };
 

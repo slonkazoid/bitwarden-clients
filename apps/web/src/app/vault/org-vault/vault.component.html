@@ -1,60 +1,80 @@
-<div class="container page-content">
-  <div class="row">
-    <div class="col-3">
-      <div class="groupings">
-        <div class="content">
-          <div class="inner-content">
-            <app-organization-vault-filter
-              #vaultFilter
-              [organization]="organization"
-              [activeFilter]="activeFilter"
-              [searchText]="currentSearchText$ | async"
-              (searchTextChanged)="filterSearchText($event)"
-            ></app-organization-vault-filter>
-          </div>
+<app-org-vault-header
+  [filter]="filter"
+  [loading]="refreshing"
+  [organization]="organization"
+  [collection]="selectedCollection"
+  [searchText]="currentSearchText$ | async"
+  (onAddCipher)="addCipher()"
+  (onAddCollection)="addCollection()"
+  (onEditCollection)="editCollection(selectedCollection.node, $event.tab, $event.readonly)"
+  (onDeleteCollection)="deleteCollection(selectedCollection.node)"
+  (searchTextChanged)="filterSearchText($event)"
+></app-org-vault-header>
+
+<div class="row">
+  <div class="col-3" *ngIf="!hideVaultFilters">
+    <div class="groupings">
+      <div class="content">
+        <div class="inner-content">
+          <app-organization-vault-filter
+            [organization]="organization"
+            [activeFilter]="activeFilter"
+            [searchText]="currentSearchText$ | async"
+            (searchTextChanged)="filterSearchText($event)"
+          ></app-organization-vault-filter>
         </div>
       </div>
     </div>
-    <div class="col-9">
-      <app-org-vault-header
-        [filter]="filter"
-        [loading]="refreshing"
-        [organization]="organization"
-        [collection]="selectedCollection"
-        (onAddCipher)="addCipher()"
-        (onAddCollection)="addCollection()"
-        (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
-        (onDeleteCollection)="deleteCollection(selectedCollection.node)"
-      ></app-org-vault-header>
-      <app-callout
-        type="warning"
-        *ngIf="activeFilter.isDeleted"
-        icon="bwi bwi-exclamation-triangle"
-      >
-        {{ trashCleanupWarning }}
-      </app-callout>
-      <app-vault-items
-        [ciphers]="ciphers"
-        [collections]="collections"
-        [allCollections]="allCollections"
-        [allOrganizations]="organization ? [organization] : []"
-        [allGroups]="allGroups"
-        [disabled]="loading"
-        [showOwner]="false"
-        [showCollections]="filter.type !== undefined"
-        [showGroups]="
-          organization?.useGroups &&
-          ((filter.type === undefined && filter.collectionId === undefined) ||
-            filter.collectionId !== undefined)
-        "
-        [showPremiumFeatures]="organization?.useTotp"
-        [showBulkMove]="false"
-        [showBulkTrashOptions]="filter.type === 'trash'"
-        [useEvents]="organization?.useEvents"
-        [cloneableOrganizationCiphers]="true"
-        (onEvent)="onVaultItemsEvent($event)"
-      >
-      </app-vault-items>
+  </div>
+  <div [class]="hideVaultFilters ? 'col-12' : 'col-9'">
+    <bit-toggle-group
+      *ngIf="showAddAccessToggle && activeFilter.selectedCollectionNode"
+      [selected]="addAccessStatus$ | async"
+      (selectedChange)="addAccessToggle($event)"
+      [attr.aria-label]="'addAccessFilter' | i18n"
+    >
+      <bit-toggle [value]="0">
+        {{ "all" | i18n }}
+      </bit-toggle>
+
+      <bit-toggle [value]="1">
+        {{ "addAccess" | i18n }}
+      </bit-toggle>
+    </bit-toggle-group>
+    <app-callout type="warning" *ngIf="activeFilter.isDeleted" icon="bwi bwi-exclamation-triangle">
+      {{ trashCleanupWarning }}
+    </app-callout>
+    <app-vault-items
+      [ciphers]="ciphers"
+      [collections]="collections"
+      [allCollections]="allCollections"
+      [allOrganizations]="organization ? [organization] : []"
+      [allGroups]="allGroups"
+      [disabled]="loading"
+      [showOwner]="false"
+      [showPermissionsColumn]="true"
+      [showCollections]="filter.type !== undefined"
+      [showGroups]="
+        organization?.useGroups &&
+        ((filter.type === undefined && filter.collectionId === undefined) ||
+          filter.collectionId !== undefined)
+      "
+      [showPremiumFeatures]="organization?.useTotp"
+      [showBulkMove]="false"
+      [showBulkTrashOptions]="filter.type === 'trash'"
+      [useEvents]="organization?.useEvents"
+      [showAdminActions]="true"
+      (onEvent)="onVaultItemsEvent($event)"
+      [showBulkEditCollectionAccess]="organization?.flexibleCollections"
+      [showBulkAddToCollections]="organization?.flexibleCollections"
+      [viewingOrgVault]="true"
+      [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled"
+      [addAccessStatus]="addAccessStatus$ | async"
+      [addAccessToggle]="showAddAccessToggle"
+      [restrictProviderAccess]="restrictProviderAccessEnabled"
+    >
+    </app-vault-items>
+    <ng-container *ngIf="!flexibleCollectionsV1Enabled">
       <div
         class="tw-mt-6 tw-flex tw-h-full tw-flex-col tw-items-center tw-justify-start"
         *ngIf="showMissingCollectionPermissionMessage"
@@ -78,21 +98,52 @@
           <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
           {{ "newItem" | i18n }}
         </button>
-      </div>
-      <div
-        class="tw-mt-6 tw-flex tw-h-full tw-flex-col tw-items-center tw-justify-start"
-        *ngIf="performingInitialLoad"
+      </div></ng-container
+    >
+    <ng-container *ngIf="flexibleCollectionsV1Enabled && !performingInitialLoad && isEmpty">
+      <bit-no-items *ngIf="!showCollectionAccessRestricted">
+        <span slot="title" class="tw-mt-4 tw-block">{{ "noItemsInList" | i18n }}</span>
+        <button
+          slot="button"
+          bitButton
+          (click)="addCipher()"
+          buttonType="primary"
+          type="button"
+          *ngIf="filter.type !== 'trash' && filter.collectionId !== Unassigned"
+        >
+          <i aria-hidden="true" class="bwi bwi-plus"></i> {{ "newItem" | i18n }}
+        </button>
+      </bit-no-items>
+      <collection-access-restricted
+        *ngIf="showCollectionAccessRestricted"
+        [canEditCollection]="
+          selectedCollection?.node?.canEdit(organization, flexibleCollectionsV1Enabled)
+        "
+        [canViewCollectionInfo]="
+          selectedCollection?.node?.canViewCollectionInfo(
+            organization,
+            flexibleCollectionsV1Enabled
+          )
+        "
+        (viewCollectionClicked)="
+          editCollection(selectedCollection.node, $event.tab, $event.readonly)
+        "
       >
-        <i
-          class="bwi bwi-spinner bwi-spin text-muted"
-          title="{{ 'loading' | i18n }}"
-          aria-hidden="true"
-        ></i>
-        <span class="sr-only">{{ "loading" | i18n }}</span>
-      </div>
+      </collection-access-restricted>
+    </ng-container>
+    <div
+      class="tw-mt-6 tw-flex tw-h-full tw-flex-col tw-items-center tw-justify-start"
+      *ngIf="performingInitialLoad"
+    >
+      <i
+        class="bwi bwi-spinner bwi-spin text-muted"
+        title="{{ 'loading' | i18n }}"
+        aria-hidden="true"
+      ></i>
+      <span class="sr-only">{{ "loading" | i18n }}</span>
     </div>
   </div>
-  <ng-template #attachments></ng-template>
-  <ng-template #cipherAddEdit></ng-template>
-  <ng-template #collectionsModal></ng-template>
 </div>
+<ng-template #attachments></ng-template>
+<ng-template #cipherAddEdit></ng-template>
+<ng-template #collectionsModal></ng-template>

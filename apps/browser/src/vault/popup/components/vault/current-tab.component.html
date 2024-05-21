@@ -1,4 +1,4 @@
-<header>
+<app-header>
   <h1 class="sr-only">{{ "currentTab" | i18n }}</h1>
   <div class="left">
     <app-pop-out *ngIf="!inSidebar"></app-pop-out>
@@ -11,7 +11,7 @@
       <i class="bwi bwi-refresh-tab bwi-lg bwi-fw" aria-hidden="true"></i>
     </button>
   </div>
-  <div class="search">
+  <div class="search center">
     <input
       type="{{ searchTypeSearch ? 'search' : 'text' }}"
       placeholder="{{ 'searchVault' | i18n }}"
@@ -29,25 +29,49 @@
       <i class="bwi bwi-plus bwi-lg bwi-fw" aria-hidden="true"></i>
     </button>
   </div>
-</header>
+</app-header>
 <main tabindex="-1">
   <div class="no-items" *ngIf="!loaded">
     <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
   </div>
   <ng-container *ngIf="loaded">
     <app-vault-select (onVaultSelectionChanged)="load()"></app-vault-select>
-    <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
-      <p>{{ autofillCalloutText }}</p>
+    <app-callout
+      *ngIf="
+        (unassignedItemsBannerEnabled$ | async) &&
+        (unassignedItemsBannerService.showBanner$ | async) &&
+        !(unassignedItemsBannerService.loading$ | async)
+      "
+      type="info"
+    >
+      <p>
+        {{ unassignedItemsBannerService.bannerText$ | async | i18n }}
+        {{ "unassignedItemsBannerCTAPartOne" | i18n }}
+        <a
+          [href]="unassignedItemsBannerService.adminConsoleUrl$ | async"
+          bitLink
+          linkType="contrast"
+          target="_blank"
+          rel="noreferrer"
+          >{{ "adminConsole" | i18n }}</a
+        >
+        {{ "unassignedItemsBannerCTAPartTwo" | i18n }}
+        <a
+          href="https://bitwarden.com/help/unassigned-vault-items-moved-to-admin-console"
+          bitLink
+          linkType="contrast"
+          target="_blank"
+          rel="noreferrer"
+          >{{ "learnMore" | i18n }}</a
+        >
+      </p>
       <button
         type="button"
         class="btn primary callout-half"
         appStopClick
-        (click)="dismissCallout()"
+        (click)="unassignedItemsBannerService.hideBanner()"
       >
         {{ "gotIt" | i18n }}
-      </button>
-      <button type="button" class="btn callout-half" appStopClick (click)="goToSettings()">
-        {{ "autofillSettings" | i18n }}
       </button>
     </app-callout>
     <div class="box list" *ngIf="loginCiphers">

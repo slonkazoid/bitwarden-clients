@@ -27,7 +27,7 @@ export class AboutMenu implements IMenubarMenu {
     i18nService: I18nService,
     version: string,
     window: BrowserWindow,
-    updater: UpdaterMain
+    updater: UpdaterMain,
   ) {
     this._i18nService = i18nService;
     this._updater = updater;
@@ -83,6 +83,8 @@ export class AboutMenu implements IMenubarMenu {
   }
 
   private async checkForUpdate() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._updater.checkForUpdate(true);
   }
 }

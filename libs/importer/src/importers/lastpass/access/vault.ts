@@ -1,19 +1,25 @@
+import * as papa from "papaparse";
+
+import { decodeJwtTokenToJson } from "@bitwarden/auth/common";
 import { HttpStatusCode } from "@bitwarden/common/enums";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
-import { Account } from "./account";
-import { Client } from "./client";
-import { ClientInfo } from "./client-info";
-import { CryptoUtils } from "./crypto-utils";
-import { Parser } from "./parser";
-import { ParserOptions } from "./parser-options";
-import { RestClient } from "./rest-client";
+import { IdpProvider } from "./enums";
+import {
+  Account,
+  ClientInfo,
+  ExportedAccount,
+  FederatedUserContext,
+  ParserOptions,
+  UserTypeContext,
+} from "./models";
+import { Client, CryptoUtils, Parser, RestClient } from "./services";
 import { Ui } from "./ui";
-import { UserType } from "./user-type";
 
 export class Vault {
   accounts: Account[];
+  userType: UserTypeContext;
 
   private client: Client;
   private cryptoUtils: CryptoUtils;
@@ -29,30 +35,45 @@ export class Vault {
     password: string,
     clientInfo: ClientInfo,
     ui: Ui,
-    parserOptions: ParserOptions = ParserOptions.default
+    parserOptions: ParserOptions = ParserOptions.default,
   ): Promise<void> {
-    this.accounts = await this.client.openVault(username, password, clientInfo, ui, parserOptions);
+    this.accounts = await this.client.openVault(
+      username,
+      password,
+      null,
+      clientInfo,
+      ui,
+      parserOptions,
+    );
   }
 
   async openFederated(
-    username: string,
-    k1: string,
-    k2: string,
+    federatedUser: FederatedUserContext,
     clientInfo: ClientInfo,
     ui: Ui,
-    parserOptions: ParserOptions = ParserOptions.default
+    parserOptions: ParserOptions = ParserOptions.default,
   ): Promise<void> {
-    const k1Arr = Utils.fromByteStringToArray(k1);
-    const k2Arr = Utils.fromB64ToArray(k2);
+    if (federatedUser == null) {
+      throw new Error("Federated user context is not set.");
+    }
+    const k1 = await this.getK1(federatedUser);
+    const [k2, fragmentId] = await this.getK2FragmentId(federatedUser);
     const hiddenPasswordArr = await this.cryptoFunctionService.hash(
-      this.cryptoUtils.ExclusiveOr(k1Arr, k2Arr),
-      "sha256"
+      this.cryptoUtils.ExclusiveOr(k1, k2),
+      "sha256",
     );
     const hiddenPassword = Utils.fromBufferToB64(hiddenPasswordArr);
-    await this.open(username, hiddenPassword, clientInfo, ui, parserOptions);
+    this.accounts = await this.client.openVault(
+      federatedUser.username,
+      hiddenPassword,
+      fragmentId,
+      clientInfo,
+      ui,
+      parserOptions,
+    );
   }
 
-  async getUserType(username: string): Promise<UserType> {
+  async setUserTypeContext(username: string) {
     const lowercaseUsername = username.toLowerCase();
     const rest = new RestClient();
     rest.baseUrl = "https://lastpass.com";
@@ -60,35 +81,167 @@ export class Vault {
     const response = await rest.get(endpoint);
     if (response.status === HttpStatusCode.Ok) {
       const json = await response.json();
-      const userType = new UserType();
-      userType.CompanyId = json.CompanyId;
-      userType.IdentityProviderGUID = json.IdentityProviderGUID;
-      userType.IdentityProviderURL = json.IdentityProviderURL;
-      userType.IsPasswordlessEnabled = json.IsPasswordlessEnabled;
-      userType.OpenIDConnectAuthority = json.OpenIDConnectAuthority;
-      userType.OpenIDConnectClientId = json.OpenIDConnectClientId;
-      userType.PkceEnabled = json.PkceEnabled;
-      userType.Provider = json.Provider;
-      userType.type = json.type;
-      return userType;
+      this.userType = new UserTypeContext();
+      this.userType.companyId = json.CompanyId;
+      this.userType.identityProviderGUID = json.IdentityProviderGUID;
+      this.userType.identityProviderURL = json.IdentityProviderURL;
+      this.userType.isPasswordlessEnabled = json.IsPasswordlessEnabled;
+      this.userType.openIDConnectAuthority = json.OpenIDConnectAuthority;
+      this.userType.openIDConnectClientId = json.OpenIDConnectClientId;
+      this.userType.pkceEnabled = json.PkceEnabled;
+      this.userType.provider = json.Provider;
+      this.userType.type = json.type;
+
+      if (this.userType.provider === IdpProvider.Azure) {
+        // Sometimes customers have malformed OIDC authority URLs. Try to fix them.
+        const appQueryIndex = this.userType.openIDConnectAuthority.indexOf("?app");
+        if (appQueryIndex > -1) {
+          this.userType.openIDConnectAuthority = this.userType.openIDConnectAuthority.substring(
+            0,
+            appQueryIndex,
+          );
+        }
+      }
+
+      return;
     }
-    throw "Cannot determine LastPass user type.";
+    throw new Error("Cannot determine LastPass user type.");
   }
 
-  async getIdentityProviderKey(userType: UserType, idToken: string): Promise<string> {
-    if (!userType.isFederated()) {
-      throw "Cannot get identity provider key for a LastPass user that is not federated.";
+  accountsToExportedCsvString(skipShared = false): string {
+    if (this.accounts == null) {
+      throw new Error("Vault has not opened any accounts.");
     }
+
+    const exportedAccounts = this.accounts
+      .filter((a) => !a.isShared || (a.isShared && !skipShared))
+      .map((a) => new ExportedAccount(a));
+
+    if (exportedAccounts.length === 0) {
+      throw new Error("No accounts to transform");
+    }
+    return papa.unparse(exportedAccounts);
+  }
+
+  private async getK1(federatedUser: FederatedUserContext): Promise<Uint8Array> {
+    if (this.userType == null) {
+      throw new Error("User type is not set.");
+    }
+
+    if (!this.userType.isFederated()) {
+      throw new Error("Cannot get k1 for LastPass user that is not federated.");
+    }
+
+    if (federatedUser == null) {
+      throw new Error("Federated user is not set.");
+    }
+
+    let k1: Uint8Array = null;
+    if (federatedUser.idpUserInfo?.LastPassK1 != null) {
+      return Utils.fromByteStringToArray(federatedUser.idpUserInfo.LastPassK1);
+    } else if (this.userType.provider === IdpProvider.Azure) {
+      k1 = await this.getK1Azure(federatedUser);
+    } else if (this.userType.provider === IdpProvider.Google) {
+      k1 = await this.getK1Google(federatedUser);
+    } else {
+      const b64Encoded = this.userType.provider === IdpProvider.PingOne;
+      k1 = await this.getK1FromAccessToken(federatedUser, b64Encoded);
+    }
+
+    if (k1 != null) {
+      return k1;
+    }
+
+    throw new Error("Cannot get k1.");
+  }
+
+  private async getK1Azure(federatedUser: FederatedUserContext) {
+    // Query the Graph API for the k1 field
     const rest = new RestClient();
-    rest.baseUrl = userType.IdentityProviderURL;
+    rest.baseUrl = "https://graph.microsoft.com";
+    const response = await rest.get(
+      "v1.0/me?$select=id,displayName,mail&$expand=extensions",
+      new Map([["Authorization", "Bearer " + federatedUser.accessToken]]),
+    );
+    if (response.status === HttpStatusCode.Ok) {
+      const json = await response.json();
+      if (json?.extensions != null && json.extensions.length > 0) {
+        const k1 = json.extensions[0].LastPassK1 as string;
+        if (k1 != null) {
+          return Utils.fromB64ToArray(k1);
+        }
+      }
+    }
+    return null;
+  }
+
+  private async getK1Google(federatedUser: FederatedUserContext) {
+    // Query Google Drive for the k1.lp file
+    const accessTokenAuthHeader = new Map([
+      ["Authorization", "Bearer " + federatedUser.accessToken],
+    ]);
+    const rest = new RestClient();
+    rest.baseUrl = "https://content.googleapis.com";
+    const response = await rest.get(
+      "drive/v3/files?pageSize=1" +
+        "&q=name%20%3D%20%27k1.lp%27" +
+        "&spaces=appDataFolder" +
+        "&fields=nextPageToken%2C%20files(id%2C%20name)",
+      accessTokenAuthHeader,
+    );
+    if (response.status === HttpStatusCode.Ok) {
+      const json = await response.json();
+      const files = json?.files as any[];
+      if (files != null && files.length > 0 && files[0].id != null && files[0].name === "k1.lp") {
+        // Open the k1.lp file
+        rest.baseUrl = "https://www.googleapis.com";
+        const response = await rest.get(
+          "drive/v3/files/" + files[0].id + "?alt=media",
+          accessTokenAuthHeader,
+        );
+        if (response.status === HttpStatusCode.Ok) {
+          const k1 = await response.text();
+          return Utils.fromB64ToArray(k1);
+        }
+      }
+    }
+    return null;
+  }
+
+  private async getK1FromAccessToken(federatedUser: FederatedUserContext, b64: boolean) {
+    const decodedAccessToken = decodeJwtTokenToJson(federatedUser.accessToken);
+    const k1 = decodedAccessToken?.LastPassK1 as string;
+    if (k1 != null) {
+      return b64 ? Utils.fromB64ToArray(k1) : Utils.fromByteStringToArray(k1);
+    }
+    return null;
+  }
+
+  private async getK2FragmentId(
+    federatedUser: FederatedUserContext,
+  ): Promise<[Uint8Array, string]> {
+    if (this.userType == null) {
+      throw new Error("User type is not set.");
+    }
+
+    if (!this.userType.isFederated()) {
+      throw new Error("Cannot get k2 for LastPass user that is not federated.");
+    }
+
+    const rest = new RestClient();
+    rest.baseUrl = this.userType.identityProviderURL;
     const response = await rest.postJson("federatedlogin/api/v1/getkey", {
-      company_id: userType.CompanyId,
-      id_token: idToken,
+      company_id: this.userType.companyId,
+      id_token: federatedUser.idToken,
     });
     if (response.status === HttpStatusCode.Ok) {
       const json = await response.json();
-      return json["k2"] as string;
+      const k2 = json?.k2 as string;
+      const fragmentId = json?.fragment_id as string;
+      if (k2 != null && fragmentId != null) {
+        return [Utils.fromB64ToArray(k2), fragmentId];
+      }
     }
-    throw "Cannot get identity provider key from LastPass.";
+    throw new Error("Cannot get k2 and/or fragment ID.");
   }
 }

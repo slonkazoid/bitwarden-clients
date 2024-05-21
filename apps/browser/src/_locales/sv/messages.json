@@ -3,12 +3,12 @@
     "message": "Bitwarden"
   },
   "extName": {
-    "message": "Bitwarden - Gratis lösenordshanterare",
+    "message": "Bitwarden Password Manager",
     "description": "Extension name, MUST be less than 40 characters (Safari restriction)"
   },
   "extDesc": {
-    "message": "Bitwarden är en säker och gratis lösenordshanterare för alla dina enheter.",
-    "description": "Extension description"
+    "message": "At home, at work, or on the go, Bitwarden easily secures all your passwords, passkeys, and sensitive information",
+    "description": "Extension description, MUST be less than 112 characters (Safari restriction)"
   },
   "loginOrCreateNewAccount": {
     "message": "Logga in eller skapa ett nytt konto för att komma åt ditt säkra valv."
@@ -92,13 +92,13 @@
     "message": "Fyll i automatiskt"
   },
   "autoFillLogin": {
-    "message": "Auto-fill login"
+    "message": "Autofyll inloggning"
   },
   "autoFillCard": {
-    "message": "Auto-fill card"
+    "message": "Autofyll kort"
   },
   "autoFillIdentity": {
-    "message": "Auto-fill identity"
+    "message": "Autofyll identitet"
   },
   "generatePasswordCopied": {
     "message": "Skapa lösenord (kopierad)"
@@ -171,6 +171,12 @@
   },
   "changeMasterPassword": {
     "message": "Ändra huvudlösenord"
+  },
+  "continueToWebApp": {
+    "message": "Continue to web app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "You can change your master password on the Bitwarden web app."
   },
   "fingerprintPhrase": {
     "message": "Fingeravtrycksfras",
@@ -257,7 +263,7 @@
     "message": "Välj"
   },
   "generatePassword": {
-    "message": "Skapa lösenord"
+    "message": "Generera lösenord"
   },
   "regeneratePassword": {
     "message": "Återskapa lösenord"
@@ -267,6 +273,9 @@
   },
   "length": {
     "message": "Längd"
+  },
+  "passwordMinLength": {
+    "message": "Minsta tillåtna lösenordslängd"
   },
   "uppercase": {
     "message": "Versaler (A-Ö)"
@@ -323,6 +332,9 @@
   "password": {
     "message": "Lösenord"
   },
+  "totp": {
+    "message": "Authenticator secret"
+  },
   "passphrase": {
     "message": "Lösenordsfras"
   },
@@ -362,8 +374,20 @@
   "other": {
     "message": "Annat"
   },
+  "unlockMethods": {
+    "message": "Unlock options"
+  },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
     "message": "Set up an unlock method to change your vault timeout action."
+  },
+  "unlockMethodNeeded": {
+    "message": "Ställ in en upplåsningsmetod i Inställningar"
+  },
+  "sessionTimeoutHeader": {
+    "message": "Session timeout"
+  },
+  "otherOptions": {
+    "message": "Other options"
   },
   "rateExtension": {
     "message": "Betygsätt tillägget"
@@ -404,6 +428,9 @@
   },
   "lockNow": {
     "message": "Lås nu"
+  },
+  "lockAll": {
+    "message": "Lås alla"
   },
   "immediately": {
     "message": "Omedelbart"
@@ -481,6 +508,12 @@
   "newAccountCreated": {
     "message": "Ditt nya konto har skapats! Du kan logga in nu."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "Du är nu inloggad"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Du kan stänga detta fönster"
+  },
   "masterPassSent": {
     "message": "Vi har skickat ett e-postmeddelande till dig med din huvudlösenordsledtråd."
   },
@@ -502,6 +535,18 @@
   },
   "autofillError": {
     "message": "Kunde inte automatiskt fylla i det valda objektet på den här webbsidan. Klipp/klistra informationen istället."
+  },
+  "totpCaptureError": {
+    "message": "Det går inte att skanna QR-koden från den aktuella webbsidan"
+  },
+  "totpCaptureSuccess": {
+    "message": "Authenticator key added"
+  },
+  "totpCapture": {
+    "message": "Scan authenticator QR code from current webpage"
+  },
+  "copyTOTP": {
+    "message": "Kopiera autentiseringsnyckel (TOTP)"
   },
   "loggedOut": {
     "message": "Utloggad"
@@ -526,12 +571,6 @@
   },
   "addedFolder": {
     "message": "Lade till mapp"
-  },
-  "changeMasterPass": {
-    "message": "Ändra huvudlösenord"
-  },
-  "changeMasterPasswordConfirmation": {
-    "message": "Du kan ändra ditt huvudlösenord på bitwardens webbvalv. Vill du besöka webbplatsen nu?"
   },
   "twoStepLoginConfirmation": {
     "message": "Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?"
@@ -561,7 +600,7 @@
     "message": "Lösenord kopierat"
   },
   "uri": {
-    "message": "URI (länk)"
+    "message": "URI"
   },
   "uriPosition": {
     "message": "URI $POSITION$",
@@ -619,6 +658,9 @@
   "addLoginNotificationDesc": {
     "message": "Be om att lägga till ett objekt om det inte finns i ditt valv."
   },
+  "addLoginNotificationDescAlt": {
+    "message": "Ask to add an item if one isn't found in your vault. Applies to all logged in accounts."
+  },
   "showCardsCurrentTab": {
     "message": "Visa kort på fliksida"
   },
@@ -651,6 +693,15 @@
   "changedPasswordNotificationDesc": {
     "message": "Be om att uppdatera ett lösenord när en ändring upptäcks på en webbplats."
   },
+  "changedPasswordNotificationDescAlt": {
+    "message": "Ask to update a login's password when a change is detected on a website. Applies to all logged in accounts."
+  },
+  "enableUsePasskeys": {
+    "message": "Be om att spara och använda lösennycklar"
+  },
+  "usePasskeysDesc": {
+    "message": "Be om att spara nya lösennycklar eller logga in med nycklar som lagras i ditt valv. Gäller för alla inloggade konton."
+  },
   "notificationChangeDesc": {
     "message": "Vill du uppdatera det här lösenordet i Bitwarden?"
   },
@@ -669,6 +720,9 @@
   "contextMenuItemDesc": {
     "message": "Använd ett andra klick för att komma åt lösenordsgenerering och matchande inloggningar för webbplatsen. "
   },
+  "contextMenuItemDescAlt": {
+    "message": "Use a secondary click to access password generation and matching logins for the website. Applies to all logged in accounts."
+  },
   "defaultUriMatchDetection": {
     "message": "Standardmatchning för URI",
     "description": "Default URI match detection for auto-fill."
@@ -681,6 +735,9 @@
   },
   "themeDesc": {
     "message": "Ändra programmets färgtema."
+  },
+  "themeDescAlt": {
+    "message": "Change the application's color theme. Applies to all logged in accounts."
   },
   "dark": {
     "message": "Mörkt",
@@ -723,7 +780,7 @@
     "message": "Delad"
   },
   "learnOrg": {
-    "message": "Lär dig om organisationer"
+    "message": "Läs mer om organisationer"
   },
   "learnOrgConfirmation": {
     "message": "Bitwarden gör det möjligt för dig att dela objekt i valvet med andra genom att använda en organisation. Vill du besöka bitwarden.com för att lära dig mer?"
@@ -820,7 +877,7 @@
     "message": "1 GB lagring av krypterade filer."
   },
   "premiumSignUpTwoStepOptions": {
-    "message": "Proprietary two-step login options such as YubiKey and Duo."
+    "message": "Premium-alternativ för tvåstegsverifiering, såsom YubiKey och Duo."
   },
   "ppremiumSignUpReports": {
     "message": "Lösenordshygien, kontohälsa och dataintrångsrapporter för att hålla ditt valv säkert."
@@ -1002,6 +1059,31 @@
   "environmentSaved": {
     "message": "Miljö-URL:erna har sparats"
   },
+  "showAutoFillMenuOnFormFields": {
+    "message": "Visa menyn för automatisk ifyllnad på formulärfält",
+    "description": "Represents the message for allowing the user to enable the auto-fill overlay"
+  },
+  "showAutoFillMenuOnFormFieldsDescAlt": {
+    "message": "Gäller för alla inloggade konton."
+  },
+  "turnOffBrowserBuiltInPasswordManagerSettings": {
+    "message": "Turn off your browser’s built in password manager settings to avoid conflicts."
+  },
+  "turnOffBrowserBuiltInPasswordManagerSettingsLink": {
+    "message": "Edit browser settings."
+  },
+  "autofillOverlayVisibilityOff": {
+    "message": "Av",
+    "description": "Overlay setting select option for disabling autofill overlay"
+  },
+  "autofillOverlayVisibilityOnFieldFocus": {
+    "message": "When field is selected (on focus)",
+    "description": "Overlay appearance select option for showing the field on focus of the input element"
+  },
+  "autofillOverlayVisibilityOnButtonClick": {
+    "message": "När ikonen för automatisk ifyllnad är vald",
+    "description": "Overlay appearance select option for showing the field on click of the overlay icon"
+  },
   "enableAutoFillOnPageLoad": {
     "message": "Aktivera automatisk ifyllnad vid sidhämtning"
   },
@@ -1047,9 +1129,6 @@
   "commandLockVaultDesc": {
     "message": "Lås valvet"
   },
-  "privateModeWarning": {
-    "message": "Stöd för privat läge är experimentellt och vissa funktioner är begränsade."
-  },
   "customFields": {
     "message": "Anpassade fält"
   },
@@ -1093,6 +1172,9 @@
   },
   "faviconDesc": {
     "message": "Visa en identifierbar bild bredvid varje inloggning."
+  },
+  "faviconDescAlt": {
+    "message": "Show a recognizable image next to each login. Applies to all logged in accounts."
   },
   "enableBadgeCounter": {
     "message": "Visa aktivitetsräknaren"
@@ -1158,7 +1240,7 @@
     "message": "Säkerhetskod"
   },
   "ex": {
-    "message": "t.ex."
+    "message": "t. ex."
   },
   "title": {
     "message": "Titel"
@@ -1423,6 +1505,9 @@
   "invalidPin": {
     "message": "Ogiltig PIN-kod."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "För många ogiltiga PIN-inmatningsförsök. Loggar ut."
+  },
   "unlockWithBiometrics": {
     "message": "Lås upp med biometri"
   },
@@ -1498,7 +1583,7 @@
     "message": "Vill du fortfarande fylla i denna inloggning?"
   },
   "autofillIframeWarning": {
-    "message": "The form is hosted by a different domain than the URI of your saved login. Choose OK to auto-fill anyway, or Cancel to stop."
+    "message": "Formuläret kommer från en annan domän än den URI för din sparade inloggning. Välj OK att automatiskt fylla i ändå, eller Avbryt för att stoppa."
   },
   "autofillIframeWarningTip": {
     "message": "För att förhindra denna varning i framtiden, spara denna URI, $HOSTNAME$, till ditt Bitwarden inloggningsobjekt för denna webbplats.",
@@ -1629,11 +1714,17 @@
   "biometricsNotSupportedDesc": {
     "message": "Biometri i webbläsaren stöds inte på den här enheten."
   },
+  "biometricsNotUnlockedTitle": {
+    "message": "User locked or logged out"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Please unlock this user in the desktop application and try again."
+  },
   "biometricsFailedTitle": {
-    "message": "Biometrics failed"
+    "message": "Biometri misslyckades"
   },
   "biometricsFailedDesc": {
-    "message": "Biometrics cannot be completed, consider using a master password or logging out. If this persists, please contact Bitwarden support."
+    "message": "Biometri kan inte slutföras, överväg att använda ett huvudlösenord eller logga ut. Om detta kvarstår, kontakta Bitwardens support."
   },
   "nativeMessaginPermissionErrorTitle": {
     "message": "Behörighet ej beviljad"
@@ -1653,18 +1744,24 @@
   "personalOwnershipPolicyInEffect": {
     "message": "En organisationspolicy påverkar dina ägarskapsalternativ."
   },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "An organization policy has blocked importing items into your individual vault."
+  },
   "excludedDomains": {
     "message": "Exkluderade domäner"
   },
   "excludedDomainsDesc": {
     "message": "Bitwarden kommer inte att fråga om att få spara inloggningsuppgifter för dessa domäner. Du måste uppdatera sidan för att ändringarna ska träda i kraft."
   },
+  "excludedDomainsDescAlt": {
+    "message": "Bitwarden will not ask to save login details for these domains for all logged in accounts. You must refresh the page for changes to take effect."
+  },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ är inte en giltig domän",
     "placeholders": {
       "domain": {
         "content": "$1",
-        "example": "googlecom"
+        "example": "google.com"
       }
     }
   },
@@ -1908,7 +2005,7 @@
     "message": "Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera det nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme."
   },
   "updateWeakMasterPasswordWarning": {
-    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Ditt huvudlösenord följer inte ett eller flera av din organisations regler. För att komma åt ditt valv så måste du ändra ditt huvudlösenord nu. Om du gör det kommer du att loggas du ut ur din nuvarande session så du måste logga in på nytt. Aktiva sessioner på andra enheter kommer fortsatt vara aktiva i upp till en timme."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatiskt deltagande"
@@ -1919,8 +2016,21 @@
   "selectFolder": {
     "message": "Välj mapp…"
   },
-  "ssoCompleteRegistration": {
-    "message": "För att slutföra inloggning med SSO, ange ett huvudlösenord för att komma åt och skydda ditt valv."
+  "noFoldersFound": {
+    "message": "Inga mappar hittades",
+    "description": "Used as a message within the notification bar when no folders are found"
+  },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Din organisations behörigheter uppdaterades, vilket kräver att du anger ett huvudlösenord.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Din organisation kräver att du anger ett huvudlösenord.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Verifiering krävs",
+    "description": "Default title for the user verification dialog."
   },
   "hours": {
     "message": "Timmar"
@@ -2031,7 +2141,7 @@
     "message": "Återskapa användarnamn"
   },
   "generateUsername": {
-    "message": "Skapa användarnamn"
+    "message": "Generera användarnamn"
   },
   "usernameType": {
     "message": "Typ av användarnamn"
@@ -2059,7 +2169,7 @@
     "message": "Webbplatsnamn"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "Vad vill du skapa?"
+    "message": "Vad skulle du vilja generera?"
   },
   "passwordType": {
     "message": "Typ av lösenord"
@@ -2072,6 +2182,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Skapa ett e-postalias med en extern vidarebefordranstjänst."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$-fel: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Ogiltig $SERVICENAME$-domän.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Ogiltig $SERVICENAME$-URL.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Värdnamn",
@@ -2117,7 +2329,7 @@
     "message": "Serverversion"
   },
   "selfHostedServer": {
-    "message": "self-hosted"
+    "message": "självhostad"
   },
   "thirdParty": {
     "message": "Tredje part"
@@ -2216,7 +2428,7 @@
     "message": "Hur du fyller i automatiskt"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Välj ett objekt från denna sida eller använd genvägen: $COMMAND$",
+    "message": "Select an item from this screen, use the shortcut $COMMAND$, or explore other options in settings.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2225,7 +2437,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Välj ett objekt från den här sidan eller ange en genväg i inställningarna."
+    "message": "Select an item from this screen, or explore other options in settings."
   },
   "gotIt": {
     "message": "Förstått"
@@ -2273,44 +2485,38 @@
     "message": "Uncheck if using a public device"
   },
   "approveFromYourOtherDevice": {
-    "message": "Approve from your other device"
+    "message": "Godkänn från din andra enhet"
   },
   "requestAdminApproval": {
-    "message": "Request admin approval"
+    "message": "Be om godkännande från administratör"
   },
   "approveWithMasterPassword": {
     "message": "Godkänn med huvudlösenord"
   },
   "ssoIdentifierRequired": {
-    "message": "Organization SSO identifier is required."
+    "message": "Organisationens SSO-identifierare krävs."
   },
   "eu": {
     "message": "EU",
     "description": "European Union"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
-  },
   "accessDenied": {
     "message": "Access denied. You do not have permission to view this page."
   },
   "general": {
-    "message": "General"
+    "message": "Allmänt"
   },
   "display": {
     "message": "Display"
   },
   "accountSuccessfullyCreated": {
-    "message": "Account successfully created!"
+    "message": "Ditt konto har skapats!"
   },
   "adminApprovalRequested": {
-    "message": "Admin approval requested"
+    "message": "Godkännande från administratör har begärts"
   },
   "adminApprovalRequestSentToAdmins": {
-    "message": "Your request has been sent to your admin."
+    "message": "Din begäran har skickats till din administratör."
   },
   "youWillBeNotifiedOnceApproved": {
     "message": "Du kommer att meddelas vid godkännande."
@@ -2319,16 +2525,16 @@
     "message": "Problem med att logga in?"
   },
   "loginApproved": {
-    "message": "Login approved"
+    "message": "Inloggning godkänd"
   },
   "userEmailMissing": {
-    "message": "User email missing"
+    "message": "Användarens e-postadress saknas"
   },
   "deviceTrusted": {
     "message": "Device trusted"
   },
   "inputRequired": {
-    "message": "Input is required."
+    "message": "Inmatning är obligatoriskt."
   },
   "required": {
     "message": "obligatoriskt"
@@ -2428,22 +2634,528 @@
     "message": "Undermeny"
   },
   "toggleCollapse": {
-    "message": "Toggle collapse",
+    "message": "Växla synlig/dold",
     "description": "Toggling an expand/collapse state."
+  },
+  "filelessImport": {
+    "message": "Importera din data till Bitwarden?",
+    "description": "Default notification title for triggering a fileless import."
+  },
+  "lpFilelessImport": {
+    "message": "Skydda din LastPass-data och importera till Bitwarden?",
+    "description": "LastPass specific notification title for triggering a fileless import."
+  },
+  "lpCancelFilelessImport": {
+    "message": "Spara som okrypterad fil",
+    "description": "LastPass specific notification button text for cancelling a fileless import."
+  },
+  "startFilelessImport": {
+    "message": "Importera till Bitwarden",
+    "description": "Notification button text for starting a fileless import."
+  },
+  "importing": {
+    "message": "Importerar...",
+    "description": "Notification message for when an import is in progress."
+  },
+  "dataSuccessfullyImported": {
+    "message": "Data har importerats till ditt valv!",
+    "description": "Notification message for when an import has completed successfully."
+  },
+  "dataImportFailed": {
+    "message": "Error importing. Check console for details.",
+    "description": "Notification message for when an import has failed."
+  },
+  "importNetworkError": {
+    "message": "Nätverksfel uppstod vid import.",
+    "description": "Notification message for when an import has failed due to a network error."
   },
   "aliasDomain": {
     "message": "Aliasdomän"
   },
   "passwordRepromptDisabledAutofillOnPageLoad": {
-    "message": "Items with master password re-prompt cannot be auto-filled on page load. Auto-fill on page load turned off.",
+    "message": "Objekt med \"Återupprepa huvudlösenord\" kan inte fyllas i automatiskt vid sidladdning. Automatisk ifyllning vid sidladdning avstängd.",
     "description": "Toast message for describing that master password re-prompt cannot be auto-filled on page load."
   },
   "autofillOnPageLoadSetToDefault": {
-    "message": "Auto-fill on page load set to use default setting.",
+    "message": "Aktivera automatisk ifyllnad vid sidhämtning sattes till att använda standardinställningen.",
     "description": "Toast message for informing the user that auto-fill on page load has been set to the default setting."
   },
   "turnOffMasterPasswordPromptToEditField": {
-    "message": "Turn off master password re-prompt to edit this field",
+    "message": "Stäng av \"återupprepa huvudlösenord\" för att redigera detta fält",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
+  },
+  "skipToContent": {
+    "message": "Hoppa till innehåll"
+  },
+  "bitwardenOverlayButton": {
+    "message": "Bitwarden automatisk ifyllnadsmenyknapp",
+    "description": "Page title for the iframe containing the overlay button"
+  },
+  "toggleBitwardenVaultOverlay": {
+    "message": "Växla Bitwarden automatisk ifyllnadsmeny",
+    "description": "Screen reader and tool tip label for the overlay button"
+  },
+  "bitwardenVault": {
+    "message": "Bitwarden automatisk ifyllnadsmeny",
+    "description": "Page title in overlay"
+  },
+  "unlockYourAccountToViewMatchingLogins": {
+    "message": "Unlock your account to view matching logins",
+    "description": "Text to display in overlay when the account is locked."
+  },
+  "unlockAccount": {
+    "message": "Lås upp konto",
+    "description": "Button text to display in overlay when the account is locked."
+  },
+  "fillCredentialsFor": {
+    "message": "Fyll i uppgifter för",
+    "description": "Screen reader text for when overlay item is in focused"
+  },
+  "partialUsername": {
+    "message": "Partial username",
+    "description": "Screen reader text for when a login item is focused where a partial username is displayed. SR will announce this phrase before reading the text of the partial username"
+  },
+  "noItemsToShow": {
+    "message": "Inga objekt att visa",
+    "description": "Text to show in overlay if there are no matching items"
+  },
+  "newItem": {
+    "message": "Nytt objekt",
+    "description": "Button text to display in overlay when there are no matching items"
+  },
+  "addNewVaultItem": {
+    "message": "Lägg till nytt valvobjekt",
+    "description": "Screen reader text (aria-label) for new item button in overlay"
+  },
+  "bitwardenOverlayMenuAvailable": {
+    "message": "Bitwarden automatisk ifyllnadsmeny är tillgänglig. Tryck på nedåtpilen för att välja.",
+    "description": "Screen reader text for announcing when the overlay opens on the page"
+  },
+  "turnOn": {
+    "message": "Aktivera"
+  },
+  "ignore": {
+    "message": "Ignorera"
+  },
+  "importData": {
+    "message": "Importera data",
+    "description": "Used for the header of the import dialog, the import button and within the file-password-prompt"
+  },
+  "importError": {
+    "message": "Fel vid import"
+  },
+  "importErrorDesc": {
+    "message": "Det uppstod ett problem med den data du försökte importera. Åtgärda de fel som anges nedan i din källfil och försök igen."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Åtgärda felen nedan och försök igen."
+  },
+  "description": {
+    "message": "Beskrivning"
+  },
+  "importSuccess": {
+    "message": "Data har importerats till ditt valv"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Sammanlagt $AMOUNT$ objekt importerades.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "tryAgain": {
+    "message": "Försök igen"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Verifiering krävs för denna åtgärd. Ange en PIN-kod för att fortsätta."
+  },
+  "setPin": {
+    "message": "Ställ in PIN-kod"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verifiera med biometri"
+  },
+  "awaitingConfirmation": {
+    "message": "Väntar på bekräftelse"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Det gick inte att slutföra biometri."
+  },
+  "needADifferentMethod": {
+    "message": "Behöver du en annan metod?"
+  },
+  "useMasterPassword": {
+    "message": "Använd huvudlösenord"
+  },
+  "usePin": {
+    "message": "Använd PIN-kod"
+  },
+  "useBiometrics": {
+    "message": "Använd biometri"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Ange verifieringskoden som skickades till din e-postadress."
+  },
+  "resendCode": {
+    "message": "Skicka kod igen"
+  },
+  "total": {
+    "message": "Totalt"
+  },
+  "importWarning": {
+    "message": "Du importerar data till $ORGANIZATION$. Din data kan komma att delas med medlemmar i den här organisationen. Vill du fortsätta?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "popoutTheExtensionToCompleteLogin": {
+    "message": "Popout the extension to complete login."
+  },
+  "popoutExtension": {
+    "message": "Popout extension"
+  },
+  "launchDuo": {
+    "message": "Starta Duo"
+  },
+  "importFormatError": {
+    "message": "Datan är inte korrekt formaterad. Vänligen kontrollera din importerade fil och försök igen."
+  },
+  "importNothingError": {
+    "message": "Ingenting har importerats."
+  },
+  "importEncKeyError": {
+    "message": "Ett fel uppstod vid dekryptering av den exporterade filen. Din krypteringsnyckel matchar inte krypteringsnyckeln som användes för att exportera datan."
+  },
+  "invalidFilePassword": {
+    "message": "Ogiltigt fillösenord, använd lösenordet du angav när du skapade exportfilen."
+  },
+  "importDestination": {
+    "message": "Importdestination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Läs mer om dina importalternativ"
+  },
+  "selectImportFolder": {
+    "message": "Välj en mapp"
+  },
+  "selectImportCollection": {
+    "message": "Välj en samling"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Filen innehåller otilldelade objekt."
+  },
+  "selectFormat": {
+    "message": "Välj importfilens format"
+  },
+  "selectImportFile": {
+    "message": "Välj importfilen"
+  },
+  "chooseFile": {
+    "message": "Välj fil"
+  },
+  "noFileChosen": {
+    "message": "Ingen fil vald"
+  },
+  "orCopyPasteFileContents": {
+    "message": "eller kopiera och klistra in innehållet från filen"
+  },
+  "instructionsFor": {
+    "message": "Instruktioner för $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Bekräfta importering av valv"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Den här filen är lösenordsskyddad. Ange lösenordet för att importera data."
+  },
+  "confirmFilePassword": {
+    "message": "Bekräfta fillösenord"
+  },
+  "typePasskey": {
+    "message": "Lösennyckel"
+  },
+  "passkeyNotCopied": {
+    "message": "Lösennyckeln kommer inte kopieras"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "Lösennyckeln kommer inte att kopieras till det klonade objektet. Vill du fortsätta klona det här objektet?"
+  },
+  "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword": {
+    "message": "Verifiering krävs av den initierande webbplatsen. Denna funktion är ännu inte implementerad för konton utan huvudlösenord."
+  },
+  "logInWithPasskey": {
+    "message": "Logga in med lösennyckel?"
+  },
+  "passkeyAlreadyExists": {
+    "message": "En lösennyckel finns redan för detta program."
+  },
+  "noPasskeysFoundForThisApplication": {
+    "message": "Inga lösennycklar hittades för detta program."
+  },
+  "noMatchingPasskeyLogin": {
+    "message": "Det finns ingen matchande inloggning för denna webbplats."
+  },
+  "confirm": {
+    "message": "Bekräfta"
+  },
+  "savePasskey": {
+    "message": "Spara lösennyckel"
+  },
+  "savePasskeyNewLogin": {
+    "message": "Spara lösennyckel som ny inloggning"
+  },
+  "choosePasskey": {
+    "message": "Välj en inloggning för att spara denna lösennyckel till"
+  },
+  "passkeyItem": {
+    "message": "Lösennyckelobjekt"
+  },
+  "overwritePasskey": {
+    "message": "Skriv över lösennyckel?"
+  },
+  "overwritePasskeyAlert": {
+    "message": "Detta objekt innehåller redan en lösennyckel. Är du säker på att du vill skriva över nuvarande lösennyckeln?"
+  },
+  "featureNotSupported": {
+    "message": "Funktionen stöds ännu inte"
+  },
+  "yourPasskeyIsLocked": {
+    "message": "Autentisering krävs för att använda lösennyckel. Verifiera din identitet för att fortsätta."
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Multifactor authentication cancelled"
+  },
+  "noLastPassDataFound": {
+    "message": "Ingen LastPass-data hittades"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Felaktigt användarnamn eller lösenord"
+  },
+  "incorrectPassword": {
+    "message": "Felaktigt lösenord"
+  },
+  "incorrectCode": {
+    "message": "Felaktig kod"
+  },
+  "incorrectPin": {
+    "message": "Felaktig PIN-kod"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Multifactor authentication failed"
+  },
+  "includeSharedFolders": {
+    "message": "Inkludera delade mappar"
+  },
+  "lastPassEmail": {
+    "message": "LastPass E-post"
+  },
+  "importingYourAccount": {
+    "message": "Importerar ditt konto..."
+  },
+  "lastPassMFARequired": {
+    "message": "LastPass multifactor authentication required"
+  },
+  "lastPassMFADesc": {
+    "message": "Ange din engångskod från din autentiseringsapp"
+  },
+  "lastPassOOBDesc": {
+    "message": "Godkänn inloggningsbegäran i din autentiseringsapp eller ange en engångskod."
+  },
+  "passcode": {
+    "message": "Passcode"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass Huvudlösenord"
+  },
+  "lastPassAuthRequired": {
+    "message": "LastPass authentication required"
+  },
+  "awaitingSSO": {
+    "message": "Awaiting SSO authentication"
+  },
+  "awaitingSSODesc": {
+    "message": "Please continue to log in using your company credentials."
+  },
+  "seeDetailedInstructions": {
+    "message": "Se detaljerade instruktioner på vår hjälpsida på",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Importera direkt från LastPass"
+  },
+  "importFromCSV": {
+    "message": "Importera från CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Try again or look for an email from LastPass to verify it's you."
+  },
+  "collection": {
+    "message": "Samling"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Sätt in YubiKey som associeras med ditt LastPass-konto i din dators USB-port, tryck sedan på knappen."
+  },
+  "switchAccount": {
+    "message": "Byt konto"
+  },
+  "switchAccounts": {
+    "message": "Byt konto"
+  },
+  "switchToAccount": {
+    "message": "Byt till konto"
+  },
+  "activeAccount": {
+    "message": "Aktivt konto"
+  },
+  "availableAccounts": {
+    "message": "Tillgängliga konton"
+  },
+  "accountLimitReached": {
+    "message": "Account limit reached. Log out of an account to add another."
+  },
+  "active": {
+    "message": "active"
+  },
+  "locked": {
+    "message": "låst"
+  },
+  "unlocked": {
+    "message": "unlocked"
+  },
+  "server": {
+    "message": "server"
+  },
+  "hostedAt": {
+    "message": "hosted at"
+  },
+  "useDeviceOrHardwareKey": {
+    "message": "Använd din enhet eller hårdvarunyckel"
+  },
+  "justOnce": {
+    "message": "Bara en gång"
+  },
+  "alwaysForThisSite": {
+    "message": "Alltid för denna webbplats"
+  },
+  "domainAddedToExcludedDomains": {
+    "message": "$DOMAIN$ added to excluded domains.",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "google.com"
+      }
+    }
+  },
+  "commonImportFormats": {
+    "message": "Common formats",
+    "description": "Label indicating the most common import formats"
+  },
+  "overrideDefaultBrowserAutofillTitle": {
+    "message": "Låt Bitwarden hantera lösenord som standard?",
+    "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
+  },
+  "overrideDefaultBrowserAutofillDescription": {
+    "message": "Ignoring this option may cause conflicts between the Bitwarden auto-fill menu and your browser's.",
+    "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
+  },
+  "overrideDefaultBrowserAutoFillSettings": {
+    "message": "Låt Bitwarden hantera lösenord som standard",
+    "description": "Label for the setting that allows overriding the default browser autofill settings"
+  },
+  "privacyPermissionAdditionNotGrantedTitle": {
+    "message": "Unable to set Bitwarden as the default password manager",
+    "description": "Title for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+  },
+  "privacyPermissionAdditionNotGrantedDescription": {
+    "message": "You must grant browser privacy permissions to Bitwarden to set it as the default password manager.",
+    "description": "Description for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+  },
+  "makeDefault": {
+    "message": "Gör till standard",
+    "description": "Button text for the setting that allows overriding the default browser autofill settings"
+  },
+  "saveCipherAttemptSuccess": {
+    "message": "Credentials saved successfully!",
+    "description": "Notification message for when saving credentials has succeeded."
+  },
+  "updateCipherAttemptSuccess": {
+    "message": "Credentials updated successfully!",
+    "description": "Notification message for when updating credentials has succeeded."
+  },
+  "saveCipherAttemptFailed": {
+    "message": "Error saving credentials. Check console for details.",
+    "description": "Notification message for when saving credentials has failed."
+  },
+  "success": {
+    "message": "Success"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "Notice: Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console."
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "Notice: On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and will only be accessible via the Admin Console."
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "Assign these items to a collection from the",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "to make them visible.",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "adminConsole": {
+    "message": "Admin Console"
+  },
+  "accountSecurity": {
+    "message": "Account security"
+  },
+  "notifications": {
+    "message": "Notifications"
+  },
+  "appearance": {
+    "message": "Utseende"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
+  },
+  "new": {
+    "message": "New"
   }
 }

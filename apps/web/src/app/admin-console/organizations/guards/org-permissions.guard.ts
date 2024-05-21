@@ -19,7 +19,7 @@ export class OrganizationPermissionsGuard implements CanActivate {
     private organizationService: OrganizationService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private syncService: SyncService
+    private syncService: SyncService,
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -28,7 +28,7 @@ export class OrganizationPermissionsGuard implements CanActivate {
       await this.syncService.fullSync(false);
     }
 
-    const org = this.organizationService.get(route.params.organizationId);
+    const org = await this.organizationService.get(route.params.organizationId);
     if (org == null) {
       return this.router.createUrlTree(["/"]);
     }
@@ -37,7 +37,7 @@ export class OrganizationPermissionsGuard implements CanActivate {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("organizationIsDisabled")
+        this.i18nService.t("organizationIsDisabled"),
       );
       return this.router.createUrlTree(["/"]);
     }

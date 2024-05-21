@@ -2,12 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 
 import * as chalk from "chalk";
-import * as program from "commander";
+import { program, Command, OptionValues } from "commander";
 
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
 
-import { Main } from "../../bw";
 import { GetCommand } from "../../commands/get.command";
 import { Response } from "../../models/response";
 import { Program } from "../../program";
@@ -29,41 +28,34 @@ import { SendResponse } from "./models/send.response";
 const writeLn = CliUtils.writeLn;
 
 export class SendProgram extends Program {
-  constructor(main: Main) {
-    super(main);
-  }
-
   async register() {
     program.addCommand(this.sendCommand());
     // receive is accessible both at `bw receive` and `bw send receive`
     program.addCommand(this.receiveCommand());
   }
 
-  private sendCommand(): program.Command {
-    return new program.Command("send")
-      .arguments("<data>")
+  private sendCommand(): Command {
+    return new Command("send")
+      .argument("<data>", "The data to Send. Specify as a filepath with the --file option")
       .description(
         "Work with Bitwarden sends. A Send can be quickly created using this command or subcommands can be used to fine-tune the Send",
-        {
-          data: "The data to Send. Specify as a filepath with the --file option",
-        }
       )
       .option("-f, --file", "Specifies that <data> is a filepath")
       .option(
         "-d, --deleteInDays <days>",
         "The number of days in the future to set deletion date, defaults to 7",
-        "7"
+        "7",
       )
       .option("-a, --maxAccessCount <amount>", "The amount of max possible accesses.")
       .option("--hidden", "Hide <data> in web by default. Valid only if --file is not set.")
       .option(
         "-n, --name <name>",
-        "The name of the Send. Defaults to a guid for text Sends and the filename for files."
+        "The name of the Send. Defaults to a guid for text Sends and the filename for files.",
       )
       .option("--notes <notes>", "Notes to add to the Send.")
       .option(
         "--fullObject",
-        "Specifies that the full Send object should be returned rather than just the access url."
+        "Specifies that the full Send object should be returned rather than just the access url.",
       )
       .addCommand(this.listCommand())
       .addCommand(this.templateCommand())
@@ -73,7 +65,7 @@ export class SendProgram extends Program {
       .addCommand(this.editCommand())
       .addCommand(this.removePasswordCommand())
       .addCommand(this.deleteCommand())
-      .action(async (data: string, options: program.OptionValues) => {
+      .action(async (data: string, options: OptionValues) => {
         const encodedJson = this.makeSendJson(data, options);
 
         let response: Response;
@@ -87,84 +79,84 @@ export class SendProgram extends Program {
       });
   }
 
-  private receiveCommand(): program.Command {
-    return new program.Command("receive")
+  private receiveCommand(): Command {
+    return new Command("receive")
       .arguments("<url>")
       .description("Access a Bitwarden Send from a url")
       .option("--password <password>", "Password needed to access the Send.")
       .option("--passwordenv <passwordenv>", "Environment variable storing the Send's password")
       .option(
         "--passwordfile <passwordfile>",
-        "Path to a file containing the Sends password as its first line"
+        "Path to a file containing the Sends password as its first line",
       )
       .option("--obj", "Return the Send's json object rather than the Send's content")
       .option("--output <location>", "Specify a file path to save a File-type Send to")
       .on("--help", () => {
         writeLn("");
         writeLn(
-          "If a password is required, the provided password is used or the user is prompted."
+          "If a password is required, the provided password is used or the user is prompted.",
         );
         writeLn("", true);
       })
-      .action(async (url: string, options: program.OptionValues) => {
+      .action(async (url: string, options: OptionValues) => {
         const cmd = new SendReceiveCommand(
-          this.main.apiService,
-          this.main.cryptoService,
-          this.main.cryptoFunctionService,
-          this.main.platformUtilsService,
-          this.main.environmentService,
-          this.main.sendApiService
+          this.serviceContainer.apiService,
+          this.serviceContainer.cryptoService,
+          this.serviceContainer.cryptoFunctionService,
+          this.serviceContainer.platformUtilsService,
+          this.serviceContainer.environmentService,
+          this.serviceContainer.sendApiService,
         );
         const response = await cmd.run(url, options);
         this.processResponse(response);
       });
   }
 
-  private listCommand(): program.Command {
-    return new program.Command("list")
+  private listCommand(): Command {
+    return new Command("list")
 
       .description("List all the Sends owned by you")
       .on("--help", () => {
         writeLn(chalk("This is in the list command"));
       })
-      .action(async (options: program.OptionValues) => {
+      .action(async (options: OptionValues) => {
         await this.exitIfLocked();
         const cmd = new SendListCommand(
-          this.main.sendService,
-          this.main.environmentService,
-          this.main.searchService
+          this.serviceContainer.sendService,
+          this.serviceContainer.environmentService,
+          this.serviceContainer.searchService,
         );
         const response = await cmd.run(options);
         this.processResponse(response);
       });
   }
 
-  private templateCommand(): program.Command {
-    return new program.Command("template")
-      .arguments("<object>")
-      .description("Get json templates for send objects", {
-        object: "Valid objects are: send.text, send.file",
-      })
+  private templateCommand(): Command {
+    return new Command("template")
+      .argument("<object>", "Valid objects are: send.text, send.file")
+      .description("Get json templates for send objects")
       .action(async (object) => {
         const cmd = new GetCommand(
-          this.main.cipherService,
-          this.main.folderService,
-          this.main.collectionService,
-          this.main.totpService,
-          this.main.auditService,
-          this.main.cryptoService,
-          this.main.stateService,
-          this.main.searchService,
-          this.main.apiService,
-          this.main.organizationService
+          this.serviceContainer.cipherService,
+          this.serviceContainer.folderService,
+          this.serviceContainer.collectionService,
+          this.serviceContainer.totpService,
+          this.serviceContainer.auditService,
+          this.serviceContainer.cryptoService,
+          this.serviceContainer.stateService,
+          this.serviceContainer.searchService,
+          this.serviceContainer.apiService,
+          this.serviceContainer.organizationService,
+          this.serviceContainer.eventCollectionService,
+          this.serviceContainer.billingAccountProfileStateService,
         );
         const response = await cmd.run("template", object, null);
         this.processResponse(response);
       });
   }
 
-  private getCommand(): program.Command {
-    return new program.Command("get")
+  private getCommand(): Command {
+    return new Command("get")
       .arguments("<id>")
       .description("Get Sends owned by you.")
       .option("--output <output>", "Output directory or filename for attachment.")
@@ -188,31 +180,29 @@ export class SendProgram extends Program {
         writeLn("    bw send get searchText --file --raw");
         writeLn("", true);
       })
-      .action(async (id: string, options: program.OptionValues) => {
+      .action(async (id: string, options: OptionValues) => {
         await this.exitIfLocked();
         const cmd = new SendGetCommand(
-          this.main.sendService,
-          this.main.environmentService,
-          this.main.searchService,
-          this.main.cryptoService
+          this.serviceContainer.sendService,
+          this.serviceContainer.environmentService,
+          this.serviceContainer.searchService,
+          this.serviceContainer.cryptoService,
         );
         const response = await cmd.run(id, options);
         this.processResponse(response);
       });
   }
 
-  private createCommand(): program.Command {
-    return new program.Command("create")
-      .arguments("[encodedJson]")
-      .description("create a Send", {
-        encodedJson: "JSON object to upload. Can also be piped in through stdin.",
-      })
+  private createCommand(): Command {
+    return new Command("create")
+      .argument("[encodedJson]", "JSON object to upload. Can also be piped in through stdin.")
+      .description("create a Send")
       .option("--file <path>", "file to Send. Can also be specified in parent's JSON.")
       .option("--text <text>", "text to Send. Can also be specified in parent's JSON.")
       .option("--hidden", "text hidden flag. Valid only with the --text option.")
       .option(
         "--password <password>",
-        "optional password to access this Send. Can also be specified in JSON"
+        "optional password to access this Send. Can also be specified in JSON",
       )
       .on("--help", () => {
         writeLn("");
@@ -220,34 +210,28 @@ export class SendProgram extends Program {
         writeLn("  Options specified in JSON take precedence over command options");
         writeLn("", true);
       })
-      .action(
-        async (
-          encodedJson: string,
-          options: program.OptionValues,
-          args: { parent: program.Command }
-        ) => {
-          // Work-around to support `--fullObject` option for `send create --fullObject`
-          // Calling `option('--fullObject', ...)` above won't work due to Commander doesn't like same option
-          // to be defind on both parent-command and sub-command
-          const { fullObject = false } = args.parent.opts();
-          const mergedOptions = {
-            ...options,
-            fullObject: fullObject,
-          };
+      .action(async (encodedJson: string, options: OptionValues, args: { parent: Command }) => {
+        // Work-around to support `--fullObject` option for `send create --fullObject`
+        // Calling `option('--fullObject', ...)` above won't work due to Commander doesn't like same option
+        // to be defind on both parent-command and sub-command
+        const { fullObject = false } = args.parent.opts();
+        const mergedOptions = {
+          ...options,
+          fullObject: fullObject,
+        };
 
-          const response = await this.runCreate(encodedJson, mergedOptions);
-          this.processResponse(response);
-        }
-      );
+        const response = await this.runCreate(encodedJson, mergedOptions);
+        this.processResponse(response);
+      });
   }
 
-  private editCommand(): program.Command {
-    return new program.Command("edit")
-      .arguments("[encodedJson]")
-      .description("edit a Send", {
-        encodedJson:
-          "Updated JSON object to save. If not provided, encodedJson is read from stdin.",
-      })
+  private editCommand(): Command {
+    return new Command("edit")
+      .argument(
+        "[encodedJson]",
+        "Updated JSON object to save. If not provided, encodedJson is read from stdin.",
+      )
+      .description("edit a Send")
       .option("--itemid <itemid>", "Overrides the itemId provided in [encodedJson]")
       .on("--help", () => {
         writeLn("");
@@ -255,54 +239,57 @@ export class SendProgram extends Program {
         writeLn("  You cannot update a File-type Send's file. Just delete and remake it");
         writeLn("", true);
       })
-      .action(async (encodedJson: string, options: program.OptionValues) => {
+      .action(async (encodedJson: string, options: OptionValues) => {
         await this.exitIfLocked();
         const getCmd = new SendGetCommand(
-          this.main.sendService,
-          this.main.environmentService,
-          this.main.searchService,
-          this.main.cryptoService
+          this.serviceContainer.sendService,
+          this.serviceContainer.environmentService,
+          this.serviceContainer.searchService,
+          this.serviceContainer.cryptoService,
         );
         const cmd = new SendEditCommand(
-          this.main.sendService,
-          this.main.stateService,
+          this.serviceContainer.sendService,
           getCmd,
-          this.main.sendApiService
+          this.serviceContainer.sendApiService,
+          this.serviceContainer.billingAccountProfileStateService,
         );
         const response = await cmd.run(encodedJson, options);
         this.processResponse(response);
       });
   }
 
-  private deleteCommand(): program.Command {
-    return new program.Command("delete")
-      .arguments("<id>")
-      .description("delete a Send", {
-        id: "The id of the Send to delete.",
-      })
+  private deleteCommand(): Command {
+    return new Command("delete")
+      .argument("<id>", "The id of the Send to delete.")
+      .description("delete a Send")
       .action(async (id: string) => {
         await this.exitIfLocked();
-        const cmd = new SendDeleteCommand(this.main.sendService, this.main.sendApiService);
+        const cmd = new SendDeleteCommand(
+          this.serviceContainer.sendService,
+          this.serviceContainer.sendApiService,
+        );
         const response = await cmd.run(id);
         this.processResponse(response);
       });
   }
 
-  private removePasswordCommand(): program.Command {
-    return new program.Command("remove-password")
-      .arguments("<id>")
-      .description("removes the saved password from a Send.", {
-        id: "The id of the Send to alter.",
-      })
+  private removePasswordCommand(): Command {
+    return new Command("remove-password")
+      .argument("<id>", "The id of the Send to alter.")
+      .description("removes the saved password from a Send.")
       .action(async (id: string) => {
         await this.exitIfLocked();
-        const cmd = new SendRemovePasswordCommand(this.main.sendService, this.main.sendApiService);
+        const cmd = new SendRemovePasswordCommand(
+          this.serviceContainer.sendService,
+          this.serviceContainer.sendApiService,
+          this.serviceContainer.environmentService,
+        );
         const response = await cmd.run(id);
         this.processResponse(response);
       });
   }
 
-  private makeSendJson(data: string, options: program.OptionValues) {
+  private makeSendJson(data: string, options: OptionValues) {
     let sendFile = null;
     let sendText = null;
     let name = Utils.newGuid();
@@ -331,13 +318,13 @@ export class SendProgram extends Program {
     return Buffer.from(JSON.stringify(template), "utf8").toString("base64");
   }
 
-  private async runCreate(encodedJson: string, options: program.OptionValues) {
+  private async runCreate(encodedJson: string, options: OptionValues) {
     await this.exitIfLocked();
     const cmd = new SendCreateCommand(
-      this.main.sendService,
-      this.main.stateService,
-      this.main.environmentService,
-      this.main.sendApiService
+      this.serviceContainer.sendService,
+      this.serviceContainer.environmentService,
+      this.serviceContainer.sendApiService,
+      this.serviceContainer.billingAccountProfileStateService,
     );
     return await cmd.run(encodedJson, options);
   }

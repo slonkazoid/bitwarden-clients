@@ -4,16 +4,19 @@ import { Subject, takeUntil } from "rxjs";
 
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
+import { Verification } from "@bitwarden/common/auth/types/verification";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { Verification } from "@bitwarden/common/types/verification";
 
 /**
  * Used for general-purpose user verification throughout the app.
  * Collects the user's master password, or if they are not using a password, prompts for an OTP via email.
  * This is exposed to the parent component via the ControlValueAccessor interface (e.g. bind it to a FormControl).
  * Use UserVerificationService to verify the user's input.
+ *
+ * @deprecated Jan 24, 2024: Use new libs/auth UserVerificationDialogComponent or UserVerificationFormInputComponent instead.
+ * Each client specific component should eventually be converted over to use one of these new components.
  */
 @Directive({
   selector: "app-user-verification",
@@ -51,8 +54,8 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit, 
         return {
           invalidSecret: {
             message: this.hasMasterPassword
-              ? this.i18nService.t("incorrectCode")
-              : this.i18nService.t("incorrectPassword"),
+              ? this.i18nService.t("incorrectPassword")
+              : this.i18nService.t("incorrectCode"),
           },
         };
       }
@@ -65,7 +68,7 @@ export class UserVerificationComponent implements ControlValueAccessor, OnInit, 
   constructor(
     private cryptoService: CryptoService,
     private userVerificationService: UserVerificationService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
   ) {}
 
   async ngOnInit() {

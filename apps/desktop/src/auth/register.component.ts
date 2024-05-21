@@ -2,11 +2,11 @@ import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/components/register.component";
+import { RegisterComponent as BaseRegisterComponent } from "@bitwarden/angular/auth/components/register.component";
 import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
+import { LoginStrategyServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -27,7 +27,7 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
   constructor(
     formValidationErrorService: FormValidationErrorsService,
     formBuilder: UntypedFormBuilder,
-    authService: AuthService,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     i18nService: I18nService,
     cryptoService: CryptoService,
@@ -40,12 +40,12 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
     private ngZone: NgZone,
     logService: LogService,
     auditService: AuditService,
-    dialogService: DialogService
+    dialogService: DialogService,
   ) {
     super(
       formValidationErrorService,
       formBuilder,
-      authService,
+      loginStrategyService,
       router,
       i18nService,
       cryptoService,
@@ -56,7 +56,7 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
       environmentService,
       logService,
       auditService,
-      dialogService
+      dialogService,
     );
   }
 
@@ -72,6 +72,8 @@ export class RegisterComponent extends BaseRegisterComponent implements OnInit, 
       });
     });
 
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super.ngOnInit();
   }
 

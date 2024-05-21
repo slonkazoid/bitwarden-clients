@@ -15,7 +15,7 @@ on:
       - '.github/workflows/build-cli.yml'
   push:
     branches:
-      - 'master'
+      - 'main'
       - 'rc'
       - 'hotfix-rc-cli'
     paths:
@@ -33,22 +33,6 @@ defaults:
     working-directory: apps/cli
 
 jobs:
-  cloc:
-    name: CLOC
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
-      - name: Set up cloc
-        run: |
-          sudo apt update
-          sudo apt -y install cloc
-
-      - name: Print lines of code
-        run: cloc --include-lang TypeScript,JavaScript --vcs git
-
-
   setup:
     name: Setup
     runs-on: ubuntu-22.04
@@ -57,7 +41,7 @@ jobs:
       node_version: ${{ steps.retrieve-node-version.outputs.node_version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Get Package Version
         id: retrieve-package-version
@@ -89,7 +73,7 @@ jobs:
       _WIN_PKG_VERSION: 3.4
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Setup Unix Vars
         run: |
@@ -98,16 +82,11 @@ jobs:
             awk '{print tolower($0)}')" >> $GITHUB_ENV
 
       - name: Set up Node
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
-
-      - name: Install node-gyp
-        run: |
-          npm install -g node-gyp
-          node-gyp install $(node -v)
 
       - name: Install
         run: npm ci
@@ -139,14 +118,14 @@ jobs:
             | awk '{split($0, a); print a[1]}' > bw-${{ env.LOWER_RUNNER_OS }}-sha256-${{ env._PACKAGE_VERSION }}.txt
 
       - name: Upload unix zip asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
           path: apps/cli/dist/bw-${{ env.LOWER_RUNNER_OS }}-${{ env._PACKAGE_VERSION }}.zip
           if-no-files-found: error
 
       - name: Upload unix checksum asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-${{ env.LOWER_RUNNER_OS }}-sha256-${{ env._PACKAGE_VERSION }}.txt
           path: apps/cli/dist/bw-${{ env.LOWER_RUNNER_OS }}-sha256-${{ env._PACKAGE_VERSION }}.txt
@@ -154,7 +133,7 @@ jobs:
 
   cli-windows:
     name: Build CLI Windows
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs:
       - setup
     env:
@@ -164,7 +143,7 @@ jobs:
       _WIN_PKG_VERSION: 3.4
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Setup Windows builder
         run: |
@@ -173,16 +152,11 @@ jobs:
           choco install nasm --no-progress
 
       - name: Set up Node
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
-
-      - name: Install node-gyp
-        run: |
-          npm install -g node-gyp
-          node-gyp install $(node -v)
 
       - name: Get pkg-fetch
         shell: pwsh
@@ -275,28 +249,28 @@ jobs:
             -t sha256 | Out-File -Encoding ASCII ./dist/bw-windows-sha256-${env:_PACKAGE_VERSION}.txt
 
       - name: Upload windows zip asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-windows-${{ env._PACKAGE_VERSION }}.zip
           path: apps/cli/dist/bw-windows-${{ env._PACKAGE_VERSION }}.zip
           if-no-files-found: error
 
       - name: Upload windows checksum asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-windows-sha256-${{ env._PACKAGE_VERSION }}.txt
           path: apps/cli/dist/bw-windows-sha256-${{ env._PACKAGE_VERSION }}.txt
           if-no-files-found: error
 
       - name: Upload Chocolatey asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bitwarden-cli.${{ env._PACKAGE_VERSION }}.nupkg
           path: apps/cli/dist/chocolatey/bitwarden-cli.${{ env._PACKAGE_VERSION }}.nupkg
           if-no-files-found: error
 
       - name: Upload NPM Build Directory asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bitwarden-cli-${{ env._PACKAGE_VERSION }}-npm-build.zip
           path: apps/cli/build
@@ -304,13 +278,16 @@ jobs:
 
   snap:
     name: Build Snap
+    # Note, before updating the ubuntu version of the workflow, ensure the snap base image
+    # is equal or greater than the new version. Otherwise there might be GLIBC version issues.
+    # The snap base for CLI is defined in `apps/cli/stores/snap/snapcraft.yaml`
     runs-on: ubuntu-22.04
     needs: [setup, cli]
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Print environment
         run: |
@@ -320,7 +297,7 @@ jobs:
           echo "BW Package Version: $_PACKAGE_VERSION"
 
       - name: Get bw linux cli
-        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
+        uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
         with:
           name: bw-linux-${{ env._PACKAGE_VERSION }}.zip
           path: apps/cli/dist/snap
@@ -333,7 +310,7 @@ jobs:
           ls -alth
 
       - name: Build snap
-        uses: snapcore/action-build@2ee46bc29d163c9c836f2820cc46b39664bf0de2 # v1.1.3
+        uses: snapcore/action-build@2096990827aa966f773676c8a53793c723b6b40f # v1.2.0
         with:
           path: apps/cli/dist/snap
 
@@ -362,14 +339,14 @@ jobs:
         run: sudo snap remove bw
 
       - name: Upload snap asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw_${{ env._PACKAGE_VERSION }}_amd64.snap
           path: apps/cli/dist/snap/bw_${{ env._PACKAGE_VERSION }}_amd64.snap
           if-no-files-found: error
 
       - name: Upload snap checksum asset
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-snap-sha256-${{ env._PACKAGE_VERSION }}.txt
           path: apps/cli/dist/snap/bw-snap-sha256-${{ env._PACKAGE_VERSION }}.txt
@@ -381,7 +358,6 @@ jobs:
     if: always()
     runs-on: ubuntu-22.04
     needs:
-      - cloc
       - setup
       - cli
       - cli-windows
@@ -389,25 +365,11 @@ jobs:
     steps:
       - name: Check if any job failed
         working-directory: ${{ github.workspace }}
-        if: ${{ (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/rc') }}
-        env:
-          CLOC_STATUS: ${{ needs.cloc.result }}
-          SETUP_STATUS: ${{ needs.setup.result }}
-          CLI_STATUS: ${{ needs.cli.result }}
-          SNAP_STATUS: ${{ needs.snap.result }}
-        run: |
-          if [ "$CLOC_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$SETUP_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$CLI_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$SNAP_STATUS" = "failure" ]; then
-              exit 1
-          fi
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc') && contains(needs.*.result, 'failure')
+        run: exit 1
 
       - name: Login to Azure - Prod Subscription
-        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         if: failure()
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
@@ -415,7 +377,7 @@ jobs:
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
-        uses: bitwarden/gh-actions/get-keyvault-secrets@f1125802b1ccae8c601d7c4f61ce39ea254b10c8
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: "bitwarden-ci"
           secrets: "devops-alerts-slack-webhook-url"

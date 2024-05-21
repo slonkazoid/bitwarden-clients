@@ -1,8 +1,8 @@
 import { Jsonify, Opaque } from "type-fest";
 
-import { EncryptionType, EXPECTED_NUM_PARTS_BY_ENCRYPTION_TYPE } from "../../../enums";
-import { Utils } from "../../../platform/misc/utils";
+import { EncryptionType, EXPECTED_NUM_PARTS_BY_ENCRYPTION_TYPE } from "../../enums";
 import { Encrypted } from "../../interfaces/encrypted";
+import { Utils } from "../../misc/utils";
 
 import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
@@ -18,7 +18,7 @@ export class EncString implements Encrypted {
     encryptedStringOrType: string | EncryptionType,
     data?: string,
     iv?: string,
-    mac?: string
+    mac?: string,
   ) {
     if (data != null) {
       this.initFromData(encryptedStringOrType as EncryptionType, data, iv, mac);
@@ -40,7 +40,7 @@ export class EncString implements Encrypted {
   }
 
   toJSON() {
-    return this.encryptedString;
+    return this.encryptedString as string;
   }
 
   static fromJSON(obj: Jsonify<EncString>): EncString {

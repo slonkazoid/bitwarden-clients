@@ -1,17 +1,19 @@
 import { Directive, ElementRef, HostBinding, Input } from "@angular/core";
 
-export type BadgeTypes = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
+import { FocusableElement } from "../shared/focusable-element";
 
-const styles: Record<BadgeTypes, string[]> = {
-  primary: ["tw-bg-primary-500"],
+export type BadgeVariant = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
+
+const styles: Record<BadgeVariant, string[]> = {
+  primary: ["tw-bg-primary-600"],
   secondary: ["tw-bg-text-muted"],
-  success: ["tw-bg-success-500"],
-  danger: ["tw-bg-danger-500"],
-  warning: ["tw-bg-warning-500"],
-  info: ["tw-bg-info-500"],
+  success: ["tw-bg-success-600"],
+  danger: ["tw-bg-danger-600"],
+  warning: ["tw-bg-warning-600"],
+  info: ["tw-bg-info-600"],
 };
 
-const hoverStyles: Record<BadgeTypes, string[]> = {
+const hoverStyles: Record<BadgeVariant, string[]> = {
   primary: ["hover:tw-bg-primary-700"],
   secondary: ["hover:tw-bg-secondary-700"],
   success: ["hover:tw-bg-success-700"],
@@ -22,8 +24,9 @@ const hoverStyles: Record<BadgeTypes, string[]> = {
 
 @Directive({
   selector: "span[bitBadge], a[bitBadge], button[bitBadge]",
+  providers: [{ provide: FocusableElement, useExisting: BadgeDirective }],
 })
-export class BadgeDirective {
+export class BadgeDirective implements FocusableElement {
   @HostBinding("class") get classList() {
     return [
       "tw-inline-block",
@@ -44,16 +47,27 @@ export class BadgeDirective {
       "focus:tw-ring-offset-2",
       "focus:tw-ring-primary-700",
     ]
-      .concat(styles[this.badgeType])
-      .concat(this.hasHoverEffects ? hoverStyles[this.badgeType] : [])
+      .concat(styles[this.variant])
+      .concat(this.hasHoverEffects ? hoverStyles[this.variant] : [])
       .concat(this.truncate ? ["tw-truncate", "tw-max-w-40"] : []);
   }
   @HostBinding("attr.title") get title() {
     return this.truncate ? this.el.nativeElement.textContent.trim() : null;
   }
 
-  @Input() badgeType: BadgeTypes = "primary";
+  /**
+   * Variant, sets the background color of the badge.
+   */
+  @Input() variant: BadgeVariant = "primary";
+
+  /**
+   * Truncate long text
+   */
   @Input() truncate = true;
+
+  getFocusTarget() {
+    return this.el.nativeElement;
+  }
 
   private hasHoverEffects = false;
 

@@ -1,37 +1,10 @@
+import { firstValueFrom, map } from "rxjs";
+
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { TotpService } from "@bitwarden/common/abstractions/totp.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-import { EventType } from "@bitwarden/common/enums";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
-import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
-import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-
-import {
-  authServiceFactory,
-  AuthServiceInitOptions,
-} from "../../auth/background/service-factories/auth-service.factory";
-import { totpServiceFactory } from "../../auth/background/service-factories/totp-service.factory";
-import { userVerificationServiceFactory } from "../../auth/background/service-factories/user-verification-service.factory";
-import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
-import { eventCollectionServiceFactory } from "../../background/service-factories/event-collection-service.factory";
-import { Account } from "../../models/account";
-import { CachedServices } from "../../platform/background/service-factories/factory-options";
-import { stateServiceFactory } from "../../platform/background/service-factories/state-service.factory";
-import { BrowserApi } from "../../platform/browser/browser-api";
-import { passwordGenerationServiceFactory } from "../../tools/background/service_factories/password-generation-service.factory";
-import {
-  cipherServiceFactory,
-  CipherServiceInitOptions,
-} from "../../vault/background/service_factories/cipher-service.factory";
-import { autofillServiceFactory } from "../background/service_factories/autofill-service.factory";
-import { copyToClipboard, GeneratePasswordToClipboardCommand } from "../clipboard";
-import { AutofillTabCommand } from "../commands/autofill-tab-command";
 import {
   AUTOFILL_CARD_ID,
   AUTOFILL_ID,
@@ -39,13 +12,27 @@ import {
   COPY_IDENTIFIER_ID,
   COPY_PASSWORD_ID,
   COPY_USERNAME_ID,
-  COPY_VERIFICATIONCODE_ID,
+  COPY_VERIFICATION_CODE_ID,
   CREATE_CARD_ID,
   CREATE_IDENTITY_ID,
   CREATE_LOGIN_ID,
   GENERATE_PASSWORD_ID,
   NOOP_COMMAND_SUFFIX,
-} from "../constants";
+} from "@bitwarden/common/autofill/constants";
+import { EventType } from "@bitwarden/common/enums";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
+import { CipherType } from "@bitwarden/common/vault/enums";
+import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+
+import { openUnlockPopout } from "../../auth/popup/utils/auth-popout-window";
+import { BrowserApi } from "../../platform/browser/browser-api";
+import {
+  openAddEditVaultItemPopout,
+  openVaultItemPasswordRepromptPopout,
+} from "../../vault/popup/utils/vault-popout-window";
+import { LockedVaultPendingNotificationsData } from "../background/abstractions/notification.background";
 import { AutofillCipherTypeId } from "../types";
 
 export type CopyToClipboardOptions = { text: string; tab: chrome.tabs.Tab };
@@ -54,9 +41,6 @@ export type AutofillAction = (tab: chrome.tabs.Tab, cipher: CipherView) => Promi
 
 export type GeneratePasswordToClipboardAction = (tab: chrome.tabs.Tab) => Promise<void>;
 
-const NOT_IMPLEMENTED = (..._args: unknown[]) =>
-  Promise.reject<never>("This action is not implemented inside of a service worker context.");
-
 export class ContextMenuClickedHandler {
   constructor(
     private copyToClipboard: CopyToClipboardAction,
@@ -64,92 +48,11 @@ export class ContextMenuClickedHandler {
     private autofillAction: AutofillAction,
     private authService: AuthService,
     private cipherService: CipherService,
-    private stateService: StateService,
     private totpService: TotpService,
     private eventCollectionService: EventCollectionService,
-    private userVerificationService: UserVerificationService
+    private userVerificationService: UserVerificationService,
+    private accountService: AccountService,
   ) {}
-
-  static async mv3Create(cachedServices: CachedServices) {
-    const stateFactory = new StateFactory(GlobalState, Account);
-    const serviceOptions: AuthServiceInitOptions & CipherServiceInitOptions = {
-      apiServiceOptions: {
-        logoutCallback: NOT_IMPLEMENTED,
-      },
-      cryptoFunctionServiceOptions: {
-        win: self,
-      },
-      encryptServiceOptions: {
-        logMacFailures: false,
-      },
-      i18nServiceOptions: {
-        systemLanguage: chrome.i18n.getUILanguage(),
-      },
-      keyConnectorServiceOptions: {
-        logoutCallback: NOT_IMPLEMENTED,
-      },
-      logServiceOptions: {
-        isDev: false,
-      },
-      platformUtilsServiceOptions: {
-        biometricCallback: NOT_IMPLEMENTED,
-        clipboardWriteCallback: NOT_IMPLEMENTED,
-        win: self,
-      },
-      stateServiceOptions: {
-        stateFactory: stateFactory,
-      },
-    };
-
-    const generatePasswordToClipboardCommand = new GeneratePasswordToClipboardCommand(
-      await passwordGenerationServiceFactory(cachedServices, serviceOptions),
-      await stateServiceFactory(cachedServices, serviceOptions)
-    );
-
-    const autofillCommand = new AutofillTabCommand(
-      await autofillServiceFactory(cachedServices, serviceOptions)
-    );
-
-    return new ContextMenuClickedHandler(
-      (options) => copyToClipboard(options.tab, options.text),
-      (tab) => generatePasswordToClipboardCommand.generatePasswordToClipboard(tab),
-      (tab, cipher) => autofillCommand.doAutofillTabWithCipherCommand(tab, cipher),
-      await authServiceFactory(cachedServices, serviceOptions),
-      await cipherServiceFactory(cachedServices, serviceOptions),
-      await stateServiceFactory(cachedServices, serviceOptions),
-      await totpServiceFactory(cachedServices, serviceOptions),
-      await eventCollectionServiceFactory(cachedServices, serviceOptions),
-      await userVerificationServiceFactory(cachedServices, serviceOptions)
-    );
-  }
-
-  static async onClickedListener(
-    info: chrome.contextMenus.OnClickData,
-    tab?: chrome.tabs.Tab,
-    cachedServices: CachedServices = {}
-  ) {
-    const contextMenuClickedHandler = await ContextMenuClickedHandler.mv3Create(cachedServices);
-    await contextMenuClickedHandler.run(info, tab);
-  }
-
-  static async messageListener(
-    message: { command: string; data: LockedVaultPendingNotificationsItem },
-    sender: chrome.runtime.MessageSender,
-    cachedServices: CachedServices
-  ) {
-    if (
-      message.command !== "unlockCompleted" ||
-      message.data.target !== "contextmenus.background"
-    ) {
-      return;
-    }
-
-    const contextMenuClickedHandler = await ContextMenuClickedHandler.mv3Create(cachedServices);
-    await contextMenuClickedHandler.run(
-      message.data.commandToRetry.msg.data,
-      message.data.commandToRetry.sender.tab
-    );
-  }
 
   async run(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) {
     if (!tab) {
@@ -174,9 +77,9 @@ export class ContextMenuClickedHandler {
     }
 
     if ((await this.authService.getAuthStatus()) < AuthenticationStatus.Unlocked) {
-      const retryMessage: LockedVaultPendingNotificationsItem = {
+      const retryMessage: LockedVaultPendingNotificationsData = {
         commandToRetry: {
-          msg: { command: NOOP_COMMAND_SUFFIX, data: info },
+          message: { command: NOOP_COMMAND_SUFFIX, contextMenuOnClickData: info },
           sender: { tab: tab },
         },
         target: "contextmenus.background",
@@ -184,10 +87,10 @@ export class ContextMenuClickedHandler {
       await BrowserApi.tabSendMessageData(
         tab,
         "addToLockedVaultPendingNotifications",
-        retryMessage
+        retryMessage,
       );
 
-      await BrowserApi.tabSendMessageData(tab, "promptForLogin");
+      await openUnlockPopout(tab);
       return;
     }
 
@@ -196,7 +99,7 @@ export class ContextMenuClickedHandler {
     const menuItemId = (info.menuItemId as string).split("_")[1]; // We create all the ids, we can guarantee they are strings
     let cipher: CipherView | undefined;
     const isCreateCipherAction = [CREATE_LOGIN_ID, CREATE_IDENTITY_ID, CREATE_CARD_ID].includes(
-      menuItemId as string
+      menuItemId as string,
     );
 
     if (isCreateCipherAction) {
@@ -206,15 +109,15 @@ export class ContextMenuClickedHandler {
         info.parentMenuItemId === AUTOFILL_IDENTITY_ID
           ? [CipherType.Identity]
           : info.parentMenuItemId === AUTOFILL_CARD_ID
-          ? [CipherType.Card]
-          : [];
+            ? [CipherType.Card]
+            : [];
 
       // This NOOP item has come through which is generally only for no access state but since we got here
       // we are actually unlocked we will do our best to find a good match of an item to autofill this is useful
       // in scenarios like unlock on autofill
       const ciphers = await this.cipherService.getAllDecryptedForUrl(
         tab.url,
-        additionalCiphersToGet
+        additionalCiphersToGet,
       );
 
       cipher = ciphers[0];
@@ -227,7 +130,10 @@ export class ContextMenuClickedHandler {
       return;
     }
 
-    this.stateService.setLastActive(new Date().getTime());
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+    await this.accountService.setAccountActivity(activeUserId, new Date());
     switch (info.parentMenuItemId) {
       case AUTOFILL_ID:
       case AUTOFILL_IDENTITY_ID:
@@ -235,14 +141,12 @@ export class ContextMenuClickedHandler {
         const cipherType = this.getCipherCreationType(menuItemId);
 
         if (cipherType) {
-          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType,
-          });
+          await openAddEditVaultItemPopout(tab, { cipherType });
           break;
         }
 
         if (await this.isPasswordRepromptRequired(cipher)) {
-          await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
+          await openVaultItemPasswordRepromptPopout(tab, {
             cipherId: cipher.id,
             // The action here is passed on to the single-use reprompt window and doesn't change based on cipher type
             action: AUTOFILL_ID,
@@ -255,9 +159,7 @@ export class ContextMenuClickedHandler {
       }
       case COPY_USERNAME_ID:
         if (menuItemId === CREATE_LOGIN_ID) {
-          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType: CipherType.Login,
-          });
+          await openAddEditVaultItemPopout(tab, { cipherType: CipherType.Login });
           break;
         }
 
@@ -265,35 +167,33 @@ export class ContextMenuClickedHandler {
         break;
       case COPY_PASSWORD_ID:
         if (menuItemId === CREATE_LOGIN_ID) {
-          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType: CipherType.Login,
-          });
+          await openAddEditVaultItemPopout(tab, { cipherType: CipherType.Login });
           break;
         }
 
         if (await this.isPasswordRepromptRequired(cipher)) {
-          await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
+          await openVaultItemPasswordRepromptPopout(tab, {
             cipherId: cipher.id,
-            action: info.parentMenuItemId,
+            action: COPY_PASSWORD_ID,
           });
         } else {
           this.copyToClipboard({ text: cipher.login.password, tab: tab });
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.eventCollectionService.collect(EventType.Cipher_ClientCopiedPassword, cipher.id);
         }
 
         break;
-      case COPY_VERIFICATIONCODE_ID:
+      case COPY_VERIFICATION_CODE_ID:
         if (menuItemId === CREATE_LOGIN_ID) {
-          await BrowserApi.tabSendMessageData(tab, "openAddEditCipher", {
-            cipherType: CipherType.Login,
-          });
+          await openAddEditVaultItemPopout(tab, { cipherType: CipherType.Login });
           break;
         }
 
         if (await this.isPasswordRepromptRequired(cipher)) {
-          await BrowserApi.tabSendMessageData(tab, "passwordReprompt", {
+          await openVaultItemPasswordRepromptPopout(tab, {
             cipherId: cipher.id,
-            action: info.parentMenuItemId,
+            action: COPY_VERIFICATION_CODE_ID,
           });
         } else {
           this.copyToClipboard({
@@ -317,10 +217,10 @@ export class ContextMenuClickedHandler {
     return menuItemId === CREATE_IDENTITY_ID
       ? CipherType.Identity
       : menuItemId === CREATE_CARD_ID
-      ? CipherType.Card
-      : menuItemId === CREATE_LOGIN_ID
-      ? CipherType.Login
-      : null;
+        ? CipherType.Card
+        : menuItemId === CREATE_LOGIN_ID
+          ? CipherType.Login
+          : null;
   }
 
   private async getIdentifier(tab: chrome.tabs.Tab, info: chrome.contextMenus.OnClickData) {
@@ -336,7 +236,7 @@ export class ContextMenuClickedHandler {
           }
 
           resolve(identifier);
-        }
+        },
       );
     });
   }

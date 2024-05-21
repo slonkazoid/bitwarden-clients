@@ -99,7 +99,7 @@
                 class="btn block"
                 type="button"
                 routerLink="/accessibility-cookie"
-                (click)="setFormValues()"
+                (click)="setLoginEmailValues()"
               >
                 <i class="bwi bwi-universal-access" aria-hidden="true"></i>
                 {{ "loadAccessibilityCookie" | i18n }}
@@ -118,7 +118,7 @@
             </button>
           </div>
           <div class="buttons-row" *ngIf="showLoginWithDevice">
-            <button type="button" class="btn block" (click)="startPasswordlessLogin()">
+            <button type="button" class="btn block" (click)="startAuthRequestLogin()">
               <i class="bwi bwi-mobile" aria-hidden="true"></i>
               {{ "logInWithAnotherDevice" | i18n }}
             </button>
@@ -139,7 +139,7 @@
             type="button"
             class="text text-primary password-hint-btn"
             routerLink="/hint"
-            (click)="setFormValues()"
+            (click)="setLoginEmailValues()"
           >
             {{ "getMasterPasswordHint" | i18n }}
           </button>

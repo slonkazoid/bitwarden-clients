@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
-import { OrganizationTaxInfoUpdateRequest } from "@bitwarden/common/billing/models/request/organization-tax-info-update.request";
+import { ExpandedTaxInfoUpdateRequest } from "@bitwarden/common/billing/models/request/expanded-tax-info-update.request";
 import { TaxInfoUpdateRequest } from "@bitwarden/common/billing/models/request/tax-info-update.request";
 import { TaxInfoResponse } from "@bitwarden/common/billing/models/response/tax-info.response";
 import { TaxRateResponse } from "@bitwarden/common/billing/models/response/tax-rate.response";
@@ -29,6 +29,7 @@ export class TaxInfoComponent {
 
   loading = true;
   organizationId: string;
+  providerId: string;
   taxInfo: TaxInfoView = {
     taxId: null,
     line1: null,
@@ -57,10 +58,16 @@ export class TaxInfoComponent {
     private apiService: ApiService,
     private route: ActivatedRoute,
     private logService: LogService,
-    private organizationApiService: OrganizationApiServiceAbstraction
+    private organizationApiService: OrganizationApiServiceAbstraction,
   ) {}
 
   async ngOnInit() {
+    // Provider setup
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+    this.route.queryParams.subscribe((params) => {
+      this.providerId = params.providerId;
+    });
+
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
@@ -120,15 +127,31 @@ export class TaxInfoComponent {
   get taxRate() {
     if (this.taxRates != null) {
       const localTaxRate = this.taxRates.find(
-        (x) => x.country === this.taxInfo.country && x.postalCode === this.taxInfo.postalCode
+        (x) => x.country === this.taxInfo.country && x.postalCode === this.taxInfo.postalCode,
       );
       return localTaxRate?.rate ?? null;
     }
   }
 
+  get showTaxIdCheckbox() {
+    return (
+      (this.organizationId || this.providerId) &&
+      this.taxInfo.country !== "US" &&
+      this.countrySupportsTax(this.taxInfo.country)
+    );
+  }
+
+  get showTaxIdFields() {
+    return (
+      (this.organizationId || this.providerId) &&
+      this.taxInfo.includeTaxId &&
+      this.countrySupportsTax(this.taxInfo.country)
+    );
+  }
+
   getTaxInfoRequest(): TaxInfoUpdateRequest {
-    if (this.organizationId) {
-      const request = new OrganizationTaxInfoUpdateRequest();
+    if (this.organizationId || this.providerId) {
+      const request = new ExpandedTaxInfoUpdateRequest();
       request.country = this.taxInfo.country;
       request.postalCode = this.taxInfo.postalCode;
 
@@ -164,7 +187,7 @@ export class TaxInfoComponent {
     return this.organizationId
       ? this.organizationApiService.updateTaxInfo(
           this.organizationId,
-          request as OrganizationTaxInfoUpdateRequest
+          request as ExpandedTaxInfoUpdateRequest,
         )
       : this.apiService.putTaxInfo(request);
   }

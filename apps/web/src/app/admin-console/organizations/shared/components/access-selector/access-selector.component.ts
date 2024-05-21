@@ -18,6 +18,8 @@ import {
   AccessItemValue,
   AccessItemView,
   CollectionPermission,
+  getPermissionList,
+  Permission,
 } from "./access-selector.models";
 
 export enum PermissionMode {
@@ -63,7 +65,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
    */
   private updateRowControlDisableState = (
     controlRow: FormGroup<ControlsOf<AccessItemValue>>,
-    item: AccessItemView
+    item: AccessItemView,
   ) => {
     // Disable entire row form group if readonly
     if (item.readonly) {
@@ -116,14 +118,16 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
   });
 
   protected itemType = AccessItemType;
-  protected permissionList = [
-    { perm: CollectionPermission.View, labelId: "canView" },
-    { perm: CollectionPermission.ViewExceptPass, labelId: "canViewExceptPass" },
-    { perm: CollectionPermission.Edit, labelId: "canEdit" },
-    { perm: CollectionPermission.EditExceptPass, labelId: "canEditExceptPass" },
-  ];
+  protected permissionList: Permission[];
   protected initialPermission = CollectionPermission.View;
 
+  /**
+   * When disabled, the access selector will make the assumption that a readonly state is desired.
+   * The PermissionMode will be set to Readonly
+   * The Multi-Select control will be hidden
+   * The delete action on each row item will be hidden
+   * The readonly permission label/property needs to configured on the access item views being passed into the component
+   */
   disabled: boolean;
 
   /**
@@ -136,14 +140,14 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
   set items(val: AccessItemView[]) {
     const selected = (this.selectionList.formArray.getRawValue() ?? []).concat(
-      val.filter((m) => m.readonly)
+      val.filter((m) => m.readonly),
     );
     this.selectionList.populateItems(
       val.map((m) => {
         m.icon = m.icon ?? this.itemIcon(m); // Ensure an icon is set
         return m;
       }),
-      selected
+      selected,
     );
   }
 
@@ -192,9 +196,24 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
    */
   @Input() showGroupColumn: boolean;
 
+  /**
+   * Enable Flexible Collections changes (feature flag)
+   */
+  @Input() set flexibleCollectionsEnabled(value: boolean) {
+    this._flexibleCollectionsEnabled = value;
+    this.permissionList = getPermissionList(value);
+  }
+
+  /**
+   * Hide the multi-select so that new items cannot be added
+   */
+  @Input() hideMultiSelect = false;
+
+  private _flexibleCollectionsEnabled: boolean;
+
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly i18nService: I18nService
+    private readonly i18nService: I18nService,
   ) {}
 
   /** Required for NG_VALUE_ACCESSOR */
@@ -213,6 +232,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
 
     // Keep the internal FormGroup in sync
     if (this.disabled) {
+      this.permissionMode = PermissionMode.Readonly;
       this.formGroup.disable();
     } else {
       this.formGroup.enable();
@@ -254,7 +274,8 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     this.pauseChangeNotification = false;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.permissionList = getPermissionList(this._flexibleCollectionsEnabled);
     // Watch the internal formArray for changes and propagate them
     this.selectionList.formArray.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((v) => {
       if (!this.notifyOnChange || this.pauseChangeNotification) {

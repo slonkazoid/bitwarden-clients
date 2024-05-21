@@ -10,19 +10,17 @@ on:
       - 'apps/browser/**'
       - 'libs/**'
       - '*'
-      - '!libs/importer'
       - '!*.md'
       - '!*.txt'
   push:
     branches:
-      - 'master'
+      - 'main'
       - 'rc'
       - 'hotfix-rc-browser'
     paths:
       - 'apps/browser/**'
       - 'libs/**'
       - '*'
-      - '!libs/importer'
       - '!*.md'
       - '!*.txt'
       - '.github/workflows/build-browser.yml'
@@ -36,22 +34,6 @@ defaults:
     shell: bash
 
 jobs:
-  cloc:
-    name: CLOC
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-
-      - name: Set up cloc
-        run: |
-          sudo apt update
-          sudo apt -y install cloc
-
-      - name: Print lines of code
-        run: cloc --include-lang TypeScript,JavaScript,HTML,Sass,CSS --vcs git
-
-
   setup:
     name: Setup
     runs-on: ubuntu-22.04
@@ -61,7 +43,7 @@ jobs:
       node_version: ${{ steps.retrieve-node-version.outputs.node_version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Get Package Version
         id: gen_vars
@@ -91,7 +73,7 @@ jobs:
         working-directory: apps/browser
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Testing locales - extName length
         run: |
@@ -129,25 +111,19 @@ jobs:
       _NODE_VERSION: ${{ needs.setup.outputs.node_version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Set up Node
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
 
-      - name: Install node-gyp
-        run: |
-          npm install -g node-gyp
-          node-gyp install $(node -v)
-
       - name: Print environment
         run: |
           node --version
           npm --version
-          node-gyp --version
 
       - name: Build sources for reviewers
         run: |
@@ -184,16 +160,20 @@ jobs:
         run: npm run dist
         working-directory: browser-source/apps/browser
 
-      # - name: Build Manifest v3
-      #   run: npm run dist:mv3
-      #   working-directory: browser-source/apps/browser
+      - name: Build Manifest v3
+        run: npm run dist:mv3
+        working-directory: browser-source/apps/browser
+
+      - name: Build Chrome Manifest v3 Beta
+        run: npm run dist:chrome:beta
+        working-directory: browser-source/apps/browser
 
       - name: Gulp
         run: gulp ci
         working-directory: browser-source/apps/browser
 
       - name: Upload Opera artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: dist-opera-${{ env._BUILD_NUMBER }}.zip
           path: browser-source/apps/browser/dist/dist-opera.zip
@@ -207,28 +187,35 @@ jobs:
       #     if-no-files-found: error
 
       - name: Upload Chrome artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: dist-chrome-${{ env._BUILD_NUMBER }}.zip
           path: browser-source/apps/browser/dist/dist-chrome.zip
           if-no-files-found: error
 
-      # - name: Upload Chrome MV3 artifact
-      #   uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
-      #   with:
-      #     name: dist-chrome-MV3-${{ env._BUILD_NUMBER }}.zip
-      #     path: browser-source/apps/browser/dist/dist-chrome-mv3.zip
-      #     if-no-files-found: error
+      - name: Upload Chrome MV3 artifact (DO NOT USE FOR PROD)
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: DO-NOT-USE-FOR-PROD-dist-chrome-MV3-${{ env._BUILD_NUMBER }}.zip
+          path: browser-source/apps/browser/dist/dist-chrome-mv3.zip
+          if-no-files-found: error
+
+      - name: Upload Chrome MV3 Beta artifact (DO NOT USE FOR PROD)
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: DO-NOT-USE-FOR-PROD-dist-chrome-MV3-beta-${{ env._BUILD_NUMBER }}.zip
+          path: browser-source/apps/browser/dist/dist-chrome-mv3-beta.zip
+          if-no-files-found: error
 
       - name: Upload Firefox artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: dist-firefox-${{ env._BUILD_NUMBER }}.zip
           path: browser-source/apps/browser/dist/dist-firefox.zip
           if-no-files-found: error
 
       - name: Upload Edge artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: dist-edge-${{ env._BUILD_NUMBER }}.zip
           path: browser-source/apps/browser/dist/dist-edge.zip
@@ -242,7 +229,7 @@ jobs:
       #     if-no-files-found: error
 
       - name: Upload browser source
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: browser-source-${{ env._BUILD_NUMBER }}.zip
           path: browser-source.zip
@@ -250,7 +237,7 @@ jobs:
 
       - name: Upload coverage artifact
         if: false
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: coverage-${{ env._BUILD_NUMBER }}.zip
           path: browser-source/apps/browser/coverage/coverage-${{ env._BUILD_NUMBER }}.zip
@@ -258,7 +245,7 @@ jobs:
 
   build-safari:
     name: Build Safari
-    runs-on: macos-11
+    runs-on: macos-13
     needs:
       - setup
       - locales-test
@@ -267,10 +254,10 @@ jobs:
       _NODE_VERSION: ${{ needs.setup.outputs.node_version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Set up Node
-        uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3.6.0
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
@@ -281,58 +268,72 @@ jobs:
           node --version
           npm --version
 
-      - name: Decrypt secrets
+      - name: Login to Azure
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Download Provisioning Profiles secrets
         env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: profiles
         run: |
           mkdir -p $HOME/secrets
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/bitwarden-desktop-key.p12" \
-            "$GITHUB_WORKSPACE/.github/secrets/bitwarden-desktop-key.p12.gpg"
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/appstore-app-cert.p12" \
-            "$GITHUB_WORKSPACE/.github/secrets/appstore-app-cert.p12.gpg"
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/appstore-installer-cert.p12" \
-            "$GITHUB_WORKSPACE/.github/secrets/appstore-installer-cert.p12.gpg"
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/devid-app-cert.p12" \
-            "$GITHUB_WORKSPACE/.github/secrets/devid-app-cert.p12.gpg"
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/devid-installer-cert.p12" \
-            "$GITHUB_WORKSPACE/.github/secrets/devid-installer-cert.p12.gpg"
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/macdev-cert.p12" \
-            "$GITHUB_WORKSPACE/.github/secrets/macdev-cert.p12.gpg"
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output "$HOME/secrets/bitwarden_desktop_appstore.provisionprofile" \
-            "$GITHUB_WORKSPACE/.github/secrets/bitwarden_desktop_appstore.provisionprofile.gpg"
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name bitwarden_desktop_appstore.provisionprofile \
+            --file $HOME/secrets/bitwarden_desktop_appstore.provisionprofile \
+            --output none
+
+      - name: Get certificates
+        run: |
+          mkdir -p $HOME/certificates
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/bitwarden-desktop-key |
+            jq -r .value | base64 -d > $HOME/certificates/bitwarden-desktop-key.p12
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/appstore-app-cert |
+            jq -r .value | base64 -d > $HOME/certificates/appstore-app-cert.p12
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/appstore-installer-cert |
+            jq -r .value | base64 -d > $HOME/certificates/appstore-installer-cert.p12
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/devid-app-cert |
+            jq -r .value | base64 -d > $HOME/certificates/devid-app-cert.p12
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/devid-installer-cert |
+            jq -r .value | base64 -d > $HOME/certificates/devid-installer-cert.p12
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/macdev-cert |
+            jq -r .value | base64 -d > $HOME/certificates/macdev-cert.p12
 
       - name: Set up keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
-          DESKTOP_KEY_PASSWORD: ${{ secrets.DESKTOP_KEY_PASSWORD }}
-          DEVID_CERT_PASSWORD: ${{ secrets.DEVID_CERT_PASSWORD }}
-          APPSTORE_CERT_PASSWORD: ${{ secrets.APPSTORE_CERT_PASSWORD }}
-          MACDEV_CERT_PASSWORD: ${{ secrets.MACDEV_CERT_PASSWORD }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         run: |
           security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
-          security import "$HOME/secrets/bitwarden-desktop-key.p12" -k build.keychain -P $DESKTOP_KEY_PASSWORD \
+
+          security import "$HOME/certificates/bitwarden-desktop-key.p12" -k build.keychain -P "" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-          security import "$HOME/secrets/devid-app-cert.p12" -k build.keychain -P $DEVID_CERT_PASSWORD \
+
+          security import "$HOME/certificates/devid-app-cert.p12" -k build.keychain -P "" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-          security import "$HOME/secrets/devid-installer-cert.p12" -k build.keychain -P $DEVID_CERT_PASSWORD \
+
+          security import "$HOME/certificates/devid-installer-cert.p12" -k build.keychain -P "" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-          security import "$HOME/secrets/appstore-app-cert.p12" -k build.keychain -P $APPSTORE_CERT_PASSWORD \
+
+          security import "$HOME/certificates/appstore-app-cert.p12" -k build.keychain -P "" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-          security import "$HOME/secrets/appstore-installer-cert.p12" -k build.keychain -P $APPSTORE_CERT_PASSWORD \
+
+          security import "$HOME/certificates/appstore-installer-cert.p12" -k build.keychain -P "" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
-          security import "$HOME/secrets/macdev-cert.p12" -k build.keychain -P $MACDEV_CERT_PASSWORD \
+
+          security import "$HOME/certificates/macdev-cert.p12" -k build.keychain -P "" \
             -T /usr/bin/codesign -T /usr/bin/security -T /usr/bin/productbuild
+
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
 
       - name: NPM setup
@@ -351,7 +352,7 @@ jobs:
           ls -la
 
       - name: Upload Safari artifact
-        uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: dist-safari-${{ env._BUILD_NUMBER }}.zip
           path: apps/browser/dist/dist-safari.zip
@@ -359,36 +360,36 @@ jobs:
 
   crowdin-push:
     name: Crowdin Push
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-22.04
     needs:
       - build
       - build-safari
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Login to Azure
-        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: bitwarden/gh-actions/get-keyvault-secrets@f1125802b1ccae8c601d7c4f61ce39ea254b10c8
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: "bitwarden-ci"
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@ee4ab4ea2feadc0fdc3b200729c7b1c4cf4b38f3 # v1.11.0
+        uses: crowdin/github-action@c953b17499daa6be3e5afbf7a63616fb02d8b18d # v1.19.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
           CROWDIN_PROJECT_ID: "268134"
         with:
           config: apps/browser/crowdin.yml
-          crowdin_branch_name: master
+          crowdin_branch_name: main
           upload_sources: true
           upload_translations: false
 
@@ -397,7 +398,6 @@ jobs:
     if: always()
     runs-on: ubuntu-22.04
     needs:
-      - cloc
       - setup
       - locales-test
       - build
@@ -405,31 +405,11 @@ jobs:
       - crowdin-push
     steps:
       - name: Check if any job failed
-        if: ${{ (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/rc') }}
-        env:
-          CLOC_STATUS: ${{ needs.cloc.result }}
-          SETUP_STATUS: ${{ needs.setup.result }}
-          LOCALES_TEST_STATUS: ${{ needs.locales-test.result }}
-          BUILD_STATUS: ${{ needs.build.result }}
-          SAFARI_BUILD_STATUS: ${{ needs.build-safari.result }}
-          CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
-        run: |
-          if [ "$CLOC_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$SETUP_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$LOCALES_TEST_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$BUILD_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$SAFARI_BUILD_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
-              exit 1
-          fi
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/rc' || github.ref == 'refs/heads/hotfix-rc') && contains(needs.*.result, 'failure')
+        run: exit 1
 
       - name: Login to Azure - Prod Subscription
-        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         if: failure()
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
@@ -437,7 +417,7 @@ jobs:
       - name: Retrieve secrets
         id: retrieve-secrets
         if: failure()
-        uses: bitwarden/gh-actions/get-keyvault-secrets@f1125802b1ccae8c601d7c4f61ce39ea254b10c8
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: "bitwarden-ci"
           secrets: "devops-alerts-slack-webhook-url"

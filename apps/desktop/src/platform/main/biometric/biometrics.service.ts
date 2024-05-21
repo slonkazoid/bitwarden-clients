@@ -1,9 +1,10 @@
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { UserId } from "@bitwarden/common/types/guid";
 
 import { WindowMain } from "../../../main/window.main";
-import { ElectronStateService } from "../../services/electron-state.service.abstraction";
 
 import { BiometricsServiceAbstraction, OsBiometricService } from "./biometrics.service.abstraction";
 
@@ -14,10 +15,10 @@ export class BiometricsService implements BiometricsServiceAbstraction {
   constructor(
     private i18nService: I18nService,
     private windowMain: WindowMain,
-    private stateService: ElectronStateService,
     private logService: LogService,
     private messagingService: MessagingService,
-    private platform: NodeJS.Platform
+    private platform: NodeJS.Platform,
+    private biometricStateService: BiometricStateService,
   ) {
     this.loadPlatformSpecificService(this.platform);
   }
@@ -27,6 +28,8 @@ export class BiometricsService implements BiometricsServiceAbstraction {
       this.loadWindowsHelloService();
     } else if (platform === "darwin") {
       this.loadMacOSService();
+    } else {
+      this.loadNoopBiometricsService();
     }
   }
 
@@ -36,19 +39,20 @@ export class BiometricsService implements BiometricsServiceAbstraction {
     this.platformSpecificService = new BiometricWindowsMain(
       this.i18nService,
       this.windowMain,
-      this.stateService,
-      this.logService
+      this.logService,
     );
   }
 
   private loadMacOSService() {
     // eslint-disable-next-line
     const BiometricDarwinMain = require("./biometric.darwin.main").default;
-    this.platformSpecificService = new BiometricDarwinMain(this.i18nService, this.stateService);
+    this.platformSpecificService = new BiometricDarwinMain(this.i18nService);
   }
 
-  async init() {
-    return await this.platformSpecificService.init();
+  private loadNoopBiometricsService() {
+    // eslint-disable-next-line
+    const NoopBiometricsService = require("./biometric.noop.main").default;
+    this.platformSpecificService = new NoopBiometricsService();
   }
 
   async osSupportsBiometric() {
@@ -62,11 +66,9 @@ export class BiometricsService implements BiometricsServiceAbstraction {
   }: {
     service: string;
     key: string;
-    userId: string;
+    userId: UserId;
   }): Promise<boolean> {
-    const requireClientKeyHalf = await this.stateService.getBiometricRequirePasswordOnStart({
-      userId,
-    });
+    const requireClientKeyHalf = await this.biometricStateService.getRequirePasswordOnStart(userId);
     const clientKeyHalfB64 = this.getClientKeyHalf(service, key);
     const clientKeyHalfSatisfied = !requireClientKeyHalf || !!clientKeyHalfB64;
     return clientKeyHalfSatisfied && (await this.osSupportsBiometric());
@@ -74,6 +76,8 @@ export class BiometricsService implements BiometricsServiceAbstraction {
 
   async authenticateBiometric(): Promise<boolean> {
     let result = false;
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.interruptProcessReload(
       () => {
         return this.platformSpecificService.authenticateBiometric();
@@ -81,7 +85,7 @@ export class BiometricsService implements BiometricsServiceAbstraction {
       (response) => {
         result = response;
         return !response;
-      }
+      },
     );
     return result;
   }
@@ -93,7 +97,7 @@ export class BiometricsService implements BiometricsServiceAbstraction {
       return await this.platformSpecificService.getBiometricKey(
         service,
         storageKey,
-        this.getClientKeyHalf(service, storageKey)
+        this.getClientKeyHalf(service, storageKey),
       );
     });
   }
@@ -105,7 +109,7 @@ export class BiometricsService implements BiometricsServiceAbstraction {
       service,
       storageKey,
       value,
-      this.getClientKeyHalf(service, storageKey)
+      this.getClientKeyHalf(service, storageKey),
     );
   }
 
@@ -133,7 +137,7 @@ export class BiometricsService implements BiometricsServiceAbstraction {
 
   private async interruptProcessReload<T>(
     callback: () => Promise<T>,
-    restartReloadCallback: (arg: T) => boolean = () => false
+    restartReloadCallback: (arg: T) => boolean = () => false,
   ): Promise<T> {
     this.messagingService.send("cancelProcessReload");
     let restartReload = false;
@@ -161,7 +165,13 @@ export class BiometricsService implements BiometricsServiceAbstraction {
   }
 
   private async enforceClientKeyHalf(service: string, storageKey: string): Promise<void> {
-    const requireClientKeyHalf = await this.stateService.getBiometricRequirePasswordOnStart();
+    // The first half of the storageKey is the userId, separated by `_`
+    // We need to extract from the service because the active user isn't properly synced to the main process,
+    // So we can't use the observables on `biometricStateService`
+    const [userId] = storageKey.split("_");
+    const requireClientKeyHalf = await this.biometricStateService.getRequirePasswordOnStart(
+      userId as UserId,
+    );
     const clientKeyHalfB64 = this.getClientKeyHalf(service, storageKey);
 
     if (requireClientKeyHalf && !clientKeyHalfB64) {

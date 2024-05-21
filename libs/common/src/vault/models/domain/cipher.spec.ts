@@ -1,15 +1,15 @@
-// eslint-disable-next-line no-restricted-imports
-import { Substitute, Arg } from "@fluffy-spoon/substitute";
+import { mock } from "jest-mock-extended";
 import { Jsonify } from "type-fest";
 
 import { makeStaticByteArray, mockEnc, mockFromJson } from "../../../../spec/utils";
-import { FieldType, SecureNoteType, UriMatchType } from "../../../enums";
+import { UriMatchStrategy } from "../../../models/domain/domain-service";
 import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../../platform/abstractions/encrypt.service";
 import { EncString } from "../../../platform/models/domain/enc-string";
 import { ContainerService } from "../../../platform/services/container.service";
 import { InitializerKey } from "../../../platform/services/cryptography/initializer-key";
 import { CipherService } from "../../abstractions/cipher.service";
+import { FieldType, SecureNoteType } from "../../enums";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
 import { CipherData } from "../../models/data/cipher.data";
@@ -76,7 +76,13 @@ describe("Cipher DTO", () => {
         reprompt: CipherRepromptType.None,
         key: "EncryptedString",
         login: {
-          uris: [{ uri: "EncryptedString", match: UriMatchType.Domain }],
+          uris: [
+            {
+              uri: "EncryptedString",
+              uriChecksum: "EncryptedString",
+              match: UriMatchStrategy.Domain,
+            },
+          ],
           username: "EncryptedString",
           password: "EncryptedString",
           passwordRevisionDate: "2022-01-31T12:00:00.000Z",
@@ -149,7 +155,13 @@ describe("Cipher DTO", () => {
           username: { encryptedString: "EncryptedString", encryptionType: 0 },
           password: { encryptedString: "EncryptedString", encryptionType: 0 },
           totp: { encryptedString: "EncryptedString", encryptionType: 0 },
-          uris: [{ match: 0, uri: { encryptedString: "EncryptedString", encryptionType: 0 } }],
+          uris: [
+            {
+              match: 0,
+              uri: { encryptedString: "EncryptedString", encryptionType: 0 },
+              uriChecksum: { encryptedString: "EncryptedString", encryptionType: 0 },
+            },
+          ],
         },
         attachments: [
           {
@@ -219,23 +231,23 @@ describe("Cipher DTO", () => {
       loginView.username = "username";
       loginView.password = "password";
 
-      const login = Substitute.for<Login>();
-      login.decrypt(Arg.any(), Arg.any()).resolves(loginView);
+      const login = mock<Login>();
+      login.decrypt.mockResolvedValue(loginView);
       cipher.login = login;
 
-      const cryptoService = Substitute.for<CryptoService>();
-      const encryptService = Substitute.for<EncryptService>();
-      const cipherService = Substitute.for<CipherService>();
+      const cryptoService = mock<CryptoService>();
+      const encryptService = mock<EncryptService>();
+      const cipherService = mock<CipherService>();
 
-      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
+      encryptService.decryptToBytes.mockResolvedValue(makeStaticByteArray(64));
 
       (window as any).bitwardenContainerService = new ContainerService(
         cryptoService,
-        encryptService
+        encryptService,
       );
 
       const cipherView = await cipher.decrypt(
-        await cipherService.getKeyForCipherKeyDecryption(cipher)
+        await cipherService.getKeyForCipherKeyDecryption(cipher),
       );
 
       expect(cipherView).toMatchObject({
@@ -343,19 +355,19 @@ describe("Cipher DTO", () => {
       cipher.secureNote.type = SecureNoteType.Generic;
       cipher.key = mockEnc("EncKey");
 
-      const cryptoService = Substitute.for<CryptoService>();
-      const encryptService = Substitute.for<EncryptService>();
-      const cipherService = Substitute.for<CipherService>();
+      const cryptoService = mock<CryptoService>();
+      const encryptService = mock<EncryptService>();
+      const cipherService = mock<CipherService>();
 
-      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
+      encryptService.decryptToBytes.mockResolvedValue(makeStaticByteArray(64));
 
       (window as any).bitwardenContainerService = new ContainerService(
         cryptoService,
-        encryptService
+        encryptService,
       );
 
       const cipherView = await cipher.decrypt(
-        await cipherService.getKeyForCipherKeyDecryption(cipher)
+        await cipherService.getKeyForCipherKeyDecryption(cipher),
       );
 
       expect(cipherView).toMatchObject({
@@ -477,23 +489,23 @@ describe("Cipher DTO", () => {
       cardView.cardholderName = "cardholderName";
       cardView.number = "4111111111111111";
 
-      const card = Substitute.for<Card>();
-      card.decrypt(Arg.any(), Arg.any()).resolves(cardView);
+      const card = mock<Card>();
+      card.decrypt.mockResolvedValue(cardView);
       cipher.card = card;
 
-      const cryptoService = Substitute.for<CryptoService>();
-      const encryptService = Substitute.for<EncryptService>();
-      const cipherService = Substitute.for<CipherService>();
+      const cryptoService = mock<CryptoService>();
+      const encryptService = mock<EncryptService>();
+      const cipherService = mock<CipherService>();
 
-      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
+      encryptService.decryptToBytes.mockResolvedValue(makeStaticByteArray(64));
 
       (window as any).bitwardenContainerService = new ContainerService(
         cryptoService,
-        encryptService
+        encryptService,
       );
 
       const cipherView = await cipher.decrypt(
-        await cipherService.getKeyForCipherKeyDecryption(cipher)
+        await cipherService.getKeyForCipherKeyDecryption(cipher),
       );
 
       expect(cipherView).toMatchObject({
@@ -639,23 +651,23 @@ describe("Cipher DTO", () => {
       identityView.firstName = "firstName";
       identityView.lastName = "lastName";
 
-      const identity = Substitute.for<Identity>();
-      identity.decrypt(Arg.any(), Arg.any()).resolves(identityView);
+      const identity = mock<Identity>();
+      identity.decrypt.mockResolvedValue(identityView);
       cipher.identity = identity;
 
-      const cryptoService = Substitute.for<CryptoService>();
-      const encryptService = Substitute.for<EncryptService>();
-      const cipherService = Substitute.for<CipherService>();
+      const cryptoService = mock<CryptoService>();
+      const encryptService = mock<EncryptService>();
+      const cipherService = mock<CipherService>();
 
-      encryptService.decryptToBytes(Arg.any(), Arg.any()).resolves(makeStaticByteArray(64));
+      encryptService.decryptToBytes.mockResolvedValue(makeStaticByteArray(64));
 
       (window as any).bitwardenContainerService = new ContainerService(
         cryptoService,
-        encryptService
+        encryptService,
       );
 
       const cipherView = await cipher.decrypt(
-        await cipherService.getKeyForCipherKeyDecryption(cipher)
+        await cipherService.getKeyForCipherKeyDecryption(cipher),
       );
 
       expect(cipherView).toMatchObject({

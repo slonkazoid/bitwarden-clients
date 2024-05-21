@@ -52,12 +52,11 @@
         </div>
       </div>
       <div class="box-footer">
-        <button type="button" class="btn link" routerLink="/hint" (click)="setFormValues()">
+        <button type="button" class="btn link" routerLink="/hint" (click)="setLoginEmailValues()">
           <b>{{ "getMasterPasswordHint" | i18n }}</b>
         </button>
       </div>
     </div>
-    <app-private-mode-warning></app-private-mode-warning>
     <div class="content login-buttons">
       <button type="submit" class="btn primary block" [disabled]="form.loading">
         <span [hidden]="form.loading"
@@ -66,7 +65,7 @@
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
       <div class="tw-mb-3" *ngIf="showLoginWithDevice && showPasswordless">
-        <button type="button" class="btn block" (click)="startPasswordlessLogin()">
+        <button type="button" class="btn block" (click)="startAuthRequestLogin()">
           <span> <i class="bwi bwi-mobile"></i> {{ "loginWithDevice" | i18n }} </span>
         </button>
       </div>

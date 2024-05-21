@@ -1,9 +1,9 @@
-import * as program from "commander";
+import { OptionValues } from "commander";
 import * as inquirer from "inquirer";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { ImportServiceAbstraction, ImportType } from "@bitwarden/importer";
+import { ImportServiceAbstraction, ImportType } from "@bitwarden/importer/core";
 
 import { Response } from "../models/response";
 import { MessageResponse } from "../models/response/message.response";
@@ -13,27 +13,23 @@ export class ImportCommand {
   constructor(
     private importService: ImportServiceAbstraction,
     private organizationService: OrganizationService,
-    private syncService: SyncService
+    private syncService: SyncService,
   ) {}
 
-  async run(
-    format: ImportType,
-    filepath: string,
-    options: program.OptionValues
-  ): Promise<Response> {
+  async run(format: ImportType, filepath: string, options: OptionValues): Promise<Response> {
     const organizationId = options.organizationid;
     if (organizationId != null) {
       const organization = await this.organizationService.getFromState(organizationId);
 
       if (organization == null) {
         return Response.badRequest(
-          `You do not belong to an organization with the ID of ${organizationId}. Check the organization ID and sync your vault.`
+          `You do not belong to an organization with the ID of ${organizationId}. Check the organization ID and sync your vault.`,
         );
       }
 
       if (!organization.canAccessImportExport) {
         return Response.badRequest(
-          "You are not authorized to import into the provided organization."
+          "You are not authorized to import into the provided organization.",
         );
       }
     }
@@ -58,7 +54,7 @@ export class ImportCommand {
     const importer = await this.importService.getImporter(
       format,
       promptForPassword_callback,
-      organizationId
+      organizationId,
     );
     if (importer === null) {
       return Response.badRequest("Proper importer type required.");
@@ -80,6 +76,8 @@ export class ImportCommand {
 
       const response = await this.importService.import(importer, contents, organizationId);
       if (response.success) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.syncService.fullSync(true);
         return Response.success(new MessageResponse("Imported " + filepath, null));
       }

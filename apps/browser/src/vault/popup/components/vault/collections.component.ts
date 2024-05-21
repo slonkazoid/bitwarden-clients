@@ -4,6 +4,8 @@ import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { CollectionsComponent as BaseCollectionsComponent } from "@bitwarden/angular/admin-console/components/collections.component";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -21,11 +23,21 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     cipherService: CipherService,
+    organizationService: OrganizationService,
     private route: ActivatedRoute,
     private location: Location,
-    logService: LogService
+    logService: LogService,
+    configService: ConfigService,
   ) {
-    super(collectionService, platformUtilsService, i18nService, cipherService, logService);
+    super(
+      collectionService,
+      platformUtilsService,
+      i18nService,
+      cipherService,
+      organizationService,
+      logService,
+      configService,
+    );
   }
 
   async ngOnInit() {

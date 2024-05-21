@@ -403,6 +403,9 @@
   "length": {
     "message": "Longitud"
   },
+  "passwordMinLength": {
+    "message": "Longitud mínima de la contrasenya"
+  },
   "uppercase": {
     "message": "Majúscules (A-Z)"
   },
@@ -476,7 +479,7 @@
     "message": "La mida màxima del fitxer és de 500 MB."
   },
   "encryptionKeyMigrationRequired": {
-    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
+    "message": "Cal migrar la clau de xifratge. Inicieu la sessió a la caixa forta web per actualitzar la clau de xifratge."
   },
   "editedFolder": {
     "message": "Carpeta guardada"
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "El vostre compte s'ha creat correctament. Ara ja podeu iniciar sessió."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "Heu iniciat sessió correctament"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Podeu tancar aquesta finestra"
   },
   "masterPassSent": {
     "message": "Hem enviat un correu electrònic amb la vostra contrasenya mestra."
@@ -791,8 +800,11 @@
   "changeMasterPass": {
     "message": "Canvia la contrasenya mestra"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Podeu canviar la contrasenya mestra a la caixa forta web de bitwarden.com. Voleu visitar el lloc web ara?"
+  "continueToWebApp": {
+    "message": "Continua cap a l'aplicació web?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Podeu canviar la vostra contrasenya mestra a l'aplicació web de Bitwarden."
   },
   "fingerprintPhrase": {
     "message": "Frase d'empremta digital",
@@ -1389,6 +1401,9 @@
   "invalidPin": {
     "message": "El codi PIN no és vàlid."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "Hi ha massa intents d'introducció de PIN no vàlids. S'està tancant sessió."
+  },
   "unlockWithWindowsHello": {
     "message": "Desbloqueja amb Windows Hello"
   },
@@ -1533,8 +1548,17 @@
   "setMasterPassword": {
     "message": "Estableix la contrasenya mestra"
   },
-  "ssoCompleteRegistration": {
-    "message": "Per completar la sessió amb SSO, configureu una contrasenya mestra per accedir i protegir la vostra caixa forta."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Els permisos de la vostra organització s'han actualitzat, cal que establiu una contrasenya mestra.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "La vostra organització requereix que establiu una contrasenya mestra.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Es requereix verificació",
+    "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
     "message": "Contrasenya mestra actual"
@@ -1608,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "La integració en el navegador no és compatible"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "S'ha produït un error en habilitar la integració del navegador"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "S'ha produït un error en activar la integració del navegador."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "Malauradament, la integració del navegador només és compatible amb la versió de Mac App Store."
   },
@@ -1622,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Habilita una capa de seguretat addicional mitjançant la validació de frases d'empremtes dactilars quan estableix un enllaç entre l'escriptori i el navegador. Quan està habilitat, requereix la intervenció i verificació de l'usuari cada vegada que s'estableix una connexió."
+  },
+  "enableHardwareAcceleration": {
+    "message": "Utilitza l'acceleració de maquinari"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "Per defecte, aquesta configuració està activada. Apagueu només si teniu problemes gràfics. Cal reiniciar."
   },
   "approve": {
     "message": "Aprova"
@@ -1661,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Una política d’organització afecta les vostres opcions de propietat."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Una política d'organització ha desactivat la importació d'elements a la vostra caixa forta personal."
   },
   "allSends": {
     "message": "Tots els Send",
@@ -1857,6 +1896,42 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "La vostra contrasenya mestra no compleix una o més de les polítiques de l'organització. Per accedir a la caixa forta, heu d'actualitzar-la ara. Si continueu, es tancarà la sessió actual i us demanarà que torneu a iniciar-la. Les sessions en altres dispositius poden continuar romanent actives fins a una hora."
+  },
+  "tryAgain": {
+    "message": "Torneu-ho a provar"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Es requereix verificació per a aquesta acció. Estableix un PIN per continuar."
+  },
+  "setPin": {
+    "message": "Estableix el PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verifica amb biomètrica"
+  },
+  "awaitingConfirmation": {
+    "message": "S'està esperant la confirmació"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "No s'ha pogut completar la biomètrica."
+  },
+  "needADifferentMethod": {
+    "message": "Necessita un mètode diferent?"
+  },
+  "useMasterPassword": {
+    "message": "Utilitza contrasenya mestra"
+  },
+  "usePin": {
+    "message": "Utilitza el PIN"
+  },
+  "useBiometrics": {
+    "message": "Utilitza la biometria"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Introduïu el codi de verificació que s’ha enviat al vostre correu electrònic."
+  },
+  "resendCode": {
+    "message": "Reenvia el codi"
   },
   "hours": {
     "message": "Hores"
@@ -2056,6 +2131,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Genera un àlies de correu electrònic amb un servei de reenviament extern."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Nom de l'amfitrió",
@@ -2280,12 +2457,6 @@
   "loggingInOn": {
     "message": "Inici de sessió en"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
-  },
   "selfHostedServer": {
     "message": "autoallotjat"
   },
@@ -2416,7 +2587,240 @@
   "submenu": {
     "message": "Submenú"
   },
+  "skipToContent": {
+    "message": "Vés al contingut"
+  },
+  "typePasskey": {
+    "message": "Clau de pas"
+  },
+  "passkeyNotCopied": {
+    "message": "La clau de pas no es copiarà"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "La clau de pas no es copiarà a l'element clonat. Voleu continuar clonant aquest element?"
+  },
   "aliasDomain": {
-    "message": "Alias domain"
+    "message": "Domini d'àlies"
+  },
+  "importData": {
+    "message": "Importa dades",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Error d'importació"
+  },
+  "importErrorDesc": {
+    "message": "Hi ha hagut un problema amb les dades que heu intentat importar. Resoleu els errors que es mostren a continuació al fitxer font i torneu-ho a provar."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resoleu els errors següents i torneu-ho a provar."
+  },
+  "description": {
+    "message": "Descripció"
+  },
+  "importSuccess": {
+    "message": "Les dades s'han importat correctament"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "S'han importat un total de $AMOUNT$ elements.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Total"
+  },
+  "importWarning": {
+    "message": "Esteu important dades a $ORGANIZATION$. Les vostres dades es poden compartir amb membres d'aquesta organització. Voleu continuar?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Inicieu DUO i seguiu els passos per finalitzar la sessió."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Es requereix l'inici de sessió en dos passos de DUO al vostre compte."
+  },
+  "launchDuo": {
+    "message": "Inicia Duo al navegador"
+  },
+  "importFormatError": {
+    "message": "Les dades no estan formatades correctament. Comproveu el fitxer d'importació i torneu-ho a provar."
+  },
+  "importNothingError": {
+    "message": "No s'ha importat res."
+  },
+  "importEncKeyError": {
+    "message": "Error en desxifrar el fitxer exportat. La vostra clau de xifratge no coincideix amb la clau de xifratge utilitzada per exportar les dades."
+  },
+  "invalidFilePassword": {
+    "message": "La contrasenya del fitxer no és vàlida. Utilitzeu la contrasenya que vau introduir quan vau crear el fitxer d'exportació."
+  },
+  "importDestination": {
+    "message": "Destinació de la importació"
+  },
+  "learnAboutImportOptions": {
+    "message": "Obteniu informació sobre les opcions d'importació"
+  },
+  "selectImportFolder": {
+    "message": "Selecciona una carpeta"
+  },
+  "selectImportCollection": {
+    "message": "Selecciona una col·lecció"
+  },
+  "importTargetHint": {
+    "message": "Seleccioneu aquesta opció si voleu que el contingut del fitxer importat es traslladi a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "El fitxer conté elements no assignats."
+  },
+  "selectFormat": {
+    "message": "Seleccioneu el format del fitxer d'importació"
+  },
+  "selectImportFile": {
+    "message": "Seleccioneu el fitxer d'importació"
+  },
+  "chooseFile": {
+    "message": "Tria un fitxer"
+  },
+  "noFileChosen": {
+    "message": "No s'ha triat cap fitxer"
+  },
+  "orCopyPasteFileContents": {
+    "message": "o copieu/enganxeu el contingut dels fitxers d'importació"
+  },
+  "instructionsFor": {
+    "message": "Instruccions de $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Confirma la importació de la Caixa forta"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Aquest fitxer està protegit amb contrasenya. Introduïu-la per importar dades."
+  },
+  "confirmFilePassword": {
+    "message": "Confirma la contrasenya del fitxer"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "S'ha cancel·lat l'autenticació multifactor"
+  },
+  "noLastPassDataFound": {
+    "message": "No s'han trobat dades del LastPass"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Nom d'usuari o contrasenya incorrectes"
+  },
+  "incorrectPassword": {
+    "message": "Contrasenya incorrecta"
+  },
+  "incorrectCode": {
+    "message": "Codi incorrecte"
+  },
+  "incorrectPin": {
+    "message": "PIN incorrecte"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "L'autenticació multifactor ha fallat"
+  },
+  "includeSharedFolders": {
+    "message": "Inclou les carpetes compartides"
+  },
+  "lastPassEmail": {
+    "message": "Adreça electrònica del LastPass"
+  },
+  "importingYourAccount": {
+    "message": "S'està important el compte..."
+  },
+  "lastPassMFARequired": {
+    "message": "L'autenticació multifactor del LastPass és obligatòria"
+  },
+  "lastPassMFADesc": {
+    "message": "Introduïu la vostra contrasenya única des de l'aplicació d'autenticació"
+  },
+  "lastPassOOBDesc": {
+    "message": "Aproveu la sol·licitud d'inici de sessió a l'aplicació d'autenticació o introduïu una contrasenya única."
+  },
+  "passcode": {
+    "message": "Clau d'accés"
+  },
+  "lastPassMasterPassword": {
+    "message": "Contrasenya mestra del LastPass"
+  },
+  "lastPassAuthRequired": {
+    "message": "L'autenticació del LastPass és obligatòria"
+  },
+  "awaitingSSO": {
+    "message": "S'està esperant l'autenticació SSO"
+  },
+  "awaitingSSODesc": {
+    "message": "Continueu iniciant la sessió amb les credencials de la vostra empresa."
+  },
+  "seeDetailedInstructions": {
+    "message": "Consulteu les instruccions detallades al nostre lloc d'ajuda a",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Importa directament des del LastPass"
+  },
+  "importFromCSV": {
+    "message": "Importa des de CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Torneu a provar-ho o cerqueu un correu electrònic del LastPass per verificar la vostra identitat."
+  },
+  "collection": {
+    "message": "Col·lecció"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Inseriu la YubiKey associada al compte del LastPass al port USB de l'ordinador i, després, toqueu-ne el botó."
+  },
+  "commonImportFormats": {
+    "message": "Formats comuns",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Èxit"
+  },
+  "troubleshooting": {
+    "message": "Resolució de problemes"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Desactiveu l'acceleració de maquinari i reinicieu"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Activeu l'acceleració i reinicieu el maquinari"
+  },
+  "removePasskey": {
+    "message": "Suprimeix la clau de pas"
+  },
+  "passkeyRemoved": {
+    "message": "Clau de pas suprimida"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "S'ha produït un error en assignar la col·lecció de destinació."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "S'ha produït un error en assignar la carpeta de destinació."
   }
 }

@@ -1,31 +1,46 @@
 import { DOCUMENT } from "@angular/common";
-import { Component, Inject, NgZone, OnDestroy, OnInit, SecurityContext } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
+import { Component, Inject, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
 import * as jq from "jquery";
-import { IndividualConfig, ToastrService } from "ngx-toastr";
-import { Subject, takeUntil } from "rxjs";
+import {
+  Subject,
+  combineLatest,
+  filter,
+  firstValueFrom,
+  map,
+  switchMap,
+  takeUntil,
+  timeout,
+  timer,
+} from "rxjs";
 
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
+import { InternalOrganizationServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { PaymentMethodWarningsServiceAbstraction as PaymentMethodWarningService } from "@bitwarden/common/billing/abstractions/payment-method-warnings-service.abstraction";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
-import { ConfigServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config.service.abstraction";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { StateEventRunnerService } from "@bitwarden/common/platform/state";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { PolicyListService } from "./admin-console/core/policy-list.service";
 import {
@@ -39,49 +54,52 @@ import {
   SingleOrgPolicy,
   TwoFactorAuthenticationPolicy,
 } from "./admin-console/organizations/policies";
-import { RouterService } from "./core";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
+const PaymentMethodWarningsRefresh = 60000; // 1 Minute
 
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
 })
 export class AppComponent implements OnDestroy, OnInit {
-  private lastActivity: number = null;
+  private lastActivity: Date = null;
   private idleTimer: number = null;
   private isIdle = false;
   private destroy$ = new Subject<void>();
+  private paymentMethodWarningsRefresh$ = timer(0, PaymentMethodWarningsRefresh);
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private broadcasterService: BroadcasterService,
     private folderService: InternalFolderService,
-    private settingsService: SettingsService,
     private syncService: SyncService,
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private cipherService: CipherService,
     private authService: AuthService,
     private router: Router,
-    private toastrService: ToastrService,
+    private toastService: ToastService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private ngZone: NgZone,
     private vaultTimeoutService: VaultTimeoutService,
     private cryptoService: CryptoService,
     private collectionService: CollectionService,
-    private sanitizer: DomSanitizer,
     private searchService: SearchService,
     private notificationsService: NotificationsService,
-    private routerService: RouterService,
     private stateService: StateService,
     private eventUploadService: EventUploadService,
     private policyService: InternalPolicyService,
     protected policyListService: PolicyListService,
     private keyConnectorService: KeyConnectorService,
-    private configService: ConfigServiceAbstraction,
-    private dialogService: DialogService
+    private configService: ConfigService,
+    private dialogService: DialogService,
+    private biometricStateService: BiometricStateService,
+    private stateEventRunnerService: StateEventRunnerService,
+    private paymentMethodWarningService: PaymentMethodWarningService,
+    private organizationService: InternalOrganizationServiceAbstraction,
+    private accountService: AccountService,
   ) {}
 
   ngOnInit() {
@@ -105,39 +123,52 @@ export class AppComponent implements OnDestroy, OnInit {
     /// and subscribe to events through that service observable.
     ///
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.ngZone.run(async () => {
         switch (message.command) {
           case "loggedIn":
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.notificationsService.updateConnection(false);
             break;
           case "loggedOut":
-            this.routerService.setPreviousUrl(null);
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.notificationsService.updateConnection(false);
             break;
           case "unlocked":
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.notificationsService.updateConnection(false);
             break;
           case "authBlocked":
-            this.routerService.setPreviousUrl(message.url);
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.router.navigate(["/"]);
             break;
           case "logout":
-            this.logOut(!!message.expired, message.redirect);
+            await this.logOut(!!message.expired, message.redirect);
             break;
           case "lockVault":
             await this.vaultTimeoutService.lock();
             break;
           case "locked":
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.notificationsService.updateConnection(false);
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.router.navigate(["lock"]);
             break;
           case "lockedUrl":
-            this.routerService.setPreviousUrl(message.url);
             break;
           case "syncStarted":
             break;
           case "syncCompleted":
-            this.configService.triggerServerConfigFetch();
+            if (message.successfully) {
+              await this.configService.ensureConfigFetched();
+            }
             break;
           case "upgradeOrganization": {
             const upgradeConfirmed = await this.dialogService.openSimpleDialog({
@@ -147,6 +178,8 @@ export class AppComponent implements OnDestroy, OnInit {
               type: "info",
             });
             if (upgradeConfirmed) {
+              // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
               this.router.navigate([
                 "organizations",
                 message.organizationId,
@@ -164,6 +197,8 @@ export class AppComponent implements OnDestroy, OnInit {
               type: "success",
             });
             if (premiumConfirmed) {
+              // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
               this.router.navigate(["settings/subscription/premium"]);
             }
             break;
@@ -177,18 +212,17 @@ export class AppComponent implements OnDestroy, OnInit {
             });
             if (emailVerificationConfirmed) {
               this.platformUtilsService.launchUri(
-                "https://bitwarden.com/help/create-bitwarden-account/"
+                "https://bitwarden.com/help/create-bitwarden-account/",
               );
             }
             break;
           }
           case "showToast":
-            this.showToast(message);
-            break;
-          case "setFullWidth":
-            this.setFullWidth();
+            this.toastService._showToast(message);
             break;
           case "convertAccountToKeyConnector":
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this.router.navigate(["/remove-password"]);
             break;
           default:
@@ -218,7 +252,24 @@ export class AppComponent implements OnDestroy, OnInit {
       new SendOptionsPolicy(),
     ]);
 
-    this.setFullWidth();
+    combineLatest([
+      this.configService.getFeatureFlag$(FeatureFlag.ShowPaymentMethodWarningBanners),
+      this.paymentMethodWarningsRefresh$,
+    ])
+      .pipe(
+        filter(([showPaymentMethodWarningBanners]) => showPaymentMethodWarningBanners),
+        switchMap(() => this.organizationService.memberOrganizations$),
+        switchMap(
+          async (organizations) =>
+            await Promise.all(
+              organizations.map((organization) =>
+                this.paymentMethodWarningService.update(organization.id),
+              ),
+            ),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -229,44 +280,67 @@ export class AppComponent implements OnDestroy, OnInit {
 
   private async logOut(expired: boolean, redirect = true) {
     await this.eventUploadService.uploadEvents();
-    const userId = await this.stateService.getUserId();
+    const userId = (await this.stateService.getUserId()) as UserId;
+
+    const logoutPromise = firstValueFrom(
+      this.authService.authStatusFor$(userId).pipe(
+        filter((authenticationStatus) => authenticationStatus === AuthenticationStatus.LoggedOut),
+        timeout({
+          first: 5_000,
+          with: () => {
+            throw new Error("The logout process did not complete in a reasonable amount of time.");
+          },
+        }),
+      ),
+    );
+
     await Promise.all([
       this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
-      this.settingsService.clear(userId),
       this.cipherService.clear(userId),
       this.folderService.clear(userId),
       this.collectionService.clear(userId),
-      this.policyService.clear(userId),
       this.passwordGenerationService.clear(),
-      this.keyConnectorService.clear(),
+      this.biometricStateService.logout(userId),
+      this.paymentMethodWarningService.clear(),
     ]);
 
-    this.searchService.clearIndex();
+    await this.stateEventRunnerService.handleEvent("logout", userId);
+
+    await this.searchService.clearIndex();
     this.authService.logOut(async () => {
       if (expired) {
         this.platformUtilsService.showToast(
           "warning",
           this.i18nService.t("loggedOut"),
-          this.i18nService.t("loginExpired")
+          this.i18nService.t("loginExpired"),
         );
       }
 
       await this.stateService.clean({ userId: userId });
+      await this.accountService.clean(userId);
+
+      await logoutPromise;
+
       if (redirect) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.router.navigate(["/"]);
       }
     });
   }
 
   private async recordActivity() {
-    const now = new Date().getTime();
-    if (this.lastActivity != null && now - this.lastActivity < 250) {
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+    const now = new Date();
+    if (this.lastActivity != null && now.getTime() - this.lastActivity.getTime() < 250) {
       return;
     }
 
     this.lastActivity = now;
-    this.stateService.setLastActive(now);
+    await this.accountService.setAccountActivity(activeUserId, now);
     // Idle states
     if (this.isIdle) {
       this.isIdle = false;
@@ -284,48 +358,15 @@ export class AppComponent implements OnDestroy, OnInit {
     }, IdleTimeout);
   }
 
-  private showToast(msg: any) {
-    let message = "";
-
-    const options: Partial<IndividualConfig> = {};
-
-    if (typeof msg.text === "string") {
-      message = msg.text;
-    } else if (msg.text.length === 1) {
-      message = msg.text[0];
-    } else {
-      msg.text.forEach(
-        (t: string) =>
-          (message += "<p>" + this.sanitizer.sanitize(SecurityContext.HTML, t) + "</p>")
-      );
-      options.enableHtml = true;
-    }
-    if (msg.options != null) {
-      if (msg.options.trustedHtml === true) {
-        options.enableHtml = true;
-      }
-      if (msg.options.timeout != null && msg.options.timeout > 0) {
-        options.timeOut = msg.options.timeout;
-      }
-    }
-
-    this.toastrService.show(message, msg.title, options, "toast-" + msg.type);
-  }
-
   private idleStateChanged() {
     if (this.isIdle) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.notificationsService.disconnectFromInactivity();
     } else {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.notificationsService.reconnectFromActivity();
-    }
-  }
-
-  private async setFullWidth() {
-    const enableFullWidth = await this.stateService.getEnableFullWidth();
-    if (enableFullWidth) {
-      document.body.classList.add("full-width");
-    } else {
-      document.body.classList.remove("full-width");
     }
   }
 }

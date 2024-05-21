@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import { concatMap, Observable, Subject, take, takeUntil } from "rxjs";
 
-import { OrgDomainApiServiceAbstraction } from "@bitwarden/common/abstractions/organization-domain/org-domain-api.service.abstraction";
-import { OrgDomainServiceAbstraction } from "@bitwarden/common/abstractions/organization-domain/org-domain.service.abstraction";
-import { OrganizationDomainResponse } from "@bitwarden/common/abstractions/organization-domain/responses/organization-domain.response";
+import { OrgDomainApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization-domain/org-domain-api.service.abstraction";
+import { OrgDomainServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization-domain/org-domain.service.abstraction";
+import { OrganizationDomainResponse } from "@bitwarden/common/admin-console/abstractions/organization-domain/responses/organization-domain.response";
 import { HttpStatusCode } from "@bitwarden/common/enums";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -36,7 +36,7 @@ export class DomainVerificationComponent implements OnInit, OnDestroy {
     private orgDomainApiService: OrgDomainApiServiceAbstraction,
     private orgDomainService: OrgDomainServiceAbstraction,
     private dialogService: DialogService,
-    private validationService: ValidationService
+    private validationService: ValidationService,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -52,7 +52,7 @@ export class DomainVerificationComponent implements OnInit, OnDestroy {
           this.organizationId = params.organizationId;
           await this.load();
         }),
-        takeUntil(this.componentDestroyed$)
+        takeUntil(this.componentDestroyed$),
       )
       .subscribe();
   }
@@ -106,7 +106,7 @@ export class DomainVerificationComponent implements OnInit, OnDestroy {
     try {
       const orgDomain: OrganizationDomainResponse = await this.orgDomainApiService.verify(
         this.organizationId,
-        orgDomainId
+        orgDomainId,
       );
 
       if (orgDomain.verifiedDate) {
@@ -115,7 +115,7 @@ export class DomainVerificationComponent implements OnInit, OnDestroy {
         this.platformUtilsService.showToast(
           "error",
           null,
-          this.i18nService.t("domainNotVerified", domainName)
+          this.i18nService.t("domainNotVerified", domainName),
         );
         // Update this item so the last checked date gets updated.
         await this.updateOrgDomain(orgDomainId);
@@ -141,7 +141,7 @@ export class DomainVerificationComponent implements OnInit, OnDestroy {
             this.platformUtilsService.showToast(
               "error",
               null,
-              this.i18nService.t("domainNotAvailable", domainName)
+              this.i18nService.t("domainNotAvailable", domainName),
             );
           }
           break;

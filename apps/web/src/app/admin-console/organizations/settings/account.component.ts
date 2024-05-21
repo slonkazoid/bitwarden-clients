@@ -1,23 +1,25 @@
 import { Component, ViewChild, ViewContainerRef } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { combineLatest, lastValueFrom, Subject, switchMap, takeUntil, from } from "rxjs";
+import { combineLatest, from, lastValueFrom, of, Subject, switchMap, takeUntil } from "rxjs";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { OrganizationCollectionManagementUpdateRequest } from "@bitwarden/common/admin-console/models/request/organization-collection-management-update.request";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "@bitwarden/common/admin-console/models/request/organization-update.request";
 import { OrganizationResponse } from "@bitwarden/common/admin-console/models/response/organization.response";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, SimpleDialogOptions } from "@bitwarden/components";
 
-import { ApiKeyComponent } from "../../../settings/api-key.component";
-import { PurgeVaultComponent } from "../../../settings/purge-vault.component";
+import { ApiKeyComponent } from "../../../auth/settings/security/api-key.component";
+import { PurgeVaultComponent } from "../../../vault/settings/purge-vault.component";
 
 import { DeleteOrganizationDialogResult, openDeleteOrganizationDialog } from "./components";
 
@@ -38,8 +40,15 @@ export class AccountComponent {
   loading = true;
   canUseApi = false;
   org: OrganizationResponse;
-  formPromise: Promise<OrganizationResponse>;
   taxFormPromise: Promise<unknown>;
+
+  protected flexibleCollectionsMigrationEnabled$ = this.configService.getFeatureFlag$(
+    FeatureFlag.FlexibleCollectionsMigration,
+  );
+
+  flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
+    FeatureFlag.FlexibleCollectionsV1,
+  );
 
   // FormGroup validators taken from server Organization domain object
   protected formGroup = this.formBuilder.group({
@@ -48,16 +57,20 @@ export class AccountComponent {
       {
         validators: [Validators.required, Validators.maxLength(50)],
         updateOn: "change",
-      }
+      },
     ),
     billingEmail: this.formBuilder.control(
       { value: "", disabled: true },
-      { validators: [Validators.required, Validators.email, Validators.maxLength(256)] }
+      { validators: [Validators.required, Validators.email, Validators.maxLength(256)] },
     ),
-    businessName: this.formBuilder.control(
-      { value: "", disabled: true },
-      { validators: [Validators.maxLength(50)] }
-    ),
+  });
+
+  protected collectionManagementFormGroup = this.formBuilder.group({
+    limitCollectionCreationDeletion: this.formBuilder.control({ value: false, disabled: true }),
+    allowAdminAccessToAllCollectionItems: this.formBuilder.control({
+      value: false,
+      disabled: true,
+    }),
   });
 
   protected organizationId: string;
@@ -71,36 +84,47 @@ export class AccountComponent {
     private route: ActivatedRoute,
     private platformUtilsService: PlatformUtilsService,
     private cryptoService: CryptoService,
-    private logService: LogService,
     private router: Router,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private dialogService: DialogService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private configService: ConfigService,
   ) {}
 
   async ngOnInit() {
     this.selfHosted = this.platformUtilsService.isSelfHost();
 
-    this.route.parent.parent.params
+    this.route.params
       .pipe(
-        switchMap((params) => {
+        switchMap((params) => this.organizationService.get$(params.organizationId)),
+        switchMap((organization) => {
           return combineLatest([
-            // Organization domain
-            this.organizationService.get$(params.organizationId),
+            of(organization),
             // OrganizationResponse for form population
-            from(this.organizationApiService.get(params.organizationId)),
+            from(this.organizationApiService.get(organization.id)),
             // Organization Public Key
-            from(this.organizationApiService.getKeys(params.organizationId)),
+            from(this.organizationApiService.getKeys(organization.id)),
           ]);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(([organization, orgResponse, orgKeys]) => {
         // Set domain level organization variables
         this.organizationId = organization.id;
         this.canEditSubscription = organization.canEditSubscription;
         this.canUseApi = organization.useApi;
+
+        // Update disabled states - reactive forms prefers not using disabled attribute
+        if (!this.selfHosted) {
+          this.formGroup.get("orgName").enable();
+          this.collectionManagementFormGroup.get("limitCollectionCreationDeletion").enable();
+          this.collectionManagementFormGroup.get("allowAdminAccessToAllCollectionItems").enable();
+        }
+
+        if (!this.selfHosted && this.canEditSubscription) {
+          this.formGroup.get("billingEmail").enable();
+        }
 
         // Org Response
         this.org = orgResponse;
@@ -112,18 +136,11 @@ export class AccountComponent {
         this.formGroup.patchValue({
           orgName: this.org.name,
           billingEmail: this.org.billingEmail,
-          businessName: this.org.businessName,
         });
-
-        // Update disabled states - reactive forms prefers not using disabled attribute
-        if (!this.selfHosted) {
-          this.formGroup.get("orgName").enable();
-        }
-
-        if (!this.selfHosted || this.canEditSubscription) {
-          this.formGroup.get("billingEmail").enable();
-          this.formGroup.get("businessName").enable();
-        }
+        this.collectionManagementFormGroup.patchValue({
+          limitCollectionCreationDeletion: this.org.limitCollectionCreationDeletion,
+          allowAdminAccessToAllCollectionItems: this.org.allowAdminAccessToAllCollectionItems,
+        });
 
         this.loading = false;
       });
@@ -143,7 +160,6 @@ export class AccountComponent {
 
     const request = new OrganizationUpdateRequest();
     request.name = this.formGroup.value.orgName;
-    request.businessName = this.formGroup.value.businessName;
     request.billingEmail = this.formGroup.value.billingEmail;
 
     // Backfill pub/priv key if necessary
@@ -153,9 +169,50 @@ export class AccountComponent {
       request.keys = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);
     }
 
-    this.formPromise = this.organizationApiService.save(this.organizationId, request);
-    await this.formPromise;
+    await this.organizationApiService.save(this.organizationId, request);
+
     this.platformUtilsService.showToast("success", null, this.i18nService.t("organizationUpdated"));
+  };
+
+  async showConfirmCollectionEnhancementsDialog() {
+    const collectionEnhancementsDialogOptions: SimpleDialogOptions = {
+      title: this.i18nService.t("confirmCollectionEnhancementsDialogTitle"),
+      content: this.i18nService.t("confirmCollectionEnhancementsDialogContent"),
+      type: "warning",
+      acceptButtonText: this.i18nService.t("continue"),
+      acceptAction: async () => {
+        await this.organizationApiService.enableCollectionEnhancements(this.organizationId);
+
+        this.platformUtilsService.showToast(
+          "success",
+          null,
+          this.i18nService.t("updatedCollectionManagement"),
+        );
+      },
+    };
+
+    await this.dialogService.openSimpleDialog(collectionEnhancementsDialogOptions);
+  }
+
+  submitCollectionManagement = async () => {
+    // Early exit if self-hosted
+    if (this.selfHosted) {
+      return;
+    }
+
+    const request = new OrganizationCollectionManagementUpdateRequest();
+    request.limitCreateDeleteOwnerAdmin =
+      this.collectionManagementFormGroup.value.limitCollectionCreationDeletion;
+    request.allowAdminAccessToAllCollectionItems =
+      this.collectionManagementFormGroup.value.allowAdminAccessToAllCollectionItems;
+
+    await this.organizationApiService.updateCollectionManagement(this.organizationId, request);
+
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("updatedCollectionManagement"),
+    );
   };
 
   async deleteOrganization() {
@@ -169,6 +226,8 @@ export class AccountComponent {
     const result = await lastValueFrom(dialog.closed);
 
     if (result === DeleteOrganizationDialogResult.Deleted) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(["/"]);
     }
   }
@@ -184,7 +243,7 @@ export class AccountComponent {
       comp.keyType = "organization";
       comp.entityId = this.organizationId;
       comp.postKey = this.organizationApiService.getOrCreateApiKey.bind(
-        this.organizationApiService
+        this.organizationApiService,
       );
       comp.scope = "api.organization";
       comp.grantType = "client_credentials";

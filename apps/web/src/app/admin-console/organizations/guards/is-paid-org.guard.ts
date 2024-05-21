@@ -13,11 +13,11 @@ export class IsPaidOrgGuard implements CanActivate {
     private router: Router,
     private organizationService: OrganizationService,
     private messagingService: MessagingService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const org = this.organizationService.get(route.params.organizationId);
+    const org = await this.organizationService.get(route.params.organizationId);
 
     if (org == null) {
       return this.router.createUrlTree(["/"]);
@@ -27,15 +27,26 @@ export class IsPaidOrgGuard implements CanActivate {
       // Users without billing permission can't access billing
       if (!org.canEditSubscription) {
         await this.dialogService.openSimpleDialog({
-          title: { key: "upgradeOrganization" },
-          content: { key: "notAvailableForFreeOrganization" },
+          title: { key: "upgradeOrganizationCloseSecurityGaps" },
+          content: { key: "upgradeOrganizationCloseSecurityGapsDesc" },
           acceptButtonText: { key: "ok" },
           cancelButtonText: null,
           type: "info",
         });
         return false;
       } else {
-        this.messagingService.send("upgradeOrganization", { organizationId: org.id });
+        const upgradeConfirmed = await this.dialogService.openSimpleDialog({
+          title: { key: "upgradeOrganizationCloseSecurityGaps" },
+          content: { key: "upgradeOrganizationCloseSecurityGapsDesc" },
+          acceptButtonText: { key: "upgradeOrganization" },
+          type: "info",
+          icon: "bwi-arrow-circle-up",
+        });
+        if (upgradeConfirmed) {
+          await this.router.navigate(["organizations", org.id, "billing", "subscription"], {
+            queryParams: { upgrade: true },
+          });
+        }
       }
     }
 

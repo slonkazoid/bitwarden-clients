@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, lastValueFrom, Observable, startWith, switchMap } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectListView } from "../../models/view/project-list.view";
-import { AccessPolicyService } from "../../shared/access-policies/access-policy.service";
 import {
   BulkConfirmationDetails,
   BulkConfirmationDialogComponent,
@@ -32,24 +32,28 @@ export class ProjectsComponent implements OnInit {
   protected search: string;
 
   private organizationId: string;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private projectService: ProjectService,
-    private accessPolicyService: AccessPolicyService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private organizationService: OrganizationService,
   ) {}
 
   ngOnInit() {
     this.projects$ = combineLatest([
       this.route.params,
       this.projectService.project$.pipe(startWith(null)),
-      this.accessPolicyService.projectAccessPolicyChanges$.pipe(startWith(null)),
     ]).pipe(
       switchMap(async ([params]) => {
         this.organizationId = params.organizationId;
+        this.organizationEnabled = (
+          await this.organizationService.get(params.organizationId)
+        )?.enabled;
+
         return await this.getProjects();
-      })
+      }),
     );
   }
 
@@ -62,6 +66,7 @@ export class ProjectsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
+        organizationEnabled: this.organizationEnabled,
         projectId: projectId,
       },
     });
@@ -72,15 +77,15 @@ export class ProjectsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
 
   async openDeleteProjectDialog(projects: ProjectListView[]) {
-    if (projects.some((project) => project.write == false)) {
-      const readOnlyProjects = projects.filter((project) => project.write == false);
-      const writeProjects = projects.filter((project) => project.write);
-
+    let projectsToDelete = projects;
+    const readOnlyProjects = projects.filter((project) => project.write == false);
+    if (readOnlyProjects.length > 0) {
       const dialogRef = this.dialogService.open<unknown, BulkConfirmationDetails>(
         BulkConfirmationDialogComponent,
         {
@@ -90,25 +95,22 @@ export class ProjectsComponent implements OnInit {
             message: "smProjectsDeleteBulkConfirmation",
             details: this.getBulkConfirmationDetails(readOnlyProjects),
           },
-        }
+        },
       );
 
       const result = await lastValueFrom(dialogRef.closed);
 
-      if (result == BulkConfirmationResult.Continue) {
-        this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
-          data: {
-            projects: writeProjects,
-          },
-        });
+      if (result !== BulkConfirmationResult.Continue) {
+        return;
       }
-    } else {
-      this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
-        data: {
-          projects,
-        },
-      });
+      projectsToDelete = projects.filter((project) => project.write);
     }
+
+    this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
+      data: {
+        projects: projectsToDelete,
+      },
+    });
   }
 
   private getBulkConfirmationDetails(projects: ProjectListView[]): BulkConfirmationStatus[] {

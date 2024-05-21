@@ -1,11 +1,12 @@
-import { Verification } from "../../../types/verification";
 import { SecretVerificationRequest } from "../../models/request/secret-verification.request";
+import { UserVerificationOptions } from "../../types/user-verification-options";
+import { Verification } from "../../types/verification";
 
 export abstract class UserVerificationService {
   buildRequest: <T extends SecretVerificationRequest>(
     verification: Verification,
     requestClass?: new () => T,
-    alreadyHashed?: boolean
+    alreadyHashed?: boolean,
   ) => Promise<T>;
   verifyUser: (verification: Verification) => Promise<boolean>;
   requestOTP: () => Promise<void>;
@@ -21,4 +22,8 @@ export abstract class UserVerificationService {
    * @returns True if the user has a master password and has used it in the current session
    */
   hasMasterPasswordAndMasterKeyHash: (userId?: string) => Promise<boolean>;
+
+  getAvailableVerificationOptions: (
+    verificationType: keyof UserVerificationOptions,
+  ) => Promise<UserVerificationOptions>;
 }

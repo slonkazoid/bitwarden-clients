@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   combineLatest,
@@ -9,7 +9,6 @@ import {
   map,
   Observable,
   shareReplay,
-  Subject,
   switchMap,
   takeUntil,
 } from "rxjs";
@@ -18,15 +17,16 @@ import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
-import { OrganizationUserConfirmRequest } from "@bitwarden/common/abstractions/organization-user/requests";
-import {
-  OrganizationUserBulkResponse,
-  OrganizationUserUserDetailsResponse,
-} from "@bitwarden/common/abstractions/organization-user/responses";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { OrganizationManagementPreferencesService } from "@bitwarden/common/admin-console/abstractions/organization-management-preferences/organization-management-preferences.service";
+import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
+import { OrganizationUserConfirmRequest } from "@bitwarden/common/admin-console/abstractions/organization-user/requests";
+import {
+  OrganizationUserBulkResponse,
+  OrganizationUserUserDetailsResponse,
+} from "@bitwarden/common/admin-console/abstractions/organization-user/responses";
 import { PolicyApiServiceAbstraction as PolicyApiService } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import {
@@ -35,14 +35,15 @@ import {
   PolicyType,
 } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
+import { BillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/billilng-api.service.abstraction";
 import { ProductType } from "@bitwarden/common/enums";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
@@ -51,9 +52,8 @@ import { Collection } from "@bitwarden/common/vault/models/domain/collection";
 import { CollectionDetailsResponse } from "@bitwarden/common/vault/models/response/collection.response";
 import { DialogService, SimpleDialogOptions } from "@bitwarden/components";
 
-import { flagEnabled } from "../../../../utils/flags";
 import { openEntityEventsDialog } from "../../../admin-console/organizations/manage/entity-events.component";
-import { BasePeopleComponent } from "../../../common/base.people.component";
+import { BasePeopleComponent } from "../../common/base.people.component";
 import { GroupService } from "../core";
 import { OrganizationUserView } from "../core/views/organization-user.view";
 
@@ -73,10 +73,7 @@ import { ResetPasswordComponent } from "./components/reset-password.component";
   selector: "app-org-people",
   templateUrl: "people.component.html",
 })
-export class PeopleComponent
-  extends BasePeopleComponent<OrganizationUserView>
-  implements OnInit, OnDestroy
-{
+export class PeopleComponent extends BasePeopleComponent<OrganizationUserView> {
   @ViewChild("groupsTemplate", { read: ViewContainerRef, static: true })
   groupsModalRef: ViewContainerRef;
   @ViewChild("confirmTemplate", { read: ViewContainerRef, static: true })
@@ -97,9 +94,9 @@ export class PeopleComponent
   organization: Organization;
   status: OrganizationUserStatusType = null;
   orgResetPasswordPolicyEnabled = false;
+  orgIsOnSecretsManagerStandalone = false;
 
   protected canUseSecretsManager$: Observable<boolean>;
-  private destroy$ = new Subject<void>();
 
   constructor(
     apiService: ApiService,
@@ -116,14 +113,15 @@ export class PeopleComponent
     searchPipe: SearchPipe,
     userNamePipe: UserNamePipe,
     private syncService: SyncService,
-    stateService: StateService,
     private organizationService: OrganizationService,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
     dialogService: DialogService,
     private router: Router,
     private groupService: GroupService,
-    private collectionService: CollectionService
+    private collectionService: CollectionService,
+    organizationManagementPreferencesService: OrganizationManagementPreferencesService,
+    private billingApiService: BillingApiServiceAbstraction,
   ) {
     super(
       apiService,
@@ -136,31 +134,29 @@ export class PeopleComponent
       logService,
       searchPipe,
       userNamePipe,
-      stateService,
-      dialogService
+      dialogService,
+      organizationManagementPreferencesService,
     );
   }
 
   async ngOnInit() {
     const organization$ = this.route.params.pipe(
-      map((params) => this.organizationService.get(params.organizationId)),
-      shareReplay({ refCount: true, bufferSize: 1 })
+      concatMap((params) => this.organizationService.get$(params.organizationId)),
+      shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
-    this.canUseSecretsManager$ = organization$.pipe(
-      map((org) => org.useSecretsManager && flagEnabled("secretsManager"))
-    );
+    this.canUseSecretsManager$ = organization$.pipe(map((org) => org.useSecretsManager));
 
     const policies$ = organization$.pipe(
       switchMap((organization) => {
         if (organization.isProviderUser) {
           return from(this.policyApiService.getPolicies(organization.id)).pipe(
-            map((response) => this.policyService.mapPoliciesFromToken(response))
+            map((response) => Policy.fromListResponse(response)),
           );
         }
 
         return this.policyService.policies$;
-      })
+      }),
     );
 
     combineLatest([this.route.queryParams, policies$, organization$])
@@ -178,7 +174,7 @@ export class PeopleComponent
             const request = new OrganizationKeysRequest(orgKeys[0], orgKeys[1].encryptedString);
             const response = await this.organizationApiService.updateKeys(
               this.organization.id,
-              request
+              request,
             );
             if (response != null) {
               this.organization.hasPublicAndPrivateKeys =
@@ -194,24 +190,31 @@ export class PeopleComponent
             .find((p) => p.organizationId === this.organization.id);
           this.orgResetPasswordPolicyEnabled = resetPasswordPolicy?.enabled;
 
+          const billingMetadata = await this.billingApiService.getOrganizationBillingMetadata(
+            this.organization.id,
+          );
+
+          this.orgIsOnSecretsManagerStandalone = billingMetadata.isOnSecretsManagerStandalone;
+
           await this.load();
 
           this.searchText = qParams.search;
           if (qParams.viewEvents != null) {
             const user = this.users.filter((u) => u.id === qParams.viewEvents);
             if (user.length > 0 && user[0].status === OrganizationUserStatusType.Confirmed) {
+              // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
               this.events(user[0]);
             }
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    super.ngOnDestroy();
   }
 
   async load() {
@@ -270,7 +273,7 @@ export class PeopleComponent
     const response = await this.apiService.getCollections(this.organization.id);
 
     const collections = response.data.map(
-      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse))
+      (r) => new Collection(new CollectionData(r as CollectionDetailsResponse)),
     );
     const decryptedCollections = await this.collectionService.decryptMany(collections);
 
@@ -303,7 +306,7 @@ export class PeopleComponent
     await this.organizationUserService.postOrganizationUserConfirm(
       this.organization.id,
       user.id,
-      request
+      request,
     );
   }
 
@@ -345,52 +348,103 @@ export class PeopleComponent
     );
   }
 
-  private async showFreeOrgUpgradeDialog(): Promise<void> {
+  private getManageBillingText(): string {
+    return this.organization.canEditSubscription ? "ManageBilling" : "NoManageBilling";
+  }
+
+  private getProductKey(productType: ProductType): string {
+    let product = "";
+    switch (productType) {
+      case ProductType.Free:
+        product = "freeOrg";
+        break;
+      case ProductType.TeamsStarter:
+        product = "teamsStarterPlan";
+        break;
+      default:
+        throw new Error(`Unsupported product type: ${productType}`);
+    }
+    return `${product}InvLimitReached${this.getManageBillingText()}`;
+  }
+
+  private getDialogContent(): string {
+    return this.i18nService.t(
+      this.getProductKey(this.organization.planProductType),
+      this.organization.seats,
+    );
+  }
+
+  private getAcceptButtonText(): string {
+    if (!this.organization.canEditSubscription) {
+      return this.i18nService.t("ok");
+    }
+
+    const productType = this.organization.planProductType;
+
+    if (productType !== ProductType.Free && productType !== ProductType.TeamsStarter) {
+      throw new Error(`Unsupported product type: ${productType}`);
+    }
+
+    return this.i18nService.t("upgrade");
+  }
+
+  private async handleDialogClose(result: boolean | undefined): Promise<void> {
+    if (!result || !this.organization.canEditSubscription) {
+      return;
+    }
+
+    const productType = this.organization.planProductType;
+
+    if (productType !== ProductType.Free && productType !== ProductType.TeamsStarter) {
+      throw new Error(`Unsupported product type: ${this.organization.planProductType}`);
+    }
+
+    await this.router.navigate(
+      ["/organizations", this.organization.id, "billing", "subscription"],
+      { queryParams: { upgrade: true } },
+    );
+  }
+
+  private async showSeatLimitReachedDialog(): Promise<void> {
     const orgUpgradeSimpleDialogOpts: SimpleDialogOptions = {
       title: this.i18nService.t("upgradeOrganization"),
-      content: this.i18nService.t(
-        this.organization.canEditSubscription
-          ? "freeOrgInvLimitReachedManageBilling"
-          : "freeOrgInvLimitReachedNoManageBilling",
-        this.organization.seats
-      ),
+      content: this.getDialogContent(),
       type: "primary",
+      acceptButtonText: this.getAcceptButtonText(),
     };
 
-    if (this.organization.canEditSubscription) {
-      orgUpgradeSimpleDialogOpts.acceptButtonText = this.i18nService.t("upgrade");
-    } else {
-      orgUpgradeSimpleDialogOpts.acceptButtonText = this.i18nService.t("ok");
-      orgUpgradeSimpleDialogOpts.cancelButtonText = null; // hide secondary btn
+    if (!this.organization.canEditSubscription) {
+      orgUpgradeSimpleDialogOpts.cancelButtonText = null;
     }
 
     const simpleDialog = this.dialogService.openSimpleDialogRef(orgUpgradeSimpleDialogOpts);
-
-    firstValueFrom(simpleDialog.closed).then((result: boolean | undefined) => {
-      if (!result) {
-        return;
-      }
-
-      if (result && this.organization.canEditSubscription) {
-        this.router.navigate(["/organizations", this.organization.id, "billing", "subscription"], {
-          queryParams: { upgrade: true },
-        });
-      }
-    });
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    firstValueFrom(simpleDialog.closed).then(this.handleDialogClose.bind(this));
   }
 
   async edit(user: OrganizationUserView, initialTab: MemberDialogTab = MemberDialogTab.Role) {
+    if (!user && this.organization.hasReseller && this.organization.seats === this.confirmedCount) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("seatLimitReached"),
+        this.i18nService.t("contactYourProvider"),
+      );
+      return;
+    }
+
     // Invite User: Add Flow
     // Click on user email: Edit Flow
 
     // User attempting to invite new users in a free org with max users
     if (
       !user &&
-      this.organization.planProductType === ProductType.Free &&
-      this.allUsers.length === this.organization.seats
+      this.allUsers.length === this.organization.seats &&
+      (this.organization.planProductType === ProductType.Free ||
+        this.organization.planProductType === ProductType.TeamsStarter)
     ) {
       // Show org upgrade modal
-      await this.showFreeOrgUpgradeDialog();
+      await this.showSeatLimitReachedDialog();
       return;
     }
 
@@ -401,7 +455,9 @@ export class PeopleComponent
         organizationUserId: user != null ? user.id : null,
         allOrganizationUserEmails: this.allUsers?.map((user) => user.email) ?? [],
         usesKeyConnector: user?.usesKeyConnector,
+        isOnSecretsManagerStandalone: this.orgIsOnSecretsManagerStandalone,
         initialTab: initialTab,
+        numConfirmedMembers: this.confirmedCount,
       },
     });
 
@@ -413,6 +469,8 @@ export class PeopleComponent
       case MemberDialogResult.Saved:
       case MemberDialogResult.Revoked:
       case MemberDialogResult.Restored:
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.load();
         break;
     }
@@ -429,7 +487,7 @@ export class PeopleComponent
       (comp) => {
         comp.organizationId = this.organization.id;
         comp.users = this.getCheckedUsers();
-      }
+      },
     );
 
     await modal.onClosedPromise();
@@ -449,16 +507,13 @@ export class PeopleComponent
       return;
     }
 
-    const ref = this.modalService.open(BulkRestoreRevokeComponent, {
-      allowMultipleModals: true,
-      data: {
-        organizationId: this.organization.id,
-        users: this.getCheckedUsers(),
-        isRevoking: isRevoking,
-      },
+    const ref = BulkRestoreRevokeComponent.open(this.dialogService, {
+      organizationId: this.organization.id,
+      users: this.getCheckedUsers(),
+      isRevoking: isRevoking,
     });
 
-    await ref.onClosedPromise();
+    await firstValueFrom(ref.closed);
     await this.load();
   }
 
@@ -474,7 +529,7 @@ export class PeopleComponent
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("noSelectedUsersApplicable")
+        this.i18nService.t("noSelectedUsersApplicable"),
       );
       return;
     }
@@ -482,13 +537,15 @@ export class PeopleComponent
     try {
       const response = this.organizationUserService.postManyOrganizationUserReinvite(
         this.organization.id,
-        filteredUsers.map((user) => user.id)
+        filteredUsers.map((user) => user.id),
       );
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.showBulkStatus(
         users,
         filteredUsers,
         response,
-        this.i18nService.t("bulkReinviteMessage")
+        this.i18nService.t("bulkReinviteMessage"),
       );
     } catch (e) {
       this.validationService.showError(e);
@@ -507,7 +564,7 @@ export class PeopleComponent
       (comp) => {
         comp.organizationId = this.organization.id;
         comp.users = this.getCheckedUsers();
-      }
+      },
     );
 
     await modal.onClosedPromise();
@@ -515,12 +572,13 @@ export class PeopleComponent
   }
 
   async bulkEnableSM() {
-    const users = this.getCheckedUsers();
+    const users = this.getCheckedUsers().filter((ou) => !ou.accessSecretsManager);
+
     if (users.length === 0) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("noSelectedUsersApplicable")
+        this.i18nService.t("noSelectedUsersApplicable"),
       );
       return;
     }
@@ -532,6 +590,7 @@ export class PeopleComponent
 
     await lastValueFrom(dialogRef.closed);
     this.selectAll(false);
+    await this.load();
   }
 
   async events(user: OrganizationUserView) {
@@ -559,9 +618,11 @@ export class PeopleComponent
         // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onPasswordReset.subscribe(() => {
           modal.close();
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.load();
         });
-      }
+      },
     );
   }
 
@@ -613,14 +674,14 @@ export class PeopleComponent
     users: OrganizationUserView[],
     filteredUsers: OrganizationUserView[],
     request: Promise<ListResponse<OrganizationUserBulkResponse>>,
-    successfullMessage: string
+    successfullMessage: string,
   ) {
     const [modal, childComponent] = await this.modalService.openViewRef(
       BulkStatusComponent,
       this.bulkStatusModalRef,
       (comp) => {
         comp.loading = true;
-      }
+      },
     );
 
     // Workaround to handle closing the modal shortly after it has been opened

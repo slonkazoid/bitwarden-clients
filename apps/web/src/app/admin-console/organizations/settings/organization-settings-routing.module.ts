@@ -9,13 +9,11 @@ import { OrganizationRedirectGuard } from "../../organizations/guards/org-redire
 import { PoliciesComponent } from "../../organizations/policies";
 
 import { AccountComponent } from "./account.component";
-import { SettingsComponent } from "./settings.component";
 import { TwoFactorSetupComponent } from "./two-factor-setup.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: SettingsComponent,
     canActivate: [OrganizationPermissionsGuard],
     data: { organizationPermissions: canAccessSettingsTab },
     children: [
@@ -45,10 +43,28 @@ const routes: Routes = [
       },
       {
         path: "tools",
-        loadChildren: () =>
-          import("../tools/import-export/org-import-export.module").then(
-            (m) => m.OrganizationImportExportModule
-          ),
+        children: [
+          {
+            path: "import",
+            loadComponent: () =>
+              import("./org-import.component").then((mod) => mod.OrgImportComponent),
+            canActivate: [OrganizationPermissionsGuard],
+            data: {
+              titleId: "importData",
+              organizationPermissions: (org: Organization) => org.canAccessImportExport,
+            },
+          },
+          {
+            path: "export",
+            loadChildren: () =>
+              import("../tools/vault-export/org-vault-export.module").then(
+                (m) => m.OrganizationVaultExportModule,
+              ),
+            data: {
+              titleId: "exportVault",
+            },
+          },
+        ],
       },
     ],
   },

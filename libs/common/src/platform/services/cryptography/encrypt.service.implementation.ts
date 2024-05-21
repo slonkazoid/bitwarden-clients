@@ -1,8 +1,8 @@
-import { EncryptionType } from "../../../enums";
 import { Utils } from "../../../platform/misc/utils";
 import { CryptoFunctionService } from "../../abstractions/crypto-function.service";
 import { EncryptService } from "../../abstractions/encrypt.service";
 import { LogService } from "../../abstractions/log.service";
+import { EncryptionType } from "../../enums";
 import { Decryptable } from "../../interfaces/decryptable.interface";
 import { Encrypted } from "../../interfaces/encrypted";
 import { InitializerMetadata } from "../../interfaces/initializer-metadata.interface";
@@ -15,7 +15,7 @@ export class EncryptServiceImplementation implements EncryptService {
   constructor(
     protected cryptoFunctionService: CryptoFunctionService,
     protected logService: LogService,
-    protected logMacFailures: boolean
+    protected logMacFailures: boolean,
   ) {}
 
   async encrypt(plainValue: string | Uint8Array, key: SymmetricCryptoKey): Promise<EncString> {
@@ -84,13 +84,13 @@ export class EncryptServiceImplementation implements EncryptService {
       encString.data,
       encString.iv,
       encString.mac,
-      key
+      key,
     );
     if (fastParams.macKey != null && fastParams.mac != null) {
       const computedMac = await this.cryptoFunctionService.hmacFast(
         fastParams.macData,
         fastParams.macKey,
-        "sha256"
+        "sha256",
       );
       const macsEqual = await this.cryptoFunctionService.compareFast(fastParams.mac, computedMac);
       if (!macsEqual) {
@@ -141,21 +141,69 @@ export class EncryptServiceImplementation implements EncryptService {
       encThing.dataBytes,
       encThing.ivBytes,
       key.encKey,
-      "cbc"
+      "cbc",
     );
 
     return result ?? null;
   }
 
+  async rsaEncrypt(data: Uint8Array, publicKey: Uint8Array): Promise<EncString> {
+    if (data == null) {
+      throw new Error("No data provided for encryption.");
+    }
+
+    if (publicKey == null) {
+      throw new Error("No public key provided for encryption.");
+    }
+    const encrypted = await this.cryptoFunctionService.rsaEncrypt(data, publicKey, "sha1");
+    return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Utils.fromBufferToB64(encrypted));
+  }
+
+  async rsaDecrypt(data: EncString, privateKey: Uint8Array): Promise<Uint8Array> {
+    if (data == null) {
+      throw new Error("No data provided for decryption.");
+    }
+
+    let algorithm: "sha1" | "sha256";
+    switch (data.encryptionType) {
+      case EncryptionType.Rsa2048_OaepSha1_B64:
+      case EncryptionType.Rsa2048_OaepSha1_HmacSha256_B64:
+        algorithm = "sha1";
+        break;
+      case EncryptionType.Rsa2048_OaepSha256_B64:
+      case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
+        algorithm = "sha256";
+        break;
+      default:
+        throw new Error("Invalid encryption type.");
+    }
+
+    if (privateKey == null) {
+      throw new Error("No private key provided for decryption.");
+    }
+
+    return this.cryptoFunctionService.rsaDecrypt(data.dataBytes, privateKey, algorithm);
+  }
+
   async decryptItems<T extends InitializerMetadata>(
     items: Decryptable<T>[],
-    key: SymmetricCryptoKey
+    key: SymmetricCryptoKey,
   ): Promise<T[]> {
     if (items == null || items.length < 1) {
       return [];
     }
 
-    return await Promise.all(items.map((item) => item.decrypt(key)));
+    // don't use promise.all because this task is not io bound
+    const results = [];
+    for (let i = 0; i < items.length; i++) {
+      results.push(await items[i].decrypt(key));
+    }
+    return results;
+  }
+
+  async hash(value: string | Uint8Array, algorithm: "sha1" | "sha256" | "sha512"): Promise<string> {
+    const hashArray = await this.cryptoFunctionService.hash(value, algorithm);
+    return Utils.fromBufferToB64(hashArray);
   }
 
   private async aesEncrypt(data: Uint8Array, key: SymmetricCryptoKey): Promise<EncryptedObject> {

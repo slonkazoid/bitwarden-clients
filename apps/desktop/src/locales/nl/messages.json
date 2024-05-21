@@ -403,6 +403,9 @@
   "length": {
     "message": "Lengte"
   },
+  "passwordMinLength": {
+    "message": "Minimale wachtwoordlengte"
+  },
   "uppercase": {
     "message": "Hoofdletters (A-Z)"
   },
@@ -476,7 +479,7 @@
     "message": "Maximale bestandsgrootte is 500 MB."
   },
   "encryptionKeyMigrationRequired": {
-    "message": "Encryption key migration required. Please login through the web vault to update your encryption key."
+    "message": "Migratie van de encryptiesleutel vereist. Login via de website om je sleutel te bij te werken."
   },
   "editedFolder": {
     "message": "Map is bewerkt"
@@ -542,7 +545,7 @@
     "message": "Type je hoofdwachtwoord opnieuw in."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Hoofdwachtwoord moet minstens $VALUE$ tekens lang zijn.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "Je nieuwe account is aangemaakt! Je kunt nu inloggen."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "Je bent succesvol ingelogd"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Je kunt dit venster sluiten"
   },
   "masterPassSent": {
     "message": "We hebben je een e-mail gestuurd met je hoofdwachtwoordhint."
@@ -791,8 +800,11 @@
   "changeMasterPass": {
     "message": "Hoofdwachtwoord wijzigen"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Je kunt je hoofdwachtwoord wijzigen in de kluis op bitwarden.com. Wil je de website nu bezoeken?"
+  "continueToWebApp": {
+    "message": "Doorgaan naar web-app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Je kunt je hoofdwachtwoord wijzigen in de Bitwarden-webapp."
   },
   "fingerprintPhrase": {
     "message": "Vingerafdrukzin",
@@ -1389,6 +1401,9 @@
   "invalidPin": {
     "message": "Ongeldige PIN-code."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "PIN te vaak verkeerd ingevuld. Bezig met uitloggen."
+  },
   "unlockWithWindowsHello": {
     "message": "Ontgrendelen met Windows Hello"
   },
@@ -1533,8 +1548,17 @@
   "setMasterPassword": {
     "message": "Hoofdwachtwoord instellen"
   },
-  "ssoCompleteRegistration": {
-    "message": "Voor het inloggen met SSO moet je een hoofdwachtwoord instellen voor toegang tot en bescherming van je kluis."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "De organisatierechten zijn bijgewerkt, je moet een hoofdwachtwoord instellen.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Je organisatie vereist dat je een hoofdwachtwoord instelt.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Verificatie vereist",
+    "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
     "message": "Huidig hoofdwachtwoord"
@@ -1608,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "Browserintegratie niet ondersteund"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Fout bij inschakelen van de browserintegratie"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "Er is iets misgegaan bij het tijdens het inschakelen van de browserintegratie."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "Helaas wordt browserintegratie momenteel alleen ondersteund in de Mac App Store-versie."
   },
@@ -1622,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Schakel een extra beveiligingsniveau in door een vingerafdrukzin te vereisen bij het verbinden van je desktop en browser. Wanneer ingeschakeld moet je iedere verbinding verifiëren."
+  },
+  "enableHardwareAcceleration": {
+    "message": "Use hardware acceleration"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "By default this setting is ON. Turn OFF only if you experience graphical issues. Restart is required."
   },
   "approve": {
     "message": "Goedkeuren"
@@ -1661,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Een organisatiebeleid heeft invloed op je eigendomsopties."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Organisatiebeleid heeft het importeren van items in je persoonlijke kluis geblokkeerd."
   },
   "allSends": {
     "message": "Alle Sends",
@@ -1858,6 +1897,42 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
   },
+  "tryAgain": {
+    "message": "Opnieuw proberen"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Deze actie vereist verificatie actie. Stel een pincode in om door te gaan."
+  },
+  "setPin": {
+    "message": "Pincode instellen"
+  },
+  "verifyWithBiometrics": {
+    "message": "Biometrisch ontgrendelen"
+  },
+  "awaitingConfirmation": {
+    "message": "Wacht op bevestiging"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Kon biometrie niet afronden."
+  },
+  "needADifferentMethod": {
+    "message": "Een andere methode proberen?"
+  },
+  "useMasterPassword": {
+    "message": "Hoofdwachtwoord gebruiken"
+  },
+  "usePin": {
+    "message": "Pincode gebruiken"
+  },
+  "useBiometrics": {
+    "message": "Biometrie gebruiken"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Voer de verificatiecode in die naar je e-mail is gestuurd."
+  },
+  "resendCode": {
+    "message": "Code opnieuw sturen"
+  },
   "hours": {
     "message": "Uren"
   },
@@ -1985,7 +2060,7 @@
     "message": "Persoonlijke kluis exporteren"
   },
   "exportingIndividualVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
+    "message": "Alleen de individuele kluisitems geassocieerd met $EMAIL$ worden geëxporteerd. Kluisitems van de organisatie worden niet meegenomen. Alleen informatie over kluisitem wordt geëxporteerd en bevat geen bijlagen.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2056,6 +2131,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Genereer een e-mailalias met een externe doorstuurservice."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Hostnaam",
@@ -2280,12 +2457,6 @@
   "loggingInOn": {
     "message": "Inloggen op"
   },
-  "usDomain": {
-    "message": "bitwarden.com"
-  },
-  "euDomain": {
-    "message": "bitwarden.eu"
-  },
   "selfHostedServer": {
     "message": "zelfgehost"
   },
@@ -2416,7 +2587,240 @@
   "submenu": {
     "message": "Submenu"
   },
+  "skipToContent": {
+    "message": "Ga naar de inhoud"
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey wordt niet gekopieerd"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "De passkey wordt niet gekopieerd naar het gekloonde item. Wil je doorgaan met het klonen van dit item?"
+  },
   "aliasDomain": {
     "message": "Aliasdomein"
+  },
+  "importData": {
+    "message": "Data importeren",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Fout bij importeren"
+  },
+  "importErrorDesc": {
+    "message": "Er was een probleem met de data die je probeerde te importeren. Los de onderstaande fouten op in het bronbestand en probeer het opnieuw."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Los onderstaande fouten op en probeer het opnieuw."
+  },
+  "description": {
+    "message": "Omschrijving"
+  },
+  "importSuccess": {
+    "message": "Data succesvol geïmporteerd"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Een totaal van $AMOUNT$ items zijn geïmporteerd.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Totaal"
+  },
+  "importWarning": {
+    "message": "Je importeert gegevens naar $ORGANIZATION$. Je gegevens kunnen gedeeld worden met de leden van deze organisatie. Wil je doorgaan?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Start Duo en volg de stappen om in te loggen."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Jouw account vereist Duo-tweestapsaanmelding."
+  },
+  "launchDuo": {
+    "message": "Start Duo in browser"
+  },
+  "importFormatError": {
+    "message": "De gegevens zijn niet correct opgemaakt. Controleer je importbestand en probeer het opnieuw."
+  },
+  "importNothingError": {
+    "message": "Er is niets geïmporteerd."
+  },
+  "importEncKeyError": {
+    "message": "Fout bij het decoderen van het geëxporteerde bestand. Je encryptiesleutel komt niet overeen met de gebruikte sleutel waarmee de gegevens zijn geëxporteerd."
+  },
+  "invalidFilePassword": {
+    "message": "Onjuist bestandswachtwoord, gebruik het wachtwoord dat je hebt ingevoerd bij het aanmaken van het exportbestand."
+  },
+  "importDestination": {
+    "message": "Importbestemming"
+  },
+  "learnAboutImportOptions": {
+    "message": "Leer meer over je importopties"
+  },
+  "selectImportFolder": {
+    "message": "Map selecteren"
+  },
+  "selectImportCollection": {
+    "message": "Collectie selecteren"
+  },
+  "importTargetHint": {
+    "message": "Kies deze optie als je de geïmporteerde bestandsinhoud wilt verplaatsen naar een $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Bestand bevat niet-toegewezen items."
+  },
+  "selectFormat": {
+    "message": "Formaat van het importbestand kiezen"
+  },
+  "selectImportFile": {
+    "message": "Importbestand kiezen"
+  },
+  "chooseFile": {
+    "message": "Bestand kiezen"
+  },
+  "noFileChosen": {
+    "message": "Geen bestand gekozen"
+  },
+  "orCopyPasteFileContents": {
+    "message": "of kopieer en plak de inhoud van het importbestand"
+  },
+  "instructionsFor": {
+    "message": "Instructies voor $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Kluisimport bevestigen"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Dit bestand is beveiligd met een wachtwoord. Voer het bestandswachtwoord in om gegevens te importeren."
+  },
+  "confirmFilePassword": {
+    "message": "Bestandswachtwoord bevestigen"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Multifactor-authenticatie geannuleerd"
+  },
+  "noLastPassDataFound": {
+    "message": "Geen LastPass-gegevens gevonden"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Onjuiste gebruikersnaam of wachtwoord"
+  },
+  "incorrectPassword": {
+    "message": "Wachtwoord onjuist"
+  },
+  "incorrectCode": {
+    "message": "Code onjuist"
+  },
+  "incorrectPin": {
+    "message": "Pincode onjuist"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Multifactor-authenticatie mislukt"
+  },
+  "includeSharedFolders": {
+    "message": "Gedeelde mappen insluiten"
+  },
+  "lastPassEmail": {
+    "message": "LastPass Email"
+  },
+  "importingYourAccount": {
+    "message": "Account impoteren..."
+  },
+  "lastPassMFARequired": {
+    "message": "LastPass multifactor-authenticatie vereist"
+  },
+  "lastPassMFADesc": {
+    "message": "Voer je eenmalige toegangscode van je authenticatie-app in"
+  },
+  "lastPassOOBDesc": {
+    "message": "Bevestig het inlogverzoek in je authenticatie-app of voer een eenmalige toegangscode in."
+  },
+  "passcode": {
+    "message": "Passcode"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass-hoofdwachtwoord"
+  },
+  "lastPassAuthRequired": {
+    "message": "LastPass-authenticatie vereist"
+  },
+  "awaitingSSO": {
+    "message": "Wacht op SSO-authenticatie"
+  },
+  "awaitingSSODesc": {
+    "message": "Ga door met inloggen met de inloggegevens van je bedrijf."
+  },
+  "seeDetailedInstructions": {
+    "message": "Zie gedetailleerde instructies op onze helpsite op",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Rechtstreeks vanuit LastPass importeren"
+  },
+  "importFromCSV": {
+    "message": "Vanuit CSV importeren"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Probeer het opnieuw of zoek naar een e-mailbericht van LastPass om te verifiëren dat jij het bent."
+  },
+  "collection": {
+    "message": "Collectie"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Plaats de YubiKey die gekoppeld is aan je LastPass-account in de USB-poort van je computer en druk vervolgens op de knop."
+  },
+  "commonImportFormats": {
+    "message": "Veelvoorkomende formaten",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Succes"
+  },
+  "troubleshooting": {
+    "message": "Probleemoplossing"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Hardwareversnelling uitschakelen en herstarten"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Hardwareversnelling inschakelen en herstarten"
+  },
+  "removePasskey": {
+    "message": "Passkey verwijderen"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey verwijderd"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Fout bij toewijzen doelverzameling."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Fout bij toewijzen doelmap."
   }
 }

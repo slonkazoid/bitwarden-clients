@@ -1,7 +1,6 @@
 export abstract class BiometricsServiceAbstraction {
-  init: () => Promise<void>;
-  osSupportsBiometric: () => Promise<boolean>;
-  canAuthBiometric: ({
+  abstract osSupportsBiometric(): Promise<boolean>;
+  abstract canAuthBiometric({
     service,
     key,
     userId,
@@ -9,11 +8,11 @@ export abstract class BiometricsServiceAbstraction {
     service: string;
     key: string;
     userId: string;
-  }) => Promise<boolean>;
-  authenticateBiometric: () => Promise<boolean>;
-  getBiometricKey: (service: string, key: string) => Promise<string | null>;
-  setBiometricKey: (service: string, key: string, value: string) => Promise<void>;
-  setEncryptionKeyHalf: ({
+  }): Promise<boolean>;
+  abstract authenticateBiometric(): Promise<boolean>;
+  abstract getBiometricKey(service: string, key: string): Promise<string | null>;
+  abstract setBiometricKey(service: string, key: string, value: string): Promise<void>;
+  abstract setEncryptionKeyHalf({
     service,
     key,
     value,
@@ -21,24 +20,23 @@ export abstract class BiometricsServiceAbstraction {
     service: string;
     key: string;
     value: string;
-  }) => void;
-  deleteBiometricKey: (service: string, key: string) => Promise<void>;
+  }): void;
+  abstract deleteBiometricKey(service: string, key: string): Promise<void>;
 }
 
 export interface OsBiometricService {
-  init: () => Promise<void>;
-  osSupportsBiometric: () => Promise<boolean>;
-  authenticateBiometric: () => Promise<boolean>;
-  getBiometricKey: (
+  osSupportsBiometric(): Promise<boolean>;
+  authenticateBiometric(): Promise<boolean>;
+  getBiometricKey(
     service: string,
     key: string,
-    clientKeyHalfB64: string | undefined
-  ) => Promise<string | null>;
-  setBiometricKey: (
+    clientKeyHalfB64: string | undefined,
+  ): Promise<string | null>;
+  setBiometricKey(
     service: string,
     key: string,
     value: string,
-    clientKeyHalfB64: string | undefined
-  ) => Promise<void>;
-  deleteBiometricKey: (service: string, key: string) => Promise<void>;
+    clientKeyHalfB64: string | undefined,
+  ): Promise<void>;
+  deleteBiometricKey(service: string, key: string): Promise<void>;
 }

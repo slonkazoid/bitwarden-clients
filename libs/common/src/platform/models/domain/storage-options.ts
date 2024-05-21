@@ -1,6 +1,4 @@
-import { Jsonify } from "type-fest";
-
-import { HtmlStorageLocation, StorageLocation } from "../../../enums";
+import { HtmlStorageLocation, StorageLocation } from "../../enums";
 
 export type StorageOptions = {
   storageLocation?: StorageLocation;
@@ -9,5 +7,3 @@ export type StorageOptions = {
   htmlStorageLocation?: HtmlStorageLocation;
   keySuffix?: string;
 };
-
-export type MemoryStorageOptions<T> = StorageOptions & { deserializer?: (obj: Jsonify<T>) => T };

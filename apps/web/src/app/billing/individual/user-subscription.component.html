@@ -54,7 +54,7 @@
   </bit-callout>
   <dl *ngIf="selfHosted">
     <dt>{{ "expiration" | i18n }}</dt>
-    <dd *ngIf="sub.expiration">{{ sub.expiration | date : "mediumDate" }}</dd>
+    <dd *ngIf="sub.expiration">{{ sub.expiration | date: "mediumDate" }}</dd>
     <dd *ngIf="!sub.expiration">{{ "neverExpires" | i18n }}</dd>
   </dl>
   <div class="row" *ngIf="!selfHosted">
@@ -63,7 +63,7 @@
         <dt>{{ "status" | i18n }}</dt>
         <dd>
           <span class="text-capitalize">{{ (subscription && subscription.status) || "-" }}</span>
-          <span bitBadge badgeType="warning" *ngIf="subscriptionMarkedForCancel">{{
+          <span bitBadge variant="warning" *ngIf="subscriptionMarkedForCancel">{{
             "pendingCancellation" | i18n
           }}</span>
         </dd>
@@ -71,9 +71,9 @@
         <dd>
           {{
             nextInvoice
-              ? (nextInvoice.date | date : "mediumDate") +
+              ? (nextInvoice.date | date: "mediumDate") +
                 ", " +
-                (nextInvoice.amount | currency : "$")
+                (nextInvoice.amount | currency: "$")
               : "-"
           }}
         </dd>
@@ -86,20 +86,9 @@
           <tr *ngFor="let i of subscription.items">
             <td>
               {{ i.name }} {{ i.quantity > 1 ? "&times;" + i.quantity : "" }} @
-              {{ i.amount | currency : "$" }}
+              {{ i.amount | currency: "$" }}
             </td>
-            <td>{{ i.quantity * i.amount | currency : "$" }} /{{ i.interval | i18n }}</td>
-          </tr>
-          <tr *ngIf="discount != null && discount.active">
-            <td colspan="2">
-              <small>
-                {{ "customBillingStart" | i18n }}
-                <a routerLink="/settings/subscription/billing-history">
-                  {{ "billingHistory" | i18n }}
-                </a>
-                {{ "customBillingEnd" | i18n }}
-              </small>
-            </td>
+            <td>{{ i.quantity * i.amount | currency: "$" }} /{{ i.interval | i18n }}</td>
           </tr>
         </tbody>
       </table>
@@ -115,7 +104,7 @@
         buttonType="secondary"
         href="{{ this.cloudWebVaultUrl }}/#/settings/subscription"
         target="_blank"
-        rel="noopener"
+        rel="noreferrer"
       >
         {{ "launchCloudSubscription" | i18n }}
       </a>
@@ -156,7 +145,7 @@
         type="button"
         buttonType="danger"
         class="btn-submit tw-ml-auto"
-        (click)="cancel()"
+        (click)="cancelSubscription()"
         [appApiAction]="cancelPromise"
         [disabled]="$any(cancelBtn).loading"
         *ngIf="subscription && !subscription.cancelled && !subscriptionMarkedForCancel"
@@ -166,7 +155,7 @@
       </button>
     </div>
     <h2 class="spaced-header">{{ "storage" | i18n }}</h2>
-    <p>{{ "subscriptionStorage" | i18n : sub.maxStorageGb || 0 : sub.storageName || "0 MB" }}</p>
+    <p>{{ "subscriptionStorage" | i18n: sub.maxStorageGb || 0 : sub.storageName || "0 MB" }}</p>
     <div class="progress">
       <div
         class="progress-bar bg-success"
@@ -181,8 +170,8 @@
     </div>
     <ng-container *ngIf="subscription && !subscription.cancelled && !subscriptionMarkedForCancel">
       <div class="mt-3">
-        <div class="d-flex" *ngIf="!showAdjustStorage">
-          <button bitButton type="button" buttonType="secondary" (click)="adjustStorage(true)">
+        <div class="d-flex">
+          <button bitButton type="button" buttonType="secondary" [bitAction]="adjustStorage(true)">
             {{ "addStorage" | i18n }}
           </button>
           <button
@@ -190,18 +179,11 @@
             type="button"
             buttonType="secondary"
             class="tw-ml-1"
-            (click)="adjustStorage(false)"
+            [bitAction]="adjustStorage(false)"
           >
             {{ "removeStorage" | i18n }}
           </button>
         </div>
-        <app-adjust-storage
-          [storageGbPrice]="4"
-          [add]="adjustStorageAdd"
-          (onAdjusted)="closeStorage(true)"
-          (onCanceled)="closeStorage(false)"
-          *ngIf="showAdjustStorage"
-        ></app-adjust-storage>
       </div>
     </ng-container>
   </ng-container>
