@@ -36,10 +36,18 @@ export class IsEnterpriseOrgGuard implements CanActivate {
         });
         return false;
       } else {
-        this.messagingService.send("upgradeEnterprise", {
-          organizationId: org.id,
-          queryParams: { upgrade: true },
+        const upgradeConfirmed = await this.dialogService.openSimpleDialog({
+          title: { key: "upgradeOrganizationEnterprise" },
+          content: { key: "onlyAvailableForEnterpriseOrganization" },
+          acceptButtonText: { key: "upgradeOrganization" },
+          type: "info",
+          icon: "bwi-arrow-circle-up",
         });
+        if (upgradeConfirmed) {
+          await this.router.navigate(["organizations", org.id, "billing", "subscription"], {
+            queryParams: { upgrade: true },
+          });
+        }
       }
     }
 
