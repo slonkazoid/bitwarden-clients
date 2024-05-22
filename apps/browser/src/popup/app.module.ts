@@ -39,7 +39,7 @@ import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
 import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
-import { NotifcationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
+import { NotificationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { PopOutComponent } from "../platform/popup/components/pop-out.component";
 import { HeaderComponent } from "../platform/popup/header.component";
@@ -84,7 +84,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
-import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
 import { OptionsComponent } from "./settings/options.component";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
@@ -155,7 +154,7 @@ import "../platform/popup/locales";
     LoginViaAuthRequestComponent,
     LoginDecryptionOptionsComponent,
     OptionsComponent,
-    NotifcationsSettingsComponent,
+    NotificationsSettingsComponent,
     AppearanceComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -185,7 +184,6 @@ import "../platform/popup/locales";
     RemovePasswordComponent,
     VaultSelectComponent,
     Fido2Component,
-    HelpAndFeedbackComponent,
     AutofillComponent,
     EnvironmentSelectorComponent,
     AccountSwitcherComponent,

@@ -747,7 +747,6 @@ export class ServiceContainer {
       this.cipherService.clear(userId),
       this.folderService.clear(userId),
       this.collectionService.clear(userId as UserId),
-      this.passwordGenerationService.clear(),
     ]);
 
     await this.stateEventRunnerService.handleEvent("logout", userId);
