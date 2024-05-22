@@ -76,6 +76,7 @@ export class AccountSwitcherComponent {
   showSwitcher$: Observable<boolean>;
 
   numberOfAccounts$: Observable<number>;
+  disabled = false;
 
   constructor(
     private stateService: StateService,
@@ -161,11 +162,13 @@ export class AccountSwitcherComponent {
   async switch(userId: string) {
     this.close();
 
+    this.disabled = true;
     const accountSwitchFinishedPromise = firstValueFrom(
       this.messageListener.messages$(new CommandDefinition("finishSwitchAccount")),
     );
     this.messagingService.send("switchAccount", { userId });
     await accountSwitchFinishedPromise;
+    this.disabled = false;
   }
 
   async addAccount() {
