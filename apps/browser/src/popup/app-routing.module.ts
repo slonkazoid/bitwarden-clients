@@ -28,7 +28,7 @@ import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
 import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
-import { NotifcationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
+import { NotificationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
@@ -36,8 +36,11 @@ import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/pass
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
+import { AboutPageComponent } from "../tools/popup/settings/about-page/about-page.component";
+import { MoreFromBitwardenPageComponent } from "../tools/popup/settings/about-page/more-from-bitwarden-page.component";
 import { ExportComponent } from "../tools/popup/settings/export.component";
 import { ImportBrowserComponent } from "../tools/popup/settings/import/import-browser.component";
+import { SettingsV2Component } from "../tools/popup/settings/settings-v2.component";
 import { SettingsComponent } from "../tools/popup/settings/settings.component";
 import { Fido2Component } from "../vault/popup/components/fido2/fido2.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
@@ -54,11 +57,11 @@ import { AppearanceComponent } from "../vault/popup/settings/appearance.componen
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
 import { FoldersComponent } from "../vault/popup/settings/folders.component";
 import { SyncComponent } from "../vault/popup/settings/sync.component";
+import { VaultSettingsV2Component } from "../vault/popup/settings/vault-settings-v2.component";
 import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.component";
 
 import { extensionRefreshRedirect, extensionRefreshSwap } from "./extension-refresh-route-utils";
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
-import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
 import { OptionsComponent } from "./settings/options.component";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
@@ -259,16 +262,15 @@ const routes: Routes = [
   },
   {
     path: "notifications",
-    component: NotifcationsSettingsComponent,
+    component: NotificationsSettingsComponent,
     canActivate: [AuthGuard],
     data: { state: "notifications" },
   },
-  {
+  ...extensionRefreshSwap(VaultSettingsComponent, VaultSettingsV2Component, {
     path: "vault-settings",
-    component: VaultSettingsComponent,
     canActivate: [AuthGuard],
     data: { state: "vault-settings" },
-  },
+  }),
   {
     path: "folders",
     component: FoldersComponent,
@@ -348,10 +350,16 @@ const routes: Routes = [
     data: { state: "update-temp-password" },
   },
   {
-    path: "help-and-feedback",
-    component: HelpAndFeedbackComponent,
+    path: "about",
+    component: AboutPageComponent,
     canActivate: [AuthGuard],
-    data: { state: "help-and-feedback" },
+    data: { state: "about" },
+  },
+  {
+    path: "more-from-bitwarden",
+    component: MoreFromBitwardenPageComponent,
+    canActivate: [AuthGuard],
+    data: { state: "moreFromBitwarden" },
   },
   ...extensionRefreshSwap(TabsComponent, TabsV2Component, {
     path: "tabs",
@@ -381,12 +389,11 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { state: "tabs_generator" },
       },
-      {
+      ...extensionRefreshSwap(SettingsComponent, SettingsV2Component, {
         path: "settings",
-        component: SettingsComponent,
         canActivate: [AuthGuard],
         data: { state: "tabs_settings" },
-      },
+      }),
       {
         path: "send",
         component: SendGroupingsComponent,
