@@ -151,7 +151,10 @@ export class VaultPopupItemsService {
   constructor(
     private cipherService: CipherService,
     private vaultSettingsService: VaultSettingsService,
-  ) {}
+  ) {
+    // Temporary workaround to trigger decrypting all ciphers when the service is created.
+    void this.cipherService.getAllDecrypted();
+  }
 
   /**
    * Re-fetch the current tab to trigger a re-evaluation of the autofill ciphers.
