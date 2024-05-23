@@ -82,6 +82,7 @@ const routes: Routes = [
           },
           {
             path: "member-access-report",
+            //Update the component when adding the MemberAccessComponent on AC-2509
             component: WeakPasswordsReportComponent,
             data: {
               titleId: "memberAccessReport",
