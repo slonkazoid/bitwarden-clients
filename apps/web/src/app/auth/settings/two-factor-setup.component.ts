@@ -160,7 +160,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
           { data: result },
         );
         yubiComp.componentInstance.onChangeStatus.subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.Authenticator);
+          this.updateStatus(enabled, TwoFactorProviderType.Yubikey);
         });
         break;
       }
