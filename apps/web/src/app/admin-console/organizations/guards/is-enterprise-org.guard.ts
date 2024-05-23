@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { ProductType } from "@bitwarden/common/enums";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { DialogService } from "@bitwarden/components";
 
 @Injectable({
@@ -13,11 +15,19 @@ export class IsEnterpriseOrgGuard implements CanActivate {
   constructor(
     private router: Router,
     private organizationService: OrganizationService,
-    private messagingService: MessagingService,
     private dialogService: DialogService,
+    private configService: ConfigService,
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    const memberAccessReport = await firstValueFrom(
+      this.configService.getFeatureFlag$(FeatureFlag.MemberAccessReport),
+    );
+
+    if (!memberAccessReport) {
+      return this.router.createUrlTree(["/"]);
+    }
+
     const org = await this.organizationService.get(route.params.organizationId);
 
     if (org == null) {
