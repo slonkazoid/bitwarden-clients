@@ -17,7 +17,7 @@ export class ReportsHomeComponent implements OnInit {
   reports$: Observable<ReportEntry[]>;
   homepage$: Observable<boolean>;
 
-  private memberAccessReport: boolean;
+  private isMemberAccessReportEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,7 +27,7 @@ export class ReportsHomeComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.memberAccessReport = await firstValueFrom(
+    this.isMemberAccessReportEnabled = await firstValueFrom(
       this.configService.getFeatureFlag$(FeatureFlag.MemberAccessReport),
     );
 
@@ -39,16 +39,13 @@ export class ReportsHomeComponent implements OnInit {
 
     this.reports$ = this.route.params.pipe(
       concatMap((params) => this.organizationService.get$(params.organizationId)),
-      map((org) =>
-        this.buildReports(org.isFreeOrg, org.planProductType === ProductType.Enterprise),
-      ),
+      map((org) => this.buildReports(org.planProductType)),
     );
   }
 
-  private buildReports(upgradeRequired: boolean, isEnterpriseOrg: boolean): ReportEntry[] {
-    const reportRequiresUpgrade = upgradeRequired
-      ? ReportVariant.RequiresUpgrade
-      : ReportVariant.Enabled;
+  private buildReports(productType: ProductType): ReportEntry[] {
+    const reportRequiresUpgrade =
+      productType == ProductType.Free ? ReportVariant.RequiresUpgrade : ReportVariant.Enabled;
 
     const reportsArray = [
       {
@@ -73,10 +70,13 @@ export class ReportsHomeComponent implements OnInit {
       },
     ];
 
-    if (this.memberAccessReport) {
+    if (this.isMemberAccessReportEnabled) {
       reportsArray.push({
         ...reports[ReportType.MemberAccessReport],
-        variant: isEnterpriseOrg ? ReportVariant.Enabled : ReportVariant.RequiresEnterprise,
+        variant:
+          productType == ProductType.Enterprise
+            ? ReportVariant.Enabled
+            : ReportVariant.RequiresEnterprise,
       });
     }
 

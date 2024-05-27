@@ -9,7 +9,6 @@ import { InactiveTwoFactorReportComponent } from "../../../admin-console/organiz
 import { ReusedPasswordsReportComponent } from "../../../admin-console/organizations/tools/reused-passwords-report.component";
 import { UnsecuredWebsitesReportComponent } from "../../../admin-console/organizations/tools/unsecured-websites-report.component";
 import { WeakPasswordsReportComponent } from "../../../admin-console/organizations/tools/weak-passwords-report.component";
-import { IsEnterpriseOrgGuard } from "../guards/is-enterprise-org.guard";
 import { IsPaidOrgGuard } from "../guards/is-paid-org.guard";
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 import { OrganizationRedirectGuard } from "../guards/org-redirect.guard";
@@ -79,15 +78,6 @@ const routes: Routes = [
               titleId: "weakPasswordsReport",
             },
             canActivate: [IsPaidOrgGuard],
-          },
-          {
-            path: "member-access-report",
-            //Update the component when adding the MemberAccessComponent on AC-2509
-            component: WeakPasswordsReportComponent,
-            data: {
-              titleId: "memberAccessReport",
-            },
-            canActivate: [IsEnterpriseOrgGuard],
           },
         ],
       },
