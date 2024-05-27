@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
+import { MemberAccessReportComponent } from "../../admin-console/organizations/tools/member-access-report.component";
 import { HeaderModule } from "../../layouts/header/header.module";
 import { SharedModule } from "../../shared";
 import { OrganizationBadgeModule } from "../../vault/individual-vault/organization-badge/organization-badge.module";
@@ -36,6 +37,7 @@ import { ReportsSharedModule } from "./shared";
     ReusedPasswordsReportComponent,
     UnsecuredWebsitesReportComponent,
     WeakPasswordsReportComponent,
+    MemberAccessReportComponent,
   ],
 })
 export class ReportsModule {}
