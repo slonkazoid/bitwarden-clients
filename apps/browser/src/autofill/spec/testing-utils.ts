@@ -104,3 +104,31 @@ export function triggerOnAlarmEvent(alarm: chrome.alarms.Alarm) {
     callback(alarm);
   });
 }
+
+export function mockQuerySelectorAllDefinedCall() {
+  const originalDocumentQuerySelectorAll = document.querySelectorAll;
+  document.querySelectorAll = function (selector: string) {
+    return originalDocumentQuerySelectorAll.call(
+      document,
+      selector === ":defined" ? "*" : selector,
+    );
+  };
+
+  const originalShadowRootQuerySelectorAll = ShadowRoot.prototype.querySelectorAll;
+  ShadowRoot.prototype.querySelectorAll = function (selector: string) {
+    return originalShadowRootQuerySelectorAll.call(this, selector === ":defined" ? "*" : selector);
+  };
+
+  const originalElementQuerySelectorAll = Element.prototype.querySelectorAll;
+  Element.prototype.querySelectorAll = function (selector: string) {
+    return originalElementQuerySelectorAll.call(this, selector === ":defined" ? "*" : selector);
+  };
+
+  return {
+    mockRestore: () => {
+      document.querySelectorAll = originalDocumentQuerySelectorAll;
+      ShadowRoot.prototype.querySelectorAll = originalShadowRootQuerySelectorAll;
+      Element.prototype.querySelectorAll = originalElementQuerySelectorAll;
+    },
+  };
+}

@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Learn more about how to use Bitwarden on the Help Center."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Continue to browser extension store?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Help others find out if Bitwarden is right for them. Visit your browser's extension store and leave a rating now."    
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "You can change your master password on the Bitwarden web app."
   },
@@ -1600,6 +1606,9 @@
   "restoredItem": {
     "message": "Item restored"
   },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?"
   },
@@ -2535,6 +2544,27 @@
   "ssoIdentifierRequired": {
     "message": "Organization SSO identifier is required."
   },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "Check your email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Go back"
+  },
+  "toEditYourEmailAddress": {
+    "message": "to edit your email address."
+  },
   "eu": {
     "message": "EU",
     "description": "European Union"
@@ -3229,7 +3259,37 @@
   "errorAssigningTargetFolder": {
     "message": "Error assigning target folder."
   },
+  "viewItemsIn": {
+    "message": "View items in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Back to $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "new": {
     "message": "New"
+  },
+  "removeItem": {
+    "message": "Remove $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }
