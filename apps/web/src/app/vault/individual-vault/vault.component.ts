@@ -14,6 +14,7 @@ import {
   firstValueFrom,
   lastValueFrom,
   Observable,
+  of,
   Subject,
 } from "rxjs";
 import {
@@ -46,6 +47,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SyncService } from "@bitwarden/common/platform/sync";
+import { OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
@@ -59,6 +61,10 @@ import { ServiceUtils } from "@bitwarden/common/vault/service-utils";
 import { DialogService, Icons, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
+import {
+  BulkCollectionAssignmentDialogComponent,
+  BulkCollectionAssignmentDialogResult,
+} from "../components/bulk-collection-assignment-dialog";
 import {
   CollectionDialogAction,
   CollectionDialogTabType,
@@ -136,6 +142,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected isEmpty: boolean;
   protected selectedCollection: TreeNode<CollectionView> | undefined;
   protected canCreateCollections = false;
+  protected editableCollections$: Observable<CollectionView[]>;
   protected currentSearchText$: Observable<string>;
   protected flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
     FeatureFlag.FlexibleCollectionsV1,
@@ -298,6 +305,33 @@ export class VaultComponent implements OnInit, OnDestroy {
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
 
+    this.editableCollections$ = combineLatest([
+      this.route.queryParams,
+      allCollections$,
+      this.organizationService.organizations$,
+      this.flexibleCollectionsV1Enabled$,
+    ]).pipe(
+      switchMap(([params, allCollections, allOrganizations, flexibleCollectionsEnabled]) => {
+        const organizationId = params.organizationId;
+
+        if (organizationId === undefined || organizationId === Unassigned) {
+          return of(allCollections);
+        }
+
+        const organization = allOrganizations.find((o) => o.id === organizationId);
+
+        return of(
+          allCollections.filter((collection) => {
+            return (
+              collection.organizationId === organizationId &&
+              collection.canEditItems(organization, flexibleCollectionsEnabled, false)
+            );
+          }),
+        );
+      }),
+      shareReplay({ refCount: true, bufferSize: 1 }),
+    );
+
     const selectedCollection$ = combineLatest([nestedCollections$, filter$]).pipe(
       filter(([collections, filter]) => collections != undefined && filter != undefined),
       map(([collections, filter]) => {
@@ -430,6 +464,8 @@ export class VaultComponent implements OnInit, OnDestroy {
         await this.editCollection(event.item, CollectionDialogTabType.Info);
       } else if (event.type === "viewCollectionAccess") {
         await this.editCollection(event.item, CollectionDialogTabType.Access);
+      } else if (event.type === "assignToCollections") {
+        await this.bulkAssignToCollections(event.items);
       }
     } finally {
       this.processingEvent = false;
@@ -706,6 +742,55 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.refresh();
     } catch (e) {
       this.logService.error(e);
+    }
+  }
+
+  async bulkAssignToCollections(ciphers: CipherView[]) {
+    if (!(await this.repromptCipher(ciphers))) {
+      return;
+    }
+
+    if (ciphers.length === 0) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected"),
+      );
+      return;
+    }
+
+    let availableCollections: CollectionView[] = [];
+    const activeOrgId = this.activeFilter.organizationId;
+    let orgId: string | undefined;
+
+    // if activeFilter.organizationId is null or undefined then we need to get the organizationId from the ciphers
+    if (!activeOrgId) {
+      orgId = [...new Set(ciphers.map((c) => c.organizationId).filter((id) => id !== null))][0];
+    }
+
+    // No organization id or it's MyVault means we have only personal ciphers
+    if (activeOrgId === "MyVault" || (!activeOrgId && !orgId)) {
+      availableCollections = [];
+    } else {
+      // Filter editableCollections if activeOrgId is not set
+      availableCollections = activeOrgId
+        ? await firstValueFrom(this.editableCollections$)
+        : (await firstValueFrom(this.editableCollections$)).filter(
+            (c) => c.organizationId === orgId,
+          );
+    }
+
+    const dialog = BulkCollectionAssignmentDialogComponent.open(this.dialogService, {
+      data: {
+        ciphers,
+        organizationId: (activeOrgId ?? orgId) as OrganizationId,
+        availableCollections,
+      },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === BulkCollectionAssignmentDialogResult.Saved) {
+      this.refresh();
     }
   }
 

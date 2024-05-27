@@ -7827,7 +7827,7 @@
     "message": "Assign to these collections"
   },
   "bulkCollectionAssignmentDialogDescription": {
-    "message": "Select the collections that the items will be shared with. Once an item is updated in one collection, it will be reflected in all collections. Only organization members with access to these collections will be able to see the items."
+    "message": "Select the collections that the items will be associated with. Only organization members with access to these collections will be able to see the items."
   },
   "selectCollectionsToAssign": {
     "message": "Select collections to assign"
@@ -8357,5 +8357,27 @@
   },
   "addToFolder": {
     "message": "Add to folder"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to the selected organization. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to $ORG$. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }

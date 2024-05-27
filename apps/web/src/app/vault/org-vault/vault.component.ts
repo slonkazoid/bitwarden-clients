@@ -66,6 +66,10 @@ import { openEntityEventsDialog } from "../../admin-console/organizations/manage
 import { VaultFilterService } from "../../vault/individual-vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/individual-vault/vault-filter/shared/models/vault-filter.model";
 import {
+  BulkCollectionAssignmentDialogComponent,
+  BulkCollectionAssignmentDialogResult,
+} from "../components/bulk-collection-assignment-dialog";
+import {
   CollectionDialogAction,
   CollectionDialogTabType,
   openCollectionDialog,
@@ -90,10 +94,6 @@ import { getNestedCollectionTree } from "../utils/collection-utils";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
-import {
-  BulkCollectionAssignmentDialogComponent,
-  BulkCollectionAssignmentDialogResult,
-} from "./bulk-collection-assignment-dialog";
 import {
   BulkCollectionsDialogComponent,
   BulkCollectionsDialogResult,

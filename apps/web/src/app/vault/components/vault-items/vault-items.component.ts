@@ -264,7 +264,7 @@ export class VaultItemsComponent {
       return true;
     }
 
-    return this.allCiphersHaveEditAccess() && hasPersonalItems;
+    return this.allCiphersHaveEditAccess();
   }
 
   protected showDelete(): boolean {
