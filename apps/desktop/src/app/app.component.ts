@@ -411,7 +411,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.masterPasswordService.forceSetPasswordReason$(message.userId),
               )) != ForceSetPasswordReason.None;
             if (locked) {
-              this.messagingService.send("locked", { userId: message.userId });
+              this.modalService.closeAll();
+              await this.router.navigate(["lock"]);
             } else if (forcedPasswordReset) {
               // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -607,7 +608,6 @@ export class AppComponent implements OnInit, OnDestroy {
       await this.cipherService.clear(userBeingLoggedOut);
       await this.folderService.clear(userBeingLoggedOut);
       await this.collectionService.clear(userBeingLoggedOut);
-      await this.passwordGenerationService.clear(userBeingLoggedOut);
       await this.vaultTimeoutSettingsService.clear(userBeingLoggedOut);
       await this.biometricStateService.logout(userBeingLoggedOut);
 

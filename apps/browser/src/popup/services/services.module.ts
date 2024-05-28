@@ -25,7 +25,7 @@ import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeou
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
-import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
@@ -34,7 +34,6 @@ import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import {
   AutofillSettingsService,
   AutofillSettingsServiceAbstraction,
@@ -81,8 +80,6 @@ import {
 } from "@bitwarden/common/platform/state";
 // eslint-disable-next-line import/no-restricted-paths -- Used for dependency injection
 import { InlineDerivedStateProvider } from "@bitwarden/common/platform/state/implementations/inline-derived-state";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import { VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -176,12 +173,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: BaseUnauthGuardService,
     useClass: UnauthGuardService,
-    deps: [AuthServiceAbstraction, Router],
-  }),
-  safeProvider({
-    provide: AuthServiceAbstraction,
-    useFactory: getBgService<AuthService>("authService"),
-    deps: [],
+    deps: [AuthService, Router],
   }),
   safeProvider({
     provide: SsoLoginServiceAbstraction,
@@ -316,11 +308,6 @@ const safeProviders: SafeProvider[] = [
       );
     },
     deps: [ToastService, OffscreenDocumentService],
-  }),
-  safeProvider({
-    provide: PasswordGenerationServiceAbstraction,
-    useFactory: getBgService<PasswordGenerationServiceAbstraction>("passwordGenerationService"),
-    deps: [],
   }),
   safeProvider({
     provide: SyncService,
@@ -481,11 +468,6 @@ const safeProviders: SafeProvider[] = [
       TokenService,
       MigrationRunner,
     ],
-  }),
-  safeProvider({
-    provide: UsernameGenerationServiceAbstraction,
-    useFactory: getBgService<UsernameGenerationServiceAbstraction>("usernameGenerationService"),
-    deps: [],
   }),
   safeProvider({
     provide: BaseStateServiceAbstraction,

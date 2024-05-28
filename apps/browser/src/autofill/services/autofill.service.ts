@@ -1,8 +1,10 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, startWith } from "rxjs";
+import { pairwise } from "rxjs/operators";
 
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { DomainSettingsService } from "@bitwarden/common/autofill/services/domain-settings.service";
 import { InlineMenuVisibilitySetting } from "@bitwarden/common/autofill/types";
@@ -69,10 +71,12 @@ export default class AutofillService implements AutofillServiceInterface {
    */
   async loadAutofillScriptsOnInstall() {
     BrowserApi.addListener(chrome.runtime.onConnect, this.handleInjectedScriptPortConnection);
-
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.injectAutofillScriptsInAllTabs();
+    void this.injectAutofillScriptsInAllTabs();
+    this.autofillSettingsService.inlineMenuVisibility$
+      .pipe(startWith(undefined), pairwise())
+      .subscribe(([previousSetting, currentSetting]) =>
+        this.handleInlineMenuVisibilityChange(previousSetting, currentSetting),
+      );
   }
 
   /**
@@ -109,9 +113,12 @@ export default class AutofillService implements AutofillServiceInterface {
     // Autofill user settings loaded from state can await the active account state indefinitely
     // if not guarded by an active account check (e.g. the user is logged in)
     const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
-
+    let overlayVisibility: InlineMenuVisibilitySetting = AutofillOverlayVisibility.Off;
     let autoFillOnPageLoadIsEnabled = false;
-    const overlayVisibility = await this.getOverlayVisibility();
+
+    if (activeAccount) {
+      overlayVisibility = await this.getOverlayVisibility();
+    }
 
     const mainAutofillScript = overlayVisibility
       ? "bootstrap-autofill-overlay.js"
@@ -2085,5 +2092,35 @@ export default class AutofillService implements AutofillServiceInterface {
         void this.injectAutofillScripts(tab, 0, false);
       }
     }
+  }
+
+  /**
+   * Updates the autofill inline menu visibility setting in all active tabs
+   * when the InlineMenuVisibilitySetting observable is updated.
+   *
+   * @param previousSetting - The previous setting value
+   * @param currentSetting - The current setting value
+   */
+  private async handleInlineMenuVisibilityChange(
+    previousSetting: InlineMenuVisibilitySetting,
+    currentSetting: InlineMenuVisibilitySetting,
+  ) {
+    if (previousSetting === undefined || previousSetting === currentSetting) {
+      return;
+    }
+
+    const inlineMenuPreviouslyDisabled = previousSetting === AutofillOverlayVisibility.Off;
+    const inlineMenuCurrentlyDisabled = currentSetting === AutofillOverlayVisibility.Off;
+    if (!inlineMenuPreviouslyDisabled && !inlineMenuCurrentlyDisabled) {
+      const tabs = await BrowserApi.tabsQuery({});
+      tabs.forEach((tab) =>
+        BrowserApi.tabSendMessageData(tab, "updateAutofillOverlayVisibility", {
+          autofillOverlayVisibility: currentSetting,
+        }),
+      );
+      return;
+    }
+
+    await this.reloadAutofillScripts();
   }
 }
