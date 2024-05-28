@@ -9,6 +9,7 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { processisolations } from "@bitwarden/desktop-native";
 
 import { WindowState } from "../platform/models/domain/window-state";
 import { DesktopSettingsService } from "../platform/services/desktop-settings.service";
@@ -32,6 +33,7 @@ export class WindowMain {
   private windowStateChangeTimer: NodeJS.Timeout;
   private windowStates: { [key: string]: WindowState } = {};
   private enableAlwaysOnTop = false;
+  private crashDumpsDisabledInRenderer = false;
   session: Electron.Session;
 
   readonly defaultWidth = 950;
@@ -55,7 +57,7 @@ export class WindowMain {
       this.win.setBackgroundColor(await this.getBackgroundColor());
 
       // By default some linux distro collect core dumps on crashes which gets written to disk.
-      if (!isLinux()) {
+      if (!isLinux() || this.crashDumpsDisabledInRenderer) {
         const crashEvent = once(this.win.webContents, "render-process-gone");
         this.win.webContents.forcefullyCrashRenderer();
         await crashEvent;
@@ -105,6 +107,20 @@ export class WindowMain {
         // initialization and is ready to create browser windows.
         // Some APIs can only be used after this event occurs.
         app.on("ready", async () => {
+          if (isLinux() && !isDev()) {
+            if (await processisolations.isCoreDumpingDisabled()) {
+              this.logService.info("Coredumps are disabled in renderer process");
+              this.crashDumpsDisabledInRenderer = true;
+            } else {
+              this.logService.info("Disabling coredumps in main process");
+              try {
+                await processisolations.disableCoredumps();
+              } catch (e) {
+                this.logService.error("Failed to disable coredumps", e);
+              }
+            }
+          }
+
           await this.createWindow();
           resolve();
           if (this.argvCallback != null) {
