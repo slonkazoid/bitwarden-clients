@@ -41,5 +41,5 @@ pub fn disable_memory_access() -> Result<String> {
         return Err(anyhow::anyhow!("failed to disable memory dumping, memory is dumpable by other processes {}", e))
     }
 
-    Ok("Core dumps disabled".to_string())
+    Ok("Memory dumps disabled".to_string())
 }
