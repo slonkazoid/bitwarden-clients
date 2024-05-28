@@ -98,6 +98,11 @@ export class VaultItemsComponent {
     return this.showBulkAddToCollections && this.ciphers.length > 0;
   }
 
+  // Use new bulk management delete if vaultBulkManagementActionEnabled feature flag is enabled
+  get deleteAllowed() {
+    return this.vaultBulkManagementActionEnabled ? this.showDelete() : true;
+  }
+
   protected canEditCollection(collection: CollectionView): boolean {
     // Only allow allow deletion if collection editing is enabled and not deleting "Unassigned"
     if (collection.id === Unassigned) {
