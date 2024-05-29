@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 
-import { ReportService as ReportServiceAbstraction } from "../abstractions/report.service";
-import { MemberAccessReportView } from "../models/view/member-access-report.view";
+import { MemberAccessReportView } from "./view/member-access-report.view";
 
 @Injectable({ providedIn: "root" })
-export class ReportService extends ReportServiceAbstraction {
+export class MemberAccessReportService {
+  //Temporary method to provide mock data for test purposes only
   getMemberAccessMockData(): MemberAccessReportView[] {
     const memberAccess = new MemberAccessReportView();
     memberAccess.email = "sjohnson@email.com";

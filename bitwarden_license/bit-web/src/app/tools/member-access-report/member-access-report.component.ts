@@ -3,11 +3,11 @@ import { BehaviorSubject } from "rxjs";
 
 import { SearchModule, TableDataSource } from "@bitwarden/components";
 
-import { HeaderModule } from "../../../layouts/header/header.module";
-import { SharedModule } from "../../../shared";
+import { HeaderModule } from "../../../../../../apps/web/src/app/layouts/header/header.module";
+import { SharedModule } from "../../../../../../apps/web/src/app/shared";
 
-import { MemberAccessReportView } from "./models/view/member-access-report.view";
-import { ReportService } from "./services/report.service";
+import { MemberAccessReportService } from "./member-access-report.service";
+import { MemberAccessReportView } from "./view/member-access-report.view";
 
 @Component({
   selector: "member-access-report",
@@ -26,7 +26,7 @@ export class MemberAccessReportComponent implements OnInit {
   set searchText(value: string) {
     this._searchText$.next(value);
   }
-  constructor(protected reportService: ReportService) {}
+  constructor(protected reportService: MemberAccessReportService) {}
 
   ngOnInit() {
     this.dataSource.data = this.reportService.getMemberAccessMockData();
