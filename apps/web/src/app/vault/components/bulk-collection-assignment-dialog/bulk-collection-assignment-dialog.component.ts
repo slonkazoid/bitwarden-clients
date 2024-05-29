@@ -116,7 +116,7 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
       this.showOrgSelector = true;
     }
 
-    await this.initializeItemCounts(this.selectedOrgId, v1FCEnabled, restrictProviderAccess);
+    await this.initializeItems(this.selectedOrgId, v1FCEnabled, restrictProviderAccess);
 
     if (this.selectedOrgId && this.selectedOrgId !== "MyVault") {
       await this.handleOrganizationCiphers();
@@ -177,38 +177,22 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
       return;
     }
 
+    // Retrieve ciphers that belong to an organization
+    const cipherIds = this.editableItems
+      .filter((i) => i.organizationId)
+      .map((i) => i.id as CipherId);
+
+    // Move personal items to the organization
     if (this.personalItemsCount > 0) {
       await this.moveToOrganization(
         this.selectedOrgId,
         this.params.ciphers.filter((c) => c.organizationId == null),
         this.selectedCollections.map((i) => i.id as CollectionId),
       );
-
-      this.dialogRef.close(BulkCollectionAssignmentDialogResult.Saved);
-      return;
     }
 
-    const cipherIds = this.editableItems.map((i) => i.id as CipherId);
-
-    if (this.selectedCollections.length > 0) {
-      await this.cipherService.bulkUpdateCollectionsWithServer(
-        this.selectedOrgId,
-        cipherIds,
-        this.selectedCollections.map((i) => i.id as CollectionId),
-        false,
-      );
-    }
-
-    if (
-      this.params.activeCollection != null &&
-      this.selectedCollections.find((c) => c.id === this.params.activeCollection.id) == null
-    ) {
-      await this.cipherService.bulkUpdateCollectionsWithServer(
-        this.selectedOrgId,
-        cipherIds,
-        [this.params.activeCollection.id as CollectionId],
-        true,
-      );
+    if (cipherIds.length > 0) {
+      await this.bulkUpdateCollections(cipherIds);
     }
 
     this.platformUtilsService.showToast(
@@ -256,7 +240,7 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
     }
   }
 
-  private async initializeItemCounts(
+  private async initializeItems(
     organizationId: OrganizationId,
     v1FCEnabled: boolean,
     restrictProviderAccess: boolean,
@@ -335,6 +319,29 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
       null,
       this.i18nService.t("movedItemsToOrg", this.orgName ?? this.i18nService.t("organization")),
     );
+  }
+
+  private async bulkUpdateCollections(cipherIds: CipherId[]) {
+    if (this.selectedCollections.length > 0) {
+      await this.cipherService.bulkUpdateCollectionsWithServer(
+        this.selectedOrgId,
+        cipherIds,
+        this.selectedCollections.map((i) => i.id as CollectionId),
+        false,
+      );
+    }
+
+    if (
+      this.params.activeCollection != null &&
+      this.selectedCollections.find((c) => c.id === this.params.activeCollection.id) == null
+    ) {
+      await this.cipherService.bulkUpdateCollectionsWithServer(
+        this.selectedOrgId,
+        cipherIds,
+        [this.params.activeCollection.id as CollectionId],
+        true,
+      );
+    }
   }
 
   static open(
