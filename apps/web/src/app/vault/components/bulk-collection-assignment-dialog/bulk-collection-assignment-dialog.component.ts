@@ -177,6 +177,17 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
       return;
     }
 
+    if (this.personalItemsCount > 0) {
+      await this.moveToOrganization(
+        this.selectedOrgId,
+        this.params.ciphers.filter((c) => c.organizationId == null),
+        this.selectedCollections.map((i) => i.id as CollectionId),
+      );
+
+      this.dialogRef.close(BulkCollectionAssignmentDialogResult.Saved);
+      return;
+    }
+
     const cipherIds = this.editableItems.map((i) => i.id as CipherId);
 
     if (this.selectedCollections.length > 0) {
@@ -299,6 +310,7 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
     ]).pipe(
       map(([collections, organizations]) => {
         const org = organizations.find((o) => o.id === orgId);
+        this.orgName = org.name;
 
         return collections.filter((c) => {
           return (
@@ -307,6 +319,24 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
         });
       }),
       shareReplay({ refCount: true, bufferSize: 1 }),
+    );
+  }
+
+  private async moveToOrganization(
+    organizationId: OrganizationId,
+    shareableCiphers: CipherView[],
+    selectedCollectionIds: CollectionId[],
+  ) {
+    await this.cipherService.shareManyWithServer(
+      shareableCiphers,
+      organizationId,
+      selectedCollectionIds,
+    );
+
+    this.platformUtilsService.showToast(
+      "success",
+      null,
+      this.i18nService.t("movedItemsToOrg", this.orgName ?? this.i18nService.t("organization")),
     );
   }
 

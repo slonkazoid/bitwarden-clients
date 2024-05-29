@@ -785,6 +785,7 @@ export class VaultComponent implements OnInit, OnDestroy {
         ciphers,
         organizationId: (activeOrgId ?? orgId) as OrganizationId,
         availableCollections,
+        activeCollection: this.activeFilter?.selectedCollectionNode?.node,
       },
     });
 
