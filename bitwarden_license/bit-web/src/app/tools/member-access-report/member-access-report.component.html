@@ -1,22 +1,23 @@
 <ng-container>
-  <app-header></app-header>
-
-  <p bitTypography="body1">
-    {{ "memberAccessReportPageDesc" | i18n }}
-  </p>
-
-  <div class="tw-flex tw-my-8">
+  <app-header>
     <bit-search
       [(ngModel)]="searchText"
-      [placeholder]="'search' | i18n"
-      class="tw-w-80 tw-mr-2"
+      [placeholder]="'searchMembers' | i18n"
+      class="tw-grow"
     ></bit-search>
 
-    <button type="button" bitButton>
+    <button type="button" bitButton buttonType="primary">
       <span>{{ "export" | i18n }}</span>
       <i class="bwi bwi-fw bwi-sign-in" aria-hidden="true"></i>
     </button>
+  </app-header>
+
+  <div class="tw-max-w-4xl">
+    <p bitTypography="body1">
+      {{ "memberAccessReportPageDesc" | i18n }}
+    </p>
   </div>
+
   <bit-table [dataSource]="dataSource" class="tw-mt-2">
     <ng-container header>
       <tr>
@@ -42,9 +43,9 @@
             </div>
           </div>
         </td>
-        <td bitCell class="tw-text-muted">{{ r.groups }}</td>
-        <td bitCell class="tw-text-muted">{{ r.collections }}</td>
-        <td bitCell class="tw-text-muted">{{ r.items }}</td>
+        <td bitCell class="tw-text-muted tw-w-[278px] tw-p-4">{{ r.groups }}</td>
+        <td bitCell class="tw-text-muted tw-w-[278px] tw-p-4">{{ r.collections }}</td>
+        <td bitCell class="tw-text-muted tw-w-[278px] tw-p-4">{{ r.items }}</td>
       </tr>
     </ng-template>
   </bit-table>
