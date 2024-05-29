@@ -20,11 +20,11 @@ export class IsEnterpriseOrgGuard implements CanActivate {
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const memberAccessReport = await firstValueFrom(
+    const isMemberAccessReportEnabled = await firstValueFrom(
       this.configService.getFeatureFlag$(FeatureFlag.MemberAccessReport),
     );
 
-    if (!memberAccessReport) {
+    if (!isMemberAccessReportEnabled) {
       return this.router.createUrlTree(["/"]);
     }
 
