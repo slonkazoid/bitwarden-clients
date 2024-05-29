@@ -80,7 +80,7 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
 
   protected formGroup = this.formBuilder.group({
     selectedOrg: [""],
-    collections: [[]],
+    collections: [[], [Validators.required]],
   });
 
   private editableItems: CipherView[] = [];
@@ -285,11 +285,8 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
 
   private setFormValidators() {
     const selectedOrgControl = this.formGroup.get("selectedOrg");
-    const collectionsControl = this.formGroup.get("collections");
     selectedOrgControl?.setValidators([Validators.required]);
-    collectionsControl?.setValidators([Validators.required]);
     selectedOrgControl?.updateValueAndValidity();
-    collectionsControl?.updateValueAndValidity();
   }
 
   /**
