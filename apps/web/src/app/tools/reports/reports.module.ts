@@ -27,6 +27,7 @@ import { ReportsSharedModule } from "./shared";
     OrganizationBadgeModule,
     PipesModule,
     HeaderModule,
+    MemberAccessReportComponent,
   ],
   declarations: [
     BreachReportComponent,
@@ -37,7 +38,6 @@ import { ReportsSharedModule } from "./shared";
     ReusedPasswordsReportComponent,
     UnsecuredWebsitesReportComponent,
     WeakPasswordsReportComponent,
-    MemberAccessReportComponent,
   ],
 })
 export class ReportsModule {}
