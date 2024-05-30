@@ -2050,6 +2050,9 @@
   "switchAccount": {
     "message": "アカウント切替"
   },
+  "alreadyHaveAccount": {
+    "message": "すでにアカウントをお持ちですか？"
+  },
   "options": {
     "message": "オプション"
   },
@@ -2389,6 +2392,27 @@
   },
   "logInRequested": {
     "message": "ログインリクエスト済み"
+  },
+  "creatingAccountOn": {
+    "message": "アカウント作成："
+  },
+  "checkYourEmail": {
+    "message": "メールをご確認ください"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "アカウントの作成を続けるには"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "に送られたメールのリンクを開いてください。"
+  },
+  "noEmail": {
+    "message": "メールがありませんか?"
+  },
+  "goBack": {
+    "message": "戻って"
+  },
+  "toEditYourEmailAddress": {
+    "message": "メールアドレスを編集してください。"
   },
   "exposedMasterPassword": {
     "message": "流出したマスターパスワード"
@@ -2822,5 +2846,39 @@
   },
   "errorAssigningTargetFolder": {
     "message": "ターゲットフォルダーの割り当てに失敗しました。"
+  },
+  "viewItemsIn": {
+    "message": "$NAME$ のアイテムを表示",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "$NAME$ に戻る",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "戻る",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "$NAME$ を削除",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

@@ -9,6 +9,7 @@ import { LayoutComponent, NavigationModule } from "@bitwarden/components";
 import { OrganizationLayoutComponent } from "../admin-console/organizations/layouts/organization-layout.component";
 import { EventsComponent as OrgEventsComponent } from "../admin-console/organizations/manage/events.component";
 import { UserConfirmComponent as OrgUserConfirmComponent } from "../admin-console/organizations/manage/user-confirm.component";
+import { VerifyRecoverDeleteOrgComponent } from "../admin-console/organizations/manage/verify-recover-delete-org.component";
 import { AcceptFamilySponsorshipComponent } from "../admin-console/organizations/sponsorships/accept-family-sponsorship.component";
 import { ExposedPasswordsReportComponent as OrgExposedPasswordsReportComponent } from "../admin-console/organizations/tools/exposed-passwords-report.component";
 import { InactiveTwoFactorReportComponent as OrgInactiveTwoFactorReportComponent } from "../admin-console/organizations/tools/inactive-two-factor-report.component";
@@ -19,7 +20,6 @@ import { ProvidersComponent } from "../admin-console/providers/providers.compone
 import { VerifyRecoverDeleteProviderComponent } from "../admin-console/providers/verify-recover-delete-provider.component";
 import { SponsoredFamiliesComponent } from "../admin-console/settings/sponsored-families.component";
 import { SponsoringOrgRowComponent } from "../admin-console/settings/sponsoring-org-row.component";
-import { AcceptOrganizationComponent } from "../auth/accept-organization.component";
 import { HintComponent } from "../auth/hint.component";
 import { RecoverDeleteComponent } from "../auth/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../auth/recover-two-factor.component";
@@ -31,7 +31,7 @@ import { ChangeAvatarComponent } from "../auth/settings/account/change-avatar.co
 import { ChangeEmailComponent } from "../auth/settings/account/change-email.component";
 import { DangerZoneComponent } from "../auth/settings/account/danger-zone.component";
 import { DeauthorizeSessionsComponent } from "../auth/settings/account/deauthorize-sessions.component";
-import { DeleteAccountComponent } from "../auth/settings/account/delete-account.component";
+import { DeleteAccountDialogComponent } from "../auth/settings/account/delete-account-dialog.component";
 import { ProfileComponent } from "../auth/settings/account/profile.component";
 import { EmergencyAccessAttachmentsComponent } from "../auth/settings/emergency-access/attachments/emergency-access-attachments.component";
 import { EmergencyAccessConfirmComponent } from "../auth/settings/emergency-access/confirm/emergency-access-confirm.component";
@@ -114,10 +114,10 @@ import { SharedModule } from "./shared.module";
     OrganizationLayoutComponent,
     UserLayoutComponent,
     PaymentMethodWarningsModule,
+    VerifyRecoverDeleteOrgComponent,
   ],
   declarations: [
     AcceptFamilySponsorshipComponent,
-    AcceptOrganizationComponent,
     AccountComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,
@@ -127,7 +127,7 @@ import { SharedModule } from "./shared.module";
     ChangeEmailComponent,
     CollectionsComponent,
     DeauthorizeSessionsComponent,
-    DeleteAccountComponent,
+    DeleteAccountDialogComponent,
     DomainRulesComponent,
     EmergencyAccessAddEditComponent,
     EmergencyAccessAttachmentsComponent,
@@ -189,7 +189,6 @@ import { SharedModule } from "./shared.module";
   exports: [
     UserVerificationModule,
     PremiumBadgeComponent,
-    AcceptOrganizationComponent,
     AccountComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,
@@ -199,7 +198,7 @@ import { SharedModule } from "./shared.module";
     ChangeEmailComponent,
     CollectionsComponent,
     DeauthorizeSessionsComponent,
-    DeleteAccountComponent,
+    DeleteAccountDialogComponent,
     DomainRulesComponent,
     DynamicAvatarComponent,
     EmergencyAccessAddEditComponent,

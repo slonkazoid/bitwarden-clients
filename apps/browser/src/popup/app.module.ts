@@ -16,7 +16,6 @@ import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
 import { UserVerificationDialogComponent } from "@bitwarden/auth/angular";
 import { AvatarModule, ButtonModule, ToastModule } from "@bitwarden/components";
-import { ExportScopeCalloutComponent } from "@bitwarden/vault-export-ui";
 
 import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
 import { AccountComponent } from "../auth/popup/account-switching/account.component";
@@ -39,7 +38,7 @@ import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
 import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
-import { NotifcationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
+import { NotificationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { PopOutComponent } from "../platform/popup/components/pop-out.component";
 import { HeaderComponent } from "../platform/popup/header.component";
@@ -55,7 +54,6 @@ import { SendListComponent } from "../tools/popup/send/components/send-list.comp
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
-import { ExportComponent } from "../tools/popup/settings/export.component";
 import { SettingsComponent } from "../tools/popup/settings/settings.component";
 import { ActionButtonsComponent } from "../vault/popup/components/action-buttons.component";
 import { CipherRowComponent } from "../vault/popup/components/cipher-row.component";
@@ -72,7 +70,6 @@ import { ShareComponent } from "../vault/popup/components/vault/share.component"
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
-import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
@@ -85,8 +82,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
-import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
-import { OptionsComponent } from "./settings/options.component";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
 
@@ -118,7 +113,6 @@ import "../platform/popup/locales";
     AvatarModule,
     AccountComponent,
     ButtonModule,
-    ExportScopeCalloutComponent,
     PopOutComponent,
     PopupPageComponent,
     PopupTabNavigationComponent,
@@ -142,7 +136,6 @@ import "../platform/popup/locales";
     CurrentTabComponent,
     EnvironmentComponent,
     ExcludedDomainsComponent,
-    ExportComponent,
     Fido2CipherRowComponent,
     Fido2UseBrowserLinkComponent,
     FolderAddEditComponent,
@@ -155,8 +148,7 @@ import "../platform/popup/locales";
     LoginComponent,
     LoginViaAuthRequestComponent,
     LoginDecryptionOptionsComponent,
-    OptionsComponent,
-    NotifcationsSettingsComponent,
+    NotificationsSettingsComponent,
     AppearanceComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -186,11 +178,9 @@ import "../platform/popup/locales";
     RemovePasswordComponent,
     VaultSelectComponent,
     Fido2Component,
-    HelpAndFeedbackComponent,
     AutofillComponent,
     EnvironmentSelectorComponent,
     AccountSwitcherComponent,
-    VaultV2Component,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],

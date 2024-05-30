@@ -25,7 +25,7 @@ import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeou
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
-import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
@@ -34,7 +34,6 @@ import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { AuthService } from "@bitwarden/common/auth/services/auth.service";
 import {
   AutofillSettingsService,
   AutofillSettingsServiceAbstraction,
@@ -174,12 +173,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: BaseUnauthGuardService,
     useClass: UnauthGuardService,
-    deps: [AuthServiceAbstraction, Router],
-  }),
-  safeProvider({
-    provide: AuthServiceAbstraction,
-    useFactory: getBgService<AuthService>("authService"),
-    deps: [],
+    deps: [AuthService, Router],
   }),
   safeProvider({
     provide: SsoLoginServiceAbstraction,
@@ -347,6 +341,7 @@ const safeProviders: SafeProvider[] = [
       BillingAccountProfileStateService,
       ScriptInjectorService,
       AccountServiceAbstraction,
+      AuthService,
     ],
   }),
   safeProvider({
@@ -529,7 +524,7 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: MessageListener,
-    useFactory: (subject: Subject<Message<object>>, ngZone: NgZone) =>
+    useFactory: (subject: Subject<Message<Record<string, unknown>>>, ngZone: NgZone) =>
       new MessageListener(
         merge(
           subject.asObservable(), // For messages in the same context
@@ -540,7 +535,7 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: MessageSender,
-    useFactory: (subject: Subject<Message<object>>, logService: LogService) =>
+    useFactory: (subject: Subject<Message<Record<string, unknown>>>, logService: LogService) =>
       MessageSender.combine(
         new SubjectMessageSender(subject), // For sending messages in the same context
         new ChromeMessageSender(logService), // For sending messages to different contexts
@@ -555,14 +550,14 @@ const safeProviders: SafeProvider[] = [
         // we need the same instance that our in memory background is utilizing.
         return getBgService("intraprocessMessagingSubject")();
       } else {
-        return new Subject<Message<object>>();
+        return new Subject<Message<Record<string, unknown>>>();
       }
     },
     deps: [],
   }),
   safeProvider({
     provide: MessageSender,
-    useFactory: (subject: Subject<Message<object>>, logService: LogService) =>
+    useFactory: (subject: Subject<Message<Record<string, unknown>>>, logService: LogService) =>
       MessageSender.combine(
         new SubjectMessageSender(subject), // For sending messages in the same context
         new ChromeMessageSender(logService), // For sending messages to different contexts
@@ -581,7 +576,7 @@ const safeProviders: SafeProvider[] = [
         // There isn't a locally created background so we will communicate with
         // the true background through chrome apis, in that case, we can just create
         // one for ourself.
-        return new Subject<Message<object>>();
+        return new Subject<Message<Record<string, unknown>>>();
       }
     },
     deps: [],

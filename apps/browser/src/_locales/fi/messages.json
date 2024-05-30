@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Jatka vahvistamalla henkilöllisyytesi."
   },
-  "account": {
-    "message": "Käyttäjätili"
-  },
   "changeMasterPassword": {
     "message": "Vaihda pääsalasana"
   },
   "continueToWebApp": {
     "message": "Avataanko verkkosovellus?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Tutustu Bitwarden-tilisi muihin ominaisuuksiin verkkosovelluksessa."
+  },
+  "continueToHelpCenter": {
+    "message": "Avataanko tukikeskus?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Lue Tukikeskuksesta lisää Bitwardenin käytöstä."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Avataanko selaimen laajennuskauppa?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Auta muita selvittämään sopiiko Bitwarden heille. Arvioi se selaimesi laajennuskaupassa nyt."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Voit vaihtaa pääsalasanasi Bitwardenin verkkosovelluksessa."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Kirjaudu ulos"
   },
+  "aboutBitwarden": {
+    "message": "Tietoja Bitwardenista"
+  },
   "about": {
     "message": "Tietoja"
+  },
+  "moreFromBitwarden": {
+    "message": "Lisää Bitwardenilta"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Avataanko bitwarden.com?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bitwarden for Business"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden Authenticator"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Bitwarden Authenticatorin avulla voit säilyttää todennusavaimet ja luoda TOTP-koodeja kaksivaiheista tunnistautumista varten. Lue lisää bitwarden.com-sivustolta."
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Salaisuushallinta"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Säilytä, hallitse ja jaa kehittäjäsalaisuuksia turvallisesti Bitwardenin Salaisuushallinnalla. Lue lisää bitwarden.com-sivustolta."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Luo perinteisistä salasanoista vapaita sujuvia ja turvallisia kirjautumisratkaisuja Passwordless.dev-palvelussa. Tutustu palveluun bitwarden.com-sivustolla."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Ilmainen Bitwarden Families"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Olet oikeutettu ilmaiseen Bitwarden Families -tilaukseen. Lunasta tarjous verkkosovelluksessa tänään."
   },
   "version": {
     "message": "Versio"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Luo kirjautumistiedoillesi automaattisesti vahvoja, ainutlaatuisia salasanoja."
   },
-  "bitWebVault": {
-    "message": "Bitwarden Verkkoholvi"
+  "bitWebVaultApp": {
+    "message": "Bitwarden Verkkosovellus"
   },
   "importItems": {
     "message": "Tuo kohteita"
@@ -779,11 +827,8 @@
   "shared": {
     "message": "Jaettu"
   },
-  "learnOrg": {
-    "message": "Lisätietoja organisaatioista"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden mahdollistaa holvin sisällön jaon organisaatiotilin avulla. Haluatko lukea lisää bitwarden.com-sivustolta?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Bitwarden for Business mahdollistaa holvisi sisällön jakamisen organisaation avulla. Lue lisää osoitteesta bitwarden.com."
   },
   "moveToOrganization": {
     "message": "Siirrä organisaatiolle"
@@ -1561,6 +1606,9 @@
   "restoredItem": {
     "message": "Kohde palautettiin"
   },
+  "alreadyHaveAccount": {
+    "message": "Onko sinulla jo tili?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?"
   },
@@ -1715,10 +1763,10 @@
     "message": "Selaimen biometriaa ei tueta tällä laitteella."
   },
   "biometricsNotUnlockedTitle": {
-    "message": "User locked or logged out"
+    "message": "Käyttäjä on lukittu tai kirjattu ulos"
   },
   "biometricsNotUnlockedDesc": {
-    "message": "Please unlock this user in the desktop application and try again."
+    "message": "Poista käyttäjän lukitus työpöytäsovelluksesta ja yritä uudelleen."
   },
   "biometricsFailedTitle": {
     "message": "Biometria epäonnistui"
@@ -2496,6 +2544,27 @@
   "ssoIdentifierRequired": {
     "message": "Organisaation kertakirjautumistunniste tarvitaan."
   },
+  "creatingAccountOn": {
+    "message": "Luodaan tili palvelimelle"
+  },
+  "checkYourEmail": {
+    "message": "Tarkasta sähköpostisi"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Seuraa viestin linkkiä, joka lähetettiin sähköpostitse osoitteeseen"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "ja jatka tilin luontia."
+  },
+  "noEmail": {
+    "message": "Etkö saanut viestiä?"
+  },
+  "goBack": {
+    "message": "Palaa takaisin"
+  },
+  "toEditYourEmailAddress": {
+    "message": "muokataksesi sähköpostiosoitettasi."
+  },
   "eu": {
     "message": "EU",
     "description": "European Union"
@@ -3137,6 +3206,41 @@
     "message": ", jotta ne näkyvät.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Automaattitäytä ehdotukset"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Tallenna sivustolle kirjautumiskohde automaattista täyttöä varten"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Holvisi on tyhjä"
+  },
+  "noItemsMatchSearch": {
+    "message": "Mikään kohde ei vastaa hakuasi"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Tyhjennä suodattimet tai kokeile toista hakutermiä"
+  },
+  "copyInfo": {
+    "message": "Kopio tiedot, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "Lisää valintoja, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "Hallintapaneelista"
   },
@@ -3155,7 +3259,37 @@
   "errorAssigningTargetFolder": {
     "message": "Virhe määritettäessä kohdekansiota."
   },
+  "viewItemsIn": {
+    "message": "Näytä kohteen $NAME$ kohteet",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Palaa kohteeseen $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "new": {
-    "message": "New"
+    "message": "Uusi"
+  },
+  "removeItem": {
+    "message": "Poista $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

@@ -2050,6 +2050,9 @@
   "switchAccount": {
     "message": "Сменить аккаунт"
   },
+  "alreadyHaveAccount": {
+    "message": "Уже зарегистрированы?"
+  },
   "options": {
     "message": "Опции"
   },
@@ -2389,6 +2392,27 @@
   },
   "logInRequested": {
     "message": "Запрошено разрешение на вход"
+  },
+  "creatingAccountOn": {
+    "message": "Создание аккаунта"
+  },
+  "checkYourEmail": {
+    "message": "Проверьте свою почту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдите по ссылке из отправленного письма"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продолжите создание аккаунта."
+  },
+  "noEmail": {
+    "message": "Нет письма?"
+  },
+  "goBack": {
+    "message": "Вернуться"
+  },
+  "toEditYourEmailAddress": {
+    "message": "для изменения адреса email."
   },
   "exposedMasterPassword": {
     "message": "Мастер-пароль скомпрометирован"
@@ -2822,5 +2846,39 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Ошибка при назначении целевой папки."
+  },
+  "viewItemsIn": {
+    "message": "Просмотр элементов в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Вернуться к $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Удалить $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

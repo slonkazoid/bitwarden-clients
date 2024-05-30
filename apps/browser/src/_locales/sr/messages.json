@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Потврдите свој идентитет да би наставили."
   },
-  "account": {
-    "message": "Налог"
-  },
   "changeMasterPassword": {
     "message": "Промени главну лозинку"
   },
   "continueToWebApp": {
     "message": "Ићи на веб апликацију?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Истражите више својстава на Bitwarden налогу на веб апликаији."
+  },
+  "continueToHelpCenter": {
+    "message": "Настави на помоћни центар?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Learn more about how to use Bitwarden у помоћни центар."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Желите ли да наставите у продавницу додатака за прегледач?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Помозите другима да сазнају да ли је Bitwarden прави за њих. Посетите продавницу апликација и оставите оцену."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Можете променити главну лозинку на Bitwarden веб апликацији."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Одјави се"
   },
+  "aboutBitwarden": {
+    "message": "О Bitwarden"
+  },
   "about": {
     "message": "О апликацији"
+  },
+  "moreFromBitwarden": {
+    "message": "Више од Bitwarden"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Наставити на bitwarden.com?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bitwarden for Business"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden Authenticator"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Bitwarden Authenticator омогућава вам да чувате кључеве аутентификатора и генеришете ТОТП кодове за токове верификације у 2 корака. Сазнајте више на bitwarden.com"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Сигурно чувајте, управљајте и делите тајне програмера са Bitwarden Secrets Manager. Сазнајте више на bitwarden.com."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Креирајте глатко и безбедно искуство пријављивања без традиционалних лозинки са Passwordless.dev. Сазнајте више на bitwarden.com."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Бесплатно Bitwarden Families"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Имате право на Бесплатно Bitwarden Families. Искористите ову понуду данас у веб апликацији."
   },
   "version": {
     "message": "Верзија"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Аутоматски генеришите јаке, јединствене лозинке за ваше пријаве."
   },
-  "bitWebVault": {
-    "message": "Bitwarden Интернет Сеф"
+  "bitWebVaultApp": {
+    "message": "Bitwarden веб апликација"
   },
   "importItems": {
     "message": "Увоз ставки"
@@ -779,11 +827,8 @@
   "shared": {
     "message": "Дељено"
   },
-  "learnOrg": {
-    "message": "Сазнајте о организацијама"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden вам омогућава да делите ставке сефа са другима користећи организацију. Да ли желите да посетите веб локацију bitwarden.com да бисте сазнали више?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Bitwarden for Business вам омогућава да делите ставке сефа са другима користећи организацију. Сазнајте више на веб локацију bitwarden.com."
   },
   "moveToOrganization": {
     "message": "Премести у организацију"
@@ -1560,6 +1605,9 @@
   },
   "restoredItem": {
     "message": "Ставка враћена"
+  },
+  "alreadyHaveAccount": {
+    "message": "Већ имате налог?"
   },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Одјава ће уклонити сваки приступ вашем сефу и захтева мрежну потврду идентитета након истека тајмаута. Да ли сте сигурни да желите да користите ову поставку?"
@@ -2496,6 +2544,27 @@
   "ssoIdentifierRequired": {
     "message": "Потребан је SSO идентификатор организације."
   },
+  "creatingAccountOn": {
+    "message": "Креирај налог на"
+  },
+  "checkYourEmail": {
+    "message": "Проверите свој имејл"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Пратите везу послатој на"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и наставите са креирањем налога."
+  },
+  "noEmail": {
+    "message": "Немате имејл?"
+  },
+  "goBack": {
+    "message": "Ићи назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": "да измените свој имејл."
+  },
   "eu": {
     "message": "EU",
     "description": "European Union"
@@ -3137,6 +3206,41 @@
     "message": "to make them visible.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Предлози за ауто-попуњавање"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Сачувајте ставку за пријаву за ову локацију за ауто-попуњавање"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Ваш сеф је празан"
+  },
+  "noItemsMatchSearch": {
+    "message": "Нема резултата по вашем упиту"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Обришите филтере или покушајте са другим термином"
+  },
+  "copyInfo": {
+    "message": "Копирај информације, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "Више опција, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "Администраторска конзола"
   },
@@ -3155,7 +3259,37 @@
   "errorAssigningTargetFolder": {
     "message": "Грешка при додељивању циљне фасцикле."
   },
+  "viewItemsIn": {
+    "message": "Видети ставке у $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Назад на $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "new": {
     "message": "Ново"
+  },
+  "removeItem": {
+    "message": "Уклонити $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }
