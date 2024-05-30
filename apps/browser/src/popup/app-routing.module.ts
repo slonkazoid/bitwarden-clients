@@ -40,7 +40,7 @@ import { AboutPageV2Component } from "../tools/popup/settings/about-page/about-p
 import { AboutPageComponent } from "../tools/popup/settings/about-page/about-page.component";
 import { MoreFromBitwardenPageV2Component } from "../tools/popup/settings/about-page/more-from-bitwarden-page-v2.component";
 import { MoreFromBitwardenPageComponent } from "../tools/popup/settings/about-page/more-from-bitwarden-page.component";
-import { ExportComponent } from "../tools/popup/settings/export.component";
+import { ExportBrowserComponent } from "../tools/popup/settings/export/export-browser.component";
 import { ImportBrowserV2Component } from "../tools/popup/settings/import/import-browser-v2.component";
 import { ImportBrowserComponent } from "../tools/popup/settings/import/import-browser.component";
 import { SettingsV2Component } from "../tools/popup/settings/settings-v2.component";
@@ -65,7 +65,6 @@ import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.c
 
 import { extensionRefreshRedirect, extensionRefreshSwap } from "./extension-refresh-route-utils";
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
-import { OptionsComponent } from "./settings/options.component";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
 
@@ -246,7 +245,7 @@ const routes: Routes = [
   }),
   {
     path: "export",
-    component: ExportComponent,
+    component: ExportBrowserComponent,
     canActivate: [AuthGuard],
     data: { state: "export" },
   },
@@ -308,12 +307,6 @@ const routes: Routes = [
     component: PremiumComponent,
     canActivate: [AuthGuard],
     data: { state: "premium" },
-  },
-  {
-    path: "options",
-    component: OptionsComponent,
-    canActivate: [AuthGuard],
-    data: { state: "options" },
   },
   {
     path: "appearance",
