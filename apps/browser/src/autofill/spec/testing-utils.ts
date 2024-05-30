@@ -15,7 +15,7 @@ export function postWindowMessage(data: any, origin = "https://localhost/", sour
   globalThis.dispatchEvent(new MessageEvent("message", { data, origin, source }));
 }
 
-export function sendExtensionRuntimeMessage(
+export function sendMockExtensionMessage(
   message: any,
   sender?: chrome.runtime.MessageSender,
   sendResponse?: CallableFunction,
