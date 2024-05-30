@@ -3,7 +3,6 @@ import { NgModule } from "@angular/core";
 import { CheckboxModule } from "@bitwarden/components";
 
 import { SharedModule } from "../../../app/shared";
-import { CardComponent } from "../card.component";
 
 import { LoginDecryptionOptionsComponent } from "./login-decryption-options/login-decryption-options.component";
 import { LoginViaAuthRequestComponent } from "./login-via-auth-request.component";
@@ -11,7 +10,7 @@ import { LoginViaWebAuthnComponent } from "./login-via-webauthn/login-via-webaut
 import { LoginComponent } from "./login.component";
 
 @NgModule({
-  imports: [SharedModule, CheckboxModule, CardComponent],
+  imports: [SharedModule, CheckboxModule],
   declarations: [
     LoginComponent,
     LoginViaAuthRequestComponent,

@@ -4,13 +4,11 @@ import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/comp
 
 import { SharedModule } from "../shared";
 
-import { CardComponent } from "./card.component";
-
 @Component({
   selector: "app-lock",
   templateUrl: "lock.component.html",
   standalone: true,
-  imports: [SharedModule, CardComponent],
+  imports: [SharedModule],
 })
 export class LockComponent extends BaseLockComponent {
   async ngOnInit() {

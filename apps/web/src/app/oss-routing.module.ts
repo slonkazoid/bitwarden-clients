@@ -8,6 +8,11 @@ import {
   tdeDecryptionRequiredGuard,
   UnauthGuard,
 } from "@bitwarden/angular/auth/guards";
+import {
+  AnonLayoutWrapperComponent,
+  AnonLayoutWrapperData,
+  LockIcon,
+} from "@bitwarden/auth/angular";
 
 import { flagEnabled, Flags } from "../utils/flags";
 
@@ -112,11 +117,6 @@ const routes: Routes = [
         canActivate: [UnauthGuard],
         data: { titleId: "passwordHint" },
       },
-      {
-        path: "lock",
-        component: LockComponent,
-        canActivate: [deepLinkGuard(), lockGuard()],
-      },
       { path: "verify-email", component: VerifyEmailTokenComponent },
       {
         path: "accept-organization",
@@ -199,6 +199,27 @@ const routes: Routes = [
           import("./auth/migrate-encryption/migrate-legacy-encryption.component").then(
             (mod) => mod.MigrateFromLegacyEncryptionComponent,
           ),
+      },
+    ],
+  },
+  {
+    path: "",
+    component: AnonLayoutWrapperComponent,
+    children: [
+      {
+        path: "lock",
+        canActivate: [deepLinkGuard(), lockGuard()],
+        children: [
+          {
+            path: "",
+            component: LockComponent,
+          },
+        ],
+        data: {
+          pageTitle: "yourVaultIsLocked",
+          pageIcon: LockIcon,
+          showReadonlyHostname: true,
+        } satisfies AnonLayoutWrapperData,
       },
     ],
   },

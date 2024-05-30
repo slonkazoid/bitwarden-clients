@@ -1,42 +1,27 @@
-<form
-  #form
-  (ngSubmit)="submit()"
-  [appApiAction]="formPromise"
-  class="tw-container tw-mx-auto tw-mt-5 tw-max-w-lg tw-p-8"
->
-  <p class="tw-mb-4 tw-text-center">
-    <i class="bwi bwi-lock bwi-4x tw-text-muted" aria-hidden="true"></i>
-  </p>
+<form #form (ngSubmit)="submit()" [appApiAction]="formPromise" class="tw-min-w-96">
+  <bit-form-field>
+    <bit-label>{{ "masterPass" | i18n }}</bit-label>
+    <input
+      type="password"
+      bitInput
+      appAutofocus
+      name="masterPassword"
+      [(ngModel)]="masterPassword"
+      required
+    />
+    <button type="button" bitIconButton bitSuffix bitPasswordInputToggle></button>
+    <bit-hint>{{ "loggedInAsEmailOn" | i18n: email : webVaultHostname }}</bit-hint>
+  </bit-form-field>
 
-  <p class="tw-mx-4 tw-mb-4 tw-mt-3 tw-text-center tw-text-xl">
-    {{ "yourVaultIsLocked" | i18n }}
-  </p>
+  <hr />
 
-  <app-auth-card>
-    <bit-form-field>
-      <bit-label>{{ "masterPass" | i18n }}</bit-label>
-      <input
-        type="password"
-        bitInput
-        appAutofocus
-        name="masterPassword"
-        [(ngModel)]="masterPassword"
-        required
-      />
-      <button type="button" bitIconButton bitSuffix bitPasswordInputToggle></button>
-      <bit-hint>{{ "loggedInAsEmailOn" | i18n: email : webVaultHostname }}</bit-hint>
-    </bit-form-field>
-
-    <hr />
-
-    <div class="tw-flex tw-gap-2">
-      <button type="submit" bitButton buttonType="primary" block [loading]="form.loading">
-        <i class="bwi bwi-unlock" aria-hidden="true"></i>
-        {{ "unlock" | i18n }}
-      </button>
-      <button type="button" bitButton block (click)="logOut()">
-        {{ "logOut" | i18n }}
-      </button>
-    </div>
-  </app-auth-card>
+  <div class="tw-flex tw-gap-2">
+    <button type="submit" bitButton buttonType="primary" block [loading]="form.loading">
+      <i class="bwi bwi-unlock" aria-hidden="true"></i>
+      {{ "unlock" | i18n }}
+    </button>
+    <button type="button" bitButton block (click)="logOut()">
+      {{ "logOut" | i18n }}
+    </button>
+  </div>
 </form>
