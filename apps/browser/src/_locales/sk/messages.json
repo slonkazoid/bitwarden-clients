@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Ak chcete pokračovať, potvrďte svoju identitu."
   },
-  "account": {
-    "message": "Účet"
-  },
   "changeMasterPassword": {
     "message": "Zmeniť hlavné heslo"
   },
   "continueToWebApp": {
     "message": "Pokračovať vo webovej aplikácii?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii."
+  },
+  "continueToHelpCenter": {
+    "message": "Pokračovať v centre pomoci?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Viac informácií o používaní Bitwardenu nájdete v centre pomoci."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Pokračovať do obchodu s rozšíreniami pre prehliadače?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Pomôžte ostatným zistiť, či je Bitwarden pre nich vhodný. Navštívte obchod s rozšíreniami pre prehliadače a pridajte hodnotenie."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Hlavné heslo si môžete zmeniť vo webovej aplikácii Bitwarden."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Odhlásiť sa"
   },
+  "aboutBitwarden": {
+    "message": "O Bitwarden"
+  },
   "about": {
     "message": "O aplikácii"
+  },
+  "moreFromBitwarden": {
+    "message": "Viac od spoločnosti Bitwarden"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Pokračovať na bitwarden.com?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bitwarden pre podniky"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden Authenticator"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Bitwarden Authenticator umožňuje uložiť overovacie kľúče a generovať kódy TOTP pre dvojstupňoveé overovanie. Viac informácií nájdete na webovej stránke bitwarden.com"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Bezpečne ukladajte, spravujte a zdieľajte vývojárske tajomstvá s Bitwarden Secrets Manager. Viac sa môžete dozvedieť na stránke bitwarden.com."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Vytvorte plynulé a bezpečné prihlásenie bez tradičných hesiel s Passwordless.dev. Viac sa môžete dozvedieť na stránke bitwarden.com."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Bitwarden pre Rodiny zadarmo"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Máte nárok na bezplatnú službu Bitwarden pre Rodiny. Využite túto ponuku ešte dnes vo webovej aplikácii."
   },
   "version": {
     "message": "Verzia"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Automaticky generovať silné a unikátne heslá k prihlasovacím údajom."
   },
-  "bitWebVault": {
-    "message": "Webový trezor Bitwarden"
+  "bitWebVaultApp": {
+    "message": "Webová aplikácia Bitwarden"
   },
   "importItems": {
     "message": "Importovať položky"
@@ -714,6 +762,9 @@
   "notificationUnlock": {
     "message": "Odomknúť"
   },
+  "additionalOptions": {
+    "message": "Ďalšie možnosti"
+  },
   "enableContextMenuItem": {
     "message": "Zobraziť možnosti kontextovej ponuky"
   },
@@ -751,11 +802,38 @@
     "message": "Solarized –⁠ tmavý",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportovať z"
+  },
   "exportVault": {
     "message": "Export trezoru"
   },
   "fileFormat": {
     "message": "Formát Súboru"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Tento exportovaný súbor bude chránený heslom a na dešifrovanie bude potrebné heslo súboru."
+  },
+  "filePassword": {
+    "message": "Heslo súboru"
+  },
+  "exportPasswordDescription": {
+    "message": "Toto heslo sa použije na export a import tohto súboru"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Na zašifrovanie exportu a obmedzenie importu len na aktuálny účet Bitwarden použite šifrovací kľúč účtu odvodený z používateľského mena a hlavného hesla účtu."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Nastavte heslo súboru na zašifrovanie exportu a importujte ho do akéhokoľvek účtu Bitwarden pomocou hesla na dešifrovanie."
+  },
+  "exportTypeHeading": {
+    "message": "Typ exportu"
+  },
+  "accountRestricted": {
+    "message": "Obmedzený účet"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Heslo súboru\" a \"Potvrdiť heslo súboru\" sa nezhodujú."
   },
   "warning": {
     "message": "UPOZORNENIE",
@@ -779,11 +857,8 @@
   "shared": {
     "message": "Zdieľané"
   },
-  "learnOrg": {
-    "message": "Zistiť viac o organizáciách"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden vám umožňuje zdieľať vaše položky trezora s ostatnými pomocou organizácie. Chcete navštíviť webovú stránku bitwarden.com a dozvedieť sa viac?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Bitwarden pre podniky vám umožňuje zdieľať položky trezoru s ostatnými pomocou organizácie. Viac informácií nájdete na webovej stránke bitwarden.com."
   },
   "moveToOrganization": {
     "message": "Presunúť do organizácie"
@@ -1561,6 +1636,9 @@
   "restoredItem": {
     "message": "Obnovená položka"
   },
+  "alreadyHaveAccount": {
+    "message": "Už máte účet?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Odhlásenie bude vyžadovať online prihlásenie po vypršaní časového limitu. Naozaj chcete použiť toto nastavenie?"
   },
@@ -1713,6 +1791,12 @@
   },
   "biometricsNotSupportedDesc": {
     "message": "Biometria v prehliadači nie je podporovaná na tomto zariadení."
+  },
+  "biometricsNotUnlockedTitle": {
+    "message": "Používateľ je zamknutý alebo odhlásený"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Prosím, odomknite tohto používateľa v počítačovej aplikácii a skúste to znova."
   },
   "biometricsFailedTitle": {
     "message": "Biometria zlyhala"
@@ -2128,6 +2212,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exportovanie trezora organizácie"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Exportované budú iba položky trezora organizácie spojené s $ORGANIZATION$. Položky osobného trezora a položky z iných organizácií nebudú zahrnuté.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Chyba"
   },
@@ -2176,6 +2272,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Vytvoriť e-mailový alias pomocou externej služby preposielania."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ chyba: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Vygenerované Bitwardenom.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Webstránka: $WEBSITE$. Vygenerované Bitwardenom.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Neplatný token API $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Neplatný token API $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Nepodarilo sa získať ID maskovaného e-mailového účtu $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Neplatná doména $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Neplatná url adresa $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Vyskytla sa neznáma chyba $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Nepodporovaná služba: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Názov hostiteľa",
@@ -2387,6 +2585,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Pole identifikátora SSO je povinné."
+  },
+  "creatingAccountOn": {
+    "message": "Vytváranie účtu na"
+  },
+  "checkYourEmail": {
+    "message": "Skontrolujte si svoj e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Postupujte podľa odkazu v e-maile zaslanom na adresu"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "a pokračujte vo vytváraní účtu."
+  },
+  "noEmail": {
+    "message": "Žiadny email?"
+  },
+  "goBack": {
+    "message": "Prejsť späť"
+  },
+  "toEditYourEmailAddress": {
+    "message": "na úpravu e-mailovej adresy."
   },
   "eu": {
     "message": "EÚ",
@@ -3029,6 +3248,41 @@
     "message": ", aby boli viditeľné.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Návrhy automatického vypĺňania"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Uložte položku prihlásenia pre tento web na automatické vyplnenie"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Váš trezor je prázdny"
+  },
+  "noItemsMatchSearch": {
+    "message": "Vyhľadávaniu nezodpovedajú žiadne položky"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Vymažte filtre alebo zmeňte vyhľadávaný výraz"
+  },
+  "copyInfo": {
+    "message": "Skopírovať info, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "Ďalšie možnosti, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "Správcovská konzola"
   },
@@ -3046,5 +3300,38 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Chyba pri priraďovaní cieľového priečinka."
+  },
+  "viewItemsIn": {
+    "message": "Zobraziť položky v $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Späť do $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "new": {
+    "message": "Nová"
+  },
+  "removeItem": {
+    "message": "Odstrániť $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

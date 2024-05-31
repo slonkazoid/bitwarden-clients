@@ -109,6 +109,7 @@ import { DefaultConfigService } from "@bitwarden/common/platform/services/config
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
+import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/multithread-encrypt.service.implementation";
 import { Fido2AuthenticatorService } from "@bitwarden/common/platform/services/fido2/fido2-authenticator.service";
 import { Fido2ClientService } from "@bitwarden/common/platform/services/fido2/fido2-client.service";
 import { FileUploadService } from "@bitwarden/common/platform/services/file-upload/file-upload.service";
@@ -143,13 +144,11 @@ import { NotificationsService } from "@bitwarden/common/services/notifications.s
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import {
-  PasswordGenerationService,
-  PasswordGenerationServiceAbstraction,
-} from "@bitwarden/common/tools/generator/password";
-import {
-  UsernameGenerationService,
-  UsernameGenerationServiceAbstraction,
-} from "@bitwarden/common/tools/generator/username";
+  legacyPasswordGenerationServiceFactory,
+  legacyUsernameGenerationServiceFactory,
+} from "@bitwarden/common/tools/generator";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import {
   PasswordStrengthService,
   PasswordStrengthServiceAbstraction,
@@ -220,7 +219,6 @@ import { BrowserCryptoService } from "../platform/services/browser-crypto.servic
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import BrowserLocalStorageService from "../platform/services/browser-local-storage.service";
 import BrowserMemoryStorageService from "../platform/services/browser-memory-storage.service";
-import { BrowserMultithreadEncryptServiceImplementation } from "../platform/services/browser-multithread-encrypt.service.implementation";
 import { BrowserScriptInjectorService } from "../platform/services/browser-script-injector.service";
 import { DefaultBrowserStateService } from "../platform/services/default-browser-state.service";
 import I18nService from "../platform/services/i18n.service";
@@ -336,7 +334,7 @@ export default class MainBackground {
   ssoLoginService: SsoLoginServiceAbstraction;
   billingAccountProfileStateService: BillingAccountProfileStateService;
   // eslint-disable-next-line rxjs/no-exposed-subjects -- Needed to give access to services module
-  intraprocessMessagingSubject: Subject<Message<object>>;
+  intraprocessMessagingSubject: Subject<Message<Record<string, unknown>>>;
   userAutoUnlockKeyService: UserAutoUnlockKeyService;
   scriptInjectorService: BrowserScriptInjectorService;
   kdfConfigService: kdfConfigServiceAbstraction;
@@ -386,7 +384,7 @@ export default class MainBackground {
     this.keyGenerationService = new KeyGenerationService(this.cryptoFunctionService);
     this.storageService = new BrowserLocalStorageService();
 
-    this.intraprocessMessagingSubject = new Subject<Message<object>>();
+    this.intraprocessMessagingSubject = new Subject<Message<Record<string, unknown>>>();
 
     this.messagingService = MessageSender.combine(
       new SubjectMessageSender(this.intraprocessMessagingSubject),
@@ -479,14 +477,14 @@ export default class MainBackground {
       storageServiceProvider,
     );
 
-    this.encryptService = flagEnabled("multithreadDecryption")
-      ? new BrowserMultithreadEncryptServiceImplementation(
-          this.cryptoFunctionService,
-          this.logService,
-          true,
-          this.offscreenDocumentService,
-        )
-      : new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, true);
+    this.encryptService =
+      flagEnabled("multithreadDecryption") && BrowserApi.isManifestVersion(2)
+        ? new MultithreadEncryptServiceImplementation(
+            this.cryptoFunctionService,
+            this.logService,
+            true,
+          )
+        : new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, true);
 
     this.singleUserStateProvider = new DefaultSingleUserStateProvider(
       storageServiceProvider,
@@ -649,10 +647,12 @@ export default class MainBackground {
 
     this.passwordStrengthService = new PasswordStrengthService();
 
-    this.passwordGenerationService = new PasswordGenerationService(
+    this.passwordGenerationService = legacyPasswordGenerationServiceFactory(
+      this.encryptService,
       this.cryptoService,
       this.policyService,
-      this.stateService,
+      this.accountService,
+      this.stateProvider,
     );
 
     this.userDecryptionOptionsService = new UserDecryptionOptionsService(this.stateProvider);
@@ -840,7 +840,12 @@ export default class MainBackground {
         this.authService,
       );
 
-      this.syncServiceListener = new SyncServiceListener(this.syncService, messageListener);
+      this.syncServiceListener = new SyncServiceListener(
+        this.syncService,
+        messageListener,
+        this.messagingService,
+        this.logService,
+      );
     }
     this.eventUploadService = new EventUploadService(
       this.apiService,
@@ -872,6 +877,7 @@ export default class MainBackground {
       this.billingAccountProfileStateService,
       this.scriptInjectorService,
       this.accountService,
+      this.authService,
     );
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
 
@@ -1092,10 +1098,14 @@ export default class MainBackground {
       this.vaultTimeoutSettingsService,
     );
 
-    this.usernameGenerationService = new UsernameGenerationService(
-      this.cryptoService,
-      this.stateService,
+    this.usernameGenerationService = legacyUsernameGenerationServiceFactory(
       this.apiService,
+      this.i18nService,
+      this.cryptoService,
+      this.encryptService,
+      this.policyService,
+      this.accountService,
+      this.stateProvider,
     );
 
     if (!this.popupOnlyContext) {
@@ -1165,7 +1175,7 @@ export default class MainBackground {
     this.contextMenusBackground?.init();
     await this.idleBackground.init();
     this.webRequestBackground?.startListening();
-    this.syncServiceListener?.startListening();
+    this.syncServiceListener?.listener$().subscribe();
 
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
@@ -1178,7 +1188,7 @@ export default class MainBackground {
   }
 
   async refreshBadge() {
-    await new UpdateBadge(self).run({ existingServices: this as any });
+    await new UpdateBadge(self, this).run();
   }
 
   async refreshMenu(forLocked = false) {
@@ -1214,7 +1224,22 @@ export default class MainBackground {
       );
       // can be removed once password generation history is migrated to state providers
       await this.stateService.clearDecryptedData(currentlyActiveAccount);
+      // HACK to ensure account is switched before proceeding
+      const switchPromise = firstValueFrom(
+        this.accountService.activeAccount$.pipe(
+          filter((account) => (account?.id ?? null) === (userId ?? null)),
+          timeout({
+            first: 1_000,
+            with: () => {
+              throw new Error(
+                "The account switch process did not complete in a reasonable amount of time.",
+              );
+            },
+          }),
+        ),
+      );
       await this.accountService.switchAccount(userId);
+      await switchPromise;
       // Clear sequentialized caches
       clearCaches();
 
@@ -1302,7 +1327,6 @@ export default class MainBackground {
       this.cipherService.clear(userBeingLoggedOut),
       this.folderService.clear(userBeingLoggedOut),
       this.collectionService.clear(userBeingLoggedOut),
-      this.passwordGenerationService.clear(userBeingLoggedOut),
       this.vaultTimeoutSettingsService.clear(userBeingLoggedOut),
       this.vaultFilterService.clear(),
       this.biometricStateService.logout(userBeingLoggedOut),
@@ -1314,7 +1338,7 @@ export default class MainBackground {
     ]);
 
     //Needs to be checked before state is cleaned
-    const needStorageReseed = await this.needsStorageReseed(userId);
+    const needStorageReseed = await this.needsStorageReseed(userBeingLoggedOut);
 
     await this.stateService.clean({ userId: userBeingLoggedOut });
     await this.accountService.clean(userBeingLoggedOut);

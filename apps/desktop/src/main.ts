@@ -119,9 +119,6 @@ export class Main {
     this.logService = new ElectronLogMainService(null, app.getPath("userData"));
 
     const storageDefaults: any = {};
-    // Default vault timeout to "on restart", and action to "lock"
-    storageDefaults["global.vaultTimeout"] = -1;
-    storageDefaults["global.vaultTimeoutAction"] = "lock";
     this.storageService = new ElectronStorageService(app.getPath("userData"), storageDefaults);
     this.memoryStorageService = new MemoryStorageService();
     this.memoryStorageForStateProviders = new MemoryStorageServiceForStateProviders();
@@ -226,7 +223,7 @@ export class Main {
     this.updaterMain = new UpdaterMain(this.i18nService, this.windowMain);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.desktopSettingsService);
 
-    const messageSubject = new Subject<Message<object>>();
+    const messageSubject = new Subject<Message<Record<string, unknown>>>();
     this.messagingService = MessageSender.combine(
       new SubjectMessageSender(messageSubject), // For local messages
       new ElectronMainMessagingService(this.windowMain),

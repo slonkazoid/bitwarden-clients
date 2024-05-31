@@ -33,6 +33,7 @@ import { HashPurpose, KeySuffixOptions } from "@bitwarden/common/platform/enums"
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 @Directive()
@@ -85,6 +86,7 @@ export class LockComponent implements OnInit, OnDestroy {
     protected accountService: AccountService,
     protected authService: AuthService,
     protected kdfConfigService: KdfConfigService,
+    protected syncService: SyncService,
   ) {}
 
   async ngOnInit() {
@@ -318,6 +320,9 @@ export class LockComponent implements OnInit, OnDestroy {
       }
     }
 
+    // Vault can be de-synced since notifications get ignored while locked. Need to check whether sync is required using the sync service.
+    await this.syncService.fullSync(false);
+
     if (this.onSuccessfulSubmit != null) {
       await this.onSuccessfulSubmit();
     } else if (this.router != null) {
@@ -372,7 +377,9 @@ export class LockComponent implements OnInit, OnDestroy {
       (await this.vaultTimeoutSettingsService.isBiometricLockSet()) &&
       ((await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
         !this.platformUtilsService.supportsSecureStorage());
-    this.email = await this.stateService.getEmail();
+    this.email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
 
     this.webVaultHostname = (await this.environmentService.getEnvironment()).getHostname();
   }

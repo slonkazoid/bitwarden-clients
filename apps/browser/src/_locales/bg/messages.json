@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Потвърдете самоличността си, за да продължите."
   },
-  "account": {
-    "message": "Регистрация"
-  },
   "changeMasterPassword": {
     "message": "Промяна на главната парола"
   },
   "continueToWebApp": {
     "message": "Продължаване към уеб приложението?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Разгледайте още от възможностите на регистрацията си в Битуорден в уеб приложението."
+  },
+  "continueToHelpCenter": {
+    "message": "Продължаване към помощния център?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Научете повече относно това как да използвате Битуорден в помощния център."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Продължаване към уеб сайта за разширения на браузъра?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Помогнете на другите да разберат дали Битуорден е подходящ за тях. Посетете уеб сайта за разширения на браузъра си и дайте оценка още сега."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Може да промените главната си парола в уеб приложението на Битуорден."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Отписване"
   },
+  "aboutBitwarden": {
+    "message": "Относно Битуорден"
+  },
   "about": {
     "message": "Относно"
+  },
+  "moreFromBitwarden": {
+    "message": "Още от Битуорден"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Продължаване към bitwarden.com?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Битуорден за бизнеса"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Удостоверител на Битуорден"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Удостоверителя на Битуорден позволява да запазвате ключове за удостоверяване, както и да произвеждате еднократни кодове за достъп за местата, където се изисква удостоверяване в 2 стъпки. Научете повече в уеб сайта bitwarden.com"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Управление на тайни"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Съхранявайте, управлявайте и споделяйте тайните по време на разработка с Управлението на тайни на Битуорден. Научете повече в уеб сайта bitwarden.com."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Създавайте лесни за ползване, но защитени процеси за вписване без нужда от традиционни пароли с помощта на Passwordless.dev. Научете повече в уеб сайта bitwarden.com."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Безплатен Битуорден за семейства"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Може да се активирате Битуорден за семейства безплатно. Възползвайте се от предложението в уеб приложението."
   },
   "version": {
     "message": "Версия"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Автоматично създаване на силни и неповторими пароли."
   },
-  "bitWebVault": {
-    "message": "Уебтрезорът на Bitwarden"
+  "bitWebVaultApp": {
+    "message": "Уеб приложение"
   },
   "importItems": {
     "message": "Внасяне на елементи"
@@ -714,6 +762,9 @@
   "notificationUnlock": {
     "message": "Отключване"
   },
+  "additionalOptions": {
+    "message": "Допълнителни настройки"
+  },
   "enableContextMenuItem": {
     "message": "Показване на опции в контекстното меню"
   },
@@ -751,11 +802,38 @@
     "message": "Преекспонирано тъмен",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Изнасяне от"
+  },
   "exportVault": {
     "message": "Изнасяне на трезора"
   },
   "fileFormat": {
     "message": "Формат на файла"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Изнесеният файл ще бъде защитен с парола, която ще бъде необходима за дешифриране на файла."
+  },
+  "filePassword": {
+    "message": "Парола на файла"
+  },
+  "exportPasswordDescription": {
+    "message": "Парола ще се използва при изнасянето и при внасянето на този файл"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Използвайте ключа си за шифриране, който се получава чрез комбиниране на потребителското име на регистрацията Ви и главната парола. С него изнасянето ще се шифрира и внасянето ще бъда възможно само в текущата регистрация в Битуорден."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Задайте парола за файла, за да шифровате изнесените данни. Ще можете да внесете данните във всяка регистрация в Битуорден използвайки паролата за дешифриране."
+  },
+  "exportTypeHeading": {
+    "message": "Вид изнасяне"
+  },
+  "accountRestricted": {
+    "message": "Регистрацията е ограничена"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "Дънните в полетата „Парола на файла“ и „Потвърждаване на паролата на файла“ не съвпадат."
   },
   "warning": {
     "message": "ВНИМАНИЕ",
@@ -779,11 +857,8 @@
   "shared": {
     "message": "Споделено"
   },
-  "learnOrg": {
-    "message": "Научете за организациите"
-  },
-  "learnOrgConfirmation": {
-    "message": "Битуорден позволява да споделяте елементи от трезора си а други, използвайки организация. Бихте ли посетили сайта bitwarden.com, за да научите повече?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Битуорден за бизнеса позволява да споделяте части от трезора си чрез използването на организация. Научете повече в уеб сайта bitwarden.com."
   },
   "moveToOrganization": {
     "message": "Преместване в организация"
@@ -1561,6 +1636,9 @@
   "restoredItem": {
     "message": "Записът е възстановен"
   },
+  "alreadyHaveAccount": {
+    "message": "Вече имате регистрация?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Излизането от трезора изцяло спира достъпа до него след изтичане на времето. Ще ви се наложи отново да се идентифицирате, за да го достъпите. Сигурни ли сте, че искате това действие?"
   },
@@ -1713,6 +1791,12 @@
   },
   "biometricsNotSupportedDesc": {
     "message": "Устройството не поддържа потвърждаване с биометрични данни."
+  },
+  "biometricsNotUnlockedTitle": {
+    "message": "Потребителят е заключен или отписан"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Отключете потребителя в настолното приложение и опитайте отново."
   },
   "biometricsFailedTitle": {
     "message": "Неуспешно удостоверяване чрез биометрични данни"
@@ -2128,6 +2212,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Изнасяне на трезора на организацията"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Ще бъдат изнесени само записите от трезора свързан с $ORGANIZATION$. Записите в отделните лични трезори и тези в други организации няма да бъдат включени.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Грешка"
   },
@@ -2176,6 +2272,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Създайте псевдоним на е-поща с външна услуга за препращане."
+  },
+  "forwarderError": {
+    "message": "Грешка от $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Създадено от Битуорден.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Уебсайт: $WEBSITE$. Създадено от Битуорден.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Неправилен идентификатор за ППИ на $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Неправилен идентификатор за ППИ на $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Не може да бъде получен идентификатор на маскиран чрез е-поща акаунт от $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Неправилен домейн за $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Неправилен адрес на $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Възникна неочаквана грешка свързана с $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Неизвестна пренасочваща услуга: „$SERVICENAME$“.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Име на сървъра",
@@ -2387,6 +2585,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Идентификаторът за еднократна идентификация на организация е задължителен."
+  },
+  "creatingAccountOn": {
+    "message": "Създаване на регистрация в"
+  },
+  "checkYourEmail": {
+    "message": "Проверете е-пощата си"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Последвайте връзката в е-писмото изпратено до"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продължете със създаването на регистрацията си."
+  },
+  "noEmail": {
+    "message": "Не сте получили е-писмо?"
+  },
+  "goBack": {
+    "message": "Върнете се назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", за да редактирате адреса на е-пощата си."
   },
   "eu": {
     "message": "ЕС",
@@ -3029,6 +3248,41 @@
     "message": "за да ги направите видими.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Автоматично попълване на предложения"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Запазване на елемент за вписване за този уеб сайт, за авт. попълване"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Трезорът е празен"
+  },
+  "noItemsMatchSearch": {
+    "message": "Няма елементи, отговарящи на търсенето"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Изчистете филтрите или опитайте да търсите нещо друго"
+  },
+  "copyInfo": {
+    "message": "Копиране на информацията, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "Още опции, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "Административна конзола"
   },
@@ -3046,5 +3300,38 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Грешка при задаването на целева папка."
+  },
+  "viewItemsIn": {
+    "message": "Преглед на елементите в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Назад към $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "new": {
+    "message": "Ново"
+  },
+  "removeItem": {
+    "message": "Премахване на $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

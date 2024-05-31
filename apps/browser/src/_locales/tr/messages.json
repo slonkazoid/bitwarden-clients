@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Devam etmek için kimliğinizi doğrulayın."
   },
-  "account": {
-    "message": "Hesap"
-  },
   "changeMasterPassword": {
     "message": "Ana parolayı değiştir"
   },
   "continueToWebApp": {
     "message": "Web uygulamasına devam edilsin mi?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Web uygulamasında Bitwarden hesabınızın diğer özelliklerini keşfedin."
+  },
+  "continueToHelpCenter": {
+    "message": "Yardım merkezine gitmek ister misiniz?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Yardım merkezinde Bitwarden kullanımı hakkında daha fazla bilgi alabilirsiniz."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Tarayıcınızın uzantı sitesine gitmek ister misiniz?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Bitwarden'ı başkalarına da tanımak ister misiniz? Tarayıcınızın uzantı mağazasını ziyaret edip Bitwarden'ı değerlendirin."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Ana parolanızı Bitwarden web uygulamasında değiştirebilirsiniz."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Çıkış yap"
   },
+  "aboutBitwarden": {
+    "message": "Bitwarden hakkında"
+  },
   "about": {
     "message": "Hakkında"
+  },
+  "moreFromBitwarden": {
+    "message": "Diğer Bitwarden ürünleri"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "bitwarden.com'a gitmek ister misiniz?"
+  },
+  "bitwardenForBusiness": {
+    "message": "İşletmeler için Bitwarden"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden Authenticator"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Bitwarden Authenticator allows you to store authenticator keys and generate TOTP codes for 2-step verification flows. Learn more on the bitwarden.com website"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Securely store, manage, and share developer secrets with Bitwarden Secrets Manager. Learn more on the bitwarden.com website."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Create smooth and secure login experiences free from traditional passwords with Passwordless.dev. Learn more on the bitwarden.com website."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Free Bitwarden Families"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "You are eligible for Free Bitwarden Families. Redeem this offer today in the web app."
   },
   "version": {
     "message": "Sürüm"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Hesaplarınız için otomatik olarak güçlü, özgün parolalar oluşturun."
   },
-  "bitWebVault": {
-    "message": "Bitwarden web kasası"
+  "bitWebVaultApp": {
+    "message": "Bitwarden web uygulaması"
   },
   "importItems": {
     "message": "Hesapları içe aktar"
@@ -714,6 +762,9 @@
   "notificationUnlock": {
     "message": "Kilidi aç"
   },
+  "additionalOptions": {
+    "message": "Ek seçenekler"
+  },
   "enableContextMenuItem": {
     "message": "Bağlam menüsü seçeneklerini göster"
   },
@@ -751,11 +802,38 @@
     "message": "Solarized koyu",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Export from"
+  },
   "exportVault": {
     "message": "Kasayı dışa aktar"
   },
   "fileFormat": {
     "message": "Dosya biçimi"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "filePassword": {
+    "message": "Dosya parolası"
+  },
+  "exportPasswordDescription": {
+    "message": "Bu parola, bu dosyayı dışa ve içe aktarmak için kullanılacaktır"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Dışa aktarmayı şifrelemek ve içe aktarmayı yalnızca mevcut Bitwarden hesabıyla kısıtlamak için, hesabınızın kullanıcı adı ve ana parolasından türetilen hesap şifreleme anahtarınızı kullanın."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Dışa aktardığınız dosyayı şifrelemek ve bir Bitwarden hesabına içe aktarmak için kullanacağınız parolayı belirleyin."
+  },
+  "exportTypeHeading": {
+    "message": "Dışa aktarma türü"
+  },
+  "accountRestricted": {
+    "message": "Hesap kısıtlı"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Dosya parolası\" ile \"Dosya parolasını onaylayın\" eşleşmiyor."
   },
   "warning": {
     "message": "UYARI",
@@ -779,11 +857,8 @@
   "shared": {
     "message": "Paylaşılan"
   },
-  "learnOrg": {
-    "message": "Kuruluşlar hakkında bilgi al"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden'ın kuruluş özelliğini kullanarak kasanızdaki kayıtları başkalarıyla paylaşabilirsiniz. Daha fazla bilgi için bitwarden.com sitesini ziyaret etmek ister misiniz?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "İşletmeler için Bitwarden'ı kullanarak kasanızdaki kayıtları başkalarıyla paylaşabilirsiniz. Daha fazla bilgi için bitwarden.com sitesini ziyaret edin."
   },
   "moveToOrganization": {
     "message": "Kuruluşa taşı"
@@ -1561,6 +1636,9 @@
   "restoredItem": {
     "message": "Kayıt geri yüklendi"
   },
+  "alreadyHaveAccount": {
+    "message": "Zaten hesabınız var mı?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Çıkış yaptığınızda kasanıza erişiminiz tamamen sonlanacak ve zaman aşımının ardından çevrimiçi kimlik doğrulaması yapmanız gerekecek. Bu ayarı kullanmak istediğinizden emin misiniz?"
   },
@@ -1713,6 +1791,12 @@
   },
   "biometricsNotSupportedDesc": {
     "message": "Tarayıcı biyometrisi bu cihazda desteklenmiyor."
+  },
+  "biometricsNotUnlockedTitle": {
+    "message": "Kullanıcı kilitlendi ve oturumu kapatıldı"
+  },
+  "biometricsNotUnlockedDesc": {
+    "message": "Lütfen masaüstü uygulamasından bu kullanıcının kilidini açıp yeniden deneyin."
   },
   "biometricsFailedTitle": {
     "message": "Biyometri doğrulanamadı"
@@ -2128,6 +2212,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Kuruluş kasasını dışa aktarma"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Hata"
   },
@@ -2176,6 +2272,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Harici bir yönlendirme servisiyle e-posta maskesi oluştur."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ hatası: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Bitwarden tarafından üretildi.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Web sitesi: $WEBSITE$. Bitwarden tarafından üretildi.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Sunucu",
@@ -2387,6 +2585,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Kuruluş SSO tanımlayıcısı gereklidir."
+  },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "E-postanızı kontrol edin"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Geri dönüp"
+  },
+  "toEditYourEmailAddress": {
+    "message": "e-posta adresinizi düzenleyin."
   },
   "eu": {
     "message": "AB",
@@ -3029,6 +3248,41 @@
     "message": "to make them visible.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Önerileri otomatik doldur"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Save a login item for this site to auto-fill"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Kasanız boş"
+  },
+  "noItemsMatchSearch": {
+    "message": "Aramanızla eşleşen kayıt yok"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Clear filters or try another search term"
+  },
+  "copyInfo": {
+    "message": "Copy info, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "More options, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "Yönetici Konsolu"
   },
@@ -3036,15 +3290,48 @@
     "message": "Hesap güvenliği"
   },
   "notifications": {
-    "message": "Notifications"
+    "message": "Bildirimler"
   },
   "appearance": {
-    "message": "Appearance"
+    "message": "Görünüm"
   },
   "errorAssigningTargetCollection": {
-    "message": "Hedef koleksiyonu atama hatası."
+    "message": "Hedef koleksiyon atama hatası."
   },
   "errorAssigningTargetFolder": {
-    "message": "Hedef klasörü atama hatası."
+    "message": "Hedef klasör atama hatası."
+  },
+  "viewItemsIn": {
+    "message": "View items in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Back to $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "new": {
+    "message": "Yeni"
+  },
+  "removeItem": {
+    "message": "Remove $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }
