@@ -1,1 +1,11 @@
-<div>Assign Collections</div>
+<popup-page>
+  <popup-header slot="header" [pageTitle]="'assignCollections' | i18n" showBackButton>
+    <ng-container slot="end">
+      <app-pop-out></app-pop-out>
+    </ng-container>
+  </popup-header>
+  <popup-footer slot="footer">
+    <button bitButton buttonType="primary">{{ "save" | i18n }}</button>
+    <button bitButton buttonType="secondary" (click)="cancel()">{{ "cancel" | i18n }}</button>
+  </popup-footer>
+</popup-page>
