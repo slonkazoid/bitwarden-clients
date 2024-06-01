@@ -111,7 +111,7 @@ export abstract class AuthRequestServiceAbstraction {
    * Creates a dash-delimited fingerprint for use in confirming the `AuthRequest` between the requesting and approving device.
    * @param email The email address of the user.
    * @param publicKey The public key for the user.
-   * @returns
+   * @returns The dash-delimited fingerprint phrase.
    */
   abstract getFingerprintPhrase(email: string, publicKey: Uint8Array): Promise<string>;
 }
