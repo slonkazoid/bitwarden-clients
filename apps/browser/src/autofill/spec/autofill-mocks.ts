@@ -249,6 +249,7 @@ function createFocusedFieldDataMock(customFields = {}) {
       paddingRight: "6px",
       paddingLeft: "6px",
     },
+    tabId: 1,
     ...customFields,
   };
 }
@@ -267,6 +268,7 @@ function createPortSpyMock(name: string) {
     disconnect: jest.fn(),
     sender: {
       tab: createChromeTabMock(),
+      url: "https://jest-testing-website.com",
     },
   });
 }

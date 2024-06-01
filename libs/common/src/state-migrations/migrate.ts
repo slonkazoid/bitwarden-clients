@@ -49,15 +49,27 @@ import { AddKeyTypeToOrgKeysMigrator } from "./migrations/5-add-key-type-to-org-
 import { KeyConnectorMigrator } from "./migrations/50-move-key-connector-to-state-provider";
 import { RememberedEmailMigrator } from "./migrations/51-move-remembered-email-to-state-providers";
 import { DeleteInstalledVersion } from "./migrations/52-delete-installed-version";
-import { DeviceTrustCryptoServiceStateProviderMigrator } from "./migrations/53-migrate-device-trust-crypto-svc-to-state-providers";
+import { DeviceTrustServiceStateProviderMigrator } from "./migrations/53-migrate-device-trust-svc-to-state-providers";
+import { SendMigrator } from "./migrations/54-move-encrypted-sends";
+import { MoveMasterKeyStateToProviderMigrator } from "./migrations/55-move-master-key-state-to-provider";
+import { AuthRequestMigrator } from "./migrations/56-move-auth-requests";
+import { CipherServiceMigrator } from "./migrations/57-move-cipher-service-to-state-provider";
+import { RemoveRefreshTokenMigratedFlagMigrator } from "./migrations/58-remove-refresh-token-migrated-state-provider-flag";
+import { KdfConfigMigrator } from "./migrations/59-move-kdf-config-to-state-provider";
 import { RemoveLegacyEtmKeyMigrator } from "./migrations/6-remove-legacy-etm-key";
+import { KnownAccountsMigrator } from "./migrations/60-known-accounts";
+import { PinStateMigrator } from "./migrations/61-move-pin-state-to-providers";
+import { VaultTimeoutSettingsServiceStateProviderMigrator } from "./migrations/62-migrate-vault-timeout-settings-svc-to-state-provider";
+import { PasswordOptionsMigrator } from "./migrations/63-migrate-password-settings";
+import { GeneratorHistoryMigrator } from "./migrations/64-migrate-generator-history";
+import { ForwarderOptionsMigrator } from "./migrations/65-migrate-forwarder-settings";
 import { MoveBiometricAutoPromptToAccount } from "./migrations/7-move-biometric-auto-prompt-to-account";
 import { MoveStateVersionMigrator } from "./migrations/8-move-state-version";
 import { MoveBrowserSettingsToGlobal } from "./migrations/9-move-browser-settings-to-global";
 import { MinVersionMigrator } from "./migrations/min-version";
 
 export const MIN_VERSION = 3;
-export const CURRENT_VERSION = 53;
+export const CURRENT_VERSION = 65;
 export type MinVersion = typeof MIN_VERSION;
 
 export function createMigrationBuilder() {
@@ -112,7 +124,19 @@ export function createMigrationBuilder() {
     .with(KeyConnectorMigrator, 49, 50)
     .with(RememberedEmailMigrator, 50, 51)
     .with(DeleteInstalledVersion, 51, 52)
-    .with(DeviceTrustCryptoServiceStateProviderMigrator, 52, CURRENT_VERSION);
+    .with(DeviceTrustServiceStateProviderMigrator, 52, 53)
+    .with(SendMigrator, 53, 54)
+    .with(MoveMasterKeyStateToProviderMigrator, 54, 55)
+    .with(AuthRequestMigrator, 55, 56)
+    .with(CipherServiceMigrator, 56, 57)
+    .with(RemoveRefreshTokenMigratedFlagMigrator, 57, 58)
+    .with(KdfConfigMigrator, 58, 59)
+    .with(KnownAccountsMigrator, 59, 60)
+    .with(PinStateMigrator, 60, 61)
+    .with(VaultTimeoutSettingsServiceStateProviderMigrator, 61, 62)
+    .with(PasswordOptionsMigrator, 62, 63)
+    .with(GeneratorHistoryMigrator, 63, 64)
+    .with(ForwarderOptionsMigrator, 64, CURRENT_VERSION);
 }
 
 export async function currentVersion(

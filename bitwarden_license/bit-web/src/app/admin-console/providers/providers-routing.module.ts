@@ -7,6 +7,9 @@ import { ProvidersComponent } from "@bitwarden/web-vault/app/admin-console/provi
 import { FrontendLayoutComponent } from "@bitwarden/web-vault/app/layouts/frontend-layout.component";
 import { UserLayoutComponent } from "@bitwarden/web-vault/app/layouts/user-layout.component";
 
+import { ProviderSubscriptionComponent, hasConsolidatedBilling } from "../../billing/providers";
+import { ManageClientOrganizationsComponent } from "../../billing/providers/clients";
+
 import { ClientsComponent } from "./clients/clients.component";
 import { CreateOrganizationComponent } from "./clients/create-organization.component";
 import { ProviderPermissionsGuard } from "./guards/provider-permissions.guard";
@@ -65,6 +68,12 @@ const routes: Routes = [
           { path: "clients/create", component: CreateOrganizationComponent },
           { path: "clients", component: ClientsComponent, data: { titleId: "clients" } },
           {
+            path: "manage-client-organizations",
+            canActivate: [hasConsolidatedBilling],
+            component: ManageClientOrganizationsComponent,
+            data: { titleId: "clients" },
+          },
+          {
             path: "manage",
             children: [
               {
@@ -88,6 +97,25 @@ const routes: Routes = [
                 data: {
                   titleId: "eventLogs",
                   providerPermissions: (provider: Provider) => provider.canAccessEventLogs,
+                },
+              },
+            ],
+          },
+          {
+            path: "billing",
+            canActivate: [hasConsolidatedBilling],
+            data: { providerPermissions: (provider: Provider) => provider.isProviderAdmin },
+            children: [
+              {
+                path: "",
+                pathMatch: "full",
+                redirectTo: "subscription",
+              },
+              {
+                path: "subscription",
+                component: ProviderSubscriptionComponent,
+                data: {
+                  titleId: "subscription",
                 },
               },
             ],

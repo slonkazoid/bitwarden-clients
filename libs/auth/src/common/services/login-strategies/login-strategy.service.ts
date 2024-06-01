@@ -8,14 +8,21 @@ import {
 } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { AuthenticationType } from "@bitwarden/common/auth/enums/authentication-type";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
-import { KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
+import {
+  Argon2KdfConfig,
+  KdfConfig,
+  PBKDF2KdfConfig,
+} from "@bitwarden/common/auth/models/domain/kdf-config";
 import { TokenTwoFactorRequest } from "@bitwarden/common/auth/models/request/identity-token/token-two-factor.request";
 import { PasswordlessAuthRequest } from "@bitwarden/common/auth/models/request/passwordless-auth.request";
 import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
@@ -31,15 +38,17 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { KdfType } from "@bitwarden/common/platform/enums";
+import { KdfType } from "@bitwarden/common/platform/enums/kdf-type.enum";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { GlobalState, GlobalStateProvider } from "@bitwarden/common/platform/state";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/src/auth/abstractions/device-trust.service.abstraction";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { MasterKey } from "@bitwarden/common/types/key";
 
 import { AuthRequestServiceAbstraction, LoginStrategyServiceAbstraction } from "../../abstractions";
 import { InternalUserDecryptionOptionsServiceAbstraction } from "../../abstractions/user-decryption-options.service.abstraction";
 import { AuthRequestLoginStrategy } from "../../login-strategies/auth-request-login.strategy";
+import { LoginStrategy } from "../../login-strategies/login.strategy";
 import { PasswordLoginStrategy } from "../../login-strategies/password-login.strategy";
 import { SsoLoginStrategy } from "../../login-strategies/sso-login.strategy";
 import { UserApiLoginStrategy } from "../../login-strategies/user-api-login.strategy";
@@ -81,6 +90,8 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
   currentAuthType$: Observable<AuthenticationType | null>;
 
   constructor(
+    protected accountService: AccountService,
+    protected masterPasswordService: InternalMasterPasswordServiceAbstraction,
     protected cryptoService: CryptoService,
     protected apiService: ApiService,
     protected tokenService: TokenService,
@@ -96,11 +107,13 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
     protected encryptService: EncryptService,
     protected passwordStrengthService: PasswordStrengthServiceAbstraction,
     protected policyService: PolicyService,
-    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected deviceTrustService: DeviceTrustServiceAbstraction,
     protected authRequestService: AuthRequestServiceAbstraction,
     protected userDecryptionOptionsService: InternalUserDecryptionOptionsServiceAbstraction,
     protected stateProvider: GlobalStateProvider,
     protected billingAccountProfileStateService: BillingAccountProfileStateService,
+    protected vaultTimeoutSettingsService: VaultTimeoutSettingsService,
+    protected kdfConfigService: KdfConfigService,
   ) {
     this.currentAuthnTypeState = this.stateProvider.get(CURRENT_LOGIN_STRATEGY_KEY);
     this.loginStrategyCacheState = this.stateProvider.get(CACHE_KEY);
@@ -229,24 +242,25 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
 
   async makePreloginKey(masterPassword: string, email: string): Promise<MasterKey> {
     email = email.trim().toLowerCase();
-    let kdf: KdfType = null;
     let kdfConfig: KdfConfig = null;
     try {
       const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(email));
       if (preloginResponse != null) {
-        kdf = preloginResponse.kdf;
-        kdfConfig = new KdfConfig(
-          preloginResponse.kdfIterations,
-          preloginResponse.kdfMemory,
-          preloginResponse.kdfParallelism,
-        );
+        kdfConfig =
+          preloginResponse.kdf === KdfType.PBKDF2_SHA256
+            ? new PBKDF2KdfConfig(preloginResponse.kdfIterations)
+            : new Argon2KdfConfig(
+                preloginResponse.kdfIterations,
+                preloginResponse.kdfMemory,
+                preloginResponse.kdfParallelism,
+              );
       }
     } catch (e) {
       if (e == null || e.statusCode !== 404) {
         throw e;
       }
     }
-    return await this.cryptoService.makeMasterKey(masterPassword, email, kdf, kdfConfig);
+    return await this.cryptoService.makeMasterKey(masterPassword, email, kdfConfig);
   }
 
   // TODO: move to auth request service
@@ -257,7 +271,8 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
   ): Promise<AuthRequestResponse> {
     const pubKey = Utils.fromB64ToArray(key);
 
-    const masterKey = await this.cryptoService.getMasterKey();
+    const userId = (await firstValueFrom(this.accountService.activeAccount$)).id;
+    const masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(userId));
     let keyToEncrypt;
     let encryptedMasterKeyHash = null;
 
@@ -266,7 +281,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
 
       // Only encrypt the master password hash if masterKey exists as
       // we won't have a masterKeyHash without a masterKey
-      const masterKeyHash = await this.stateService.getKeyHash();
+      const masterKeyHash = await firstValueFrom(this.masterPasswordService.masterKeyHash$(userId));
       if (masterKeyHash != null) {
         encryptedMasterKeyHash = await this.cryptoService.rsaEncrypt(
           Utils.fromUtf8ToArray(masterKeyHash),
@@ -324,6 +339,24 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
   private initializeLoginStrategy(
     source: Observable<[AuthenticationType | null, CacheData | null]>,
   ) {
+    const sharedDeps: ConstructorParameters<typeof LoginStrategy> = [
+      this.accountService,
+      this.masterPasswordService,
+      this.cryptoService,
+      this.apiService,
+      this.tokenService,
+      this.appIdService,
+      this.platformUtilsService,
+      this.messagingService,
+      this.logService,
+      this.stateService,
+      this.twoFactorService,
+      this.userDecryptionOptionsService,
+      this.billingAccountProfileStateService,
+      this.vaultTimeoutSettingsService,
+      this.kdfConfigService,
+    ];
+
     return source.pipe(
       map(([strategy, data]) => {
         if (strategy == null) {
@@ -333,88 +366,35 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
           case AuthenticationType.Password:
             return new PasswordLoginStrategy(
               data?.password,
-              this.cryptoService,
-              this.apiService,
-              this.tokenService,
-              this.appIdService,
-              this.platformUtilsService,
-              this.messagingService,
-              this.logService,
-              this.stateService,
-              this.twoFactorService,
-              this.userDecryptionOptionsService,
               this.passwordStrengthService,
               this.policyService,
               this,
-              this.billingAccountProfileStateService,
+              ...sharedDeps,
             );
           case AuthenticationType.Sso:
             return new SsoLoginStrategy(
               data?.sso,
-              this.cryptoService,
-              this.apiService,
-              this.tokenService,
-              this.appIdService,
-              this.platformUtilsService,
-              this.messagingService,
-              this.logService,
-              this.stateService,
-              this.twoFactorService,
-              this.userDecryptionOptionsService,
               this.keyConnectorService,
-              this.deviceTrustCryptoService,
+              this.deviceTrustService,
               this.authRequestService,
               this.i18nService,
-              this.billingAccountProfileStateService,
+              ...sharedDeps,
             );
           case AuthenticationType.UserApiKey:
             return new UserApiLoginStrategy(
               data?.userApiKey,
-              this.cryptoService,
-              this.apiService,
-              this.tokenService,
-              this.appIdService,
-              this.platformUtilsService,
-              this.messagingService,
-              this.logService,
-              this.stateService,
-              this.twoFactorService,
-              this.userDecryptionOptionsService,
               this.environmentService,
               this.keyConnectorService,
-              this.billingAccountProfileStateService,
+              ...sharedDeps,
             );
           case AuthenticationType.AuthRequest:
             return new AuthRequestLoginStrategy(
               data?.authRequest,
-              this.cryptoService,
-              this.apiService,
-              this.tokenService,
-              this.appIdService,
-              this.platformUtilsService,
-              this.messagingService,
-              this.logService,
-              this.stateService,
-              this.twoFactorService,
-              this.userDecryptionOptionsService,
-              this.deviceTrustCryptoService,
-              this.billingAccountProfileStateService,
+              this.deviceTrustService,
+              ...sharedDeps,
             );
           case AuthenticationType.WebAuthn:
-            return new WebAuthnLoginStrategy(
-              data?.webAuthn,
-              this.cryptoService,
-              this.apiService,
-              this.tokenService,
-              this.appIdService,
-              this.platformUtilsService,
-              this.messagingService,
-              this.logService,
-              this.stateService,
-              this.twoFactorService,
-              this.userDecryptionOptionsService,
-              this.billingAccountProfileStateService,
-            );
+            return new WebAuthnLoginStrategy(data?.webAuthn, ...sharedDeps);
         }
       }),
     );

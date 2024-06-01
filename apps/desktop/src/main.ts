@@ -1,16 +1,20 @@
 import * as path from "path";
 
 import { app } from "electron";
-import { firstValueFrom } from "rxjs";
+import { Subject, firstValueFrom } from "rxjs";
 
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { AccountServiceImplementation } from "@bitwarden/common/auth/services/account.service";
 import { TokenService } from "@bitwarden/common/auth/services/token.service";
+import { ClientType } from "@bitwarden/common/enums";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { DefaultBiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
+import { Message, MessageSender } from "@bitwarden/common/platform/messaging";
+// eslint-disable-next-line no-restricted-imports -- For dependency creation
+import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
@@ -18,7 +22,6 @@ import { KeyGenerationService } from "@bitwarden/common/platform/services/key-ge
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationBuilderService } from "@bitwarden/common/platform/services/migration-builder.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
-import { NoopMessagingService } from "@bitwarden/common/platform/services/noop-messaging.service";
 /* eslint-disable import/no-restricted-paths -- We need the implementation to inject, but generally this should not be accessed */
 import { StorageServiceProvider } from "@bitwarden/common/platform/services/storage-service.provider";
 import { DefaultActiveUserStateProvider } from "@bitwarden/common/platform/state/implementations/default-active-user-state.provider";
@@ -59,7 +62,7 @@ export class Main {
   storageService: ElectronStorageService;
   memoryStorageService: MemoryStorageService;
   memoryStorageForStateProviders: MemoryStorageServiceForStateProviders;
-  messagingService: ElectronMainMessagingService;
+  messagingService: MessageSender;
   stateService: StateService;
   environmentService: DefaultEnvironmentService;
   mainCryptoFunctionService: MainCryptoFunctionService;
@@ -116,9 +119,6 @@ export class Main {
     this.logService = new ElectronLogMainService(null, app.getPath("userData"));
 
     const storageDefaults: any = {};
-    // Default vault timeout to "on restart", and action to "lock"
-    storageDefaults["global.vaultTimeout"] = -1;
-    storageDefaults["global.vaultTimeoutAction"] = "lock";
     this.storageService = new ElectronStorageService(app.getPath("userData"), storageDefaults);
     this.memoryStorageService = new MemoryStorageService();
     this.memoryStorageForStateProviders = new MemoryStorageServiceForStateProviders();
@@ -131,7 +131,7 @@ export class Main {
     this.i18nService = new I18nMainService("en", "./locales/", globalStateProvider);
 
     const accountService = new AccountServiceImplementation(
-      new NoopMessagingService(),
+      MessageSender.EMPTY,
       this.logService,
       globalStateProvider,
     );
@@ -155,7 +155,7 @@ export class Main {
       activeUserStateProvider,
       singleUserStateProvider,
       globalStateProvider,
-      new DefaultDerivedStateProvider(this.memoryStorageForStateProviders),
+      new DefaultDerivedStateProvider(),
     );
 
     this.environmentService = new DefaultEnvironmentService(stateProvider, accountService);
@@ -188,6 +188,7 @@ export class Main {
       this.storageService,
       this.logService,
       new MigrationBuilderService(),
+      ClientType.Desktop,
     );
 
     // TODO: this state service will have access to on disk storage, but not in memory storage.
@@ -203,7 +204,6 @@ export class Main {
       this.environmentService,
       this.tokenService,
       this.migrationRunner,
-      false, // Do not use disk caching because this will get out of sync with the renderer service
     );
 
     this.desktopSettingsService = new DesktopSettingsService(stateProvider);
@@ -223,7 +223,13 @@ export class Main {
     this.updaterMain = new UpdaterMain(this.i18nService, this.windowMain);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.desktopSettingsService);
 
-    this.messagingService = new ElectronMainMessagingService(this.windowMain, (message) => {
+    const messageSubject = new Subject<Message<Record<string, unknown>>>();
+    this.messagingService = MessageSender.combine(
+      new SubjectMessageSender(messageSubject), // For local messages
+      new ElectronMainMessagingService(this.windowMain),
+    );
+
+    messageSubject.asObservable().subscribe((message) => {
       this.messagingMain.onMessage(message);
     });
 
@@ -291,12 +297,20 @@ export class Main {
         this.powerMonitorMain.init();
         await this.updaterMain.init();
 
-        if (
-          (await this.stateService.getEnableBrowserIntegration()) ||
-          (await firstValueFrom(
-            this.desktopAutofillSettingsService.enableDuckDuckGoBrowserIntegration$,
-          ))
-        ) {
+        const [browserIntegrationEnabled, ddgIntegrationEnabled] = await Promise.all([
+          this.stateService.getEnableBrowserIntegration(),
+          firstValueFrom(this.desktopAutofillSettingsService.enableDuckDuckGoBrowserIntegration$),
+        ]);
+
+        if (browserIntegrationEnabled || ddgIntegrationEnabled) {
+          // Re-register the native messaging host integrations on startup, in case they are not present
+          if (browserIntegrationEnabled) {
+            this.nativeMessagingMain.generateManifests().catch(this.logService.error);
+          }
+          if (ddgIntegrationEnabled) {
+            this.nativeMessagingMain.generateDdgManifests().catch(this.logService.error);
+          }
+
           this.nativeMessagingMain.listen();
         }
 

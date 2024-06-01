@@ -1,27 +1,35 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, firstValueFrom, lastValueFrom, Subject, takeUntil } from "rxjs";
+import { concatMap, firstValueFrom, lastValueFrom, Observable, Subject, takeUntil } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationApiKeyType } from "@bitwarden/common/admin-console/enums";
+import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
+import { OrganizationApiKeyType, ProviderStatusType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { PlanType } from "@bitwarden/common/billing/enums";
 import { OrganizationSubscriptionResponse } from "@bitwarden/common/billing/models/response/organization-subscription.response";
 import { BillingSubscriptionItemResponse } from "@bitwarden/common/billing/models/response/subscription.response";
 import { ProductType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
 import {
+  AdjustStorageDialogResult,
+  openAdjustStorageDialog,
+} from "../shared/adjust-storage.component";
+import {
   OffboardingSurveyDialogResultType,
   openOffboardingSurvey,
 } from "../shared/offboarding-survey.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { ManageBilling } from "./icons/manage-billing.icon";
 import { SecretsManagerSubscriptionOptions } from "./sm-adjust-subscription.component";
 
 @Component({
@@ -34,17 +42,23 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   userOrg: Organization;
   showChangePlan = false;
   showDownloadLicense = false;
-  adjustStorageAdd = true;
-  showAdjustStorage = false;
   hasBillingSyncToken: boolean;
   showAdjustSecretsManager = false;
   showSecretsManagerSubscribe = false;
   firstLoaded = false;
   loading: boolean;
+  locale: string;
+  showUpdatedSubscriptionStatusSection$: Observable<boolean>;
+  manageBillingFromProviderPortal = ManageBilling;
+  isProviderManaged = false;
 
   protected readonly teamsStarter = ProductType.TeamsStarter;
 
   private destroy$ = new Subject<void>();
+
+  protected enableConsolidatedBilling$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableConsolidatedBilling,
+  );
 
   constructor(
     private apiService: ApiService,
@@ -55,6 +69,8 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     private organizationApiService: OrganizationApiServiceAbstraction,
     private route: ActivatedRoute,
     private dialogService: DialogService,
+    private configService: ConfigService,
+    private providerService: ProviderService,
   ) {}
 
   async ngOnInit() {
@@ -74,6 +90,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
         takeUntil(this.destroy$),
       )
       .subscribe();
+
+    this.showUpdatedSubscriptionStatusSection$ = this.configService.getFeatureFlag$(
+      FeatureFlag.AC1795_UpdatedSubscriptionStatusSection,
+    );
   }
 
   ngOnDestroy() {
@@ -86,10 +106,20 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       return;
     }
     this.loading = true;
+    this.locale = await firstValueFrom(this.i18nService.locale$);
     this.userOrg = await this.organizationService.get(this.organizationId);
+
     if (this.userOrg.canViewSubscription) {
+      const enableConsolidatedBilling = await firstValueFrom(this.enableConsolidatedBilling$);
+      const provider = await this.providerService.get(this.userOrg.providerId);
+      this.isProviderManaged =
+        enableConsolidatedBilling &&
+        this.userOrg.hasProvider &&
+        provider.providerStatus == ProviderStatusType.Billable;
+
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
       this.lineItems = this.sub?.subscription?.items;
+
       if (this.lineItems && this.lineItems.length) {
         this.lineItems = this.lineItems
           .map((item) => {
@@ -230,6 +260,8 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     return (
       this.sub.planType === PlanType.EnterpriseAnnually ||
       this.sub.planType === PlanType.EnterpriseMonthly ||
+      this.sub.planType === PlanType.EnterpriseAnnually2023 ||
+      this.sub.planType === PlanType.EnterpriseMonthly2023 ||
       this.sub.planType === PlanType.EnterpriseAnnually2020 ||
       this.sub.planType === PlanType.EnterpriseMonthly2020 ||
       this.sub.planType === PlanType.EnterpriseAnnually2019 ||
@@ -243,6 +275,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     } else if (
       this.sub.planType === PlanType.FamiliesAnnually ||
       this.sub.planType === PlanType.FamiliesAnnually2019 ||
+      this.sub.planType === PlanType.TeamsStarter2023 ||
       this.sub.planType === PlanType.TeamsStarter
     ) {
       if (this.isSponsoredSubscription) {
@@ -347,19 +380,22 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     this.load();
   }
 
-  adjustStorage(add: boolean) {
-    this.adjustStorageAdd = add;
-    this.showAdjustStorage = true;
-  }
-
-  closeStorage(load: boolean) {
-    this.showAdjustStorage = false;
-    if (load) {
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.load();
-    }
-  }
+  adjustStorage = (add: boolean) => {
+    return async () => {
+      const dialogRef = openAdjustStorageDialog(this.dialogService, {
+        data: {
+          storageGbPrice: this.storageGbPrice,
+          add: add,
+          organizationId: this.organizationId,
+          interval: this.billingInterval,
+        },
+      });
+      const result = await lastValueFrom(dialogRef.closed);
+      if (result === AdjustStorageDialogResult.Adjusted) {
+        await this.load();
+      }
+    };
+  };
 
   removeSponsorship = async () => {
     const confirmed = await this.dialogService.openSimpleDialog({

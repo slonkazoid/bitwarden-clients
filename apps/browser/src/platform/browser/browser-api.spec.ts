@@ -525,29 +525,34 @@ describe("BrowserApi", () => {
     });
   });
 
-  describe("createOffscreenDocument", () => {
-    it("creates the offscreen document with the supplied reasons and justification", async () => {
-      const reasons = [chrome.offscreen.Reason.CLIPBOARD];
-      const justification = "justification";
+  describe("registerContentScriptsMv2", () => {
+    const details: browser.contentScripts.RegisteredContentScriptOptions = {
+      matches: ["<all_urls>"],
+      js: [{ file: "content/fido2/page-script.js" }],
+    };
 
-      await BrowserApi.createOffscreenDocument(reasons, justification);
-
-      expect(chrome.offscreen.createDocument).toHaveBeenCalledWith({
-        url: "offscreen-document/index.html",
-        reasons,
-        justification,
+    it("registers content scripts through the `browser.contentScripts` API when the API is available", async () => {
+      globalThis.browser = mock<typeof browser>({
+        contentScripts: { register: jest.fn() },
       });
+
+      await BrowserApi.registerContentScriptsMv2(details);
+
+      expect(browser.contentScripts.register).toHaveBeenCalledWith(details);
     });
-  });
 
-  describe("closeOffscreenDocument", () => {
-    it("closes the offscreen document", () => {
-      const callbackMock = jest.fn();
+    it("registers content scripts through the `registerContentScriptsPolyfill` when the `browser.contentScripts.register` API is not available", async () => {
+      globalThis.browser = mock<typeof browser>({
+        contentScripts: { register: undefined },
+      });
+      jest.spyOn(BrowserApi, "addListener");
 
-      BrowserApi.closeOffscreenDocument(callbackMock);
+      await BrowserApi.registerContentScriptsMv2(details);
 
-      expect(chrome.offscreen.closeDocument).toHaveBeenCalled();
-      expect(callbackMock).toHaveBeenCalled();
+      expect(BrowserApi.addListener).toHaveBeenCalledWith(
+        chrome.webNavigation.onCommitted,
+        expect.any(Function),
+      );
     });
   });
 });

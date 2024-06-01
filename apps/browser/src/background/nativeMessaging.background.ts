@@ -1,6 +1,8 @@
 import { firstValueFrom } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -71,6 +73,8 @@ export class NativeMessagingBackground {
   private validatingFingerprint: boolean;
 
   constructor(
+    private accountService: AccountService,
+    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
     private cryptoService: CryptoService,
     private cryptoFunctionService: CryptoFunctionService,
     private runtimeBackground: RuntimeBackground,
@@ -163,6 +167,11 @@ export class NativeMessagingBackground {
               cancelButtonText: null,
               type: "danger",
             });
+
+            if (this.resolver) {
+              this.resolver(message);
+            }
+
             break;
           case "verifyFingerprint": {
             if (this.sharedSecret == null) {
@@ -199,6 +208,8 @@ export class NativeMessagingBackground {
         this.sharedSecret = null;
         this.privateKey = null;
         this.connected = false;
+
+        this.logService.error("NativeMessaging port disconnected because of error: " + error);
 
         const reason = error != null ? "desktopIntegrationDisabled" : null;
         reject(new Error(reason));
@@ -310,6 +321,15 @@ export class NativeMessagingBackground {
             type: "danger",
           });
           break;
+        } else if (message.response === "not unlocked") {
+          this.messagingService.send("showDialog", {
+            title: { key: "biometricsNotUnlockedTitle" },
+            content: { key: "biometricsNotUnlockedDesc" },
+            acceptButtonText: { key: "ok" },
+            cancelButtonText: null,
+            type: "danger",
+          });
+          break;
         } else if (message.response === "canceled") {
           break;
         }
@@ -336,21 +356,25 @@ export class NativeMessagingBackground {
               ) as UserKey;
               await this.cryptoService.setUserKey(userKey);
             } else if (message.keyB64) {
+              const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
               // Backwards compatibility to support cases in which the user hasn't updated their desktop app
               // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
-              let encUserKey = await this.stateService.getEncryptedCryptoSymmetricKey();
-              encUserKey ||= await this.stateService.getMasterKeyEncryptedUserKey();
+              const encUserKeyPrim = await this.stateService.getEncryptedCryptoSymmetricKey();
+              const encUserKey =
+                encUserKeyPrim != null
+                  ? new EncString(encUserKeyPrim)
+                  : await this.masterPasswordService.getMasterKeyEncryptedUserKey(userId);
               if (!encUserKey) {
                 throw new Error("No encrypted user key found");
               }
               const masterKey = new SymmetricCryptoKey(
                 Utils.fromB64ToArray(message.keyB64),
               ) as MasterKey;
-              const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(
+              const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(
                 masterKey,
-                new EncString(encUserKey),
+                encUserKey,
               );
-              await this.cryptoService.setMasterKey(masterKey);
+              await this.masterPasswordService.setMasterKey(masterKey, userId);
               await this.cryptoService.setUserKey(userKey);
             } else {
               throw new Error("No key received");
@@ -389,7 +413,7 @@ export class NativeMessagingBackground {
 
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.runtimeBackground.processMessage({ command: "unlocked" }, null);
+          this.runtimeBackground.processMessage({ command: "unlocked" });
         }
         break;
       }

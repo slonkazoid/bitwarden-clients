@@ -14,6 +14,8 @@ import {
   UserDecryptionOptionsServiceAbstraction,
 } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { AuthenticationType } from "@bitwarden/common/auth/enums/authentication-type";
@@ -92,13 +94,15 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     protected userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     protected ssoLoginService: SsoLoginServiceAbstraction,
     protected configService: ConfigService,
+    protected masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    protected accountService: AccountService,
   ) {
     super(environmentService, i18nService, platformUtilsService);
     this.webAuthnSupported = this.platformUtilsService.supportsWebAuthn(win);
   }
 
   async ngOnInit() {
-    if (!(await this.authing()) || this.twoFactorService.getProviders() == null) {
+    if (!(await this.authing()) || (await this.twoFactorService.getProviders()) == null) {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate([this.loginRoute]);
@@ -141,7 +145,9 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       );
     }
 
-    this.selectedProviderType = this.twoFactorService.getDefaultProvider(this.webAuthnSupported);
+    this.selectedProviderType = await this.twoFactorService.getDefaultProvider(
+      this.webAuthnSupported,
+    );
     await this.init();
   }
 
@@ -158,12 +164,14 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
 
     this.cleanupWebAuthn();
     this.title = (TwoFactorProviders as any)[this.selectedProviderType].name;
-    const providerData = this.twoFactorService.getProviders().get(this.selectedProviderType);
+    const providerData = await this.twoFactorService.getProviders().then((providers) => {
+      return providers.get(this.selectedProviderType);
+    });
     switch (this.selectedProviderType) {
       case TwoFactorProviderType.WebAuthn:
         if (!this.webAuthnNewTab) {
-          setTimeout(() => {
-            this.authWebAuthn();
+          setTimeout(async () => {
+            await this.authWebAuthn();
           }, 500);
         }
         break;
@@ -208,7 +216,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
         break;
       case TwoFactorProviderType.Email:
         this.twoFactorEmail = providerData.Email;
-        if (this.twoFactorService.getProviders().size > 1) {
+        if ((await this.twoFactorService.getProviders()).size > 1) {
           await this.sendEmail(false);
         }
         break;
@@ -342,8 +350,10 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       // Set flag so that auth guard can redirect to set password screen after decryption (trusted or untrusted device)
       // Note: we cannot directly navigate to the set password screen in this scenario as we are in a pre-decryption state, and
       // if you try to set a new MP before decrypting, you will invalidate the user's data by making a new user key.
-      await this.stateService.setForceSetPasswordReason(
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
         ForceSetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission,
+        userId,
       );
     }
 
@@ -468,8 +478,10 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     this.emailPromise = null;
   }
 
-  authWebAuthn() {
-    const providerData = this.twoFactorService.getProviders().get(this.selectedProviderType);
+  async authWebAuthn() {
+    const providerData = await this.twoFactorService.getProviders().then((providers) => {
+      return providers.get(this.selectedProviderType);
+    });
 
     if (!this.webAuthnSupported || this.webAuthn == null) {
       return;

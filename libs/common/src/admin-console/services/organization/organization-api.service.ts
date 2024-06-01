@@ -4,9 +4,9 @@ import { OrganizationSsoRequest } from "../../../auth/models/request/organizatio
 import { SecretVerificationRequest } from "../../../auth/models/request/secret-verification.request";
 import { ApiKeyResponse } from "../../../auth/models/response/api-key.response";
 import { OrganizationSsoResponse } from "../../../auth/models/response/organization-sso.response";
+import { ExpandedTaxInfoUpdateRequest } from "../../../billing/models/request/expanded-tax-info-update.request";
 import { OrganizationSmSubscriptionUpdateRequest } from "../../../billing/models/request/organization-sm-subscription-update.request";
 import { OrganizationSubscriptionUpdateRequest } from "../../../billing/models/request/organization-subscription-update.request";
-import { OrganizationTaxInfoUpdateRequest } from "../../../billing/models/request/organization-tax-info-update.request";
 import { PaymentRequest } from "../../../billing/models/request/payment.request";
 import { SecretsManagerSubscribeRequest } from "../../../billing/models/request/sm-subscribe.request";
 import { BillingResponse } from "../../../billing/models/response/billing.response";
@@ -26,6 +26,7 @@ import { OrganizationCreateRequest } from "../../models/request/organization-cre
 import { OrganizationKeysRequest } from "../../models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "../../models/request/organization-update.request";
 import { OrganizationUpgradeRequest } from "../../models/request/organization-upgrade.request";
+import { OrganizationVerifyDeleteRecoverRequest } from "../../models/request/organization-verify-delete-recover.request";
 import { OrganizationApiKeyInformationResponse } from "../../models/response/organization-api-key-information.response";
 import { OrganizationAutoEnrollStatusResponse } from "../../models/response/organization-auto-enroll-status.response";
 import { OrganizationKeysResponse } from "../../models/response/organization-keys.response";
@@ -198,6 +199,19 @@ export class OrganizationApiService implements OrganizationApiServiceAbstraction
     await this.syncService.fullSync(true);
   }
 
+  deleteUsingToken(
+    organizationId: string,
+    request: OrganizationVerifyDeleteRecoverRequest,
+  ): Promise<any> {
+    return this.apiService.send(
+      "POST",
+      "/organizations/" + organizationId + "/delete-recover-token",
+      request,
+      false,
+      false,
+    );
+  }
+
   async updateLicense(id: string, data: FormData): Promise<void> {
     await this.apiService.send(
       "POST",
@@ -257,7 +271,7 @@ export class OrganizationApiService implements OrganizationApiServiceAbstraction
     return new TaxInfoResponse(r);
   }
 
-  async updateTaxInfo(id: string, request: OrganizationTaxInfoUpdateRequest): Promise<void> {
+  async updateTaxInfo(id: string, request: ExpandedTaxInfoUpdateRequest): Promise<void> {
     // Can't broadcast anything because the response doesn't have content
     return this.apiService.send("PUT", "/organizations/" + id + "/tax", request, true, false);
   }
@@ -337,16 +351,5 @@ export class OrganizationApiService implements OrganizationApiServiceAbstraction
     const data = new OrganizationResponse(r);
     await this.syncService.fullSync(true);
     return data;
-  }
-
-  async enableCollectionEnhancements(id: string): Promise<void> {
-    await this.apiService.send(
-      "POST",
-      "/organizations/" + id + "/enable-collection-enhancements",
-      null,
-      true,
-      false,
-    );
-    await this.syncService.fullSync(true);
   }
 }

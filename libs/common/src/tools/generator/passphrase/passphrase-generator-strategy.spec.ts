@@ -2,7 +2,6 @@
  * include structuredClone in test environment.
  * @jest-environment ../../../../shared/test.environment.ts
  */
-
 import { mock } from "jest-mock-extended";
 import { of, firstValueFrom } from "rxjs";
 
@@ -12,12 +11,16 @@ import { PolicyType } from "../../../admin-console/enums";
 import { Policy } from "../../../admin-console/models/domain/policy";
 import { StateProvider } from "../../../platform/state";
 import { UserId } from "../../../types/guid";
+import { PasswordGenerationServiceAbstraction } from "../abstractions/password-generation.service.abstraction";
 import { PASSPHRASE_SETTINGS } from "../key-definitions";
-import { PasswordGenerationServiceAbstraction } from "../password/password-generation.service.abstraction";
 
 import { DisabledPassphraseGeneratorPolicy } from "./passphrase-generator-policy";
 
-import { PassphraseGeneratorOptionsEvaluator, PassphraseGeneratorStrategy } from ".";
+import {
+  DefaultPassphraseGenerationOptions,
+  PassphraseGeneratorOptionsEvaluator,
+  PassphraseGeneratorStrategy,
+} from ".";
 
 const SomeUser = "some user" as UserId;
 
@@ -71,12 +74,13 @@ describe("Password generation strategy", () => {
     });
   });
 
-  describe("cache_ms", () => {
-    it("should be a positive non-zero number", () => {
-      const legacy = mock<PasswordGenerationServiceAbstraction>();
-      const strategy = new PassphraseGeneratorStrategy(legacy, null);
+  describe("defaults$", () => {
+    it("should return the default subaddress options", async () => {
+      const strategy = new PassphraseGeneratorStrategy(null, null);
 
-      expect(strategy.cache_ms).toBeGreaterThan(0);
+      const result = await firstValueFrom(strategy.defaults$(SomeUser));
+
+      expect(result).toEqual(DefaultPassphraseGenerationOptions);
     });
   });
 

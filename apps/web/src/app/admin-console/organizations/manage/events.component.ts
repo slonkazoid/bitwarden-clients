@@ -108,7 +108,7 @@ export class EventsComponent extends BaseEventsComponent implements OnInit, OnDe
       }
     }
 
-    await this.loadEvents(true);
+    await this.refreshEvents();
     this.loaded = true;
   }
 
@@ -154,7 +154,7 @@ export class EventsComponent extends BaseEventsComponent implements OnInit, OnDe
 
     if (r.serviceAccountId) {
       return {
-        name: this.i18nService.t("serviceAccount") + " " + this.getShortId(r.serviceAccountId),
+        name: this.i18nService.t("machineAccount") + " " + this.getShortId(r.serviceAccountId),
       };
     }
 

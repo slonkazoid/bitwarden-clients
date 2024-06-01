@@ -17,6 +17,7 @@ import { PASSWORD_SETTINGS } from "../key-definitions";
 import { DisabledPasswordGeneratorPolicy } from "./password-generator-policy";
 
 import {
+  DefaultPasswordGenerationOptions,
   PasswordGenerationServiceAbstraction,
   PasswordGeneratorOptionsEvaluator,
   PasswordGeneratorStrategy,
@@ -82,12 +83,13 @@ describe("Password generation strategy", () => {
     });
   });
 
-  describe("cache_ms", () => {
-    it("should be a positive non-zero number", () => {
-      const legacy = mock<PasswordGenerationServiceAbstraction>();
-      const strategy = new PasswordGeneratorStrategy(legacy, null);
+  describe("defaults$", () => {
+    it("should return the default subaddress options", async () => {
+      const strategy = new PasswordGeneratorStrategy(null, null);
 
-      expect(strategy.cache_ms).toBeGreaterThan(0);
+      const result = await firstValueFrom(strategy.defaults$(SomeUser));
+
+      expect(result).toEqual(DefaultPasswordGenerationOptions);
     });
   });
 

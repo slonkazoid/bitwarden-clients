@@ -3,7 +3,6 @@ import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from "@angula
 import { AbstractControl, FormBuilder, Validators } from "@angular/forms";
 import {
   combineLatest,
-  from,
   map,
   Observable,
   of,
@@ -16,18 +15,22 @@ import { first } from "rxjs/operators";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
+import { OrganizationUserUserDetailsResponse } from "@bitwarden/common/admin-console/abstractions/organization-user/responses/organization-user.response";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CollectionResponse } from "@bitwarden/common/vault/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { BitValidators, DialogService } from "@bitwarden/components";
 
-import { GroupService, GroupView } from "../../../admin-console/organizations/core";
+import {
+  CollectionAccessSelectionView,
+  GroupService,
+  GroupView,
+} from "../../../admin-console/organizations/core";
 import { PermissionMode } from "../../../admin-console/organizations/shared/components/access-selector/access-selector.component";
 import {
   AccessItemType,
@@ -36,8 +39,6 @@ import {
   CollectionPermission,
   convertToPermission,
   convertToSelectionView,
-  mapGroupToAccessItemView,
-  mapUserToAccessItemView,
 } from "../../../admin-console/organizations/shared/components/access-selector/access-selector.models";
 import { CollectionAdminService } from "../../core/collection-admin.service";
 import { CollectionAdminView } from "../../core/views/collection-admin.view";
@@ -53,7 +54,12 @@ export interface CollectionDialogParams {
   initialTab?: CollectionDialogTabType;
   parentCollectionId?: string;
   showOrgSelector?: boolean;
-  collectionIds?: string[];
+  /**
+   * Flag to limit the nested collections to only those the user has explicit CanManage access too.
+   */
+  limitNestedCollections?: boolean;
+  readonly?: boolean;
+  isAddAccessCollection?: boolean;
 }
 
 export interface CollectionDialogResult {
@@ -72,7 +78,7 @@ export enum CollectionDialogAction {
 })
 export class CollectionDialogComponent implements OnInit, OnDestroy {
   protected flexibleCollectionsV1Enabled$ = this.configService
-    .getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1, false)
+    .getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1)
     .pipe(first());
 
   private destroy$ = new Subject<void>();
@@ -81,7 +87,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   protected tabIndex: CollectionDialogTabType;
   protected loading = true;
   protected organization?: Organization;
-  protected collection?: CollectionView;
+  protected collection?: CollectionAdminView;
   protected nestOptions: CollectionView[] = [];
   protected accessItems: AccessItemView[] = [];
   protected deletedParentName: string | undefined;
@@ -95,6 +101,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   });
   protected PermissionMode = PermissionMode;
   protected showDeleteButton = false;
+  protected showAddAccessWarning = false;
 
   constructor(
     @Inject(DIALOG_DATA) private params: CollectionDialogParams,
@@ -103,7 +110,6 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     private organizationService: OrganizationService,
     private groupService: GroupService,
     private collectionAdminService: CollectionAdminService,
-    private collectionService: CollectionService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private organizationUserService: OrganizationUserService,
@@ -120,7 +126,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       this.showOrgSelector = true;
       this.formGroup.controls.selectedOrg.valueChanges
         .pipe(takeUntil(this.destroy$))
-        .subscribe((id) => this.loadOrg(id, this.params.collectionIds));
+        .subscribe((id) => this.loadOrg(id));
       this.organizations$ = this.organizationService.organizations$.pipe(
         first(),
         map((orgs) =>
@@ -134,11 +140,11 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     } else {
       // Opened from the org vault
       this.formGroup.patchValue({ selectedOrg: this.params.organizationId });
-      await this.loadOrg(this.params.organizationId, this.params.collectionIds);
+      await this.loadOrg(this.params.organizationId);
     }
   }
 
-  async loadOrg(orgId: string, collectionIds: string[]) {
+  async loadOrg(orgId: string) {
     const organization$ = this.organizationService
       .get$(orgId)
       .pipe(shareReplay({ refCount: true, bufferSize: 1 }));
@@ -154,65 +160,65 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     combineLatest({
       organization: organization$,
       collections: this.collectionAdminService.getAll(orgId),
-      collectionDetails: this.params.collectionId
-        ? from(this.collectionAdminService.get(orgId, this.params.collectionId))
-        : of(null),
       groups: groups$,
-      users: this.organizationUserService.getAllUsers(orgId),
-      collection: this.params.collectionId
-        ? this.collectionService.get(this.params.collectionId)
-        : of(null),
+      // Collection(s) needed to map readonlypermission for (potential) access selector disabled state
+      users: this.organizationUserService.getAllUsers(orgId, { includeCollections: true }),
       flexibleCollectionsV1: this.flexibleCollectionsV1Enabled$,
     })
       .pipe(takeUntil(this.formGroup.controls.selectedOrg.valueChanges), takeUntil(this.destroy$))
       .subscribe(
-        ({
-          organization,
-          collections,
-          collectionDetails,
-          groups,
-          users,
-          collection,
-          flexibleCollectionsV1,
-        }) => {
+        ({ organization, collections: allCollections, groups, users, flexibleCollectionsV1 }) => {
           this.organization = organization;
           this.accessItems = [].concat(
-            groups.map(mapGroupToAccessItemView),
-            users.data.map(mapUserToAccessItemView),
+            groups.map((group) => mapGroupToAccessItemView(group, this.collectionId)),
+            users.data.map((user) => mapUserToAccessItemView(user, this.collectionId)),
           );
 
           // Force change detection to update the access selector's items
           this.changeDetectorRef.detectChanges();
 
-          if (collectionIds) {
-            collections = collections.filter((c) => collectionIds.includes(c.id));
-          }
+          this.nestOptions = this.params.limitNestedCollections
+            ? allCollections.filter((c) => c.manage)
+            : allCollections;
 
           if (this.params.collectionId) {
-            this.collection = collections.find((c) => c.id === this.collectionId);
-            this.nestOptions = collections.filter((c) => c.id !== this.collectionId);
+            this.collection = allCollections.find((c) => c.id === this.collectionId);
+            // Ensure we don't allow nesting the current collection within itself
+            this.nestOptions = this.nestOptions.filter((c) => c.id !== this.collectionId);
 
             if (!this.collection) {
               throw new Error("Could not find collection to edit.");
             }
 
-            const { name, parent } = parseName(this.collection);
-            if (parent !== undefined && !this.nestOptions.find((c) => c.name === parent)) {
-              this.deletedParentName = parent;
+            // Parse the name to find its parent name
+            const { name, parent: parentName } = parseName(this.collection);
+
+            // Determine if the user can see/select the parent collection
+            if (parentName !== undefined) {
+              if (
+                this.organization.canViewAllCollections &&
+                !allCollections.find((c) => c.name === parentName)
+              ) {
+                // The user can view all collections, but the parent was not found -> assume it has been deleted
+                this.deletedParentName = parentName;
+              } else if (!this.nestOptions.find((c) => c.name === parentName)) {
+                // We cannot find the current parent collection in our list of options, so add a placeholder
+                this.nestOptions.unshift({ name: parentName } as CollectionView);
+              }
             }
 
-            const accessSelections = mapToAccessSelections(collectionDetails);
+            const accessSelections = mapToAccessSelections(this.collection);
             this.formGroup.patchValue({
               name,
               externalId: this.collection.externalId,
-              parent,
+              parent: parentName,
               access: accessSelections,
             });
-            this.collection.manage = collection?.manage ?? false; // Get manage flag from sync data collection
-            this.showDeleteButton = this.collection.canDelete(organization);
+            this.showDeleteButton =
+              !this.dialogReadonly &&
+              this.collection.canDelete(organization, flexibleCollectionsV1);
           } else {
-            this.nestOptions = collections;
-            const parent = collections.find((c) => c.id === this.params.parentCollectionId);
+            const parent = this.nestOptions.find((c) => c.id === this.params.parentCollectionId);
             const currentOrgUserId = users.data.find(
               (u) => u.userId === this.organization?.userId,
             )?.id;
@@ -244,7 +250,10 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
           }
           this.formGroup.controls.access.updateValueAndValidity();
 
+          this.handleFormGroupReadonly(this.dialogReadonly);
+
           this.loading = false;
+          this.showAddAccessWarning = this.handleAddAccessWarning(flexibleCollectionsV1);
         },
       );
   }
@@ -257,11 +266,20 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
     return this.params.collectionId != undefined;
   }
 
+  protected get dialogReadonly() {
+    return this.params.readonly === true;
+  }
+
   protected async cancel() {
     this.close(CollectionDialogAction.Canceled);
   }
 
   protected submit = async () => {
+    // Saving a collection is prohibited while in read only mode
+    if (this.dialogReadonly) {
+      return;
+    }
+
     this.formGroup.markAllAsTouched();
 
     if (this.formGroup.invalid) {
@@ -316,6 +334,11 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   };
 
   protected delete = async () => {
+    // Deleting a collection is prohibited while in read only mode
+    if (this.dialogReadonly) {
+      return;
+    }
+
     const confirmed = await this.dialogService.openSimpleDialog({
       title: this.collection?.name,
       content: { key: "deleteCollectionConfirmation" },
@@ -340,6 +363,32 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private handleAddAccessWarning(flexibleCollectionsV1: boolean): boolean {
+    if (
+      flexibleCollectionsV1 &&
+      !this.organization?.allowAdminAccessToAllCollectionItems &&
+      this.params.isAddAccessCollection
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private handleFormGroupReadonly(readonly: boolean) {
+    if (readonly) {
+      this.formGroup.controls.name.disable();
+      this.formGroup.controls.externalId.disable();
+      this.formGroup.controls.parent.disable();
+      this.formGroup.controls.access.disable();
+    } else {
+      this.formGroup.controls.name.enable();
+      this.formGroup.controls.externalId.enable();
+      this.formGroup.controls.parent.enable();
+      this.formGroup.controls.access.enable();
+    }
   }
 
   private close(action: CollectionDialogAction, collection?: CollectionResponse | CollectionView) {
@@ -381,6 +430,56 @@ function validateCanManagePermission(control: AbstractControl) {
   const hasManagePermission = access.some((a) => a.permission === CollectionPermission.Manage);
 
   return hasManagePermission ? null : { managePermissionRequired: true };
+}
+
+/**
+ *
+ * @param group Current group being used to translate object into AccessItemView
+ * @param collectionId Current collection being viewed/edited
+ * @returns AccessItemView customized to set a readonlyPermission to be displayed if the access selector is in a disabled state
+ */
+function mapGroupToAccessItemView(group: GroupView, collectionId: string): AccessItemView {
+  return {
+    id: group.id,
+    type: AccessItemType.Group,
+    listName: group.name,
+    labelName: group.name,
+    accessAllItems: group.accessAll,
+    readonly: group.accessAll,
+    readonlyPermission:
+      collectionId != null
+        ? convertToPermission(group.collections.find((gc) => gc.id == collectionId))
+        : undefined,
+  };
+}
+
+/**
+ *
+ * @param user Current user being used to translate object into AccessItemView
+ * @param collectionId Current collection being viewed/edited
+ * @returns AccessItemView customized to set a readonlyPermission to be displayed if the access selector is in a disabled state
+ */
+function mapUserToAccessItemView(
+  user: OrganizationUserUserDetailsResponse,
+  collectionId: string,
+): AccessItemView {
+  return {
+    id: user.id,
+    type: AccessItemType.Member,
+    email: user.email,
+    role: user.type,
+    listName: user.name?.length > 0 ? `${user.name} (${user.email})` : user.email,
+    labelName: user.name ?? user.email,
+    status: user.status,
+    accessAllItems: user.accessAll,
+    readonly: user.accessAll,
+    readonlyPermission:
+      collectionId != null
+        ? convertToPermission(
+            new CollectionAccessSelectionView(user.collections.find((uc) => uc.id == collectionId)),
+          )
+        : undefined,
+  };
 }
 
 /**

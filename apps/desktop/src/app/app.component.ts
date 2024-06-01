@@ -3,15 +3,12 @@ import {
   NgZone,
   OnDestroy,
   OnInit,
-  SecurityContext,
   Type,
   ViewChild,
   ViewContainerRef,
 } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { IndividualConfig, ToastrService } from "ngx-toastr";
-import { firstValueFrom, Subject, takeUntil } from "rxjs";
+import { filter, firstValueFrom, map, Subject, takeUntil, timeout } from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -21,11 +18,12 @@ import { NotificationsService } from "@bitwarden/common/abstractions/notificatio
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
-import { InternalOrganizationServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { InternalPolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { MasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
@@ -40,15 +38,17 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { clearCaches } from "@bitwarden/common/platform/misc/sequentialize";
 import { StateEventRunnerService } from "@bitwarden/common/platform/state";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UserId } from "@bitwarden/common/types/guid";
+import { VaultTimeout, VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { DeleteAccountComponent } from "../auth/delete-account.component";
 import { LoginApprovalComponent } from "../auth/login/login-approval.component";
@@ -57,7 +57,7 @@ import { PremiumComponent } from "../vault/app/accounts/premium.component";
 import { FolderAddEditComponent } from "../vault/app/vault/folder-add-edit.component";
 
 import { SettingsComponent } from "./accounts/settings.component";
-import { ExportComponent } from "./tools/export/export.component";
+import { ExportDesktopComponent } from "./tools/export/export-desktop.component";
 import { GeneratorComponent } from "./tools/generator.component";
 import { ImportDesktopComponent } from "./tools/import/import-desktop.component";
 import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-history.component";
@@ -65,12 +65,6 @@ import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-hi
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
 const SyncInterval = 6 * 60 * 60 * 1000; // 6 hours
-
-const systemTimeoutOptions = {
-  onLock: -2,
-  onSuspend: -3,
-  onIdle: -4,
-};
 
 @Component({
   selector: "app-root",
@@ -109,17 +103,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   loading = false;
 
-  private lastActivity: number = null;
+  private lastActivity: Date = null;
   private modal: ModalRef = null;
   private idleTimer: number = null;
   private isIdle = false;
-  private activeUserId: string = null;
+  private activeUserId: UserId = null;
 
   private destroy$ = new Subject<void>();
 
   private accountCleanUpInProgress: { [userId: string]: boolean } = {};
 
   constructor(
+    private masterPasswordService: MasterPasswordServiceAbstraction,
     private broadcasterService: BroadcasterService,
     private folderService: InternalFolderService,
     private syncService: SyncService,
@@ -127,9 +122,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private cipherService: CipherService,
     private authService: AuthService,
     private router: Router,
-    private toastrService: ToastrService,
+    private toastService: ToastService,
     private i18nService: I18nService,
-    private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private vaultTimeoutService: VaultTimeoutService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
@@ -152,12 +146,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private biometricStateService: BiometricStateService,
     private stateEventRunnerService: StateEventRunnerService,
     private providerService: ProviderService,
-    private organizationService: InternalOrganizationServiceAbstraction,
+    private accountService: AccountService,
   ) {}
 
   ngOnInit() {
-    this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
-      this.activeUserId = userId;
+    this.accountService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
+      this.activeUserId = account?.id;
     });
 
     this.ngZone.runOutsideAngular(() => {
@@ -220,8 +214,10 @@ export class AppComponent implements OnInit, OnDestroy {
             await this.vaultTimeoutService.lock(message.userId);
             break;
           case "lockAllVaults": {
-            const currentUser = await this.stateService.getUserId();
-            const accounts = await firstValueFrom(this.stateService.accounts$);
+            const currentUser = await firstValueFrom(
+              this.accountService.activeAccount$.pipe(map((a) => a.id)),
+            );
+            const accounts = await firstValueFrom(this.accountService.accounts$);
             await this.vaultTimeoutService.lock(currentUser);
             for (const account of Object.keys(accounts)) {
               if (account === currentUser) {
@@ -292,7 +288,7 @@ export class AppComponent implements OnInit, OnDestroy {
             );
             break;
           case "showToast":
-            this.showToast(message);
+            this.toastService._showToast(message);
             break;
           case "copiedToClipboard":
             if (!message.clearing) {
@@ -370,7 +366,7 @@ export class AppComponent implements OnInit, OnDestroy {
             await this.dialogService.open(ImportDesktopComponent);
             break;
           case "exportVault":
-            await this.openExportVault();
+            await this.dialogService.open(ExportDesktopComponent);
             break;
           case "newLogin":
             this.routeToVault("add", CipherType.Login);
@@ -401,17 +397,22 @@ export class AppComponent implements OnInit, OnDestroy {
             this.router.navigate(["/remove-password"]);
             break;
           case "switchAccount": {
+            // Clear sequentialized caches
+            clearCaches();
             if (message.userId != null) {
-              await this.stateService.setActiveUser(message.userId);
+              await this.stateService.clearDecryptedData(message.userId);
+              await this.accountService.switchAccount(message.userId);
             }
             const locked =
               (await this.authService.getAuthStatus(message.userId)) ===
               AuthenticationStatus.Locked;
             const forcedPasswordReset =
-              (await this.stateService.getForceSetPasswordReason({ userId: message.userId })) !=
-              ForceSetPasswordReason.None;
+              (await firstValueFrom(
+                this.masterPasswordService.forceSetPasswordReason$(message.userId),
+              )) != ForceSetPasswordReason.None;
             if (locked) {
-              this.messagingService.send("locked", { userId: message.userId });
+              this.modalService.closeAll();
+              await this.router.navigate(["lock"]);
             } else if (forcedPasswordReset) {
               // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -428,13 +429,13 @@ export class AppComponent implements OnInit, OnDestroy {
             break;
           }
           case "systemSuspended":
-            await this.checkForSystemTimeout(systemTimeoutOptions.onSuspend);
+            await this.checkForSystemTimeout(VaultTimeoutStringType.OnSleep);
             break;
           case "systemLocked":
-            await this.checkForSystemTimeout(systemTimeoutOptions.onLock);
+            await this.checkForSystemTimeout(VaultTimeoutStringType.OnLocked);
             break;
           case "systemIdle":
-            await this.checkForSystemTimeout(systemTimeoutOptions.onIdle);
+            await this.checkForSystemTimeout(VaultTimeoutStringType.OnIdle);
             break;
           case "openLoginApproval":
             if (message.notificationId != null) {
@@ -460,26 +461,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
-  }
-
-  async openExportVault() {
-    this.modalService.closeAll();
-
-    const [modal, childComponent] = await this.modalService.openViewRef(
-      ExportComponent,
-      this.exportVaultModalRef,
-    );
-    this.modal = modal;
-
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    childComponent.onSaved.subscribe(() => {
-      this.modal.close();
-    });
-
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.modal.onClosed.subscribe(() => {
-      this.modal = null;
-    });
   }
 
   async addFolder() {
@@ -523,7 +504,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private async updateAppMenu() {
     let updateRequest: MenuUpdateRequest;
-    const stateAccounts = await firstValueFrom(this.stateService.accounts$);
+    const stateAccounts = await firstValueFrom(this.accountService.accounts$);
     if (stateAccounts == null || Object.keys(stateAccounts).length < 1) {
       updateRequest = {
         accounts: null,
@@ -532,83 +513,113 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       const accounts: { [userId: string]: MenuAccount } = {};
       for (const i in stateAccounts) {
+        const userId = i as UserId;
         if (
           i != null &&
-          stateAccounts[i]?.profile?.userId != null &&
-          !this.isAccountCleanUpInProgress(stateAccounts[i].profile.userId) // skip accounts that are being cleaned up
+          userId != null &&
+          !this.isAccountCleanUpInProgress(userId) // skip accounts that are being cleaned up
         ) {
-          const userId = stateAccounts[i].profile.userId;
           const availableTimeoutActions = await firstValueFrom(
             this.vaultTimeoutSettingsService.availableVaultTimeoutActions$(userId),
           );
 
+          const authStatus = await firstValueFrom(this.authService.authStatusFor$(userId));
           accounts[userId] = {
-            isAuthenticated: await this.stateService.getIsAuthenticated({
-              userId: userId,
-            }),
-            isLocked:
-              (await this.authService.getAuthStatus(userId)) === AuthenticationStatus.Locked,
+            isAuthenticated: authStatus >= AuthenticationStatus.Locked,
+            isLocked: authStatus === AuthenticationStatus.Locked,
             isLockable: availableTimeoutActions.includes(VaultTimeoutAction.Lock),
-            email: stateAccounts[i].profile.email,
-            userId: stateAccounts[i].profile.userId,
+            email: stateAccounts[userId].email,
+            userId: userId,
             hasMasterPassword: await this.userVerificationService.hasMasterPassword(userId),
           };
         }
       }
       updateRequest = {
         accounts: accounts,
-        activeUserId: await this.stateService.getUserId(),
+        activeUserId: await firstValueFrom(
+          this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+        ),
       };
     }
 
     this.messagingService.send("updateAppMenu", { updateRequest: updateRequest });
   }
 
-  private async logOut(expired: boolean, userId?: string) {
-    const userBeingLoggedOut = await this.stateService.getUserId({ userId: userId });
+  // Even though the userId parameter is no longer optional doesn't mean a message couldn't be
+  // passing null-ish values to us.
+  private async logOut(expired: boolean, userId: UserId) {
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+
+    const userBeingLoggedOut = userId ?? activeUserId;
 
     // Mark account as being cleaned up so that the updateAppMenu logic (executed on syncCompleted)
     // doesn't attempt to update a user that is being logged out as we will manually
     // call updateAppMenu when the logout is complete.
     this.startAccountCleanUp(userBeingLoggedOut);
 
-    let preLogoutActiveUserId;
+    const nextUpAccount =
+      activeUserId === userBeingLoggedOut
+        ? await firstValueFrom(this.accountService.nextUpAccount$) // We'll need to switch accounts
+        : null;
+
     try {
+      // HACK: We shouldn't wait for authentication status to change here but instead subscribe to the
+      // authentication status to do various actions.
+      const logoutPromise = firstValueFrom(
+        this.authService.authStatusFor$(userBeingLoggedOut).pipe(
+          filter((authenticationStatus) => authenticationStatus === AuthenticationStatus.LoggedOut),
+          timeout({
+            first: 5_000,
+            with: () => {
+              throw new Error(
+                "The logout process did not complete in a reasonable amount of time.",
+              );
+            },
+          }),
+        ),
+      );
+
       // Provide the userId of the user to upload events for
-      await this.eventUploadService.uploadEvents(userBeingLoggedOut as UserId);
+      await this.eventUploadService.uploadEvents(userBeingLoggedOut);
       await this.syncService.setLastSync(new Date(0), userBeingLoggedOut);
       await this.cryptoService.clearKeys(userBeingLoggedOut);
       await this.cipherService.clear(userBeingLoggedOut);
       await this.folderService.clear(userBeingLoggedOut);
       await this.collectionService.clear(userBeingLoggedOut);
-      await this.passwordGenerationService.clear(userBeingLoggedOut);
       await this.vaultTimeoutSettingsService.clear(userBeingLoggedOut);
-      await this.policyService.clear(userBeingLoggedOut);
-      await this.biometricStateService.logout(userBeingLoggedOut as UserId);
-      await this.providerService.save(null, userBeingLoggedOut as UserId);
+      await this.biometricStateService.logout(userBeingLoggedOut);
 
-      await this.stateEventRunnerService.handleEvent("logout", userBeingLoggedOut as UserId);
+      await this.stateEventRunnerService.handleEvent("logout", userBeingLoggedOut);
 
-      preLogoutActiveUserId = this.activeUserId;
       await this.stateService.clean({ userId: userBeingLoggedOut });
+      await this.accountService.clean(userBeingLoggedOut);
+
+      // HACK: Wait for the user logging outs authentication status to transition to LoggedOut
+      await logoutPromise;
     } finally {
       this.finishAccountCleanUp(userBeingLoggedOut);
     }
 
-    if (this.activeUserId == null) {
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.router.navigate(["login"]);
-    } else if (preLogoutActiveUserId !== this.activeUserId) {
-      this.messagingService.send("switchAccount");
+    // We only need to change the display at all if the account being looked at is the one
+    // being logged out. If it was a background account, no need to do anything.
+    if (userBeingLoggedOut === activeUserId) {
+      if (nextUpAccount != null) {
+        this.messagingService.send("switchAccount", { userId: nextUpAccount.id });
+      } else {
+        // We don't have another user to switch to, bring them to the login page so they
+        // can sign into a user.
+        await this.accountService.switchAccount(null);
+        void this.router.navigate(["login"]);
+      }
     }
 
     await this.updateAppMenu();
 
     // This must come last otherwise the logout will prematurely trigger
     // a process reload before all the state service user data can be cleaned up
-    if (userBeingLoggedOut === preLogoutActiveUserId) {
-      this.searchService.clearIndex();
+    if (userBeingLoggedOut === activeUserId) {
       this.authService.logOut(async () => {
         if (expired) {
           this.platformUtilsService.showToast(
@@ -626,13 +637,13 @@ export class AppComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const now = new Date().getTime();
-    if (this.lastActivity != null && now - this.lastActivity < 250) {
+    const now = new Date();
+    if (this.lastActivity != null && now.getTime() - this.lastActivity.getTime() < 250) {
       return;
     }
 
     this.lastActivity = now;
-    await this.stateService.setLastActive(now, { userId: this.activeUserId });
+    await this.accountService.setAccountActivity(this.activeUserId, now);
 
     // Idle states
     if (this.isIdle) {
@@ -674,34 +685,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  private showToast(msg: any) {
-    let message = "";
-
-    const options: Partial<IndividualConfig> = {};
-
-    if (typeof msg.text === "string") {
-      message = msg.text;
-    } else if (msg.text.length === 1) {
-      message = msg.text[0];
-    } else {
-      msg.text.forEach(
-        (t: string) =>
-          (message += "<p>" + this.sanitizer.sanitize(SecurityContext.HTML, t) + "</p>"),
-      );
-      options.enableHtml = true;
-    }
-    if (msg.options != null) {
-      if (msg.options.trustedHtml === true) {
-        options.enableHtml = true;
-      }
-      if (msg.options.timeout != null && msg.options.timeout > 0) {
-        options.timeOut = msg.options.timeout;
-      }
-    }
-
-    this.toastrService.show(message, msg.title, options, "toast-" + msg.type);
-  }
-
   private routeToVault(action: string, cipherType: CipherType) {
     if (!this.router.url.includes("vault")) {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
@@ -716,8 +699,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async checkForSystemTimeout(timeout: number): Promise<void> {
-    const accounts = await firstValueFrom(this.stateService.accounts$);
+  private async checkForSystemTimeout(timeout: VaultTimeout): Promise<void> {
+    const accounts = await firstValueFrom(this.accountService.accounts$);
     for (const userId in accounts) {
       if (userId == null) {
         continue;
@@ -727,15 +710,19 @@ export class AppComponent implements OnInit, OnDestroy {
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         options[1] === "logOut"
-          ? this.logOut(false, userId)
+          ? this.logOut(false, userId as UserId)
           : await this.vaultTimeoutService.lock(userId);
       }
     }
   }
 
-  private async getVaultTimeoutOptions(userId: string): Promise<[number, string]> {
-    const timeout = await this.stateService.getVaultTimeout({ userId: userId });
-    const action = await this.stateService.getVaultTimeoutAction({ userId: userId });
+  private async getVaultTimeoutOptions(userId: string): Promise<[VaultTimeout, string]> {
+    const timeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
+    const action = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+    );
     return [timeout, action];
   }
 

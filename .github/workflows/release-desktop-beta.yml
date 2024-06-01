@@ -393,10 +393,7 @@ jobs:
 
   macos-build:
     name: MacOS Build
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules
-    runs-on: macos-11
+    runs-on: macos-13
     needs: setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
@@ -457,7 +454,7 @@ jobs:
 
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/bitwarden-desktop-key |
             jq -r .value | base64 -d > $HOME/certificates/bitwarden-desktop-key.p12
-          
+
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/appstore-app-cert |
             jq -r .value | base64 -d > $HOME/certificates/appstore-app-cert.p12
 
@@ -525,10 +522,7 @@ jobs:
 
   macos-package-github:
     name: MacOS Package GitHub Release Assets
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules  
-    runs-on: macos-11
+    runs-on: macos-13
     needs:
       - setup
       - macos-build
@@ -596,7 +590,7 @@ jobs:
 
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/bitwarden-desktop-key |
             jq -r .value | base64 -d > $HOME/certificates/bitwarden-desktop-key.p12
-          
+
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/appstore-app-cert |
             jq -r .value | base64 -d > $HOME/certificates/appstore-app-cert.p12
 
@@ -738,10 +732,7 @@ jobs:
 
   macos-package-mas:
     name: MacOS Package Prod Release Asset
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules    
-    runs-on: macos-11
+    runs-on: macos-13
     needs:
       - setup
       - macos-build
@@ -804,7 +795,7 @@ jobs:
 
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/bitwarden-desktop-key |
             jq -r .value | base64 -d > $HOME/certificates/bitwarden-desktop-key.p12
-          
+
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/appstore-app-cert |
             jq -r .value | base64 -d > $HOME/certificates/appstore-app-cert.p12
 
@@ -955,11 +946,7 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "aws-electron-access-id,
             aws-electron-access-key,
-            aws-electron-bucket-name,
-            r2-electron-access-id,
-            r2-electron-access-key,
-            r2-electron-bucket-name,
-            cf-prod-account"
+            aws-electron-bucket-name"
 
       - name: Download all artifacts
         uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
@@ -984,20 +971,6 @@ jobs:
           --acl "public-read" \
           --recursive \
           --quiet
-
-      - name: Publish artifacts to R2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.retrieve-secrets.outputs.r2-electron-access-id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.retrieve-secrets.outputs.r2-electron-access-key }}
-          AWS_DEFAULT_REGION: 'us-east-1'
-          AWS_S3_BUCKET_NAME: ${{ steps.retrieve-secrets.outputs.r2-electron-bucket-name }}
-          CF_ACCOUNT: ${{ steps.retrieve-secrets.outputs.cf-prod-account }}
-        working-directory: apps/desktop/artifacts
-        run: |
-          aws s3 cp ./ $AWS_S3_BUCKET_NAME/desktop/ \
-          --recursive \
-          --quiet \
-          --endpoint-url https://${CF_ACCOUNT}.r2.cloudflarestorage.com
 
       - name: Update deployment status to Success
         if: ${{ success() }}

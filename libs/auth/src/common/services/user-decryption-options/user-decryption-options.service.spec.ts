@@ -1,6 +1,5 @@
 import { firstValueFrom } from "rxjs";
 
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import {
   FakeAccountService,
@@ -66,7 +65,7 @@ describe("UserDecryptionOptionsService", () => {
       await fakeAccountService.addAccount(givenUser, {
         name: "Test User 1",
         email: "test1@email.com",
-        status: AuthenticationStatus.Locked,
+        emailVerified: false,
       });
       await fakeStateProvider.setUserState(
         USER_DECRYPTION_OPTIONS,

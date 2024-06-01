@@ -1,23 +1,13 @@
 import { firstValueFrom, BehaviorSubject } from "rxjs";
 import { Jsonify } from "type-fest";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
-import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
-import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { UserApiTokenRequest } from "@bitwarden/common/auth/models/request/identity-token/user-api-token.request";
 import { IdentityTokenResponse } from "@bitwarden/common/auth/models/response/identity-token.response";
-import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
-import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { UserId } from "@bitwarden/common/types/guid";
 
-import { InternalUserDecryptionOptionsServiceAbstraction } from "../abstractions/user-decryption-options.service.abstraction";
 import { UserApiLoginCredentials } from "../models/domain/login-credentials";
 import { CacheData } from "../services/login-strategies/login-strategy.state";
 
@@ -39,33 +29,12 @@ export class UserApiLoginStrategy extends LoginStrategy {
 
   constructor(
     data: UserApiLoginStrategyData,
-    cryptoService: CryptoService,
-    apiService: ApiService,
-    tokenService: TokenService,
-    appIdService: AppIdService,
-    platformUtilsService: PlatformUtilsService,
-    messagingService: MessagingService,
-    logService: LogService,
-    stateService: StateService,
-    twoFactorService: TwoFactorService,
-    userDecryptionOptionsService: InternalUserDecryptionOptionsServiceAbstraction,
     private environmentService: EnvironmentService,
     private keyConnectorService: KeyConnectorService,
-    billingAccountProfileStateService: BillingAccountProfileStateService,
+    ...sharedDeps: ConstructorParameters<typeof LoginStrategy>
   ) {
-    super(
-      cryptoService,
-      apiService,
-      tokenService,
-      appIdService,
-      platformUtilsService,
-      messagingService,
-      logService,
-      stateService,
-      twoFactorService,
-      userDecryptionOptionsService,
-      billingAccountProfileStateService,
-    );
+    super(...sharedDeps);
+
     this.cache = new BehaviorSubject(data);
   }
 
@@ -83,37 +52,49 @@ export class UserApiLoginStrategy extends LoginStrategy {
     return authResult;
   }
 
-  protected override async setMasterKey(response: IdentityTokenResponse) {
+  protected override async setMasterKey(response: IdentityTokenResponse, userId: UserId) {
     if (response.apiUseKeyConnector) {
       const env = await firstValueFrom(this.environmentService.environment$);
       const keyConnectorUrl = env.getKeyConnectorUrl();
-      await this.keyConnectorService.setMasterKeyFromUrl(keyConnectorUrl);
+      await this.keyConnectorService.setMasterKeyFromUrl(keyConnectorUrl, userId);
     }
   }
 
-  protected override async setUserKey(response: IdentityTokenResponse): Promise<void> {
+  protected override async setUserKey(
+    response: IdentityTokenResponse,
+    userId: UserId,
+  ): Promise<void> {
     await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
 
     if (response.apiUseKeyConnector) {
-      const masterKey = await this.cryptoService.getMasterKey();
+      const masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(userId));
       if (masterKey) {
-        const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
-        await this.cryptoService.setUserKey(userKey);
+        const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
+        await this.cryptoService.setUserKey(userKey, userId);
       }
     }
   }
 
-  protected override async setPrivateKey(response: IdentityTokenResponse): Promise<void> {
+  protected override async setPrivateKey(
+    response: IdentityTokenResponse,
+    userId: UserId,
+  ): Promise<void> {
     await this.cryptoService.setPrivateKey(
-      response.privateKey ?? (await this.createKeyPairForOldAccount()),
+      response.privateKey ?? (await this.createKeyPairForOldAccount(userId)),
+      userId,
     );
   }
 
-  protected async saveAccountInformation(tokenResponse: IdentityTokenResponse) {
-    await super.saveAccountInformation(tokenResponse);
+  // Overridden to save client ID and secret to token service
+  protected async saveAccountInformation(tokenResponse: IdentityTokenResponse): Promise<UserId> {
+    const userId = await super.saveAccountInformation(tokenResponse);
 
-    const vaultTimeout = await this.stateService.getVaultTimeout();
-    const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
+    const vaultTimeoutAction = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+    );
+    const vaultTimeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
 
     const tokenRequest = this.cache.value.tokenRequest;
 
@@ -127,6 +108,7 @@ export class UserApiLoginStrategy extends LoginStrategy {
       vaultTimeoutAction as VaultTimeoutAction,
       vaultTimeout,
     );
+    return userId;
   }
 
   exportCache(): CacheData {

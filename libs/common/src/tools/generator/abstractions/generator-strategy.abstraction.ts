@@ -17,11 +17,11 @@ export abstract class GeneratorStrategy<Options, Policy> {
    */
   durableState: (userId: UserId) => SingleUserState<Options>;
 
+  /** Gets the default options. */
+  defaults$: (userId: UserId) => Observable<Options>;
+
   /** Identifies the policy enforced by the generator. */
   policy: PolicyType;
-
-  /** Length of time in milliseconds to cache the evaluator */
-  cache_ms: number;
 
   /** Operator function that converts a policy collection observable to a single
    *   policy evaluator observable.

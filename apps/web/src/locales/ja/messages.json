@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "アクセスレベル"
   },
+  "accessing": {
+    "message": "アクセス中"
+  },
   "loggedOut": {
     "message": "ログアウトしました"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "アカウントが削除され、すべての関連するデータが削除されました。"
   },
+  "deleteOrganizationWarning": {
+    "message": "組織を恒久的に削除します。元に戻すことはできません。"
+  },
   "myAccount": {
     "message": "マイアカウント"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Bitwardenアプリの情報をDuoの管理パネルから入力して下さい。"
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "連携キー"
+  "twoFactorDuoClientId": {
+    "message": "Client Id"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "秘密鍵"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "API のホスト名"
@@ -1809,12 +1815,16 @@
   "unsecuredWebsitesFound": {
     "message": "セキュリティ保護されていないウェブサイトが見つかりました"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "セキュアでないURIが$COUNT$個のアイテムで見つかりました。ウェブサイトが対応しているならば、URIをhttps://形式に変更すべきです。",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "セキュアでない URI が $VAULT$ 内で $COUNT$ 個見つかりました。ウェブサイトが対応している場合は、URI を https:// 形式に変更すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1830,12 +1840,16 @@
   "inactive2faFound": {
     "message": "二段階認証を利用していないアイテムが見つかりました"
   },
-  "inactive2faFoundDesc": {
-    "message": "保管庫に $COUNT$ 個のウェブサイトがあり、2段階認証でのログインが設定されていない可能性があります (2fa.directory によれば)。これらのアカウントをさらに保護するには、2段階認証のログインを設定する必要があります。",
+  "inactive2faFoundReportDesc": {
+    "message": "$VAULT$ に $COUNT$ 個のウェブサイトがあり、(2fa.directory によれば) 2段階認証でのログインを設定できる可能性があります 。これらのアカウントをさらに保護するには、2段階認証のログインを設定してください。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1854,12 +1868,16 @@
   "exposedPasswordsFound": {
     "message": "流出したパスワードが見つかりました"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "既知のデータ流出で公開されていたパスワードが $COUNT$ 個のアイテムで見つかりました。これらは新しいパスワードへ変更すべきです。",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "既知の流出済みパスワードが $VAULT$ 内の $COUNT$ 個のアイテムで見つかりました。これらは新しいパスワードへ変更すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1887,12 +1905,16 @@
   "weakPasswordsFound": {
     "message": "脆弱なパスワードが見つかりました"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "保管庫内に$COUNT$個の強力でないパスワードが見つかりました。もっと強力なパスワードへ更新すべきです。",
+  "weakPasswordsFoundReportDesc": {
+    "message": "$VAULT$ 内に $COUNT$ 個の脆弱なパスワードが見つかりました。もっと強力なパスワードへ更新すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1908,12 +1930,16 @@
   "reusedPasswordsFound": {
     "message": "再利用しているパスワードが見つかりました。"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "$COUNT$個の再利用しているパスワードが見つかりました。それぞれ異なるパスワードへ変更すべきです。",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "$VAULT$ 内に $COUNT$ 個の再利用しているパスワードが見つかりました。それぞれ異なるパスワードへ変更すべきです。",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -2768,6 +2794,12 @@
   "all": {
     "message": "すべて"
   },
+  "addAccess": {
+    "message": "アクセスを追加"
+  },
+  "addAccessFilter": {
+    "message": "アクセスフィルタを追加"
+  },
   "refresh": {
     "message": "更新"
   },
@@ -3215,6 +3247,27 @@
   "device": {
     "message": "デバイス"
   },
+  "creatingAccountOn": {
+    "message": "アカウント作成："
+  },
+  "checkYourEmail": {
+    "message": "メールをご確認ください"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "アカウントの作成を続けるには"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "に送られたメールのリンクを開いてください。"
+  },
+  "noEmail": {
+    "message": "メールがありませんか?"
+  },
+  "goBack": {
+    "message": "戻って"
+  },
+  "toEditYourEmailAddress": {
+    "message": "メールアドレスを編集してください。"
+  },
   "view": {
     "message": "表示"
   },
@@ -3361,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Bitwardenアカウント削除のリクエストがありました。削除する場合はボタンをクリックしてください。"
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Bitwarden 組織の削除をリクエストしました。"
   },
   "myOrganization": {
     "message": "組織"
@@ -3538,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "サブスクリプションを調整すると、請求の合計が日割りで変更されます。新たに招待されたユーザーがお客様の契約数を超えた場合、お客様は直ちに追加ユーザー分の日割り計算を請求されます。"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "バンドルオファーなしで"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "シートを追加したい場合はお問い合わせください"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "サブスクリプションを調整すると、請求の合計が日割りで変更されます。新しく招待されたユーザーがお客様の契約数を超えた場合、契約数が$MAX$名に達するまで、追加されたユーザーに対する日割り計算の請求が即座に請求されます。",
@@ -4506,7 +4568,7 @@
     "message": "権限"
   },
   "managerPermissions": {
-    "message": "権限の管理"
+    "message": "管理者権限"
   },
   "adminPermissions": {
     "message": "管理者権限"
@@ -4955,6 +5017,9 @@
   },
   "addExistingOrganization": {
     "message": "既存の組織を追加する"
+  },
+  "addNewOrganization": {
+    "message": "新しい組織を追加"
   },
   "myProvider": {
     "message": "プロバイダー"
@@ -5779,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "外部転送サービスを使用してメールエイリアスを生成します。"
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ エラー: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "ウェブサイト: $WEBSITE$ Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "不正な$SERVICENAME$ API トークン",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "不正な$SERVICENAME$ API トークン: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "$SERVICENAME$ マスク済みメールアカウント ID を取得できませんでした。",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "不正な $SERVICENAME$ ドメインです。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "不正な $SERVICENAME$ URL です。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "不明な $SERVICENAME$ エラーが起きました。",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "不明な転送先: '$SERVICENAME$'",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "ホスト名",
     "description": "Part of a URL."
@@ -6457,6 +6624,9 @@
   "editGroupCollectionsDesc": {
     "message": "このグループに追加してコレクションへのアクセスを許可します。"
   },
+  "restrictedCollectionAssignmentDesc": {
+    "message": "自分が管理しているコレクションのみを割り当てることができます。"
+  },
   "accessAllCollectionsDesc": {
     "message": "現在および将来のすべてのコレクションへのアクセスを許可します。"
   },
@@ -6688,8 +6858,8 @@
   "selectGroups": {
     "message": "グループを選択"
   },
-  "userPermissionOverrideHelper": {
-    "message": "メンバーの権限設定は、そのメンバーのグループによって設定された権限に置き換えられます"
+  "userPermissionOverrideHelperDesc": {
+    "message": "メンバーの権限設定は、そのメンバーのグループによって設定された権限に置き換えられます。"
   },
   "noMembersOrGroupsAdded": {
     "message": "メンバーまたはグループが追加されていません"
@@ -6880,7 +7050,7 @@
   "updateLowKdfIterationsDesc": {
     "message": "新しいセキュリティの推奨事項に対応し、アカウントの保護を向上させるために、暗号化設定を更新してください。"
   },
-  "changeKdfLoggedOutWarning": {
+  "kdfSettingsChangeLogoutWarning": {
     "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
   },
   "secretsManager": {
@@ -7498,6 +7668,15 @@
   "collectionAccessRestricted": {
     "message": "コレクションへのアクセスが制限されています"
   },
+  "readOnlyCollectionAccess": {
+    "message": "このコレクションを管理する権限がありません。"
+  },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "「管理可能」権限がありません"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "コレクションの削除を含む完全なコレクション管理を許可するには「管理可能」権限を許可してください。"
+  },
   "grantCollectionAccess": {
     "message": "グループまたはメンバーにこのコレクションへのアクセスを許可します。"
   },
@@ -7528,13 +7707,6 @@
     "message": "支払い方法を追加してください",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "柔軟性を高めるために、新しい設定と権限を追加します。 マネージャーのロールを「管理可能」権限に置き換えます。 そして、ユーザーがコレクションを作成できるようにするオプションを導入し、コレクションへの管理者のアクセスを制限します。",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "コレクション管理の詳細はこちら"
-  },
   "organizationInformation": {
     "message": "組織情報"
   },
@@ -7546,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "あなたのメールアドレスに確認メールを送信しました："
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "この操作は元に戻せません"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "この機能を有効にすると、管理者ロールを非推奨にし、管理可能権限に置き換えます。 しばらく時間がかかります。完了するまで組織設定を変更しないでください。続行してもよろしいですか？"
   },
   "sorryToSeeYouGo": {
     "message": "お別れするのは残念です！キャンセルする理由を共有して、Bitwarden の改善にご協力ください。",
@@ -7595,15 +7761,18 @@
     "message": "リリースブログを読む"
   },
   "adminConsole": {
-    "message": "管理者コンソール"
+    "message": "管理コンソール"
   },
   "providerPortal": {
     "message": "プロバイダーポータル"
   },
+  "success": {
+    "message": "成功"
+  },
   "restrictedGroupAccess": {
     "message": "あなた自身をグループに追加することはできません。"
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "コレクションに自分自身を追加することはできません。"
   },
   "assign": {
@@ -7642,5 +7811,491 @@
   },
   "items": {
     "message": "アイテム"
+  },
+  "assignedSeats": {
+    "message": "割り当て済のシート"
+  },
+  "assigned": {
+    "message": "割り当て済"
+  },
+  "used": {
+    "message": "使用中"
+  },
+  "remaining": {
+    "message": "残り"
+  },
+  "unlinkOrganization": {
+    "message": "組織のリンクを解除"
+  },
+  "manageSeats": {
+    "message": "シートの管理"
+  },
+  "manageSeatsDescription": {
+    "message": "調整したシートは、次の請求サイクルで反映されます。"
+  },
+  "unassignedSeatsDescription": {
+    "message": "未割り当てのサブスクリプションシート"
+  },
+  "purchaseSeatDescription": {
+    "message": "追加シートを購入しました"
+  },
+  "assignedSeatCannotUpdate": {
+    "message": "割り当て済のシートは更新できません。組織の所有者に連絡してください。"
+  },
+  "subscriptionUpdateFailed": {
+    "message": "サブスクリプションの更新に失敗しました"
+  },
+  "trial": {
+    "message": "お試し",
+    "description": "A subscription status label."
+  },
+  "pastDue": {
+    "message": "期限切れ",
+    "description": "A subscription status label"
+  },
+  "subscriptionExpired": {
+    "message": "サブスクリプションの有効期限が切れました",
+    "description": "The date header used when a subscription is past due."
+  },
+  "pastDueWarningForChargeAutomatically": {
+    "message": "期限が切れた日から$DAYS$日間の猶予期間があり、支払いを済ませればサブスクリプションを継続できます。期限切れになった請求書の支払いを $SUSPENSION_DATE$ までに済ませてください。",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they are charged automatically."
+  },
+  "pastDueWarningForSendInvoice": {
+    "message": "最初の未払いの請求書の期限日から$DAYS$日間の猶予期間があり、支払いを済ませればサブスクリプションを継続できます。期限切れになった請求書の支払いを $SUSPENSION_DATE$ までに済ませてください。",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they pay via invoice."
+  },
+  "unpaidInvoice": {
+    "message": "未払い請求書",
+    "description": "The header of a warning box shown to a user whose subscription is unpaid."
+  },
+  "toReactivateYourSubscription": {
+    "message": "サブスクリプションを再度有効にするには、期限切れになった請求書の支払いをしてください。",
+    "description": "The body of a warning box shown to a user whose subscription is unpaid."
+  },
+  "cancellationDate": {
+    "message": "解約日",
+    "description": "The date header used when a subscription is cancelled."
+  },
+  "machineAccountsCannotCreate": {
+    "message": "一時停止中の組織ではマシンアカウントを作成できません。組織の所有者に問い合わせてください。"
+  },
+  "machineAccount": {
+    "message": "マシンアカウント",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "machineAccounts": {
+    "message": "マシンアカウント",
+    "description": "The title for the section that deals with machine accounts."
+  },
+  "newMachineAccount": {
+    "message": "新しいマシンアカウント",
+    "description": "Title for creating a new machine account."
+  },
+  "machineAccountsNoItemsMessage": {
+    "message": "シークレットアクセスを自動化するためには、新しいマシンアカウントを作成してください。",
+    "description": "Message to encourage the user to start creating machine accounts."
+  },
+  "machineAccountsNoItemsTitle": {
+    "message": "まだ表示するものはありません",
+    "description": "Title to indicate that there are no machine accounts to display."
+  },
+  "deleteMachineAccounts": {
+    "message": "マシンアカウントの削除",
+    "description": "Title for the action to delete one or multiple machine accounts."
+  },
+  "deleteMachineAccount": {
+    "message": "マシンアカウントの削除",
+    "description": "Title for the action to delete a single machine account."
+  },
+  "viewMachineAccount": {
+    "message": "マシンアカウントを表示",
+    "description": "Action to view the details of a machine account."
+  },
+  "deleteMachineAccountDialogMessage": {
+    "message": "マシンアカウント $MACHINE_ACCOUNT$ を削除すると元に戻すことはできません。",
+    "placeholders": {
+      "machine_account": {
+        "content": "$1",
+        "example": "Machine account name"
+      }
+    }
+  },
+  "deleteMachineAccountsDialogMessage": {
+    "message": "マシンアカウントを削除すると元に戻すことはできません。"
+  },
+  "deleteMachineAccountsConfirmMessage": {
+    "message": "$COUNT$ 個のマシンアカウントの削除",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteMachineAccountToast": {
+    "message": "マシンアカウントを削除しました"
+  },
+  "deleteMachineAccountsToast": {
+    "message": "マシンアカウントを削除しました"
+  },
+  "searchMachineAccounts": {
+    "message": "マシンアカウントの検索",
+    "description": "Placeholder text for searching machine accounts."
+  },
+  "editMachineAccount": {
+    "message": "マシンアカウントの編集",
+    "description": "Title for editing a machine account."
+  },
+  "machineAccountName": {
+    "message": "マシンアカウント名",
+    "description": "Label for the name of a machine account"
+  },
+  "machineAccountCreated": {
+    "message": "マシンアカウントの作成",
+    "description": "Notifies that a new machine account has been created"
+  },
+  "machineAccountUpdated": {
+    "message": "マシンアカウントを更新しました",
+    "description": "Notifies that a machine account has been updated"
+  },
+  "projectMachineAccountsDescription": {
+    "message": "このプロジェクトへのマシンアカウントのアクセスを許可します。"
+  },
+  "projectMachineAccountsSelectHint": {
+    "message": "マシンアカウントを入力または選択"
+  },
+  "projectEmptyMachineAccountAccessPolicies": {
+    "message": "アクセスを許可するマシンアカウントを追加"
+  },
+  "machineAccountPeopleDescription": {
+    "message": "グループまたはメンバーにこのマシンアカウントへのアクセスを許可します。"
+  },
+  "machineAccountProjectsDescription": {
+    "message": "このマシンアカウントにプロジェクトを割り当てます。 "
+  },
+  "createMachineAccount": {
+    "message": "マシンアカウントを作成"
+  },
+  "maPeopleWarningMessage": {
+    "message": "マシンアカウントからユーザーを削除しても、作成したアクセストークンは削除されません。 セキュリティ向上のために、マシンアカウントから削除されたユーザーによって作成されたアクセストークンを取り消すことをお勧めします。"
+  },
+  "smAccessRemovalWarningMaTitle": {
+    "message": "このマシンアカウントへのアクセスを削除"
+  },
+  "smAccessRemovalWarningMaMessage": {
+    "message": "この操作により、マシンアカウントへのあなたのアクセス権限が削除されます。"
+  },
+  "machineAccountsIncluded": {
+    "message": "$COUNT$ 個のマシンアカウントが含まれています",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalMachineAccountCost": {
+    "message": "追加のマシンアカウントは月額 $COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "additionalMachineAccounts": {
+    "message": "追加のマシンアカウント"
+  },
+  "includedMachineAccounts": {
+    "message": "お客様のプランには $COUNT$ 個のマシンアカウントが付属しています。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalMachineAccounts": {
+    "message": "月額 $COST$ でマシンアカウントを追加できます。",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "limitMachineAccounts": {
+    "message": "マシンアカウントの制限 (オプション)"
+  },
+  "limitMachineAccountsDesc": {
+    "message": "マシンアカウントの上限を設定します。この制限に達すると、新しいマシンアカウントを作成できなくなります。"
+  },
+  "machineAccountLimit": {
+    "message": "マシンアカウントの上限（オプション）"
+  },
+  "maxMachineAccountCost": {
+    "message": "マシンアカウントのコストの最大値"
+  },
+  "machineAccountAccessUpdated": {
+    "message": "マシンアカウントへのアクセス権限を更新しました"
+  },
+  "restrictedGroupAccessDesc": {
+    "message": "あなた自身をグループに追加することはできません。"
+  },
+  "unassignedItemsBannerSelfHost": {
+    "message": "お知らせ：2024年5月2日に、 割り当てられていない組織アイテムはデバイス間のすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。 管理コンソールからコレクションにこれらのアイテムを割り当てると、表示できるようになります。"
+  },
+  "unassignedItemsBannerNotice": {
+    "message": "注意: 割り当てられていない組織アイテムは、デバイス間のすべての保管庫ビューでは表示されなくなり、管理コンソールからのみアクセスできるようになりました。"
+  },
+  "unassignedItemsBannerSelfHostNotice": {
+    "message": "お知らせ：2024年5月16日に、 割り当てられていない組織アイテムは、デバイス間のすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。"
+  },
+  "unassignedItemsBannerCTAPartOne": {
+    "message": "これらのアイテムのコレクションへの割り当てを",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "unassignedItemsBannerCTAPartTwo": {
+    "message": "で実行すると表示できるようになります。",
+    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
+  },
+  "deleteProvider": {
+    "message": "プロバイダを削除"
+  },
+  "deleteProviderConfirmation": {
+    "message": "プロバイダの削除は恒久的で元に戻せません。マスターパスワードを入力して、プロバイダと関連するすべてのデータの削除を確認してください。"
+  },
+  "deleteProviderName": {
+    "message": "$ID$ を削除できません",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDescription": {
+    "message": "$ID$ を削除するには、まずすべてのクライアントのリンクを解除してください。",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "プロバイダを削除しました"
+  },
+  "providerDeletedDesc": {
+    "message": "プロバイダと関連するすべてのデータを削除しました。"
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "このプロバイダの削除をリクエストしました。下のボタンを使うと確認できます。"
+  },
+  "deleteProviderWarning": {
+    "message": "プロバイダを削除すると元に戻すことはできません。"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "ターゲットコレクションの割り当てに失敗しました。"
+  },
+  "errorAssigningTargetFolder": {
+    "message": "ターゲットフォルダーの割り当てに失敗しました。"
+  },
+  "integrationsAndSdks": {
+    "message": "連携＆SDK",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "システム連携"
+  },
+  "integrationsDesc": {
+    "message": "Bitwarden シークレットマネージャーのシークレットを、サードパーティーのサービスに自動的に同期します。"
+  },
+  "sdks": {
+    "message": "SDK"
+  },
+  "sdksDesc": {
+    "message": "Bitwarden シークレットマネージャー SDK を以下のプログラミング言語で使用して、独自のアプリを構築できます。"
+  },
+  "setUpGithubActions": {
+    "message": "Github アクションを設定"
+  },
+  "setUpGitlabCICD": {
+    "message": "GitLab CI/CD の設定"
+  },
+  "setUpAnsible": {
+    "message": "Ansible を設定"
+  },
+  "cSharpSDKRepo": {
+    "message": "C# リポジトリを表示"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "C++ リポジトリを表示"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "JS WebAssembly リポジトリを表示"
+  },
+  "javaSDKRepo": {
+    "message": "Java リポジトリを表示"
+  },
+  "pythonSDKRepo": {
+    "message": "Python リポジトリを表示"
+  },
+  "phpSDKRepo": {
+    "message": "PHP リポジトリを表示"
+  },
+  "rubySDKRepo": {
+    "message": "Ruby リポジトリを表示"
+  },
+  "goSDKRepo": {
+    "message": "Go リポジトリを表示"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "プロバイダーとして管理するための新しいクライアント組織を作成します。次の請求サイクルに追加のシートが反映されます。"
+  },
+  "selectAPlan": {
+    "message": "プランを選択"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35%割引"
+  },
+  "monthPerMember": {
+    "message": "月/メンバーあたり"
+  },
+  "seats": {
+    "message": "シート"
+  },
+  "addOrganization": {
+    "message": "組織を追加"
+  },
+  "createdNewClient": {
+    "message": "新しいクライアントを作成しました"
+  },
+  "noAccess": {
+    "message": "アクセス不可"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "このコレクションは管理コンソールからのみアクセス可能です"
+  },
+  "organizationOptionsMenu": {
+    "message": "組織メニューの切り替え"
+  },
+  "vaultItemSelect": {
+    "message": "保管庫のアイテムを選択"
+  },
+  "collectionItemSelect": {
+    "message": "コレクションのアイテムを選択"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "プロバイダーポータルからの請求を管理"
+  },
+  "viewItemsIn": {
+    "message": "$NAME$ のアイテムを表示",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "$NAME$ に戻る",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "戻る",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "$NAME$ を削除",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "情報を表示"
+  },
+  "viewAccess": {
+    "message": "アクセスを表示"
+  },
+  "noCollectionsSelected": {
+    "message": "コレクションが選択されていません。"
+  },
+  "updateName": {
+    "message": "名前を更新"
+  },
+  "updatedOrganizationName": {
+    "message": "組織名を更新済み"
+  },
+  "providerPlan": {
+    "message": "マネージドサービスプロバイダー"
+  },
+  "orgSeats": {
+    "message": "組織のシート"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$%割引",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "KDF 反復回数が少ないです。あなたのアカウントのセキュリティを向上させるために反復回数を増やしてください。"
+  },
+  "changeKDFSettings": {
+    "message": "KDF 設定の変更"
+  },
+  "secureYourInfrastructure": {
+    "message": "インフラストラクチャの保護"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "家族やビジネスを保護"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "モニタリングレポートでセキュリティギャップを解消"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "監視を強化できる有料プランにアップグレードすると、セキュリティ脆弱性に素早く対応できます。"
+  },
+  "approveAllRequests": {
+    "message": "すべての要求を承認する"
+  },
+  "allLoginRequestsApproved": {
+    "message": "すべてのログイン要求を承認しました"
   }
 }

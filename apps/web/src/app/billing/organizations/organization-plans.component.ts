@@ -15,6 +15,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { ProviderApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/provider/provider-api.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { OrganizationCreateRequest } from "@bitwarden/common/admin-console/models/request/organization-create.request";
@@ -47,7 +48,7 @@ interface OnSuccessArgs {
   organizationId: string;
 }
 
-const Allowed2020PlanTypes = [
+const Allowed2020PlansForLegacyProviders = [
   PlanType.TeamsMonthly2020,
   PlanType.TeamsAnnually2020,
   PlanType.EnterpriseAnnually2020,
@@ -69,6 +70,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
   @Input() showCancel = false;
   @Input() acceptingSponsorship = false;
   @Input() currentPlan: PlanResponse;
+  selectedFile: File;
 
   @Input()
   get product(): ProductType {
@@ -108,6 +110,10 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   secretsManagerSubscription = secretsManagerSubscribeFormFactory(this.formBuilder);
 
+  selfHostedForm = this.formBuilder.group({
+    file: [null, [Validators.required]],
+  });
+
   formGroup = this.formBuilder.group({
     name: [""],
     billingEmail: ["", [Validators.email]],
@@ -116,7 +122,6 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     additionalStorage: [0, [Validators.min(0), Validators.max(99)]],
     additionalSeats: [0, [Validators.min(0), Validators.max(100000)]],
     clientOwnerEmail: ["", [Validators.email]],
-    businessName: [""],
     plan: [this.plan],
     product: [this.product],
     secretsManager: this.secretsManagerSubscription,
@@ -144,6 +149,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     private messagingService: MessagingService,
     private formBuilder: FormBuilder,
     private organizationApiService: OrganizationApiServiceAbstraction,
+    private providerApiService: ProviderApiServiceAbstraction,
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -179,7 +185,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     if (this.hasProvider) {
       this.formGroup.controls.businessOwned.setValue(true);
       this.changedOwnedBusiness();
-      this.provider = await this.apiService.getProvider(this.providerId);
+      this.provider = await this.providerApiService.getProvider(this.providerId);
       const providerDefaultPlan = this.passwordManagerPlans.find(
         (plan) => plan.type === PlanType.TeamsAnnually,
       );
@@ -278,7 +284,8 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         (!this.currentPlan || this.currentPlan.upgradeSortOrder < plan.upgradeSortOrder) &&
         (!this.hasProvider || plan.product !== ProductType.TeamsStarter) &&
         ((!this.isProviderQualifiedFor2020Plan() && this.planIsEnabled(plan)) ||
-          (this.isProviderQualifiedFor2020Plan() && Allowed2020PlanTypes.includes(plan.type))),
+          (this.isProviderQualifiedFor2020Plan() &&
+            Allowed2020PlansForLegacyProviders.includes(plan.type))),
     );
 
     result.sort((planA, planB) => planA.displaySortOrder - planB.displaySortOrder);
@@ -293,7 +300,8 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         (plan) =>
           plan.product === selectedProductType &&
           ((!this.isProviderQualifiedFor2020Plan() && this.planIsEnabled(plan)) ||
-            (this.isProviderQualifiedFor2020Plan() && Allowed2020PlanTypes.includes(plan.type))),
+            (this.isProviderQualifiedFor2020Plan() &&
+              Allowed2020PlansForLegacyProviders.includes(plan.type))),
       ) || [];
 
     result.sort((planA, planB) => planA.displaySortOrder - planB.displaySortOrder);
@@ -430,6 +438,10 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     return this.selectedSecretsManagerPlan != null;
   }
 
+  get teamsStarterPlanIsAvailable() {
+    return this.selectablePlans.some((plan) => plan.type === PlanType.TeamsStarter);
+  }
+
   changedProduct() {
     const selectedPlan = this.selectablePlans[0];
 
@@ -503,8 +515,13 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     if (!this.formGroup.controls.businessOwned.value || this.selectedPlan.canBeUsedByBusiness) {
       return;
     }
-    this.formGroup.controls.product.setValue(ProductType.TeamsStarter);
-    this.formGroup.controls.plan.setValue(PlanType.TeamsStarter);
+    if (this.teamsStarterPlanIsAvailable) {
+      this.formGroup.controls.product.setValue(ProductType.TeamsStarter);
+      this.formGroup.controls.plan.setValue(PlanType.TeamsStarter);
+    } else {
+      this.formGroup.controls.product.setValue(ProductType.Teams);
+      this.formGroup.controls.plan.setValue(PlanType.TeamsAnnually);
+    }
     this.changedProduct();
   }
 
@@ -524,77 +541,75 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     this.onCanceled.emit();
   }
 
-  async submit() {
+  setSelectedFile(event: Event) {
+    const fileInputEl = <HTMLInputElement>event.target;
+    this.selectedFile = fileInputEl.files.length > 0 ? fileInputEl.files[0] : null;
+  }
+
+  submit = async () => {
     if (this.singleOrgPolicyBlock) {
       return;
     }
+    const doSubmit = async (): Promise<string> => {
+      let orgId: string = null;
+      if (this.createOrganization) {
+        const orgKey = await this.cryptoService.makeOrgKey<OrgKey>();
+        const key = orgKey[0].encryptedString;
+        const collection = await this.cryptoService.encrypt(
+          this.i18nService.t("defaultCollection"),
+          orgKey[1],
+        );
+        const collectionCt = collection.encryptedString;
+        const orgKeys = await this.cryptoService.makeKeyPair(orgKey[1]);
 
-    try {
-      const doSubmit = async (): Promise<string> => {
-        let orgId: string = null;
-        if (this.createOrganization) {
-          const orgKey = await this.cryptoService.makeOrgKey<OrgKey>();
-          const key = orgKey[0].encryptedString;
-          const collection = await this.cryptoService.encrypt(
-            this.i18nService.t("defaultCollection"),
-            orgKey[1],
-          );
-          const collectionCt = collection.encryptedString;
-          const orgKeys = await this.cryptoService.makeKeyPair(orgKey[1]);
-
-          if (this.selfHosted) {
-            orgId = await this.createSelfHosted(key, collectionCt, orgKeys);
-          } else {
-            orgId = await this.createCloudHosted(key, collectionCt, orgKeys, orgKey[1]);
-          }
-
-          this.platformUtilsService.showToast(
-            "success",
-            this.i18nService.t("organizationCreated"),
-            this.i18nService.t("organizationReadyToGo"),
-          );
+        if (this.selfHosted) {
+          orgId = await this.createSelfHosted(key, collectionCt, orgKeys);
         } else {
-          orgId = await this.updateOrganization(orgId);
-          this.platformUtilsService.showToast(
-            "success",
-            null,
-            this.i18nService.t("organizationUpgraded"),
-          );
+          orgId = await this.createCloudHosted(key, collectionCt, orgKeys, orgKey[1]);
         }
 
-        await this.apiService.refreshIdentityToken();
-        await this.syncService.fullSync(true);
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("organizationCreated"),
+          this.i18nService.t("organizationReadyToGo"),
+        );
+      } else {
+        orgId = await this.updateOrganization(orgId);
+        this.platformUtilsService.showToast(
+          "success",
+          null,
+          this.i18nService.t("organizationUpgraded"),
+        );
+      }
 
-        if (!this.acceptingSponsorship && !this.isInTrialFlow) {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.router.navigate(["/organizations/" + orgId]);
-        }
+      await this.apiService.refreshIdentityToken();
+      await this.syncService.fullSync(true);
 
-        if (this.isInTrialFlow) {
-          this.onTrialBillingSuccess.emit({
-            orgId: orgId,
-            subLabelText: this.billingSubLabelText(),
-          });
-        }
+      if (!this.acceptingSponsorship && !this.isInTrialFlow) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.router.navigate(["/organizations/" + orgId]);
+      }
 
-        return orgId;
-      };
+      if (this.isInTrialFlow) {
+        this.onTrialBillingSuccess.emit({
+          orgId: orgId,
+          subLabelText: this.billingSubLabelText(),
+        });
+      }
 
-      this.formPromise = doSubmit();
-      const organizationId = await this.formPromise;
-      this.onSuccess.emit({ organizationId: organizationId });
-      this.messagingService.send("organizationCreated", organizationId);
-    } catch (e) {
-      this.logService.error(e);
-    }
-  }
+      return orgId;
+    };
+
+    this.formPromise = doSubmit();
+    const organizationId = await this.formPromise;
+    this.onSuccess.emit({ organizationId: organizationId });
+    // TODO: No one actually listening to this message?
+    this.messagingService.send("organizationCreated", { organizationId });
+  };
 
   private async updateOrganization(orgId: string) {
     const request = new OrganizationUpgradeRequest();
-    request.businessName = this.formGroup.controls.businessOwned.value
-      ? this.formGroup.controls.businessName.value
-      : null;
     request.additionalSeats = this.formGroup.controls.additionalSeats.value;
     request.additionalStorageGb = this.formGroup.controls.additionalStorage.value;
     request.premiumAccessAddon =
@@ -652,9 +667,6 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
       request.paymentToken = tokenResult[0];
       request.paymentMethodType = tokenResult[1];
-      request.businessName = this.formGroup.controls.businessOwned.value
-        ? this.formGroup.controls.businessName.value
-        : null;
       request.additionalSeats = this.formGroup.controls.additionalSeats.value;
       request.additionalStorageGb = this.formGroup.controls.additionalStorage.value;
       request.premiumAccessAddon =
@@ -695,14 +707,12 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
   }
 
   private async createSelfHosted(key: string, collectionCt: string, orgKeys: [string, EncString]) {
-    const fileEl = document.getElementById("file") as HTMLInputElement;
-    const files = fileEl.files;
-    if (files == null || files.length === 0) {
+    if (!this.selectedFile) {
       throw new Error(this.i18nService.t("selectFile"));
     }
 
     const fd = new FormData();
-    fd.append("license", files[0]);
+    fd.append("license", this.selectedFile);
     fd.append("key", key);
     fd.append("collectionName", collectionCt);
     const response = await this.organizationApiService.createLicense(fd);
@@ -762,11 +772,20 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     }
 
     if (this.currentPlan && this.currentPlan.product !== ProductType.Enterprise) {
-      const upgradedPlan = this.passwordManagerPlans.find((plan) =>
-        this.currentPlan.product === ProductType.Free
-          ? plan.type === PlanType.FamiliesAnnually
-          : plan.upgradeSortOrder == this.currentPlan.upgradeSortOrder + 1,
-      );
+      const upgradedPlan = this.passwordManagerPlans.find((plan) => {
+        if (this.currentPlan.product === ProductType.Free) {
+          return plan.type === PlanType.FamiliesAnnually;
+        }
+
+        if (
+          this.currentPlan.product === ProductType.Families &&
+          !this.teamsStarterPlanIsAvailable
+        ) {
+          return plan.type === PlanType.TeamsAnnually;
+        }
+
+        return plan.upgradeSortOrder === this.currentPlan.upgradeSortOrder + 1;
+      });
 
       this.plan = upgradedPlan.type;
       this.product = upgradedPlan.product;

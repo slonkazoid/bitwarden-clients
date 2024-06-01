@@ -16,13 +16,16 @@ import { MenuComponent } from "./menu.component";
 
 @Directive({
   selector: "[bitMenuTriggerFor]",
+  exportAs: "menuTrigger",
 })
 export class MenuTriggerForDirective implements OnDestroy {
   @HostBinding("attr.aria-expanded") isOpen = false;
   @HostBinding("attr.aria-haspopup") get hasPopup(): "menu" | "dialog" {
     return this.menu?.ariaRole || "menu";
   }
-  @HostBinding("attr.role") role = "button";
+  @HostBinding("attr.role")
+  @Input()
+  role = "button";
 
   @Input("bitMenuTriggerFor") menu: MenuComponent;
 
@@ -88,11 +91,12 @@ export class MenuTriggerForDirective implements OnDestroy {
       }
       this.destroyMenu();
     });
-    this.keyDownEventsSub =
-      this.menu.keyManager &&
-      this.overlayRef
+    if (this.menu.keyManager) {
+      this.menu.keyManager.setFirstItemActive();
+      this.keyDownEventsSub = this.overlayRef
         .keydownEvents()
         .subscribe((event: KeyboardEvent) => this.menu.keyManager.onKeydown(event));
+    }
   }
 
   private destroyMenu() {

@@ -1,22 +1,23 @@
-import { map, pipe } from "rxjs";
+import { BehaviorSubject, map, pipe } from "rxjs";
 
 import { GeneratorStrategy } from "..";
 import { PolicyType } from "../../../admin-console/enums";
 import { StateProvider } from "../../../platform/state";
 import { UserId } from "../../../types/guid";
+import { PasswordGenerationServiceAbstraction } from "../abstractions/password-generation.service.abstraction";
 import { PASSPHRASE_SETTINGS } from "../key-definitions";
-import { PasswordGenerationServiceAbstraction } from "../password/password-generation.service.abstraction";
-import { reduceCollection } from "../reduce-collection.operator";
+import { distinctIfShallowMatch, reduceCollection } from "../rx-operators";
 
-import { PassphraseGenerationOptions } from "./passphrase-generation-options";
+import {
+  PassphraseGenerationOptions,
+  DefaultPassphraseGenerationOptions,
+} from "./passphrase-generation-options";
 import { PassphraseGeneratorOptionsEvaluator } from "./passphrase-generator-options-evaluator";
 import {
   DisabledPassphraseGeneratorPolicy,
   PassphraseGeneratorPolicy,
   leastPrivilege,
 } from "./passphrase-generator-policy";
-
-const ONE_MINUTE = 60 * 1000;
 
 /** {@link GeneratorStrategy} */
 export class PassphraseGeneratorStrategy
@@ -36,20 +37,21 @@ export class PassphraseGeneratorStrategy
     return this.stateProvider.getUser(id, PASSPHRASE_SETTINGS);
   }
 
+  /** Gets the default options. */
+  defaults$(_: UserId) {
+    return new BehaviorSubject({ ...DefaultPassphraseGenerationOptions }).asObservable();
+  }
+
   /** {@link GeneratorStrategy.policy} */
   get policy() {
     return PolicyType.PasswordGenerator;
-  }
-
-  /** {@link GeneratorStrategy.cache_ms} */
-  get cache_ms() {
-    return ONE_MINUTE;
   }
 
   /** {@link GeneratorStrategy.toEvaluator} */
   toEvaluator() {
     return pipe(
       reduceCollection(leastPrivilege, DisabledPassphraseGeneratorPolicy),
+      distinctIfShallowMatch(),
       map((policy) => new PassphraseGeneratorOptionsEvaluator(policy)),
     );
   }

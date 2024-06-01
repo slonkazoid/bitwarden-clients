@@ -2,14 +2,14 @@ import { firstValueFrom } from "rxjs";
 
 import { FakeStateProvider, awaitAsync } from "../../../spec";
 import { FakeAccountService } from "../../../spec/fake-account-service";
-import { AuthenticationStatus } from "../../auth/enums/authentication-status";
 import { UserId } from "../../types/guid";
 import { CloudRegion, Region } from "../abstractions/environment.service";
 
 import {
-  ENVIRONMENT_KEY,
+  GLOBAL_ENVIRONMENT_KEY,
   DefaultEnvironmentService,
   EnvironmentUrls,
+  USER_ENVIRONMENT_KEY,
 } from "./default-environment.service";
 
 // There are a few main states EnvironmentService could be in when first used
@@ -31,12 +31,12 @@ describe("EnvironmentService", () => {
       [testUser]: {
         name: "name",
         email: "email",
-        status: AuthenticationStatus.Locked,
+        emailVerified: false,
       },
       [alternateTestUser]: {
         name: "name",
         email: "email",
-        status: AuthenticationStatus.Locked,
+        emailVerified: false,
       },
     });
     stateProvider = new FakeStateProvider(accountService);
@@ -49,13 +49,13 @@ describe("EnvironmentService", () => {
       id: userId,
       email: "test@example.com",
       name: `Test Name ${userId}`,
-      status: AuthenticationStatus.Unlocked,
+      emailVerified: false,
     });
     await awaitAsync();
   };
 
   const setGlobalData = (region: Region, environmentUrls: EnvironmentUrls) => {
-    stateProvider.global.getFake(ENVIRONMENT_KEY).stateSubject.next({
+    stateProvider.global.getFake(GLOBAL_ENVIRONMENT_KEY).stateSubject.next({
       region: region,
       urls: environmentUrls,
     });
@@ -66,7 +66,7 @@ describe("EnvironmentService", () => {
     environmentUrls: EnvironmentUrls,
     userId: UserId = testUser,
   ) => {
-    stateProvider.singleUser.getFake(userId, ENVIRONMENT_KEY).nextState({
+    stateProvider.singleUser.getFake(userId, USER_ENVIRONMENT_KEY).nextState({
       region: region,
       urls: environmentUrls,
     });

@@ -12,6 +12,9 @@ import {
   takeUntil,
   defer,
   throwError,
+  map,
+  Observable,
+  take,
 } from "rxjs";
 
 import {
@@ -23,7 +26,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { DeviceTrustCryptoServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust-crypto.service.abstraction";
+import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
 import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { PasswordResetEnrollmentServiceAbstraction } from "@bitwarden/common/auth/abstractions/password-reset-enrollment.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
@@ -67,6 +70,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   protected data?: Data;
   protected loading = true;
 
+  private email$: Observable<string>;
+
   activeAccountId: UserId;
 
   // Remember device means for the user to trust the device
@@ -93,7 +98,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     protected apiService: ApiService,
     protected i18nService: I18nService,
     protected validationService: ValidationService,
-    protected deviceTrustCryptoService: DeviceTrustCryptoServiceAbstraction,
+    protected deviceTrustService: DeviceTrustServiceAbstraction,
     protected platformUtilsService: PlatformUtilsService,
     protected userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     protected passwordResetEnrollmentService: PasswordResetEnrollmentServiceAbstraction,
@@ -104,6 +109,14 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.loading = true;
     this.activeAccountId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    this.email$ = this.accountService.activeAccount$.pipe(
+      map((a) => a?.email),
+      catchError((err: unknown) => {
+        this.validationService.showError(err);
+        return of(undefined);
+      }),
+      takeUntil(this.destroy$),
+    );
 
     this.setupRememberDeviceValueChanges();
 
@@ -156,7 +169,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   }
 
   private async setRememberDeviceDefaultValue() {
-    const rememberDeviceFromState = await this.deviceTrustCryptoService.getShouldTrustDevice(
+    const rememberDeviceFromState = await this.deviceTrustService.getShouldTrustDevice(
       this.activeAccountId,
     );
 
@@ -169,9 +182,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
     this.rememberDevice.valueChanges
       .pipe(
         switchMap((value) =>
-          defer(() =>
-            this.deviceTrustCryptoService.setShouldTrustDevice(this.activeAccountId, value),
-          ),
+          defer(() => this.deviceTrustService.setShouldTrustDevice(this.activeAccountId, value)),
         ),
         takeUntil(this.destroy$),
       )
@@ -195,16 +206,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       }),
     );
 
-    const email$ = from(this.stateService.getEmail()).pipe(
-      catchError((err: unknown) => {
-        this.validationService.showError(err);
-        return of(undefined);
-      }),
-      takeUntil(this.destroy$),
-    );
-
     const autoEnrollStatus = await firstValueFrom(autoEnrollStatus$);
-    const email = await firstValueFrom(email$);
+    const email = await firstValueFrom(this.email$);
 
     this.data = { state: State.NewUser, organizationId: autoEnrollStatus.id, userEmail: email };
     this.loading = false;
@@ -213,17 +216,9 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
   loadUntrustedDeviceData(userDecryptionOptions: UserDecryptionOptions) {
     this.loading = true;
 
-    const email$ = from(this.stateService.getEmail()).pipe(
-      catchError((err: unknown) => {
-        this.validationService.showError(err);
-        return of(undefined);
-      }),
-      takeUntil(this.destroy$),
-    );
-
-    email$
+    this.email$
       .pipe(
-        takeUntil(this.destroy$),
+        take(1),
         finalize(() => {
           this.loading = false;
         }),
@@ -274,6 +269,7 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
 
     // this.loading to support clients without async-actions-support
     this.loading = true;
+    // errors must be caught in child components to prevent navigation
     try {
       const { publicKey, privateKey } = await this.cryptoService.initAccount();
       const keysRequest = new KeysRequest(publicKey, privateKey.encryptedString);
@@ -288,10 +284,8 @@ export class BaseLoginDecryptionOptionsComponent implements OnInit, OnDestroy {
       await this.passwordResetEnrollmentService.enroll(this.data.organizationId);
 
       if (this.rememberDeviceForm.value.rememberDevice) {
-        await this.deviceTrustCryptoService.trustDevice(this.activeAccountId);
+        await this.deviceTrustService.trustDevice(this.activeAccountId);
       }
-    } catch (error) {
-      this.validationService.showError(error);
     } finally {
       this.loading = false;
     }

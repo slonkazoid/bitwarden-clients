@@ -8,7 +8,7 @@ import { StateDefinition } from "./state-definition";
 
 export type ClearEvent = "lock" | "logout";
 
-type UserKeyDefinitionOptions<T> = KeyDefinitionOptions<T> & {
+export type UserKeyDefinitionOptions<T> = KeyDefinitionOptions<T> & {
   clearOn: ClearEvent[];
 };
 
@@ -120,7 +120,7 @@ export class UserKeyDefinition<T> {
    * });
    * ```
    */
-  static record<T, TKey extends string = string>(
+  static record<T, TKey extends string | number = string>(
     stateDefinition: StateDefinition,
     key: string,
     // We have them provide options for the value of the record, depending on future options we add, this could get a little weird.

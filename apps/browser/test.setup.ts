@@ -1,3 +1,5 @@
+import "jest-preset-angular/setup-jest";
+
 // Add chrome storage api
 const QUOTA_BYTES = 10;
 const storage = {
@@ -68,6 +70,8 @@ const tabs = {
 
 const scripting = {
   executeScript: jest.fn(),
+  registerContentScripts: jest.fn(),
+  unregisterContentScripts: jest.fn(),
 };
 
 const windows = {
@@ -124,6 +128,19 @@ const offscreen = {
   },
 };
 
+const permissions = {
+  contains: jest.fn((permissions, callback) => {
+    callback(true);
+  }),
+};
+
+const webNavigation = {
+  onCommitted: {
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  },
+};
+
 // set chrome
 global.chrome = {
   i18n,
@@ -137,4 +154,6 @@ global.chrome = {
   privacy,
   extension,
   offscreen,
+  permissions,
+  webNavigation,
 } as any;

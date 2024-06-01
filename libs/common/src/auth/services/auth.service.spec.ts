@@ -56,6 +56,7 @@ describe("AuthService", () => {
       status: AuthenticationStatus.Unlocked,
       id: userId,
       email: "email",
+      emailVerified: false,
       name: "name",
     };
 
@@ -109,6 +110,7 @@ describe("AuthService", () => {
         status: AuthenticationStatus.Unlocked,
         id: Utils.newGuid() as UserId,
         email: "email2",
+        emailVerified: false,
         name: "name2",
       };
 
@@ -122,17 +124,43 @@ describe("AuthService", () => {
     });
   });
 
+  describe("authStatuses$", () => {
+    it("requests auth status for all known users", async () => {
+      const userId2 = Utils.newGuid() as UserId;
+
+      await accountService.addAccount(userId2, {
+        email: "email2",
+        emailVerified: false,
+        name: "name2",
+      });
+
+      const mockFn = jest.fn().mockReturnValue(of(AuthenticationStatus.Locked));
+      sut.authStatusFor$ = mockFn;
+
+      await expect(firstValueFrom(await sut.authStatuses$)).resolves.toEqual({
+        [userId]: AuthenticationStatus.Locked,
+        [userId2]: AuthenticationStatus.Locked,
+      });
+      expect(mockFn).toHaveBeenCalledTimes(2);
+      expect(mockFn).toHaveBeenCalledWith(userId);
+      expect(mockFn).toHaveBeenCalledWith(userId2);
+    });
+  });
+
   describe("authStatusFor$", () => {
     beforeEach(() => {
       tokenService.hasAccessToken$.mockReturnValue(of(true));
       cryptoService.getInMemoryUserKeyFor$.mockReturnValue(of(undefined));
     });
 
-    it("emits LoggedOut when userId is null", async () => {
-      expect(await firstValueFrom(sut.authStatusFor$(null))).toEqual(
-        AuthenticationStatus.LoggedOut,
-      );
-    });
+    it.each([null, undefined, "not a userId"])(
+      "emits LoggedOut when userId is invalid (%s)",
+      async () => {
+        expect(await firstValueFrom(sut.authStatusFor$(null))).toEqual(
+          AuthenticationStatus.LoggedOut,
+        );
+      },
+    );
 
     it("emits LoggedOut when there is no access token", async () => {
       tokenService.hasAccessToken$.mockReturnValue(of(false));

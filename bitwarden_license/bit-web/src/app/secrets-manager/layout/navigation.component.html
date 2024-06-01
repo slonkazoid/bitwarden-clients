@@ -1,4 +1,4 @@
-<nav>
+<nav class="tw-flex tw-flex-col tw-h-full">
   <a routerLink="." class="tw-m-5 tw-mt-7 tw-block">
     <bit-icon [icon]="logo"></bit-icon>
   </a>
@@ -18,8 +18,14 @@
   ></bit-nav-item>
   <bit-nav-item
     icon="bwi-wrench"
-    [text]="'serviceAccounts' | i18n"
-    route="service-accounts"
+    [text]="'machineAccounts' | i18n"
+    route="machine-accounts"
+    [relativeTo]="route.parent"
+  ></bit-nav-item>
+  <bit-nav-item
+    icon="bwi-providers"
+    [text]="'integrations' | i18n"
+    route="integrations"
     [relativeTo]="route.parent"
   ></bit-nav-item>
   <bit-nav-item
@@ -41,4 +47,8 @@
       [relativeTo]="route.parent"
     ></bit-nav-item>
   </bit-nav-group>
+
+  <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
+
+  <app-toggle-width></app-toggle-width>
 </nav>

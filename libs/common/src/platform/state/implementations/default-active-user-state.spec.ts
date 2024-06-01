@@ -9,7 +9,6 @@ import { Jsonify } from "type-fest";
 import { awaitAsync, trackEmissions } from "../../../../spec";
 import { FakeStorageService } from "../../../../spec/fake-storage.service";
 import { AccountInfo } from "../../../auth/abstractions/account.service";
-import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 import { UserId } from "../../../types/guid";
 import { StorageServiceProvider } from "../../services/storage-service.provider";
 import { StateDefinition } from "../state-definition";
@@ -83,8 +82,8 @@ describe("DefaultActiveUserState", () => {
     activeAccountSubject.next({
       id: userId,
       email: `test${id}@example.com`,
+      emailVerified: false,
       name: `Test User ${id}`,
-      status: AuthenticationStatus.Unlocked,
     });
     await awaitAsync();
   };

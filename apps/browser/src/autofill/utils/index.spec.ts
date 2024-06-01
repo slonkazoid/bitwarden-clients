@@ -8,7 +8,6 @@ import {
   generateRandomCustomElementName,
   sendExtensionMessage,
   setElementStyles,
-  getFromLocalStorage,
   setupExtensionDisconnectAction,
   setupAutofillInitDisconnectAction,
 } from "./index";
@@ -38,14 +37,29 @@ describe("generateRandomCustomElementName", () => {
 });
 
 describe("sendExtensionMessage", () => {
-  it("sends a message to the extention", () => {
-    const extensionMessageResponse = sendExtensionMessage("updateAutofillOverlayHidden", {
+  it("sends a message to the extension", async () => {
+    const extensionMessagePromise = sendExtensionMessage("updateAutofillOverlayHidden", {
       display: "none",
     });
-    jest.spyOn(chrome.runtime, "sendMessage");
 
-    expect(chrome.runtime.sendMessage).toHaveBeenCalled();
-    expect(extensionMessageResponse).toEqual(Promise.resolve({}));
+    // Jest doesn't give anyway to select the typed overload of "sendMessage",
+    // a cast is needed to get the correct spy type.
+    const sendMessageSpy = jest.spyOn(chrome.runtime, "sendMessage") as unknown as jest.SpyInstance<
+      void,
+      [message: string, responseCallback: (response: string) => void],
+      unknown
+    >;
+
+    expect(sendMessageSpy).toHaveBeenCalled();
+
+    const [latestCall] = sendMessageSpy.mock.calls;
+    const responseCallback = latestCall[1];
+
+    responseCallback("sendMessageResponse");
+
+    const response = await extensionMessagePromise;
+
+    expect(response).toEqual("sendMessageResponse");
   });
 });
 
@@ -121,33 +135,6 @@ describe("setElementStyles", () => {
     setElementStyles(testDiv, {}, true);
 
     expect(testDiv.style.cssText).toEqual(expectedCSSRuleString);
-  });
-});
-
-describe("getFromLocalStorage", () => {
-  it("returns a promise with the storage object pulled from the extension storage api", async () => {
-    const localStorage: Record<string, any> = {
-      testValue: "test",
-      another: "another",
-    };
-    jest.spyOn(chrome.storage.local, "get").mockImplementation((keys, callback) => {
-      const localStorageObject: Record<string, string> = {};
-
-      if (typeof keys === "string") {
-        localStorageObject[keys] = localStorage[keys];
-      } else if (Array.isArray(keys)) {
-        for (const key of keys) {
-          localStorageObject[key] = localStorage[key];
-        }
-      }
-
-      callback(localStorageObject);
-    });
-
-    const returnValue = await getFromLocalStorage("testValue");
-
-    expect(chrome.storage.local.get).toHaveBeenCalled();
-    expect(returnValue).toEqual({ testValue: "test" });
   });
 });
 

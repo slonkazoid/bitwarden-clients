@@ -1,3 +1,5 @@
+import { from } from "rxjs";
+
 import { PolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "../../../admin-console/enums";
 import { PasswordGeneratorPolicyOptions } from "../../../admin-console/models/domain/password-generator-policy-options";
@@ -5,10 +7,10 @@ import { CryptoService } from "../../../platform/abstractions/crypto.service";
 import { StateService } from "../../../platform/abstractions/state.service";
 import { EFFLongWordList } from "../../../platform/misc/wordlist";
 import { EncString } from "../../../platform/models/domain/enc-string";
+import { PasswordGenerationServiceAbstraction } from "../abstractions/password-generation.service.abstraction";
 import { PassphraseGeneratorOptionsEvaluator } from "../passphrase/passphrase-generator-options-evaluator";
 
 import { GeneratedPasswordHistory } from "./generated-password-history";
-import { PasswordGenerationServiceAbstraction } from "./password-generation.service.abstraction";
 import { PasswordGeneratorOptions } from "./password-generator-options";
 import { PasswordGeneratorOptionsEvaluator } from "./password-generator-options-evaluator";
 
@@ -169,6 +171,10 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
       await this.appendRandomNumberToRandomWord(wordList);
     }
     return wordList.join(o.wordSeparator);
+  }
+
+  getOptions$() {
+    return from(this.getOptions());
   }
 
   async getOptions(): Promise<[PasswordGeneratorOptions, PasswordGeneratorPolicyOptions]> {
@@ -336,27 +342,10 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     return await this.stateService.setEncryptedPasswordGenerationHistory(newHistory);
   }
 
-  async clear(userId?: string): Promise<void> {
+  async clear(userId?: string): Promise<GeneratedPasswordHistory[]> {
     await this.stateService.setEncryptedPasswordGenerationHistory(null, { userId: userId });
     await this.stateService.setDecryptedPasswordGenerationHistory(null, { userId: userId });
-  }
-
-  normalizeOptions(
-    options: PasswordGeneratorOptions,
-    enforcedPolicyOptions: PasswordGeneratorPolicyOptions,
-  ) {
-    const evaluator =
-      options.type == "password"
-        ? new PasswordGeneratorOptionsEvaluator(enforcedPolicyOptions)
-        : new PassphraseGeneratorOptionsEvaluator(enforcedPolicyOptions);
-
-    const evaluatedOptions = evaluator.applyPolicy(options);
-    const santizedOptions = evaluator.sanitize(evaluatedOptions);
-
-    // callers assume this function updates the options parameter
-    Object.assign(options, santizedOptions);
-
-    return options;
+    return [];
   }
 
   private capitalize(str: string) {

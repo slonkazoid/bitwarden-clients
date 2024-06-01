@@ -1,4 +1,4 @@
-import { KeyDefinition } from "../../platform/state";
+import { KeyDefinition, UserKeyDefinition } from "../../platform/state";
 
 import {
   ACCESS_TOKEN_DISK,
@@ -10,7 +10,7 @@ import {
   EMAIL_TWO_FACTOR_TOKEN_RECORD_DISK_LOCAL,
   REFRESH_TOKEN_DISK,
   REFRESH_TOKEN_MEMORY,
-  REFRESH_TOKEN_MIGRATED_TO_SECURE_STORAGE,
+  SECURITY_STAMP_MEMORY,
 } from "./token.state";
 
 describe.each([
@@ -18,18 +18,18 @@ describe.each([
   [ACCESS_TOKEN_MEMORY, "accessTokenMemory"],
   [REFRESH_TOKEN_DISK, "refreshTokenDisk"],
   [REFRESH_TOKEN_MEMORY, "refreshTokenMemory"],
-  [REFRESH_TOKEN_MIGRATED_TO_SECURE_STORAGE, true],
   [EMAIL_TWO_FACTOR_TOKEN_RECORD_DISK_LOCAL, { user: "token" }],
   [API_KEY_CLIENT_ID_DISK, "apiKeyClientIdDisk"],
   [API_KEY_CLIENT_ID_MEMORY, "apiKeyClientIdMemory"],
   [API_KEY_CLIENT_SECRET_DISK, "apiKeyClientSecretDisk"],
   [API_KEY_CLIENT_SECRET_MEMORY, "apiKeyClientSecretMemory"],
+  [SECURITY_STAMP_MEMORY, "securityStamp"],
 ])(
   "deserializes state key definitions",
   (
     keyDefinition:
-      | KeyDefinition<string>
-      | KeyDefinition<boolean>
+      | UserKeyDefinition<string>
+      | UserKeyDefinition<boolean>
       | KeyDefinition<Record<string, string>>,
     state: string | boolean | Record<string, string>,
   ) => {
@@ -50,7 +50,10 @@ describe.each([
       return typeof value === "object" && value !== null && !Array.isArray(value);
     }
 
-    function testDeserialization<T>(keyDefinition: KeyDefinition<T>, state: T) {
+    function testDeserialization<T>(
+      keyDefinition: KeyDefinition<T> | UserKeyDefinition<T>,
+      state: T,
+    ) {
       const deserialized = keyDefinition.deserializer(JSON.parse(JSON.stringify(state)));
       expect(deserialized).toEqual(state);
     }

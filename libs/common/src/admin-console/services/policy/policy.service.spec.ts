@@ -32,7 +32,8 @@ describe("PolicyService", () => {
     organizationService = mock<OrganizationService>();
 
     activeUserState = stateProvider.activeUser.getFake(POLICIES);
-    organizationService.organizations$ = of([
+
+    const organizations$ = of([
       // User
       organization("org1", true, true, OrganizationUserStatusType.Confirmed, false),
       // Owner
@@ -50,7 +51,13 @@ describe("PolicyService", () => {
       organization("org4", true, true, OrganizationUserStatusType.Confirmed, false),
       // Another User
       organization("org5", true, true, OrganizationUserStatusType.Confirmed, false),
+      // Can manage policies
+      organization("org6", true, true, OrganizationUserStatusType.Confirmed, true),
     ]);
+
+    organizationService.organizations$ = organizations$;
+
+    organizationService.getAll$.mockReturnValue(organizations$);
 
     policyService = new PolicyService(stateProvider, organizationService);
   });
@@ -100,66 +107,6 @@ describe("PolicyService", () => {
         enabled: true,
       },
     ]);
-  });
-
-  describe("clear", () => {
-    beforeEach(() => {
-      activeUserState.nextState(
-        arrayToRecord([
-          policyData("1", "test-organization", PolicyType.MaximumVaultTimeout, true, {
-            minutes: 14,
-          }),
-        ]),
-      );
-    });
-
-    it("clears state for the active user", async () => {
-      await policyService.clear();
-
-      expect(await firstValueFrom(policyService.policies$)).toEqual([]);
-      expect(await firstValueFrom(activeUserState.state$)).toEqual(null);
-      expect(stateProvider.activeUser.getFake(POLICIES).nextMock).toHaveBeenCalledWith([
-        "userId",
-        null,
-      ]);
-    });
-
-    it("clears state for an inactive user", async () => {
-      const inactiveUserId = "someOtherUserId" as UserId;
-      const inactiveUserState = stateProvider.singleUser.getFake(inactiveUserId, POLICIES);
-      inactiveUserState.nextState(
-        arrayToRecord([
-          policyData("10", "another-test-organization", PolicyType.PersonalOwnership, true),
-        ]),
-      );
-
-      await policyService.clear(inactiveUserId);
-
-      // Active user is not affected
-      const expectedActiveUserPolicy: Partial<Policy> = {
-        id: "1" as PolicyId,
-        organizationId: "test-organization",
-        type: PolicyType.MaximumVaultTimeout,
-        enabled: true,
-        data: { minutes: 14 },
-      };
-      expect(await firstValueFrom(policyService.policies$)).toEqual([expectedActiveUserPolicy]);
-      expect(await firstValueFrom(activeUserState.state$)).toEqual({
-        "1": expectedActiveUserPolicy,
-      });
-      expect(stateProvider.activeUser.getFake(POLICIES).nextMock).not.toHaveBeenCalled();
-
-      // Non-active user is cleared
-      expect(
-        await firstValueFrom(
-          policyService.getAll$(PolicyType.PersonalOwnership, "someOtherUserId" as UserId),
-        ),
-      ).toEqual([]);
-      expect(await firstValueFrom(inactiveUserState.state$)).toEqual(null);
-      expect(
-        stateProvider.singleUser.getFake("someOtherUserId" as UserId, POLICIES).nextMock,
-      ).toHaveBeenCalledWith(null);
-    });
   });
 
   describe("masterPasswordPolicyOptions", () => {
@@ -312,6 +259,22 @@ describe("PolicyService", () => {
       );
 
       expect(result).toBeNull();
+    });
+
+    it.each([
+      ["owners", "org2"],
+      ["administrators", "org6"],
+    ])("returns the password generator policy for %s", async (_, organization) => {
+      activeUserState.nextState(
+        arrayToRecord([
+          policyData("policy1", "org1", PolicyType.ActivateAutofill, false),
+          policyData("policy2", organization, PolicyType.PasswordGenerator, true),
+        ]),
+      );
+
+      const result = await firstValueFrom(policyService.get$(PolicyType.PasswordGenerator));
+
+      expect(result).toBeTruthy();
     });
 
     it("does not return policies for organizations that do not use policies", async () => {

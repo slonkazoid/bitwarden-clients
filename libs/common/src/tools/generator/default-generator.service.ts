@@ -7,6 +7,13 @@ import { UserId } from "../../types/guid";
 
 import { GeneratorStrategy, GeneratorService, PolicyEvaluator } from "./abstractions";
 
+type DefaultGeneratorServiceTuning = {
+  /* amount of time to keep the most recent policy after a subscription ends. Once the
+   * cache expires, the ignoreQty and timeoutMs settings apply to the next lookup.
+   */
+  policyCacheMs: number;
+};
+
 /** {@link GeneratorServiceAbstraction} */
 export class DefaultGeneratorService<Options, Policy> implements GeneratorService<Options, Policy> {
   /** Instantiates the generator service
@@ -17,13 +24,28 @@ export class DefaultGeneratorService<Options, Policy> implements GeneratorServic
   constructor(
     private strategy: GeneratorStrategy<Options, Policy>,
     private policy: PolicyService,
-  ) {}
+    tuning: Partial<DefaultGeneratorServiceTuning> = {},
+  ) {
+    this.tuning = Object.assign(
+      {
+        // a minute
+        policyCacheMs: 60000,
+      },
+      tuning,
+    );
+  }
 
+  private tuning: DefaultGeneratorServiceTuning;
   private _evaluators$ = new Map<UserId, Observable<PolicyEvaluator<Policy, Options>>>();
 
-  /** {@link GeneratorService.options$()} */
+  /** {@link GeneratorService.options$} */
   options$(userId: UserId) {
     return this.strategy.durableState(userId).state$;
+  }
+
+  /** {@link GeneratorService.defaults$} */
+  defaults$(userId: UserId) {
+    return this.strategy.defaults$(userId);
   }
 
   /** {@link GeneratorService.saveOptions} */
@@ -31,7 +53,7 @@ export class DefaultGeneratorService<Options, Policy> implements GeneratorServic
     await this.strategy.durableState(userId).update(() => options);
   }
 
-  /** {@link GeneratorService.evaluator$()} */
+  /** {@link GeneratorService.evaluator$} */
   evaluator$(userId: UserId) {
     let evaluator$ = this._evaluators$.get(userId);
 
@@ -52,14 +74,14 @@ export class DefaultGeneratorService<Options, Policy> implements GeneratorServic
       // and reduce GC pressure.
       share({
         connector: () => new ReplaySubject(1),
-        resetOnRefCountZero: () => timer(this.strategy.cache_ms),
+        resetOnRefCountZero: () => timer(this.tuning.policyCacheMs),
       }),
     );
 
     return evaluator$;
   }
 
-  /** {@link GeneratorService.enforcePolicy()} */
+  /** {@link GeneratorService.enforcePolicy} */
   async enforcePolicy(userId: UserId, options: Options): Promise<Options> {
     const policy = await firstValueFrom(this.evaluator$(userId));
     const evaluated = policy.applyPolicy(options);

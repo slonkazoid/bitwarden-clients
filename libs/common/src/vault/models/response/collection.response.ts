@@ -21,6 +21,10 @@ export class CollectionDetailsResponse extends CollectionResponse {
   readOnly: boolean;
   manage: boolean;
   hidePasswords: boolean;
+
+  /**
+   * Flag indicating the user has been explicitly assigned to this Collection
+   */
   assigned: boolean;
 
   constructor(response: any) {
@@ -35,18 +39,15 @@ export class CollectionDetailsResponse extends CollectionResponse {
   }
 }
 
-export class CollectionAccessDetailsResponse extends CollectionResponse {
+export class CollectionAccessDetailsResponse extends CollectionDetailsResponse {
   groups: SelectionReadOnlyResponse[] = [];
   users: SelectionReadOnlyResponse[] = [];
-
-  /**
-   * Flag indicating the user has been explicitly assigned to this Collection
-   */
-  assigned: boolean;
+  unmanaged: boolean;
 
   constructor(response: any) {
     super(response);
     this.assigned = this.getResponseProperty("Assigned") || false;
+    this.unmanaged = this.getResponseProperty("Unmanaged") || false;
 
     const groups = this.getResponseProperty("Groups");
     if (groups != null) {

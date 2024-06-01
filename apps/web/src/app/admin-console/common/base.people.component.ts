@@ -1,5 +1,6 @@
 import { Directive, ViewChild, ViewContainerRef } from "@angular/core";
-import { firstValueFrom } from "rxjs";
+import { FormControl } from "@angular/forms";
+import { firstValueFrom, concatMap, map, lastValueFrom, startWith, debounceTime } from "rxjs";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
@@ -88,7 +89,6 @@ export abstract class BasePeopleComponent<
   status: StatusType;
   users: UserType[] = [];
   pagedUsers: UserType[] = [];
-  searchText: string;
   actionPromise: Promise<void>;
 
   protected allUsers: UserType[] = [];
@@ -96,6 +96,21 @@ export abstract class BasePeopleComponent<
 
   protected didScroll = false;
   protected pageSize = 100;
+
+  protected searchControl = new FormControl("", { nonNullable: true });
+  protected isSearching$ = this.searchControl.valueChanges.pipe(
+    debounceTime(500),
+    concatMap((searchText) => this.searchService.isSearchable(searchText)),
+    startWith(false),
+  );
+  protected isPaging$ = this.isSearching$.pipe(
+    map((isSearching) => {
+      if (isSearching && this.didScroll) {
+        this.resetPaging();
+      }
+      return !isSearching && this.users && this.users.length > this.pageSize;
+    }),
+  );
 
   private pagedUsersCount = 0;
 
@@ -165,8 +180,6 @@ export abstract class BasePeopleComponent<
     }
     // Reset checkbox selecton
     this.selectAll(false);
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.resetPaging();
   }
 
@@ -199,7 +212,7 @@ export abstract class BasePeopleComponent<
 
     const filteredUsers = this.searchPipe.transform(
       this.users,
-      this.searchText,
+      this.searchControl.value,
       "name",
       "email",
       "id",
@@ -212,7 +225,7 @@ export abstract class BasePeopleComponent<
     }
   }
 
-  async resetPaging() {
+  resetPaging() {
     this.pagedUsers = [];
     this.loadMore();
   }
@@ -356,25 +369,16 @@ export abstract class BasePeopleComponent<
         this.organizationManagementPreferencesService.autoConfirmFingerPrints.state$,
       );
       if (autoConfirm == null || !autoConfirm) {
-        const [modal] = await this.modalService.openViewRef(
-          UserConfirmComponent,
-          this.confirmModalRef,
-          (comp) => {
-            comp.name = this.userNamePipe.transform(user);
-            comp.userId = user != null ? user.userId : null;
-            comp.publicKey = publicKey;
-            // eslint-disable-next-line rxjs/no-async-subscribe
-            comp.onConfirmedUser.subscribe(async () => {
-              try {
-                comp.formPromise = confirmUser(publicKey);
-                await comp.formPromise;
-                modal.close();
-              } catch (e) {
-                this.logService.error(e);
-              }
-            });
+        const dialogRef = UserConfirmComponent.open(this.dialogService, {
+          data: {
+            name: this.userNamePipe.transform(user),
+            userId: user != null ? user.userId : null,
+            publicKey: publicKey,
+            confirmUser: () => confirmUser(publicKey),
           },
-        );
+        });
+        await lastValueFrom(dialogRef.closed);
+
         return;
       }
 
@@ -390,20 +394,6 @@ export abstract class BasePeopleComponent<
     }
   }
 
-  isSearching() {
-    return this.searchService.isSearchable(this.searchText);
-  }
-
-  isPaging() {
-    const searching = this.isSearching();
-    if (searching && this.didScroll) {
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.resetPaging();
-    }
-    return !searching && this.users && this.users.length > this.pageSize;
-  }
-
   protected revokeWarningMessage(): string {
     return this.i18nService.t("revokeUserConfirmation");
   }
@@ -416,8 +406,6 @@ export abstract class BasePeopleComponent<
     let index = this.users.indexOf(user);
     if (index > -1) {
       this.users.splice(index, 1);
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.resetPaging();
     }
 
