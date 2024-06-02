@@ -416,9 +416,7 @@ export class VaultComponent implements OnInit, OnDestroy {
             (o) => o.canCreateNewCollections && !o.isProviderUser,
           );
 
-          this.showBulkMove =
-            filter.type !== "trash" &&
-            (filter.organizationId === undefined || filter.organizationId === Unassigned);
+          this.showBulkMove = filter.type !== "trash";
           this.isEmpty = collections?.length === 0 && ciphers?.length === 0;
 
           this.performingInitialLoad = false;

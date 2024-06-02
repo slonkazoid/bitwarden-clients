@@ -8358,6 +8358,9 @@
   "addToFolder": {
     "message": "Add to folder"
   },
+  "selectFolder": {
+    "message": "Select folder"
+  },
   "personalItemsTransferWarning": {
     "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to the selected organization. You will no longer own these items.",
     "placeholders": {

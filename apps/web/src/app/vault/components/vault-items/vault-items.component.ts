@@ -94,6 +94,15 @@ export class VaultItemsComponent {
     );
   }
 
+  get DisableMenu() {
+    return (
+      this.vaultBulkManagementActionEnabled &&
+      !this.bulkMoveAllowed &&
+      !this.showAssignToCollections() &&
+      !this.showDelete()
+    );
+  }
+
   get bulkAssignToCollectionsAllowed() {
     return this.showBulkAddToCollections && this.ciphers.length > 0;
   }
@@ -247,29 +256,31 @@ export class VaultItemsComponent {
       return true;
     }
 
-    // Check for personal items
     const hasPersonalItems = this.hasPersonalItems();
-
-    const uniqueOrgIds = this.getUniqueOrganizationIds();
+    const uniqueCipherOrgIds = this.getUniqueOrganizationIds();
 
     // Return false if items are from different organizations
-    if (uniqueOrgIds.size > 1) {
+    if (uniqueCipherOrgIds.size > 1) {
       return false;
     }
 
-    if (uniqueOrgIds.size === 0) {
+    // If all items are personal, return based on personal items
+    if (uniqueCipherOrgIds.size === 0) {
       return hasPersonalItems;
     }
 
     const organization = this.allOrganizations.find(
-      (o) => o.id === uniqueOrgIds.values().next().value,
+      (o) => o.id === uniqueCipherOrgIds.values().next().value,
+    );
+    const canEditOrManageAllCiphers = organization?.canEditAllCiphers(
+      this.flexibleCollectionsV1Enabled,
+      false,
     );
 
-    if (organization.canEditAllCiphers(this.flexibleCollectionsV1Enabled, false)) {
-      return true;
-    }
+    const collectionNotSelected =
+      this.selection.selected.filter((item) => item.collection).length === 0;
 
-    return this.allCiphersHaveEditAccess();
+    return (canEditOrManageAllCiphers || this.allCiphersHaveEditAccess()) && collectionNotSelected;
   }
 
   protected showDelete(): boolean {
@@ -277,25 +288,33 @@ export class VaultItemsComponent {
       return true;
     }
 
-    // Check for personal items
     const hasPersonalItems = this.hasPersonalItems();
-    const uniqueOrgIds = this.getUniqueOrganizationIds();
-
-    if (uniqueOrgIds.size === 0) {
-      return hasPersonalItems;
-    }
-
-    const organizations = Array.from(uniqueOrgIds).map((orgId) =>
+    const uniqueCipherOrgIds = this.getUniqueOrganizationIds();
+    const organizations = Array.from(uniqueCipherOrgIds, (orgId) =>
       this.allOrganizations.find((o) => o.id === orgId),
     );
 
+    const canEditOrManageAllCiphers =
+      organizations.length > 0 &&
+      organizations.every((org) =>
+        org?.canEditAllCiphers(this.flexibleCollectionsV1Enabled, false),
+      );
+
+    const canDeleteCollections = this.selection.selected
+      .filter((item) => item.collection)
+      .every((item) => item.collection && this.canDeleteCollection(item.collection));
+
+    const userCanDeleteAccess =
+      (canEditOrManageAllCiphers || this.allCiphersHaveEditAccess()) && canDeleteCollections;
+
     if (
-      organizations.every((org) => org?.canEditAllCiphers(this.flexibleCollectionsV1Enabled, false))
+      userCanDeleteAccess ||
+      (hasPersonalItems && (!uniqueCipherOrgIds.size || userCanDeleteAccess))
     ) {
       return true;
     }
 
-    return this.allCiphersHaveEditAccess();
+    return false;
   }
 
   private hasPersonalItems(): boolean {
@@ -303,14 +322,12 @@ export class VaultItemsComponent {
   }
 
   private allCiphersHaveEditAccess(): boolean {
-    return this.selection.selected.every(({ cipher }) => cipher?.edit);
+    return this.selection.selected
+      .filter(({ cipher }) => cipher)
+      .every(({ cipher }) => cipher?.edit);
   }
 
   private getUniqueOrganizationIds(): Set<string> {
-    return new Set(
-      this.selection.selected
-        .map(({ cipher }) => cipher?.organizationId)
-        .filter((organizationId) => organizationId !== null),
-    );
+    return new Set(this.selection.selected.flatMap((i) => i.cipher?.organizationId ?? []));
   }
 }
