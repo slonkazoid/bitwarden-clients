@@ -10,15 +10,18 @@
     <div bitDialogContent>
       <p>{{ "bulkCollectionAssignmentDialogDescription" | i18n }}</p>
 
-      <br />
-
-      <p *ngIf="readonlyItemCount > 0">
-        {{ "bulkCollectionAssignmentWarning" | i18n: totalItemCount : readonlyItemCount }}
-      </p>
-
-      <p *ngIf="personalItemsCount > 0">
-        {{ transferWarningText(orgName, personalItemsCount) }}
-      </p>
+      <ul class="tw-list-disc tw-pl-5 tw-space-y-2">
+        <li *ngIf="readonlyItemCount > 0">
+          <p>
+            {{ "bulkCollectionAssignmentWarning" | i18n: totalItemCount : readonlyItemCount }}
+          </p>
+        </li>
+        <li *ngIf="personalItemsCount > 0">
+          <p>
+            {{ transferWarningText(orgName, personalItemsCount) }}
+          </p>
+        </li>
+      </ul>
 
       <div class="tw-flex" *ngIf="showOrgSelector">
         <bit-form-field class="tw-grow">
