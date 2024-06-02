@@ -90,6 +90,19 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
   protected pluralize = (count: number, singular: string, plural: string) =>
     `${count} ${this.i18nService.t(count === 1 ? singular : plural)}`;
 
+  protected transferWarningText = (orgName: string, itemsCount: number) => {
+    return orgName
+      ? this.i18nService.t(
+          "personalItemsWithOrgTransferWarning",
+          this.pluralize(itemsCount, "item", "items"),
+          orgName,
+        )
+      : this.i18nService.t(
+          "personalItemsTransferWarning",
+          this.pluralize(itemsCount, "item", "items"),
+        );
+  };
+
   constructor(
     @Inject(DIALOG_DATA) private params: BulkCollectionAssignmentDialogParams,
     private dialogRef: DialogRef<BulkCollectionAssignmentDialogResult>,

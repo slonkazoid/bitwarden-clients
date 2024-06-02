@@ -17,13 +17,7 @@
       </p>
 
       <p *ngIf="personalItemsCount > 0">
-        {{
-          orgName
-            ? ("personalItemsWithOrgTransferWarning"
-              | i18n: pluralize(personalItemsCount, "item", "items") : orgName)
-            : ("personalItemsTransferWarning"
-              | i18n: pluralize(personalItemsCount, "item", "items"))
-        }}
+        {{ transferWarningText(orgName, personalItemsCount) }}
       </p>
 
       <div class="tw-flex" *ngIf="showOrgSelector">
