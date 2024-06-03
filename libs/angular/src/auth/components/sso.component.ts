@@ -307,7 +307,7 @@ export class SsoComponent {
     ) {
       const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
       await this.masterPasswordService.setForceSetPasswordReason(
-        ForceSetPasswordReason.TdeDisabledMasterPasswordRequired,
+        ForceSetPasswordReason.TdeOffboarding,
         userId,
       );
     }

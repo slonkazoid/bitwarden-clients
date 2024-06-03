@@ -30,5 +30,5 @@ export enum ForceSetPasswordReason {
   /**
    * Occurs when TDE is disabled and master password has to be set.
    */
-  TdeDisabledMasterPasswordRequired,
+  TdeOffboarding,
 }
