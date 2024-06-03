@@ -26,6 +26,16 @@
         </bit-select>
       </bit-form-field>
     </ng-container>
+    <bit-form-field *ngIf="collections.length" disableMargin>
+      <bit-label>{{ "collections" | i18n }}</bit-label>
+      <bit-multi-select
+        id="collections"
+        name="Collections"
+        class="tw-w-full"
+        [baseItems]="collections"
+        [required]="true"
+      ></bit-multi-select>
+    </bit-form-field>
   </bit-card>
 
   <popup-footer slot="footer">
