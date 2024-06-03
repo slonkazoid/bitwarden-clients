@@ -301,6 +301,17 @@ export class SsoComponent {
       );
     }
 
+    if (
+      !userDecryptionOpts.hasMasterPassword &&
+      userDecryptionOpts.trustedDeviceOption.isTdeOffboarding
+    ) {
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ForceSetPasswordReason.TdeDisabledMasterPasswordRequired,
+        userId,
+      );
+    }
+
     if (this.onSuccessfulLoginTde != null) {
       // Don't await b/c causes hang on desktop & browser
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.

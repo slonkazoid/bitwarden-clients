@@ -97,9 +97,13 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
 
   get masterPasswordWarningText(): string {
-    return this.reason == ForceSetPasswordReason.WeakMasterPassword
-      ? this.i18nService.t("updateWeakMasterPasswordWarning")
-      : this.i18nService.t("updateMasterPasswordWarning");
+    if (this.reason == ForceSetPasswordReason.WeakMasterPassword) {
+      return this.i18nService.t("weakMasterPasswordWarning");
+    } else if (this.reason == ForceSetPasswordReason.TdeDisabledMasterPasswordRequired) {
+      return this.i18nService.t("tdeDisabledMasterPasswordRequired");
+    } else {
+      return this.i18nService.t("masterPasswordWarning");
+    }
   }
 
   togglePassword(confirmField: boolean) {
