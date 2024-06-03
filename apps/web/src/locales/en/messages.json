@@ -7422,6 +7422,9 @@
   "requestedDeviceApproval": {
     "message": "Requested device approval."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "User set a master password during TDE offboarding."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
     "placeholders": {
