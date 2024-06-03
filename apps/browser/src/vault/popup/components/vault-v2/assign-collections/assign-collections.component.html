@@ -4,8 +4,32 @@
       <app-pop-out></app-pop-out>
     </ng-container>
   </popup-header>
+
+  <bit-card>
+    <p bitTypography="body1">
+      1 item will be permanently transferred to the selected organization. You will no longer own
+      this item.
+    </p>
+    <ng-container *ngIf="organizations$ | async as organizations">
+      <bit-form-field>
+        <bit-label>{{ "moveToOrganization" | i18n }}</bit-label>
+        <bit-select
+          *ngIf="organizations.length"
+          id="organization"
+          name="OrganizationId"
+          [(ngModel)]="organizationId"
+          (change)="updateCollections()"
+          [disabled]="organizations.length === 1"
+          [required]="true"
+        >
+          <bit-option *ngFor="let o of organizations" [value]="o.id" [label]="o.name"></bit-option>
+        </bit-select>
+      </bit-form-field>
+    </ng-container>
+  </bit-card>
+
   <popup-footer slot="footer">
     <button bitButton buttonType="primary">{{ "save" | i18n }}</button>
-    <button bitButton buttonType="secondary" (click)="cancel()">{{ "cancel" | i18n }}</button>
+    <button bitButton buttonType="secondary" (click)="navigateBack()">{{ "cancel" | i18n }}</button>
   </popup-footer>
 </popup-page>
