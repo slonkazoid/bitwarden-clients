@@ -462,7 +462,7 @@ export class ApiService implements ApiServiceAbstraction {
     return this.send("PUT", "/accounts/update-temp-password", request, true, false);
   }
 
-  putUpdateTdeOffboardingPassword(request: UpdateTdeOffboardingPasswordRequest): Promise<any> {
+  putUpdateTdeOffboardingPassword(request: UpdateTdeOffboardingPasswordRequest): Promise<void> {
     return this.send("PUT", "/accounts/update-tde-offboarding-password", request, true, false);
   }
 
