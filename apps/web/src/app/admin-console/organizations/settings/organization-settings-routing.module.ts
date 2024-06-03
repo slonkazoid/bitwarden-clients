@@ -38,7 +38,11 @@ const routes: Routes = [
       {
         path: "two-factor",
         component: TwoFactorSetupComponent,
-        data: { titleId: "twoStepLogin" },
+        canActivate: [OrganizationPermissionsGuard],
+        data: {
+          organizationPermissions: (org: Organization) => org.use2fa && org.isOwner,
+          titleId: "twoStepLogin",
+        },
       },
       {
         path: "policies",
