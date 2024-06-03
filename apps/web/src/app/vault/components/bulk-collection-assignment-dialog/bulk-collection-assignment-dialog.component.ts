@@ -240,6 +240,25 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
       listName: c.name,
     }));
 
+    const assignedCollectionIds = this.params.ciphers.flatMap((c) => c.collectionIds);
+    // Filter the available collections to select only those that are associated with the ciphers, excluding the active collection
+    const assignedCollections = this.availableCollections
+      .filter(
+        (collection) =>
+          assignedCollectionIds.includes(collection.id) &&
+          collection.id !== this.params.activeCollection?.id,
+      )
+      .map((collection) => ({
+        icon: "bwi-collection",
+        id: collection.id,
+        labelName: collection.labelName,
+        listName: collection.listName,
+      }));
+
+    if (assignedCollections.length > 0) {
+      this.selectCollections(assignedCollections);
+    }
+
     // If the active collection is set, select it by default
     if (this.params.activeCollection) {
       this.selectCollections([

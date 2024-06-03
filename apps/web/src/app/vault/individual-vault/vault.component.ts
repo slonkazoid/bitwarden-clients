@@ -14,7 +14,6 @@ import {
   firstValueFrom,
   lastValueFrom,
   Observable,
-  of,
   Subject,
 } from "rxjs";
 import {
@@ -142,7 +141,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected isEmpty: boolean;
   protected selectedCollection: TreeNode<CollectionView> | undefined;
   protected canCreateCollections = false;
-  protected editableCollections$: Observable<CollectionView[]>;
   protected currentSearchText$: Observable<string>;
   protected flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
     FeatureFlag.FlexibleCollectionsV1,
@@ -301,33 +299,6 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
 
         return collectionsToReturn;
-      }),
-      shareReplay({ refCount: true, bufferSize: 1 }),
-    );
-
-    this.editableCollections$ = combineLatest([
-      this.route.queryParams,
-      allCollections$,
-      this.organizationService.organizations$,
-      this.flexibleCollectionsV1Enabled$,
-    ]).pipe(
-      switchMap(([params, allCollections, allOrganizations, flexibleCollectionsEnabled]) => {
-        const organizationId = params.organizationId;
-
-        if (organizationId === undefined || organizationId === Unassigned) {
-          return of(allCollections);
-        }
-
-        const organization = allOrganizations.find((o) => o.id === organizationId);
-
-        return of(
-          allCollections.filter((collection) => {
-            return (
-              collection.organizationId === organizationId &&
-              collection.canEditItems(organization, flexibleCollectionsEnabled, false)
-            );
-          }),
-        );
       }),
       shareReplay({ refCount: true, bufferSize: 1 }),
     );
@@ -770,12 +741,13 @@ export class VaultComponent implements OnInit, OnDestroy {
     if (activeOrgId === "MyVault" || (!activeOrgId && !orgId)) {
       availableCollections = [];
     } else {
-      // Filter editableCollections if activeOrgId is not set
-      availableCollections = activeOrgId
-        ? await firstValueFrom(this.editableCollections$)
-        : (await firstValueFrom(this.editableCollections$)).filter(
-            (c) => c.organizationId === orgId,
-          );
+      const organization = this.allOrganizations.find((o) => o.id === (activeOrgId || orgId));
+      const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
+      availableCollections = this.allCollections.filter(
+        (c) =>
+          c.organizationId === organization.id &&
+          c.canEditItems(organization, flexibleCollectionsV1Enabled, false),
+      );
     }
 
     const dialog = BulkCollectionAssignmentDialogComponent.open(this.dialogService, {
