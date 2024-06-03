@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, first, map, take } from "rxjs";
+import { Observable, first, map, take, tap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -16,7 +16,13 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
-import { ButtonModule, CardComponent, SelectModule, FormFieldModule } from "@bitwarden/components";
+import {
+  ButtonModule,
+  CardComponent,
+  SelectModule,
+  FormFieldModule,
+  SelectItemView,
+} from "@bitwarden/components";
 
 import { PopOutComponent } from "../../../../../platform/popup/components/pop-out.component";
 import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup-footer.component";
@@ -51,8 +57,8 @@ export class AssignCollections {
   /** The selected organization Id */
   organizationId: string | null = null;
 
-  /** Selectable collections */
-  collections: Checkable<CollectionView>[] = [];
+  /** Selectable collections formatted to use with the MultiSelectComponent */
+  collections: SelectItemView[] = [];
 
   /** The current cipher being altered */
   cipher: CipherView;
@@ -77,6 +83,7 @@ export class AssignCollections {
       .pipe(takeUntilDestroyed(), take(1))
       .subscribe((collections) => {
         this.writeableCollections = collections.filter((c) => !c.readOnly);
+        this.updateCollections();
       });
 
     this.organizations$ = this.organizationService.memberOrganizations$.pipe(
@@ -85,28 +92,32 @@ export class AssignCollections {
           .filter((o) => o.enabled && o.status === OrganizationUserStatusType.Confirmed)
           .sort(Utils.getSortFunction(this.i18nService, "name"));
       }),
+      tap((orgs) => {
+        // If there is only one organization, select it by default
+        if (this.organizationId === null && orgs.length > 0) {
+          this.organizationId = orgs[0].id;
+          this.updateCollections();
+        }
+      }),
     );
-
-    this.organizations$.pipe(takeUntilDestroyed()).subscribe((orgs) => {
-      // When organizations are loaded & an organization hasn't been selected yet:
-      // - Set the first organization as the selected organization
-      // - Updated the collections based on the selected organization
-      if (this.organizationId === null && orgs.length > 0) {
-        this.organizationId = orgs[0].id;
-        this.updateCollections();
-      }
-    });
   }
 
   /** Populate the selectable collections based on the organization selected */
   updateCollections() {
     this.writeableCollections.forEach((c) => (c.checked = false));
+
     if (this.organizationId === null || this.writeableCollections.length === 0) {
       this.collections = [];
     } else {
-      this.collections = this.writeableCollections.filter(
-        (c) => c.organizationId === this.organizationId,
-      );
+      this.collections = this.writeableCollections
+        .filter((c) => c.organizationId === this.organizationId)
+        .map((c) => ({
+          id: c.id,
+          value: c.id,
+          labelName: c.name,
+          listName: c.name,
+          icon: "bwi-collection",
+        }));
     }
   }
 
