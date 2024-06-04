@@ -9,5 +9,5 @@ pub fn is_core_dumping_disabled() -> Result<bool> {
 }
 
 pub fn disable_memory_access() -> Result<()> {
-    bail("Not implemented on Windows")
+    bail!("Not implemented on Windows")
 }
