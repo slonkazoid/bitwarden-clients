@@ -114,7 +114,7 @@
     </button>
     <button
       bitMenuItem
-      *ngIf="!cipher.organizationId && !cipher.isDeleted"
+      *ngIf="!cipher.organizationId && !cipher.isDeleted && !vaultBulkManagementActionEnabled"
       type="button"
       (click)="moveToOrganization()"
     >
@@ -123,12 +123,21 @@
     </button>
     <button
       bitMenuItem
-      *ngIf="cipher.organizationId && !cipher.isDeleted"
+      *ngIf="cipher.organizationId && !cipher.isDeleted && !vaultBulkManagementActionEnabled"
       type="button"
       (click)="editCollections()"
     >
       <i class="bwi bwi-fw bwi-collection" aria-hidden="true"></i>
       {{ "collections" | i18n }}
+    </button>
+    <button
+      bitMenuItem
+      *ngIf="canEditCipher && vaultBulkManagementActionEnabled"
+      type="button"
+      (click)="assignToCollections()"
+    >
+      <i class="bwi bwi-fw bwi-collection" aria-hidden="true"></i>
+      {{ "assignToCollections" | i18n }}
     </button>
     <button bitMenuItem *ngIf="cipher.organizationId && useEvents" type="button" (click)="events()">
       <i class="bwi bwi-fw bwi-file-text" aria-hidden="true"></i>
@@ -138,7 +147,12 @@
       <i class="bwi bwi-fw bwi-undo" aria-hidden="true"></i>
       {{ "restore" | i18n }}
     </button>
-    <button bitMenuItem (click)="deleteCipher()" type="button">
+    <button
+      bitMenuItem
+      *ngIf="vaultBulkManagementActionEnabled && canEditCipher"
+      (click)="deleteCipher()"
+      type="button"
+    >
       <span class="tw-text-danger">
         <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>
         {{ (cipher.isDeleted ? "permanentlyDelete" : "delete") | i18n }}

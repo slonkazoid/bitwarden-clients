@@ -207,6 +207,20 @@ export class VaultItemsComponent {
     return false;
   }
 
+  protected canEditCipher(cipher: CipherView) {
+    if (cipher.organizationId == null) {
+      return true;
+    }
+
+    const organization = this.allOrganizations.find((o) => o.id === cipher.organizationId);
+    return (
+      organization.canEditAllCiphers(
+        this.flexibleCollectionsV1Enabled,
+        this.restrictProviderAccess,
+      ) || cipher.edit
+    );
+  }
+
   private refreshItems() {
     const collections: VaultItem[] = this.collections.map((collection) => ({ collection }));
     const ciphers: VaultItem[] = this.ciphers.map((cipher) => ({ cipher }));

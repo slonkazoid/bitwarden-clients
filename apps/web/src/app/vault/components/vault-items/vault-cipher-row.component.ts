@@ -26,6 +26,8 @@ export class VaultCipherRowComponent {
   @Input() organizations: Organization[];
   @Input() collections: CollectionView[];
   @Input() viewingOrgVault: boolean;
+  @Input() canEditCipher: boolean;
+  @Input() vaultBulkManagementActionEnabled: boolean;
 
   @Output() onEvent = new EventEmitter<VaultItemEvent>();
 
@@ -75,5 +77,9 @@ export class VaultCipherRowComponent {
 
   protected attachments() {
     this.onEvent.emit({ type: "viewAttachments", item: this.cipher });
+  }
+
+  protected assignToCollections() {
+    this.onEvent.emit({ type: "assignToCollections", items: [this.cipher] });
   }
 }
