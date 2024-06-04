@@ -25,8 +25,9 @@
         </th>
         <th bitCell class="tw-w-12 tw-text-right">
           <button
-            [disabled]="disabled || isEmpty"
+            [disabled]="disabled || isEmpty || disableMenu"
             [bitMenuTriggerFor]="headerMenu"
+            [attr.title]="disableMenu ? ('missingPermissions' | i18n) : ''"
             bitIconButton="bwi-ellipsis-v"
             size="small"
             type="button"

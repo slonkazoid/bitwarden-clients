@@ -94,7 +94,7 @@ export class VaultItemsComponent {
     );
   }
 
-  get DisableMenu() {
+  get disableMenu() {
     return (
       this.vaultBulkManagementActionEnabled &&
       !this.bulkMoveAllowed &&
