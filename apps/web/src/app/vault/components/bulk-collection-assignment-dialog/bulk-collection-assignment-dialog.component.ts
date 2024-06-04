@@ -240,12 +240,17 @@ export class BulkCollectionAssignmentDialogComponent implements OnDestroy, OnIni
       listName: c.name,
     }));
 
-    const assignedCollectionIds = this.params.ciphers.flatMap((c) => c.collectionIds);
-    // Filter the available collections to select only those that are associated with the ciphers, excluding the active collection
+    // Retrieve the shared collection IDs between ciphers.
+    // If only one cipher exists, it retrieves the collection IDs of that cipher.
+    const sharedCollectionIds = this.params.ciphers
+      .map((c) => c.collectionIds)
+      .reduce((sharedIds, collectionIds) => sharedIds.filter((id) => collectionIds.includes(id)));
+
+    // Filter the shared collections to select only those that are associated with the ciphers, excluding the active collection
     const assignedCollections = this.availableCollections
       .filter(
         (collection) =>
-          assignedCollectionIds.includes(collection.id) &&
+          sharedCollectionIds.includes(collection.id) &&
           collection.id !== this.params.activeCollection?.id,
       )
       .map((collection) => ({
