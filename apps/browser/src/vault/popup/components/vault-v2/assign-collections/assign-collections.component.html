@@ -10,36 +10,56 @@
       1 item will be permanently transferred to the selected organization. You will no longer own
       this item.
     </p>
-    <ng-container *ngIf="organizations$ | async as organizations">
-      <bit-form-field>
-        <bit-label>{{ "moveToOrganization" | i18n }}</bit-label>
-        <bit-select
-          *ngIf="organizations.length"
-          id="organization"
-          name="OrganizationId"
-          [(ngModel)]="organizationId"
-          (change)="updateCollections()"
-          [disabled]="organizations.length === 1"
+    <form
+      #form
+      id="transferForm"
+      [formGroup]="transferForm"
+      (ngSubmit)="submit()"
+      [appApiAction]="formPromise"
+    >
+      <ng-container *ngIf="organizations$ | async as organizations">
+        <bit-form-field>
+          <bit-label>{{ "moveToOrganization" | i18n }}</bit-label>
+          <bit-select
+            *ngIf="organizations.length"
+            id="organization"
+            name="OrganizationId"
+            formControlName="organizationId"
+            [required]="true"
+          >
+            <bit-option
+              *ngFor="let o of organizations"
+              [value]="o.id"
+              [label]="o.name"
+            ></bit-option>
+          </bit-select>
+        </bit-form-field>
+      </ng-container>
+      <bit-form-field *ngIf="collections.length" disableMargin>
+        <bit-label>{{ "collections" | i18n }}</bit-label>
+        <bit-multi-select
+          id="collections"
+          name="Collections"
+          class="tw-w-full"
+          formControlName="collections"
+          [baseItems]="collections"
           [required]="true"
-        >
-          <bit-option *ngFor="let o of organizations" [value]="o.id" [label]="o.name"></bit-option>
-        </bit-select>
+        ></bit-multi-select>
+        <bit-hint>{{ "onlyOrganizationMembersCanView" | i18n }}</bit-hint>
       </bit-form-field>
-    </ng-container>
-    <bit-form-field *ngIf="collections.length" disableMargin>
-      <bit-label>{{ "collections" | i18n }}</bit-label>
-      <bit-multi-select
-        id="collections"
-        name="Collections"
-        class="tw-w-full"
-        [baseItems]="collections"
-        [required]="true"
-      ></bit-multi-select>
-    </bit-form-field>
+    </form>
   </bit-card>
 
   <popup-footer slot="footer">
-    <button bitButton buttonType="primary">{{ "save" | i18n }}</button>
+    <button
+      bitButton
+      buttonType="primary"
+      type="submit"
+      form="transferForm"
+      [disabled]="form.loading"
+    >
+      {{ "save" | i18n }}
+    </button>
     <button bitButton buttonType="secondary" (click)="navigateBack()">{{ "cancel" | i18n }}</button>
   </popup-footer>
 </popup-page>
