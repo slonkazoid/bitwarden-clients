@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Bestätige deine Identität, um fortzufahren."
   },
-  "account": {
-    "message": "Konto"
-  },
   "changeMasterPassword": {
     "message": "Master-Passwort ändern"
   },
   "continueToWebApp": {
     "message": "Weiter zur Web-App?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Entdecke weitere Funktionen deines Bitwarden-Kontos in der Web-App."
+  },
+  "continueToHelpCenter": {
+    "message": "Weiter zum Hilfezentrum?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Erfahre mehr über die Verwendung von Bitwarden im Hilfezentrum."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Weiter zum Store für Browser-Erweiterungen?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Hilf anderen herauszufinden, ob Bitwarden für sie das Richtige ist. Besuch den Erweiterungs-Store deines Browsers und hinterlasse jetzt eine Bewertung."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Du kannst dein Master-Passwort in der Bitwarden Web-App ändern."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Abmelden"
   },
+  "aboutBitwarden": {
+    "message": "Über Bitwarden"
+  },
   "about": {
     "message": "Über uns"
+  },
+  "moreFromBitwarden": {
+    "message": "Mehr von Bitwarden"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Weiter zu bitwarden.com?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bitwarden für Unternehmen"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden Authenticator"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Mit dem Bitwarden Authenticator kannst du Authentifizierungsschlüssel speichern und TOTP-Codes für Zwei-Faktor-Verifizierungsprozesse generieren. Erfahre mehr auf der bitwarden.com Website"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Speicher, verwalte und teile Entwicklergeheimnisse sicher mit dem Bitwarden Secrets Manager. Erfahre mehr auf der bitwarden.com Website."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Erstelle reibungslose und sichere Anmeldeerfahrungen ohne herkömmliche Passwörter mit Passwordless.dev. Erfahre mehr auf der bitwarden.com Website."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Free Bitwarden Families"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Du bist für Free Bitwarden Families berechtigt. Löse dieses Angebot heute in der Web-App ein."
   },
   "version": {
     "message": "Version"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Generiert automatisch ein starkes und einzigartiges Passwort."
   },
-  "bitWebVault": {
-    "message": "Bitwarden Web-Tresor"
+  "bitWebVaultApp": {
+    "message": "Bitwarden Web-App"
   },
   "importItems": {
     "message": "Einträge importieren"
@@ -714,6 +762,9 @@
   "notificationUnlock": {
     "message": "Entsperren"
   },
+  "additionalOptions": {
+    "message": "Weitere Optionen"
+  },
   "enableContextMenuItem": {
     "message": "Kontextmenüoptionen anzeigen"
   },
@@ -751,11 +802,38 @@
     "message": "Solarized Dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Export aus"
+  },
   "exportVault": {
     "message": "Tresor exportieren"
   },
   "fileFormat": {
     "message": "Dateiformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Dieser Datei-Export ist passwortgeschützt und erfordert das Dateipasswort zum Entschlüsseln."
+  },
+  "filePassword": {
+    "message": "Dateipasswort"
+  },
+  "exportPasswordDescription": {
+    "message": "Dieses Passwort wird zum Exportieren und Importieren dieser Datei verwendet"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Verwende den Verschlüsselungsschlüssel deines Kontos, abgeleitet vom Benutzernamen und Master-Passwort, um den Export zu verschlüsseln und den Import auf das aktuelle Bitwarden-Konto zu beschränken."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Lege ein Dateipasswort fest, um den Export zu verschlüsseln und importiere ihn in ein beliebiges Bitwarden-Konto, wobei das Passwort zum Entschlüsseln genutzt wird."
+  },
+  "exportTypeHeading": {
+    "message": "Exporttyp"
+  },
+  "accountRestricted": {
+    "message": "Konto eingeschränkt"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "„Dateipasswort“ und „Dateipasswort bestätigen“ stimmen nicht überein."
   },
   "warning": {
     "message": "ACHTUNG",
@@ -779,11 +857,8 @@
   "shared": {
     "message": "Geteilt"
   },
-  "learnOrg": {
-    "message": "Erfahre mehr über Organisationen"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden erlaubt es dir deine Tresor Einträge mit anderen zu teilen, wenn du einen Organisations Account hast. Möchtest du bitwarden.com besuchen, um mehr zu erfahren?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Bitwarden für Unternehmen erlaubt es dir, deine Tresor-Einträge mit anderen zu teilen, indem du eine Organisation verwendest. Erfahre mehr auf der bitwarden.com Website."
   },
   "moveToOrganization": {
     "message": "In Organisation verschieben"
@@ -1561,6 +1636,9 @@
   "restoredItem": {
     "message": "Eintrag wiederhergestellt"
   },
+  "alreadyHaveAccount": {
+    "message": "Hast du bereits ein Konto?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Nach dem Ausloggen verlierest du jeglichen Zugriff auf deinen Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchten?"
   },
@@ -1649,7 +1727,7 @@
     "message": "Ihr neues Master-Passwort entspricht nicht den Anforderungen der Richtlinie."
   },
   "acceptPolicies": {
-    "message": "Durch Anwählen dieses Kästchens erklären Sie sich mit folgendem einverstanden:"
+    "message": "Durch Anwählen dieses Kästchens erklärst du dich mit Folgendem einverstanden:"
   },
   "acceptPoliciesRequired": {
     "message": "Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert."
@@ -1715,10 +1793,10 @@
     "message": "Biometrie im Browser wird auf diesem Gerät nicht unterstützt."
   },
   "biometricsNotUnlockedTitle": {
-    "message": "User locked or logged out"
+    "message": "Nutzer gesperrt oder abgemeldet"
   },
   "biometricsNotUnlockedDesc": {
-    "message": "Please unlock this user in the desktop application and try again."
+    "message": "Bitte entsperre diesen Nutzer in der Desktop-Anwendung und versuche es erneut."
   },
   "biometricsFailedTitle": {
     "message": "Biometrie fehlgeschlagen"
@@ -2134,6 +2212,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Tresor der Organisation wird exportiert"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Nur der mit $ORGANIZATION$ verbundene Organisationstresor wird exportiert. Einträge in persönlichen Tresoren oder anderen Organisationen werden nicht berücksichtigt.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Fehler"
   },
@@ -2184,7 +2274,7 @@
     "message": "Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst."
   },
   "forwarderError": {
-    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "message": "$SERVICENAME$ Fehler: $ERRORMESSAGE$",
     "description": "Reports an error returned by a forwarding service to the user.",
     "placeholders": {
       "servicename": {
@@ -2198,11 +2288,11 @@
     }
   },
   "forwarderGeneratedBy": {
-    "message": "Generated by Bitwarden.",
+    "message": "Von Bitwarden generiert.",
     "description": "Displayed with the address on the forwarding service's configuration screen."
   },
   "forwarderGeneratedByWithWebsite": {
-    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "message": "Webseite: $WEBSITE$. Von Bitwarden generiert.",
     "description": "Displayed with the address on the forwarding service's configuration screen.",
     "placeholders": {
       "WEBSITE": {
@@ -2212,7 +2302,7 @@
     }
   },
   "forwaderInvalidToken": {
-    "message": "Invalid $SERVICENAME$ API token",
+    "message": "Ungültiger API-Token von $SERVICENAME$",
     "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2222,7 +2312,7 @@
     }
   },
   "forwaderInvalidTokenWithMessage": {
-    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "message": "Ungültiger API-Token von $SERVICENAME$: $ERRORMESSAGE$",
     "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
     "placeholders": {
       "servicename": {
@@ -2236,7 +2326,7 @@
     }
   },
   "forwarderNoAccountId": {
-    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "message": "Maskierte E-Mail-Konto-ID für $SERVICENAME$ konnte nicht abgerufen werden.",
     "description": "Displayed when the forwarding service fails to return an account ID.",
     "placeholders": {
       "servicename": {
@@ -2246,7 +2336,7 @@
     }
   },
   "forwarderNoDomain": {
-    "message": "Invalid $SERVICENAME$ domain.",
+    "message": "Ungültige $SERVICENAME$-Domain.",
     "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2256,7 +2346,7 @@
     }
   },
   "forwarderNoUrl": {
-    "message": "Invalid $SERVICENAME$ url.",
+    "message": "Ungültige $SERVICENAME$-URL.",
     "description": "Displayed when the url of the forwarding service wasn't supplied.",
     "placeholders": {
       "servicename": {
@@ -2266,7 +2356,7 @@
     }
   },
   "forwarderUnknownError": {
-    "message": "Unknown $SERVICENAME$ error occurred.",
+    "message": "Unbekannter $SERVICENAME$-Fehler aufgetreten.",
     "description": "Displayed when the forwarding service failed due to an unknown error.",
     "placeholders": {
       "servicename": {
@@ -2276,7 +2366,7 @@
     }
   },
   "forwarderUnknownForwarder": {
-    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "message": "Unbekannter Weiterleitungsdienst: '$SERVICENAME$'.",
     "description": "Displayed when the forwarding service is not supported.",
     "placeholders": {
       "servicename": {
@@ -2495,6 +2585,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "SSO-Kennung der Organisation erforderlich."
+  },
+  "creatingAccountOn": {
+    "message": "Konto wird erstellt bei"
+  },
+  "checkYourEmail": {
+    "message": "Überprüfe deine E-Mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Folge dem Link in der E-Mail an"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "und fahre mit der Erstellung deines Kontos fort."
+  },
+  "noEmail": {
+    "message": "Keine E-Mail?"
+  },
+  "goBack": {
+    "message": "Geh zurück"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", um deine E-Mail-Adresse zu bearbeiten."
   },
   "eu": {
     "message": "EU",
@@ -3137,6 +3248,41 @@
     "message": "zu, um sie sichtbar zu machen.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Vorschläge zum Auto-Ausfüllen"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Speichere einen Login-Eintrag für diese Seite zum automatischen Ausfüllen"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Dein Tresor hat keine Einträge"
+  },
+  "noItemsMatchSearch": {
+    "message": "Deine Suche ergab keine Treffer"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Entferne die Filter oder versuche einen anderen Suchbegriff"
+  },
+  "copyInfo": {
+    "message": "Information kopieren, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "Weitere Optionen, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "Administrator-Konsole"
   },
@@ -3155,7 +3301,37 @@
   "errorAssigningTargetFolder": {
     "message": "Fehler beim Zuweisen des Ziel-Ordners."
   },
+  "viewItemsIn": {
+    "message": "Einträge in $NAME$ anzeigen",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Zurück zu $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "new": {
     "message": "Neu"
+  },
+  "removeItem": {
+    "message": "$NAME$ entfernen",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

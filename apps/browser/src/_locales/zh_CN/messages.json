@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "确认您的身份以继续。"
   },
-  "account": {
-    "message": "账户"
-  },
   "changeMasterPassword": {
     "message": "更改主密码"
   },
   "continueToWebApp": {
     "message": "前往网页 App 吗？"
+  },
+  "continueToWebAppDesc": {
+    "message": "在网页应用上探索 Bitwarden 账户的更多功能。"
+  },
+  "continueToHelpCenter": {
+    "message": "前往帮助中心吗？"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "访问帮助中心了解更多如何使用 Bitwarden 的信息。"
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "前往浏览器扩展商店吗？"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "帮助别人了解 Bitwarden 是否适合他们。立即访问浏览器的扩展程序商店并留下评分。"
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "您可以在 Bitwarden 网页应用上更改您的主密码。"
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "注销"
   },
+  "aboutBitwarden": {
+    "message": "关于 Bitwarden"
+  },
   "about": {
     "message": "关于"
+  },
+  "moreFromBitwarden": {
+    "message": "更多来自 Bitwarden 的产品"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "前往 bitwarden.com 吗？"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bitwarden 商业版"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden 验证器"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "您可以使用 Bitwarden 验证器存储验证器密钥，并为两步验证流程生成 TOTP 代码。访问 bitwarden.com 网站了解更多信息。"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden 机密管理器"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "使用 Bitwarden 机密管理器安全地存储、管理以及共享开发人员的机密。访问 bitwarden.com 网站了解更多信息。"
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "使用 Passwordless.dev 摆脱传统密码束缚，打造流畅且安全的登录体验。访问 bitwarden.com 网站了解更多信息。"
+  },
+  "freeBitwardenFamilies": {
+    "message": "免费 Bitwarden 家庭"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "您有资格获得免费的 Bitwarden 家庭。立即在网页应用中兑换此优惠。"
   },
   "version": {
     "message": "版本"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "自动生成安全可靠唯一的登录密码。"
   },
-  "bitWebVault": {
-    "message": "Bitwarden 网页版密码库"
+  "bitWebVaultApp": {
+    "message": "Bitwarden 网页版应用"
   },
   "importItems": {
     "message": "导入项目"
@@ -714,6 +762,9 @@
   "notificationUnlock": {
     "message": "解锁​​​​"
   },
+  "additionalOptions": {
+    "message": "附加选项"
+  },
   "enableContextMenuItem": {
     "message": "显示上下文菜单选项"
   },
@@ -751,11 +802,38 @@
     "message": "过曝暗",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "导出自"
+  },
   "exportVault": {
     "message": "导出密码库"
   },
   "fileFormat": {
     "message": "文件格式"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "此文件导出将受密码保护，需要文件密码才能解密。"
+  },
+  "filePassword": {
+    "message": "文件密码"
+  },
+  "exportPasswordDescription": {
+    "message": "此密码将用于导出和导入此文件"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "使用衍生自您账户的用户名和主密码的账户加密密钥，以加密此导出并限制只能导入到当前的 Bitwarden 账户。"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "设置一个文件密码用来加密此导出，并使用此密码解密以导入到任意 Bitwarden 账户。"
+  },
+  "exportTypeHeading": {
+    "message": "导出类型"
+  },
+  "accountRestricted": {
+    "message": "账户受限"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "「文件密码」与「确认文件密码」不一致。"
   },
   "warning": {
     "message": "警告",
@@ -779,11 +857,8 @@
   "shared": {
     "message": "已共享"
   },
-  "learnOrg": {
-    "message": "了解组织"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden 允许您使用组织与他人共享您的密码库项目。要访问 bitwarden.com 网站以了解更多内容吗？"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Bitwarden 商业版允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站了解更多信息。"
   },
   "moveToOrganization": {
     "message": "移动到组织"
@@ -1561,6 +1636,9 @@
   "restoredItem": {
     "message": "项目已恢复"
   },
+  "alreadyHaveAccount": {
+    "message": "已经拥有账户了吗？"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？"
   },
@@ -2134,6 +2212,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "正在导出组织密码库"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "仅会导出与 $ORGANIZATION$ 关联的组织密码库数据。不包括个人密码库和其他组织中的项目。",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "错误"
   },
@@ -2236,7 +2326,7 @@
     }
   },
   "forwarderNoAccountId": {
-    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "message": "无法获取 $SERVICENAME$ 电子邮件账户 ID。",
     "description": "Displayed when the forwarding service fails to return an account ID.",
     "placeholders": {
       "servicename": {
@@ -2359,7 +2449,7 @@
     "message": "正登录为"
   },
   "notYou": {
-    "message": "不是你？"
+    "message": "不是您吗？"
   },
   "newAroundHere": {
     "message": "初来乍到吗？"
@@ -2495,6 +2585,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "必须填写组织 SSO 标识符。"
+  },
+  "creatingAccountOn": {
+    "message": "创建账户于"
+  },
+  "checkYourEmail": {
+    "message": "检查您的电子邮箱"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "点击发送到电子邮件中的链接"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "然后继续创建您的账户。"
+  },
+  "noEmail": {
+    "message": "没收到电子邮件吗？"
+  },
+  "goBack": {
+    "message": "返回"
+  },
+  "toEditYourEmailAddress": {
+    "message": "编辑您的电子邮件地址。"
   },
   "eu": {
     "message": "欧盟",
@@ -2708,7 +2819,7 @@
     "description": "Button text to display in overlay when the account is locked."
   },
   "fillCredentialsFor": {
-    "message": "填写凭据",
+    "message": "为其填写凭据",
     "description": "Screen reader text for when overlay item is in focused"
   },
   "partialUsername": {
@@ -2784,7 +2895,7 @@
     "message": "无法完成生物识别。"
   },
   "needADifferentMethod": {
-    "message": "需要一个不同的方法？"
+    "message": "尝试其他方式吗？"
   },
   "useMasterPassword": {
     "message": "使用主密码"
@@ -3015,7 +3126,7 @@
     "message": "从 CSV 导入"
   },
   "lastPassTryAgainCheckEmail": {
-    "message": "请重试或查找来自 LastPass 的电子邮件以验证您的身份。"
+    "message": "请重试或查找来自 LastPass 的可以验证您的身份的电子邮件。"
   },
   "collection": {
     "message": "集合"
@@ -3137,6 +3248,41 @@
     "message": "，以使其可见。",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "自动填充建议"
+  },
+  "autofillSuggestionsTip": {
+    "message": "保存此站点的登录项目用来自动填充"
+  },
+  "yourVaultIsEmpty": {
+    "message": "您的密码库是空的"
+  },
+  "noItemsMatchSearch": {
+    "message": "没有搜索到匹配的项目"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "清除筛选器或尝试另一个搜索词"
+  },
+  "copyInfo": {
+    "message": "复制信息，$ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "更多选项，$ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "管理控制台"
   },
@@ -3155,7 +3301,37 @@
   "errorAssigningTargetFolder": {
     "message": "分配目标文件夹时出错。"
   },
+  "viewItemsIn": {
+    "message": "查看 $NAME$ 中的项目",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "返回 $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "new": {
     "message": "新建"
+  },
+  "removeItem": {
+    "message": "删除 $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Livello di accesso"
   },
+  "accessing": {
+    "message": "Accedendo a"
+  },
   "loggedOut": {
     "message": "Uscito"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Il tuo account è stato eliminato e tutti i dati associati a esso sono stati eliminati."
   },
+  "deleteOrganizationWarning": {
+    "message": "L'eliminazione della tua organizzazione è permanente. Non può essere annullata."
+  },
   "myAccount": {
     "message": "Il mio account"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Inserisci le informazioni dell'app Bitwarden dal tuo pannello di amministrazione Duo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Chiave di integrazione"
+  "twoFactorDuoClientId": {
+    "message": "ID cliente"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Chiave segreta"
+  "twoFactorDuoClientSecret": {
+    "message": "Segreto cliente"
   },
   "twoFactorDuoApiHostname": {
     "message": "Nome host API"
@@ -3241,6 +3247,27 @@
   "device": {
     "message": "Dispositivo"
   },
+  "creatingAccountOn": {
+    "message": "Creazione account su"
+  },
+  "checkYourEmail": {
+    "message": "Controlli la tua email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Segui il link nell'email inviata a"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "e continua a creare il tuo account."
+  },
+  "noEmail": {
+    "message": "Nessuna email?"
+  },
+  "goBack": {
+    "message": "Torna indietro"
+  },
+  "toEditYourEmailAddress": {
+    "message": "per modificare il tuo indirizzo email."
+  },
   "view": {
     "message": "Visualizza"
   },
@@ -3387,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Hai richiesto di eliminare il tuo account Bitwarden. Clicca qui sotto per confermare."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Hai richiesto di eliminare la tua organizzazione Bitwarden."
   },
   "myOrganization": {
     "message": "La mia organizzazione"
@@ -7677,13 +7707,6 @@
     "message": "aggiungi un metodo di pagamento",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Aggiungi nuove impostazioni e autorizzazioni per una maggiore flessibilità. Sostituisci il ruolo di Manager con l'autorizzazione \"può gestire\" e introduci opzioni per consentire agli utenti di creare raccolte e limitare l'accesso alle raccolte agli amministratori.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Ulteriori informazioni sulla gestione delle raccolte"
-  },
   "organizationInformation": {
     "message": "Informazioni sull'organizzazione"
   },
@@ -7695,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Abbiamo inviato un'email di conferma al tuo indirizzo email: "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Questa azione è irreversibile"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Attivando questa funzionalità, il ruolo di manager sarà sostituito dall'autorizzazione Può gestire. L'operazione richiederà alcuni istanti. Non apportare modifiche all'organizzazione fino a quando non è finita. Sei sicuro di voler procedere?"
   },
   "sorryToSeeYouGo": {
     "message": "Siamo spiacenti di vederti andare! Aiutaci a migliorare Bitwarden condividendo il motivo per cui stai annullando.",
@@ -8193,6 +8210,40 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Gestisci la fatturazione dal Portale del Fornitore"
   },
+  "viewItemsIn": {
+    "message": "Visualizza gli elementi in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Torna a $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Indietro",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Rimuovi $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "viewInfo": {
     "message": "Visualizza informazioni"
   },
@@ -8223,6 +8274,12 @@
       }
     }
   },
+  "lowKDFIterationsBanner": {
+    "message": "Iterazioni KDF basse. Aumenta le tue iterazioni per migliorare la sicurezza del tuo account."
+  },
+  "changeKDFSettings": {
+    "message": "Cambia impostazioni KDF"
+  },
   "secureYourInfrastructure": {
     "message": "Proteggi la tua infrastruttura"
   },
@@ -8234,5 +8291,11 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Stai al passo con le vulnerabilità della sicurezza passando a un piano a pagamento per un monitoraggio più avanzato."
+  },
+  "approveAllRequests": {
+    "message": "Approva tutte le richieste"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Tutte le richieste di accesso approvate"
   }
 }

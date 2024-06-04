@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "访问权限等级"
   },
+  "accessing": {
+    "message": "访问中"
+  },
   "loggedOut": {
     "message": "已注销"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "您的账户已被关闭，所有相关数据也已被删除。"
   },
+  "deleteOrganizationWarning": {
+    "message": "删除组织是永久性操作，无法撤销！"
+  },
   "myAccount": {
     "message": "我的账户"
   },
@@ -1710,20 +1716,20 @@
   "twoFactorDuoDesc": {
     "message": "输入 Duo 管理面板提供的 Bitwarden 应用信息。"
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "集成密钥"
+  "twoFactorDuoClientId": {
+    "message": "Client ID"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "安全密钥"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "API 主机名"
   },
   "twoFactorEmailDesc": {
-    "message": "按照以下步骤设置使用电子邮件两步登录:"
+    "message": "按照以下步骤设置使用电子邮件的两步登录："
   },
   "twoFactorEmailEnterEmail": {
-    "message": "输入您希望接收验证码的电子邮件"
+    "message": "输入您希望接收验证码的电子邮件地址"
   },
   "twoFactorEmailEnterCode": {
     "message": "输入电子邮件中的 6 位数验证码"
@@ -2099,7 +2105,7 @@
     "message": "Bitwarden 家庭版计划。"
   },
   "addons": {
-    "message": "附加项目"
+    "message": "插件"
   },
   "premiumAccess": {
     "message": "高级会员"
@@ -2537,7 +2543,7 @@
     "message": "使用审核日志跟踪用户操作"
   },
   "enforce2faDuo": {
-    "message": "强制启用 Duo 的两步登录"
+    "message": "强制 Duo 2FA"
   },
   "priorityCustomerSupport": {
     "message": "优先客户支持"
@@ -2846,7 +2852,7 @@
     "message": "停用了两步登录"
   },
   "recovered2fa": {
-    "message": "从两步登录中恢复了帐户。"
+    "message": "从两步登录中恢复了账户"
   },
   "failedLogin": {
     "message": "登录失败，密码不正确。"
@@ -3241,6 +3247,27 @@
   "device": {
     "message": "设备"
   },
+  "creatingAccountOn": {
+    "message": "创建账户于"
+  },
+  "checkYourEmail": {
+    "message": "检查您的电子邮箱"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "点击发送到电子邮件中的链接"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "然后继续创建您的账户。"
+  },
+  "noEmail": {
+    "message": "没收到电子邮件吗？"
+  },
+  "goBack": {
+    "message": "返回"
+  },
+  "toEditYourEmailAddress": {
+    "message": "编辑您的电子邮件地址。"
+  },
   "view": {
     "message": "查看"
   },
@@ -3387,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "您已请求删除您的 Bitwarden 账户。单击下面的按钮以确认。"
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "您已请求删除您的 Bitwarden 组织。"
   },
   "myOrganization": {
     "message": "我的组织"
@@ -3569,7 +3599,7 @@
     "message": "如果您想要添加额外的"
   },
   "smStandaloneTrialSeatCountUpdateMessageFragment2": {
-    "message": "无捆绑优惠的座位，请联系"
+    "message": "无捆绑优惠的席位，请联系"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的成员超过了您的订阅席位，您将立即收到按比例的额外成员费用，直到达到您的 $MAX$ 席位限制。",
@@ -6104,7 +6134,7 @@
     "message": "正登录为"
   },
   "notYou": {
-    "message": "不是你？"
+    "message": "不是您吗？"
   },
   "pickAnAvatarColor": {
     "message": "选择头像颜色"
@@ -6829,7 +6859,7 @@
     "message": "选择群组"
   },
   "userPermissionOverrideHelperDesc": {
-    "message": "为成员设置的权限将替换为该成员群组设置的权限。"
+    "message": "为成员设置的权限将替换为由该成员群组设置的权限。"
   },
   "noMembersOrGroupsAdded": {
     "message": "未添加任何成员或群组"
@@ -6850,7 +6880,7 @@
     "message": "成员角色"
   },
   "moreFromBitwarden": {
-    "message": "来自 Bitwarden 的更多产品"
+    "message": "更多来自 Bitwarden 的产品"
   },
   "switchProducts": {
     "message": "切换产品"
@@ -7584,7 +7614,7 @@
     "message": "别名域"
   },
   "alreadyHaveAccount": {
-    "message": "已经有一个账户？"
+    "message": "已经拥有账户了吗？"
   },
   "skipToContent": {
     "message": "跳转到内容"
@@ -7677,13 +7707,6 @@
     "message": "请添加一个付款方式。",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "添加新的设置和权限以获得额外的灵活性。将经理角色替换为「可以管理」权限，并引入允许用户创建集合以及限制对集合的管理访问权限的选项。",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "了解更多关于集合管理的信息"
-  },
   "organizationInformation": {
     "message": "组织信息"
   },
@@ -7695,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "我们已经发送了一封确认邮件到 "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "此操作不可逆"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "开启此功能将弃用经理角色，并将其替换为「可以管理」权限。这需要一些时间。在完成之前，请勿对组织进行任何更改。您确定要继续吗？"
   },
   "sorryToSeeYouGo": {
     "message": "很遗憾看到您离开！请分享您取消的原因，以帮助改进 Bitwarden。",
@@ -8173,7 +8190,7 @@
     "message": "添加组织"
   },
   "createdNewClient": {
-    "message": "Successfully created new client"
+    "message": "成功创建了新的客户"
   },
   "noAccess": {
     "message": "无访问权限"
@@ -8192,6 +8209,40 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "从提供商门户管理账单"
+  },
+  "viewItemsIn": {
+    "message": "查看 $NAME$ 中的项目",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "返回 $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "返回",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "删除 $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   },
   "viewInfo": {
     "message": "查看信息"
@@ -8223,6 +8274,12 @@
       }
     }
   },
+  "lowKDFIterationsBanner": {
+    "message": "KDF 迭代低。请增加迭代次数以提高您账户的安全性。"
+  },
+  "changeKDFSettings": {
+    "message": "更改 KDF 设置"
+  },
   "secureYourInfrastructure": {
     "message": "保护您的基础设施"
   },
@@ -8234,5 +8291,11 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "升级到付费计划以加强监控，从而提前发现安全漏洞。"
+  },
+  "approveAllRequests": {
+    "message": "批准所有请求"
+  },
+  "allLoginRequestsApproved": {
+    "message": "所有登录请求已批准"
   }
 }

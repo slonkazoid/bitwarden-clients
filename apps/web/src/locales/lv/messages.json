@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Piekļuves līmenis"
   },
+  "accessing": {
+    "message": "Piekļūst"
+  },
   "loggedOut": {
     "message": "Atteicies"
   },
@@ -833,7 +836,7 @@
     "message": "Nederīga galvenā parole"
   },
   "invalidFilePassword": {
-    "message": "Nederīga datnes parole, lūgums izmantot to paroli, kas tika ievadīta izdošanas datnes izveidošanas brīdī."
+    "message": "Nederīga datnes parole, lūgums izmantot to paroli, kas tika ievadīta izgūšanas datnes izveidošanas brīdī."
   },
   "lockNow": {
     "message": "Aizslēgt"
@@ -1057,10 +1060,10 @@
     "message": "Apstiprināt noslēpumu izgūšanu"
   },
   "exportWarningDesc": {
-    "message": "Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas."
+    "message": "Šī izguve satur glabātavas datus nešifrētā veidā. Izgūto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Tā ir jāizdzēš uzreiz pēc izmantošanas."
   },
   "exportSecretsWarningDesc": {
-    "message": "Šī izguve satur noslēpumu datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas."
+    "message": "Šī izguve satur noslēpumu datus nešifrētā veidā. Izgūto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Tā ir jāizdzēš uzreiz pēc izmantošanas."
   },
   "encExportKeyWarningDesc": {
     "message": "Šī izguve šifrē datus ar konta šifrēšanas atslēgu. Ja tā jebkad tiks mainīta, izvadi vajadzētu veikt vēlreiz, jo vairs nebūs iespējams atšifrēt šo datni."
@@ -1084,10 +1087,10 @@
     "message": "Datnes veids"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Šī datņu izdošana būs aizsargāta ar paroli, un būs nepieciešama datnes parole, lai to atšifrētu."
+    "message": "Šī datņu izgūšana būs aizsargāta ar paroli, un būs nepieciešama datnes parole, lai to atšifrētu."
   },
   "exportPasswordDescription": {
-    "message": "Šī parole tiks izmantota, lai izdotu un ievietotu šo datni"
+    "message": "Šī parole tiks izmantota, lai izgūtu un ievietotu šo datni"
   },
   "confirmMasterPassword": {
     "message": "Apstiprināt galveno paroli"
@@ -1102,13 +1105,13 @@
     "message": "Apstiprināt datnes paroli"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Izmantot konta šifrēšanas atslēgu, kas iegūta no lietotājvārda un galvenās paroles, lai šifrētu izdošanu un atļautu ievietošanu tikai pašreizējā Bitwarden kontā."
+    "message": "Jāizmanto konta šifrēšanas atslēga, kas iegūta no lietotājvārda un galvenās paroles, lai šifrētu izguvi un atļautu ievietošanu tikai pašreizējā Bitwarden kontā."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Uzstādīt paroli, lai šifrētu izdošanu un tad to ievietotu jebkurā Bitwarden kontā, izmantojot atšifrēšanas paroli."
+    "message": "Uzstādīt paroli, lai šifrētu izguvi un tad to ievietotu jebkurā Bitwarden kontā, izmantojot atšifrēšanas paroli."
   },
   "exportTypeHeading": {
-    "message": "Izdošanas veids"
+    "message": "Izgūšanas veids"
   },
   "accountRestricted": {
     "message": "Konts ir ierobežots"
@@ -1340,6 +1343,9 @@
   },
   "accountDeletedDesc": {
     "message": "Konts tika slēgts, un visi saistītie dati tika izdzēsti."
+  },
+  "deleteOrganizationWarning": {
+    "message": "Savas apvienības izdzēšana ir paliekoša. To nevar atsaukt."
   },
   "myAccount": {
     "message": "Mans konts"
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Ievadīt Bitwarden lietotnes informāciju no Duo pārvaldības rīka."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Iekļaušanas atslēga"
+  "twoFactorDuoClientId": {
+    "message": "Klienta Id"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Slepenā atslēga"
+  "twoFactorDuoClientSecret": {
+    "message": "Klienta noslēpums"
   },
   "twoFactorDuoApiHostname": {
     "message": "API saimniekdatora nosaukums"
@@ -3241,6 +3247,27 @@
   "device": {
     "message": "Ierīce"
   },
+  "creatingAccountOn": {
+    "message": "Tiek veidots konts"
+  },
+  "checkYourEmail": {
+    "message": "Jāpārbauda e-pasts"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Jāatver saite, kas tika nosūtīta uz e-pasta adresi"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "un jāturpina sava konta izveide."
+  },
+  "noEmail": {
+    "message": "Nav e-pasta?"
+  },
+  "goBack": {
+    "message": "Atgriezties"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", lai labotu savu e-pasta adresi."
+  },
   "view": {
     "message": "Skatīt"
   },
@@ -3387,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Tika pieprasīts izdzēst Bitwarden kontu. Jāizmanto zemāk esošā poga, lai apstiprinātu."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Tu pieprasīji izdzēst savu Bitwarden apvienību."
   },
   "myOrganization": {
     "message": "Mana apvienība"
@@ -5654,10 +5684,10 @@
     "message": "Sesijai iestājās noildze. Lūgums mēģināt pieteikties vēlreiz."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Izdod personīgo glabātavu"
+    "message": "Izgūst personīgo glabātavu"
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Izdod apvienības glabātavu"
+    "message": "Izgūst apvienības glabātavu"
   },
   "exportingIndividualVaultDescription": {
     "message": "Tiks izgūti tikai atsevišķi glabātavas vienumi, kas ir saistīti ar $EMAIL$. Apvienības glabātavas vienumi netiks iekļauti. Tiks izgūta tikai glabātavas vienumu informācija, un saistītie pielikumi netiks iekļauti.",
@@ -5669,7 +5699,7 @@
     }
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Tiks izdota tikai apvienības glabātava, kas ir saistīta ar $ORGANIZATION$. Atsevišķu glabātavu vai citu apvienību vienumi netiks iekļauti.",
+    "message": "Tiks izgūta tikai apvienības glabātava, kas ir saistīta ar $ORGANIZATION$. Atsevišķu glabātavu vai citu apvienību vienumi netiks iekļauti.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -7677,13 +7707,6 @@
     "message": "jāpievieno maksājuma veids",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Ir pievienojami jauni iestatījumi un atļaujas papildu pielāgojamībai. Pārvaldnieka loma ir aizvietojama ar \"var pārvaldīt\" atļauju, un var ieviest iespējas, lai ļautu lietotājiem izveidot krājumus, kā arī ierobežot pārvaldības piekļuvi krājumiem.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Uzzināt vairāk par krājumu pārvaldību"
-  },
   "organizationInformation": {
     "message": "Apvienības informācija"
   },
@@ -7695,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Mēs esam nosūtījuši apstiprinājuma e-pasta ziņojumu uz "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Šī darbība ir neatgriezeniska"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Šīs iespējas ieslēgšana padarīs pārvaldnieka lomu par nevēlamu un aizstās to ar atļauju \"Var pārvaldīt\". Tas aizņems dažus mirkļus. Neveikt nekādas apvienību izmaiņas, līdz tas ir pabeigts. Vai tiešām turpināt?"
   },
   "sorryToSeeYouGo": {
     "message": "Žēl redzēt Tevi aizejam. Palīdzi uzlabot Bitwarden, daloties ar atcelšanas iemeslu!",
@@ -8193,6 +8210,40 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Norēķinus var pārvaldīt Nodrošinātāju portālā"
   },
+  "viewItemsIn": {
+    "message": "Skatīt $NAME$ vienumus",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Atgriezties uz $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Atpakaļ",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Noņemt $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "viewInfo": {
     "message": "Skatīt informāciju"
   },
@@ -8223,6 +8274,12 @@
       }
     }
   },
+  "lowKDFIterationsBanner": {
+    "message": "Zems KDF atkārtojumu skaits. Tas jāpalielina, lai uzlabotu sava konta drošību."
+  },
+  "changeKDFSettings": {
+    "message": "Mainīt KDF iestatījumus"
+  },
   "secureYourInfrastructure": {
     "message": "Nodrošini savu infrastruktūru"
   },
@@ -8234,5 +8291,11 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Apsteidz drošības ievainojamības ar pāriešanu uz maksas plānu pastiprinātai uzraudzībai."
+  },
+  "approveAllRequests": {
+    "message": "Apstiprināt visus pieprasījumus"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Visi pieteikšanās pieprasījumi apstiprināti"
   }
 }

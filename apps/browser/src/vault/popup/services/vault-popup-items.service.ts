@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import {
+  BehaviorSubject,
   combineLatest,
+  distinctUntilKeyChanged,
+  from,
   map,
   Observable,
   of,
@@ -10,6 +13,8 @@ import {
   switchMap,
 } from "rxjs";
 
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherType } from "@bitwarden/common/vault/enums";
@@ -17,6 +22,8 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { BrowserApi } from "../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
+
+import { MY_VAULT_ID, VaultPopupListFiltersService } from "./vault-popup-list-filters.service";
 
 /**
  * Service for managing the various item lists on the new Vault tab in the browser popup.
@@ -26,6 +33,7 @@ import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 })
 export class VaultPopupItemsService {
   private _refreshCurrentTab$ = new Subject<void>();
+  private searchText$ = new BehaviorSubject<string>("");
 
   /**
    * Observable that contains the list of other cipher types that should be shown
@@ -69,6 +77,21 @@ export class VaultPopupItemsService {
     shareReplay({ refCount: false, bufferSize: 1 }),
   );
 
+  private _filteredCipherList$: Observable<CipherView[]> = combineLatest([
+    this._cipherList$,
+    this.searchText$,
+    this.vaultPopupListFiltersService.filterFunction$,
+  ]).pipe(
+    map(([ciphers, searchText, filterFunction]): [CipherView[], string] => [
+      filterFunction(ciphers),
+      searchText,
+    ]),
+    switchMap(([ciphers, searchText]) =>
+      this.searchService.searchCiphers(searchText, null, ciphers),
+    ),
+    shareReplay({ refCount: true, bufferSize: 1 }),
+  );
+
   /**
    * List of ciphers that can be used for autofill on the current tab. Includes cards and/or identities
    * if enabled in the vault settings. Ciphers are sorted by type, then by last used date, then by name.
@@ -76,7 +99,7 @@ export class VaultPopupItemsService {
    * See {@link refreshCurrentTab} to trigger re-evaluation of the current tab.
    */
   autoFillCiphers$: Observable<CipherView[]> = combineLatest([
-    this._cipherList$,
+    this._filteredCipherList$,
     this._otherAutoFillTypes$,
     this._currentAutofillTab$,
   ]).pipe(
@@ -96,7 +119,7 @@ export class VaultPopupItemsService {
    */
   favoriteCiphers$: Observable<CipherView[]> = combineLatest([
     this.autoFillCiphers$,
-    this._cipherList$,
+    this._filteredCipherList$,
   ]).pipe(
     map(([autoFillCiphers, ciphers]) =>
       ciphers.filter((cipher) => cipher.favorite && !autoFillCiphers.includes(cipher)),
@@ -114,7 +137,7 @@ export class VaultPopupItemsService {
   remainingCiphers$: Observable<CipherView[]> = combineLatest([
     this.autoFillCiphers$,
     this.favoriteCiphers$,
-    this._cipherList$,
+    this._filteredCipherList$,
   ]).pipe(
     map(([autoFillCiphers, favoriteCiphers, ciphers]) =>
       ciphers.filter(
@@ -127,9 +150,20 @@ export class VaultPopupItemsService {
 
   /**
    * Observable that indicates whether a filter is currently applied to the ciphers.
-   * @todo Implement filter/search functionality in PM-6824 and PM-6826.
    */
-  hasFilterApplied$: Observable<boolean> = of(false);
+  hasFilterApplied$ = combineLatest([
+    this.searchText$,
+    this.vaultPopupListFiltersService.filters$,
+  ]).pipe(
+    switchMap(([searchText, filters]) => {
+      return from(this.searchService.isSearchable(searchText)).pipe(
+        map(
+          (isSearchable) =>
+            isSearchable || Object.values(filters).some((filter) => filter !== null),
+        ),
+      );
+    }),
+  );
 
   /**
    * Observable that indicates whether autofill is allowed in the current context.
@@ -144,13 +178,32 @@ export class VaultPopupItemsService {
 
   /**
    * Observable that indicates whether there are no ciphers to show with the current filter.
-   * @todo Implement filter/search functionality in PM-6824 and PM-6826.
    */
-  noFilteredResults$: Observable<boolean> = of(false);
+  noFilteredResults$: Observable<boolean> = this._filteredCipherList$.pipe(
+    map((ciphers) => !ciphers.length),
+  );
+
+  /** Observable that indicates when the user should see the deactivated org state */
+  showDeactivatedOrg$: Observable<boolean> = combineLatest([
+    this.vaultPopupListFiltersService.filters$.pipe(distinctUntilKeyChanged("organization")),
+    this.organizationService.organizations$,
+  ]).pipe(
+    map(([filters, orgs]) => {
+      if (!filters.organization || filters.organization.id === MY_VAULT_ID) {
+        return false;
+      }
+
+      const org = orgs.find((o) => o.id === filters.organization.id);
+      return org ? !org.enabled : false;
+    }),
+  );
 
   constructor(
     private cipherService: CipherService,
     private vaultSettingsService: VaultSettingsService,
+    private vaultPopupListFiltersService: VaultPopupListFiltersService,
+    private organizationService: OrganizationService,
+    private searchService: SearchService,
   ) {}
 
   /**
@@ -158,6 +211,10 @@ export class VaultPopupItemsService {
    */
   refreshCurrentTab() {
     this._refreshCurrentTab$.next(null);
+  }
+
+  applyFilter(newSearchText: string) {
+    this.searchText$.next(newSearchText);
   }
 
   /**

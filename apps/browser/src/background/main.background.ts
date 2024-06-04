@@ -9,6 +9,7 @@ import {
   AuthRequestService,
   LoginEmailServiceAbstraction,
   LoginEmailService,
+  LogoutReason,
 } from "@bitwarden/auth/common";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -334,7 +335,7 @@ export default class MainBackground {
   ssoLoginService: SsoLoginServiceAbstraction;
   billingAccountProfileStateService: BillingAccountProfileStateService;
   // eslint-disable-next-line rxjs/no-exposed-subjects -- Needed to give access to services module
-  intraprocessMessagingSubject: Subject<Message<object>>;
+  intraprocessMessagingSubject: Subject<Message<Record<string, unknown>>>;
   userAutoUnlockKeyService: UserAutoUnlockKeyService;
   scriptInjectorService: BrowserScriptInjectorService;
   kdfConfigService: kdfConfigServiceAbstraction;
@@ -375,8 +376,17 @@ export default class MainBackground {
       }
     };
 
-    const logoutCallback = async (expired: boolean, userId?: UserId) =>
-      await this.logout(expired, userId);
+    const logoutCallback = async (logoutReason: LogoutReason, userId?: UserId) =>
+      await this.logout(logoutReason, userId);
+
+    const refreshAccessTokenErrorCallback = () => {
+      // Send toast to popup
+      this.messagingService.send("showToast", {
+        type: "error",
+        title: this.i18nService.t("errorRefreshingAccessToken"),
+        message: this.i18nService.t("errorRefreshingAccessTokenDesc"),
+      });
+    };
 
     const isDev = process.env.ENV === "development";
     this.logService = new ConsoleLogService(isDev);
@@ -384,7 +394,7 @@ export default class MainBackground {
     this.keyGenerationService = new KeyGenerationService(this.cryptoFunctionService);
     this.storageService = new BrowserLocalStorageService();
 
-    this.intraprocessMessagingSubject = new Subject<Message<object>>();
+    this.intraprocessMessagingSubject = new Subject<Message<Record<string, unknown>>>();
 
     this.messagingService = MessageSender.combine(
       new SubjectMessageSender(this.intraprocessMessagingSubject),
@@ -523,6 +533,7 @@ export default class MainBackground {
       this.keyGenerationService,
       this.encryptService,
       this.logService,
+      logoutCallback,
     );
 
     const migrationRunner = new MigrationRunner(
@@ -608,9 +619,12 @@ export default class MainBackground {
       this.platformUtilsService,
       this.environmentService,
       this.appIdService,
+      refreshAccessTokenErrorCallback,
+      this.logService,
+      (logoutReason: LogoutReason, userId?: UserId) => this.logout(logoutReason, userId),
       this.vaultTimeoutSettingsService,
-      (expired: boolean) => this.logout(expired),
     );
+
     this.domainSettingsService = new DefaultDomainSettingsService(this.stateProvider);
     this.fileUploadService = new FileUploadService(this.logService);
     this.cipherFileUploadService = new CipherFileUploadService(
@@ -840,7 +854,12 @@ export default class MainBackground {
         this.authService,
       );
 
-      this.syncServiceListener = new SyncServiceListener(this.syncService, messageListener);
+      this.syncServiceListener = new SyncServiceListener(
+        this.syncService,
+        messageListener,
+        this.messagingService,
+        this.logService,
+      );
     }
     this.eventUploadService = new EventUploadService(
       this.apiService,
@@ -872,6 +891,7 @@ export default class MainBackground {
       this.billingAccountProfileStateService,
       this.scriptInjectorService,
       this.accountService,
+      this.authService,
     );
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
 
@@ -1169,7 +1189,7 @@ export default class MainBackground {
     this.contextMenusBackground?.init();
     await this.idleBackground.init();
     this.webRequestBackground?.startListening();
-    this.syncServiceListener?.startListening();
+    this.syncServiceListener?.listener$().subscribe();
 
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
@@ -1277,7 +1297,7 @@ export default class MainBackground {
     }
   }
 
-  async logout(expired: boolean, userId?: UserId) {
+  async logout(logoutReason: LogoutReason, userId?: UserId) {
     const activeUserId = await firstValueFrom(
       this.accountService.activeAccount$.pipe(
         map((a) => a?.id),
@@ -1332,7 +1352,7 @@ export default class MainBackground {
     ]);
 
     //Needs to be checked before state is cleaned
-    const needStorageReseed = await this.needsStorageReseed(userId);
+    const needStorageReseed = await this.needsStorageReseed(userBeingLoggedOut);
 
     await this.stateService.clean({ userId: userBeingLoggedOut });
     await this.accountService.clean(userBeingLoggedOut);
@@ -1343,7 +1363,7 @@ export default class MainBackground {
     await logoutPromise;
 
     this.messagingService.send("doneLoggingOut", {
-      expired: expired,
+      logoutReason: logoutReason,
       userId: userBeingLoggedOut,
     });
 

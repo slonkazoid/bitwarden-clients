@@ -166,14 +166,26 @@
   "confirmIdentity": {
     "message": "Підтвердьте свої облікові дані для продовження."
   },
-  "account": {
-    "message": "Обліковий запис"
-  },
   "changeMasterPassword": {
     "message": "Змінити головний пароль"
   },
   "continueToWebApp": {
     "message": "Продовжити у вебпрограмі?"
+  },
+  "continueToWebAppDesc": {
+    "message": "Ознайомтеся з іншими функціями вашого облікового запису Bitwarden у вебпрограмі."
+  },
+  "continueToHelpCenter": {
+    "message": "Перейти до довідкового центру?"
+  },
+  "continueToHelpCenterDesc": {
+    "message": "Дізнайтеся більше про те, як використовувати Bitwarden в довідковому центрі."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Перейти до вебмагазину розширень?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Допоможіть іншим дізнатися про Bitwarden. Відвідайте вебмагазин розширень для вашого браузера і поставте оцінку."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Ви можете змінити головний пароль у вебпрограмі Bitwarden."
@@ -192,8 +204,44 @@
   "logOut": {
     "message": "Вийти"
   },
+  "aboutBitwarden": {
+    "message": "Про Bitwarden"
+  },
   "about": {
     "message": "Про розширення"
+  },
+  "moreFromBitwarden": {
+    "message": "Більше від Bitwarden"
+  },
+  "continueToBitwardenDotCom": {
+    "message": "Продовжити на bitwarden.com?"
+  },
+  "bitwardenForBusiness": {
+    "message": "Bitwarden для бізнесу"
+  },
+  "bitwardenAuthenticator": {
+    "message": "Bitwarden Authenticator"
+  },
+  "continueToAuthenticatorPageDesc": {
+    "message": "Bitwarden Authenticator дозволяє зберігати ключі авторизації та генерувати одноразові коди TOTP для двоетапної перевірки. Дізнайтеся більше про це на вебсайті bitwarden.com"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Менеджер секретів Bitwarden"
+  },
+  "continueToSecretsManagerPageDesc": {
+    "message": "Надійно зберігайте секретні ключі розробників та діліться ними за допомогою менеджера секретів Bitwarden. Докладніше на вебсайті bitwarden.com."
+  },
+  "passwordlessDotDev": {
+    "message": "Passwordless.dev"
+  },
+  "continueToPasswordlessDotDevPageDesc": {
+    "message": "Організуйте функціональну та безпечну роботу без використання традиційного методу входу з паролями за допомогою Passwordless.dev. Дізнайтеся більше на вебсайті bitwarden.com."
+  },
+  "freeBitwardenFamilies": {
+    "message": "Bitwarden Families безплатно"
+  },
+  "freeBitwardenFamiliesPageDesc": {
+    "message": "Для вас доступна безплатна можливість Bitwarden Families. Отримайте цю пропозицію у вебпрограмі."
   },
   "version": {
     "message": "Версія"
@@ -253,8 +301,8 @@
   "passGenInfo": {
     "message": "Автоматичне генерування стійких, унікальних паролів."
   },
-  "bitWebVault": {
-    "message": "Веб сховище Bitwarden"
+  "bitWebVaultApp": {
+    "message": "Вебпрограма Bitwarden"
   },
   "importItems": {
     "message": "Імпортувати записи"
@@ -714,6 +762,9 @@
   "notificationUnlock": {
     "message": "Розблокувати"
   },
+  "additionalOptions": {
+    "message": "Додаткові налаштування"
+  },
   "enableContextMenuItem": {
     "message": "Показувати в контекстному меню"
   },
@@ -751,11 +802,38 @@
     "message": "Solarized темна",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Експортувати з"
+  },
   "exportVault": {
     "message": "Експортувати сховище"
   },
   "fileFormat": {
     "message": "Формат файлу"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Цей експортований файл буде захищений паролем, який необхідно ввести для його розшифрування."
+  },
+  "filePassword": {
+    "message": "Пароль файлу"
+  },
+  "exportPasswordDescription": {
+    "message": "Цей пароль буде використано для експортування та імпортування цього файлу"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Використовуйте ключ шифрування свого облікового запису, створений на основі імені користувача й головного пароля, щоб зашифрувати експортовані дані та обмежити можливість імпортування лише до поточного облікового запису Bitwarden."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Встановіть пароль файлу, щоб зашифрувати експортовані дані та імпортувати до будь-якого облікового запису Bitwarden за допомогою цього пароля."
+  },
+  "exportTypeHeading": {
+    "message": "Тип експорту"
+  },
+  "accountRestricted": {
+    "message": "Обмежено обліковим записом"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "Пароль файлу та підтвердження пароля відрізняються."
   },
   "warning": {
     "message": "ПОПЕРЕДЖЕННЯ",
@@ -779,11 +857,8 @@
   "shared": {
     "message": "Спільні"
   },
-  "learnOrg": {
-    "message": "Докладніше про організації"
-  },
-  "learnOrgConfirmation": {
-    "message": "Bitwarden дозволяє вам надавати доступ до записів свого сховища іншим за допомогою облікового запису організації. Бажаєте перейти на веб-сайт bitwarden.com, щоб дізнатися більше?"
+  "bitwardenForBusinessPageDesc": {
+    "message": "Bitwarden для бізнесу дозволяє доступ до записів сховища спільно з іншими користувачами за допомогою організації. Дізнайтеся більше про це на вебсайті bitwarden.com."
   },
   "moveToOrganization": {
     "message": "Перемістити до організації"
@@ -1561,6 +1636,9 @@
   "restoredItem": {
     "message": "Запис відновлено"
   },
+  "alreadyHaveAccount": {
+    "message": "Вже маєте обліковий запис?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Вихід скасує всі права доступу до вашого сховища і вимагатиме автентифікацію після завершення часу очікування. Ви дійсно хочете використати цей параметр?"
   },
@@ -2134,6 +2212,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Експортування сховища організації"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Буде експортовано лише сховище організації, пов'язане з $ORGANIZATION$. Елементи особистих сховищ або інших організацій не будуть включені.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Помилка"
   },
@@ -2495,6 +2585,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Потрібен SSO-ідентифікатор організації."
+  },
+  "creatingAccountOn": {
+    "message": "Створення облікового запису"
+  },
+  "checkYourEmail": {
+    "message": "Перевірте свою електронну пошту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдіть за посиланням у листі, надісланому на"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "і завершіть створення облікового запису."
+  },
+  "noEmail": {
+    "message": "Не отримали електронного листа?"
+  },
+  "goBack": {
+    "message": "Поверніться назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": "і виправте адресу електронної пошти."
   },
   "eu": {
     "message": "ЄС",
@@ -3137,6 +3248,41 @@
     "message": "щоб зробити їх видимими.",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
+  "autofillSuggestions": {
+    "message": "Пропозиції автозаповнення"
+  },
+  "autofillSuggestionsTip": {
+    "message": "Зберегти дані входу цього сайту для автозаповнення"
+  },
+  "yourVaultIsEmpty": {
+    "message": "Ваше сховище порожнє"
+  },
+  "noItemsMatchSearch": {
+    "message": "За цим запитом нічого не знайдено"
+  },
+  "clearFiltersOrTryAnother": {
+    "message": "Скиньте фільтри або спробуйте іншу умову пошуку"
+  },
+  "copyInfo": {
+    "message": "Копіювати інформацію, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "moreOptions": {
+    "message": "Інші можливості, $ITEMNAME$",
+    "description": "Aria label for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
   "adminConsole": {
     "message": "консолі адміністратора,"
   },
@@ -3155,7 +3301,37 @@
   "errorAssigningTargetFolder": {
     "message": "Помилка призначення цільової теки."
   },
+  "viewItemsIn": {
+    "message": "Переглянути записи в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Назад до $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "new": {
     "message": "Новий"
+  },
+  "removeItem": {
+    "message": "Вилучити $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

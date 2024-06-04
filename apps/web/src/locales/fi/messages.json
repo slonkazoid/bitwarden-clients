@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Käyttöoikeustaso"
   },
+  "accessing": {
+    "message": "Avataan"
+  },
   "loggedOut": {
     "message": "Kirjauduttu ulos"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Tilisi on suljettu ja kaikki siihen liittyvät tiedot on poistettu."
   },
+  "deleteOrganizationWarning": {
+    "message": "Organisaation poisto on pysyvä toimenpide, eikä sen peruminen ole mahdollista."
+  },
   "myAccount": {
     "message": "Oma tili"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Syötä Bitwarden-sovelluksen tiedot Duo Security -tilisi hallintapaneelista."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Integration key"
+  "twoFactorDuoClientId": {
+    "message": "Client ID"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Secret key"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "API hostname"
@@ -2099,7 +2105,7 @@
     "message": "Bitwarden Families -tilauksella."
   },
   "addons": {
-    "message": "Laajennukset"
+    "message": "Lisäykset"
   },
   "premiumAccess": {
     "message": "Premium-käyttöoikeudet"
@@ -3241,6 +3247,27 @@
   "device": {
     "message": "Laite"
   },
+  "creatingAccountOn": {
+    "message": "Luodaan tili palvelimelle"
+  },
+  "checkYourEmail": {
+    "message": "Tarkasta sähköpostisi"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Seuraa viestin linkkiä, joka lähetettiin sähköpostitse osoitteeseen"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "ja jatka tilin luontia."
+  },
+  "noEmail": {
+    "message": "Etkö saanut viestiä?"
+  },
+  "goBack": {
+    "message": "Palaa takaisin"
+  },
+  "toEditYourEmailAddress": {
+    "message": "muokataksesi sähköpostiosoitettasi."
+  },
   "view": {
     "message": "Näytä"
   },
@@ -3387,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Olet pyytänyt Bitwarden-tilisi poistoa. Vahvista alla olevalla painikeella."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Olet pyytänyt Bitwarden-organisaatiosi poistoa."
   },
   "myOrganization": {
     "message": "Oma organisaatio"
@@ -3566,10 +3596,10 @@
     "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen jäsenten määrä ylittää tilauksesi jäsenpaikkojen määrän, veloitetaan suhteutettu hinta uusista jäsenistä välittömästi."
   },
   "smStandaloneTrialSeatCountUpdateMessageFragment1": {
-    "message": "If you want to add additional"
+    "message": "Lisää käyttäjäpaikkoja"
   },
   "smStandaloneTrialSeatCountUpdateMessageFragment2": {
-    "message": "seats without the bundled offer, please contact"
+    "message": "ottamalla yhteyttä osoitteella"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Tilausmuutokset aiheuttavat suhteutettuja laskutusmuutoksia. Jos hiljattain kutsuttujen jäsenten määrä ylittää tilauksesi jäsenpaikkojen määrän, veloitetaan suhteutettu hinta uusista jäsenistä välittömästi, kunnes $MAX$ paikan enimmäismäärä täyttyy.",
@@ -6595,7 +6625,7 @@
     "message": "Myönnä käyttöoikeudet kokoelmiin lisäämällä heidät tähän ryhmään."
   },
   "restrictedCollectionAssignmentDesc": {
-    "message": "You can only assign collections you manage."
+    "message": "Voit määrittää vain hallitsemiasi kokoelmia."
   },
   "accessAllCollectionsDesc": {
     "message": "Myönnä käyttöoikeudet kaikkiin nykyisiin ja tuleviin kokoelmiin"
@@ -6829,7 +6859,7 @@
     "message": "Valitse ryhmät"
   },
   "userPermissionOverrideHelperDesc": {
-    "message": "Permissions set for a member will replace permissions set by that member's group."
+    "message": "Jäsenkohtaisesti määritetyt käyttöoikeudet korvaavat jäsenen ryhmän määrittämät oikeudet."
   },
   "noMembersOrGroupsAdded": {
     "message": "Jäseniä tai ryhmiä ei ole lisätty."
@@ -7677,13 +7707,6 @@
     "message": "lisää maksutapa",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Paranna joustavuutta lisäämällä uusia asetuksia ja käyttöoikeuksia. Korvaa \"Valvoja\"-rooli \"Voi hallita\" -käyttöoikeudella ja aktivoi ominaisuuksia, joilla käyttäjät voivat luoda kokoelmia ja rajoittaa kokoelmien hallintaoikeuksia.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Lisätietoja kokoelmien hallinnasta"
-  },
   "organizationInformation": {
     "message": "Organisaation tiedot"
   },
@@ -7695,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Sähköpostivahvistus lähetettiin osoitteeseen "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Toimintoa ei ole mahdollista kumota"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Ominaisuuden käyttöönotto korvaa \"Valvoja\"-roolin \"Voi hallita\" -käyttöoikeudella. Muutos kestää hetken ja ennen sen valmistumista organisaatioon ei tule tehdä mitään muutoksia. Haluatko varmasti jatkaa?"
   },
   "sorryToSeeYouGo": {
     "message": "Harmillista, että päätit lopettaa tilauksesi! Auta meitä parantamaan Bitwardenia kertomalla miksi.",
@@ -7756,7 +7773,7 @@
     "message": "Et voi lisätä itseäsi ryhmiin."
   },
   "cannotAddYourselfToCollections": {
-    "message": "You cannot add yourself to collections."
+    "message": "Et voi lisätä itseäsi kokoelmiin."
   },
   "assign": {
     "message": "Määritä"
@@ -8193,6 +8210,40 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Hallitse laskutusta Toimittajaportaaliista"
   },
+  "viewItemsIn": {
+    "message": "Näytä kohteen $NAME$ kohteet",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Palaa kohteeseen $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Takaisin",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Poista $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "viewInfo": {
     "message": "Tarkastele tietoja"
   },
@@ -8223,16 +8274,28 @@
       }
     }
   },
+  "lowKDFIterationsBanner": {
+    "message": "Alhainen KDF-toistojen määrä. Paranna tilisi suojausta korottamalla määrää."
+  },
+  "changeKDFSettings": {
+    "message": "Muuta KDF-asetuksia"
+  },
   "secureYourInfrastructure": {
-    "message": "Secure your infrastructure"
+    "message": "Suojaa infrastruktuurisi"
   },
   "protectYourFamilyOrBusiness": {
-    "message": "Protect your family or business"
+    "message": "Suojaa perheesi tai yrityksesi"
   },
   "upgradeOrganizationCloseSecurityGaps": {
-    "message": "Close security gaps with monitoring reports"
+    "message": "Sulje suojauksesi aukkoja valvontaraporttien avulla"
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
-    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+    "message": "Pysy haavoittuvuuksien edellä tehostamalla valvontaa päivittämällä maksulliseen tilaukseeen."
+  },
+  "approveAllRequests": {
+    "message": "Hyväksy kaikki pyynnöt"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Kaikki kirjautumispyynnöt hyväksyttiin"
   }
 }

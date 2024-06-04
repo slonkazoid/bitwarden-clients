@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Adgangsniveau"
   },
+  "accessing": {
+    "message": "Tilgår"
+  },
   "loggedOut": {
     "message": "Logget ud"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Din konto er blevet lukket og alle tilknyttede data slettet."
   },
+  "deleteOrganizationWarning": {
+    "message": "Sletning af organisationen er permanent og irreversibel."
+  },
   "myAccount": {
     "message": "Min konto"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Angiv Bitwarden-applikationsoplysningerne fra Duo Admin-panelet."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Integrationsnøgle"
+  "twoFactorDuoClientId": {
+    "message": "Klient-ID"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Hemmelig nøgle"
+  "twoFactorDuoClientSecret": {
+    "message": "Klienthemmelighed"
   },
   "twoFactorDuoApiHostname": {
     "message": "API-værtsnavn"
@@ -3241,6 +3247,27 @@
   "device": {
     "message": "Enhed"
   },
+  "creatingAccountOn": {
+    "message": "Opretter konto på"
+  },
+  "checkYourEmail": {
+    "message": "Tjek din e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Følg linket i e-mailen sendt til"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "og fortsæt med kontooprettelsen."
+  },
+  "noEmail": {
+    "message": "Ingen e-mail?"
+  },
+  "goBack": {
+    "message": "Gå tilbage"
+  },
+  "toEditYourEmailAddress": {
+    "message": "for at redigere e-mailadressen."
+  },
   "view": {
     "message": "Vis"
   },
@@ -3387,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Du har bedt om at få slettet din Bitwarden-konto. Klik på knappen nedenfor for at bekræfte."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Du har anmodet om sletning af din Bitwarden-organisation."
   },
   "myOrganization": {
     "message": "Min organisation"
@@ -7677,13 +7707,6 @@
     "message": "tilføj en betalingsmetode",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Tilføj nye indstillinger og tilladelser for ekstra fleksibilitet. Erstat Manager-rollen med tilladelsen \"kan håndtere\", og indfør muligheder for brugerne til at oprette samlinger samt begrænse administrativ adgang til samlinger.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Læs mere om samlingshåndtering"
-  },
   "organizationInformation": {
     "message": "Organisationsoplysninger"
   },
@@ -7695,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Vi har sendt bekræftelsesmail til dig via "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Denne handling er irreversibel"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Aktivering af denne funktion vil udfase manager-rollen og erstatte den med tilladelsen Kan administrere. Dette vil tage et øjeblik. Foretag ingen organisationsændringer før processen er færdig. Sikker på, at du vil fortsætte?"
   },
   "sorryToSeeYouGo": {
     "message": "Vi er kede af, at du stopper! Hjælp os med at forbedre Bitwarden ved at dele årsagen til din opsigelse.",
@@ -8193,6 +8210,40 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Håndter fakturering via udbyderportalen"
   },
+  "viewItemsIn": {
+    "message": "Vis emner i $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Retur til $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Retur",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Fjern $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "viewInfo": {
     "message": "Se info"
   },
@@ -8223,6 +8274,12 @@
       }
     }
   },
+  "lowKDFIterationsBanner": {
+    "message": "Få KDF-iterationer. Forøg iterationer for at forbedre kontosikkerheden."
+  },
+  "changeKDFSettings": {
+    "message": "Skift KDF-indstillinger"
+  },
   "secureYourInfrastructure": {
     "message": "Sikr infrastrukturen"
   },
@@ -8234,5 +8291,11 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Vær opdateret mod sikkerhedssårbarheder ved at opgradere til en betalt abonnementstype for forbedret monitorering."
+  },
+  "approveAllRequests": {
+    "message": "Godkend alle anmodninger"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Alle login-anmodninger godkendt"
   }
 }

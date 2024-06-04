@@ -1,6 +1,8 @@
 import { mock } from "jest-mock-extended";
 import { BehaviorSubject } from "rxjs";
 
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { CipherId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
@@ -11,6 +13,7 @@ import { BrowserApi } from "../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 
 import { VaultPopupItemsService } from "./vault-popup-items.service";
+import { VaultPopupListFiltersService } from "./vault-popup-list-filters.service";
 
 describe("VaultPopupItemsService", () => {
   let service: VaultPopupItemsService;
@@ -19,6 +22,9 @@ describe("VaultPopupItemsService", () => {
 
   const cipherServiceMock = mock<CipherService>();
   const vaultSettingsServiceMock = mock<VaultSettingsService>();
+  const organizationServiceMock = mock<OrganizationService>();
+  const vaultPopupListFiltersServiceMock = mock<VaultPopupListFiltersService>();
+  const searchService = mock<SearchService>();
 
   beforeEach(() => {
     allCiphers = cipherFactory(10);
@@ -34,18 +40,43 @@ describe("VaultPopupItemsService", () => {
     cipherList[3].favorite = true;
 
     cipherServiceMock.cipherViews$ = new BehaviorSubject(allCiphers).asObservable();
+    searchService.searchCiphers.mockImplementation(async () => cipherList);
     cipherServiceMock.filterCiphersForUrl.mockImplementation(async () => autoFillCiphers);
     vaultSettingsServiceMock.showCardsCurrentTab$ = new BehaviorSubject(false).asObservable();
     vaultSettingsServiceMock.showIdentitiesCurrentTab$ = new BehaviorSubject(false).asObservable();
+
+    vaultPopupListFiltersServiceMock.filters$ = new BehaviorSubject({
+      organization: null,
+      collection: null,
+      cipherType: null,
+      folder: null,
+    });
+    // Return all ciphers, `filterFunction$` will be tested in `VaultPopupListFiltersService`
+    vaultPopupListFiltersServiceMock.filterFunction$ = new BehaviorSubject(
+      (ciphers: CipherView[]) => ciphers,
+    );
+
     jest.spyOn(BrowserPopupUtils, "inPopout").mockReturnValue(false);
     jest
       .spyOn(BrowserApi, "getTabFromCurrentWindow")
       .mockResolvedValue({ url: "https://example.com" } as chrome.tabs.Tab);
-    service = new VaultPopupItemsService(cipherServiceMock, vaultSettingsServiceMock);
+    service = new VaultPopupItemsService(
+      cipherServiceMock,
+      vaultSettingsServiceMock,
+      vaultPopupListFiltersServiceMock,
+      organizationServiceMock,
+      searchService,
+    );
   });
 
   it("should be created", () => {
-    service = new VaultPopupItemsService(cipherServiceMock, vaultSettingsServiceMock);
+    service = new VaultPopupItemsService(
+      cipherServiceMock,
+      vaultSettingsServiceMock,
+      vaultPopupListFiltersServiceMock,
+      organizationServiceMock,
+      searchService,
+    );
     expect(service).toBeTruthy();
   });
 
@@ -73,7 +104,13 @@ describe("VaultPopupItemsService", () => {
       vaultSettingsServiceMock.showIdentitiesCurrentTab$ = new BehaviorSubject(true).asObservable();
       jest.spyOn(BrowserApi, "getTabFromCurrentWindow").mockResolvedValue(currentTab);
 
-      service = new VaultPopupItemsService(cipherServiceMock, vaultSettingsServiceMock);
+      service = new VaultPopupItemsService(
+        cipherServiceMock,
+        vaultSettingsServiceMock,
+        vaultPopupListFiltersServiceMock,
+        organizationServiceMock,
+        searchService,
+      );
 
       service.autoFillCiphers$.subscribe((ciphers) => {
         expect(cipherServiceMock.filterCiphersForUrl.mock.calls.length).toBe(1);
@@ -99,7 +136,13 @@ describe("VaultPopupItemsService", () => {
         Object.values(allCiphers),
       );
 
-      service = new VaultPopupItemsService(cipherServiceMock, vaultSettingsServiceMock);
+      service = new VaultPopupItemsService(
+        cipherServiceMock,
+        vaultSettingsServiceMock,
+        vaultPopupListFiltersServiceMock,
+        organizationServiceMock,
+        searchService,
+      );
 
       service.autoFillCiphers$.subscribe((ciphers) => {
         expect(ciphers.length).toBe(10);
@@ -111,6 +154,24 @@ describe("VaultPopupItemsService", () => {
           expect(expectedTypeOrder[current.type]).toBeLessThanOrEqual(expectedTypeOrder[next.type]);
         }
         expect(cipherServiceMock.sortCiphersByLastUsedThenName).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it("should filter autoFillCiphers$ down to search term", (done) => {
+      const cipherList = Object.values(allCiphers);
+      const searchText = "Login";
+
+      searchService.searchCiphers.mockImplementation(async () => {
+        return cipherList.filter((cipher) => {
+          return cipher.name.includes(searchText);
+        });
+      });
+
+      // there is only 1 Login returned for filteredCiphers. but two results expected because of other autofill types
+      service.autoFillCiphers$.subscribe((ciphers) => {
+        expect(ciphers[0].name.includes(searchText)).toBe(true);
+        expect(ciphers.length).toBe(2);
         done();
       });
     });
@@ -131,6 +192,24 @@ describe("VaultPopupItemsService", () => {
         done();
       });
     });
+
+    it("should filter favoriteCiphers$ down to search term", (done) => {
+      const cipherList = Object.values(allCiphers);
+      const searchText = "Card 2";
+
+      searchService.searchCiphers.mockImplementation(async () => {
+        return cipherList.filter((cipher) => {
+          return cipher.name === searchText;
+        });
+      });
+
+      service.favoriteCiphers$.subscribe((ciphers) => {
+        // There are 2 favorite items but only one Card 2
+        expect(ciphers[0].name).toBe(searchText);
+        expect(ciphers.length).toBe(1);
+        done();
+      });
+    });
   });
 
   describe("remainingCiphers$", () => {
@@ -148,12 +227,35 @@ describe("VaultPopupItemsService", () => {
         done();
       });
     });
+
+    it("should filter remainingCiphers$ down to search term", (done) => {
+      const cipherList = Object.values(allCiphers);
+      const searchText = "Login";
+
+      searchService.searchCiphers.mockImplementation(async () => {
+        return cipherList.filter((cipher) => {
+          return cipher.name.includes(searchText);
+        });
+      });
+
+      service.remainingCiphers$.subscribe((ciphers) => {
+        // There are 6 remaining ciphers but only 2 with "Login" in the name
+        expect(ciphers.length).toBe(2);
+        done();
+      });
+    });
   });
 
   describe("emptyVault$", () => {
     it("should return true if there are no ciphers", (done) => {
       cipherServiceMock.cipherViews$ = new BehaviorSubject({}).asObservable();
-      service = new VaultPopupItemsService(cipherServiceMock, vaultSettingsServiceMock);
+      service = new VaultPopupItemsService(
+        cipherServiceMock,
+        vaultSettingsServiceMock,
+        vaultPopupListFiltersServiceMock,
+        organizationServiceMock,
+        searchService,
+      );
       service.emptyVault$.subscribe((empty) => {
         expect(empty).toBe(true);
         done();
@@ -188,6 +290,54 @@ describe("VaultPopupItemsService", () => {
       jest.spyOn(BrowserPopupUtils, "inPopout").mockReturnValue(true);
       service.autofillAllowed$.subscribe((allowed) => {
         expect(allowed).toBe(false);
+        done();
+      });
+    });
+  });
+
+  describe("noFilteredResults$", () => {
+    it("should return false when filteredResults has values", (done) => {
+      service.noFilteredResults$.subscribe((noResults) => {
+        expect(noResults).toBe(false);
+        done();
+      });
+    });
+
+    it("should return true when there are zero filteredResults", (done) => {
+      searchService.searchCiphers.mockImplementation(async () => []);
+      service.noFilteredResults$.subscribe((noResults) => {
+        expect(noResults).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe("hasFilterApplied$", () => {
+    it("should return true if the search term provided is searchable", (done) => {
+      searchService.isSearchable.mockImplementation(async () => true);
+      service.hasFilterApplied$.subscribe((canSearch) => {
+        expect(canSearch).toBe(true);
+        done();
+      });
+    });
+
+    it("should return false if the search term provided is not searchable", (done) => {
+      searchService.isSearchable.mockImplementation(async () => false);
+      service.hasFilterApplied$.subscribe((canSearch) => {
+        expect(canSearch).toBe(false);
+        done();
+      });
+    });
+  });
+
+  describe("applyFilter", () => {
+    it("should call search Service with the new search term", (done) => {
+      const searchText = "Hello";
+      service.applyFilter(searchText);
+      const searchServiceSpy = jest.spyOn(searchService, "searchCiphers");
+
+      service.favoriteCiphers$.subscribe(() => {
+        expect(searchServiceSpy).toHaveBeenCalledWith(searchText, null, expect.anything());
         done();
       });
     });

@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Ниво приступа"
   },
+  "accessing": {
+    "message": "Accessing"
+  },
   "loggedOut": {
     "message": "Одјављено"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Ваш налог је затворен и сви повезани подаци су избрисани."
   },
+  "deleteOrganizationWarning": {
+    "message": "Брисање организације је трајно. Не може се поништити."
+  },
   "myAccount": {
     "message": "Мој налог"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Унесите информације о апликацији Bitwarden из администрације Duo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Кључ интеграције"
+  "twoFactorDuoClientId": {
+    "message": "Ид клијента"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Тајни кључ"
+  "twoFactorDuoClientSecret": {
+    "message": "Тајна клијента"
   },
   "twoFactorDuoApiHostname": {
     "message": "API Име хоста"
@@ -3241,6 +3247,27 @@
   "device": {
     "message": "Уређај"
   },
+  "creatingAccountOn": {
+    "message": "Креирај налог на"
+  },
+  "checkYourEmail": {
+    "message": "Проверите свој имејл"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Пратите везу послатој на"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и наставите са креирањем налога."
+  },
+  "noEmail": {
+    "message": "Немате имејл?"
+  },
+  "goBack": {
+    "message": "Ићи назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": "да измените свој имејл."
+  },
   "view": {
     "message": "Приказ"
   },
@@ -3387,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Затражили сте да избришете свој Bitwarden рачун. Кликните на доње дугме да бисте потврдили."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Захтевали сте да избришете своју Bitwarden оранизацију."
   },
   "myOrganization": {
     "message": "Моја организација"
@@ -7677,13 +7707,6 @@
     "message": "додајте начин плаћања",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Додајте нова подешавања и дозволе за додатну флексибилност. Замените улогу менаџера са дозволом „може да управља“ и уведите опције које омогућавају корисницима да креирају колекције, као и ограничавање административног приступа збиркама.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Сазнајте више о управљању колекцијом"
-  },
   "organizationInformation": {
     "message": "Информације о организацији"
   },
@@ -7695,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Послали смо е-поруку са потврдом на ваш имејл на "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Ова радња је неповратна"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Turning on this feature will deprecate the manager role and replace it with a Can manage permission. This will take a few moments. Do not make any organization changes until it is complete. Are you sure you want to proceed?"
   },
   "sorryToSeeYouGo": {
     "message": "Жао нам је што идете Помозите да се побољша Bitwarden тако што ћете поделити зашто отказујете.",
@@ -8193,6 +8210,40 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Управљајте наплатом из Provider Portal"
   },
+  "viewItemsIn": {
+    "message": "Видети ставке у $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Назад на $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Уклонити $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
   "viewInfo": {
     "message": "Прикажи информације"
   },
@@ -8223,6 +8274,12 @@
       }
     }
   },
+  "lowKDFIterationsBanner": {
+    "message": "Ниске KDF итерације. Повећајте број понављања да бисте побољшали безбедност свог налога."
+  },
+  "changeKDFSettings": {
+    "message": "Променити KDF подешавања"
+  },
   "secureYourInfrastructure": {
     "message": "Обезбедите своју инфраструктуру"
   },
@@ -8234,5 +8291,11 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Будите испред безбедносних пропуста надоградњом на плаћени план за побољшано праћење."
+  },
+  "approveAllRequests": {
+    "message": "Approve all requests"
+  },
+  "allLoginRequestsApproved": {
+    "message": "All login requests approved"
   }
 }
