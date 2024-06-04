@@ -33,7 +33,7 @@ export class WindowMain {
   private windowStateChangeTimer: NodeJS.Timeout;
   private windowStates: { [key: string]: WindowState } = {};
   private enableAlwaysOnTop = false;
-  private crashDumpsDisabledInRenderer = false;
+  private enableRendererProcessForceCrashReload = false;
   session: Electron.Session;
 
   readonly defaultWidth = 950;
@@ -57,7 +57,7 @@ export class WindowMain {
       this.win.setBackgroundColor(await this.getBackgroundColor());
 
       // By default some linux distro collect core dumps on crashes which gets written to disk.
-      if (!isLinux() || this.crashDumpsDisabledInRenderer) {
+      if (this.enableRendererProcessForceCrashReload) {
         const crashEvent = once(this.win.webContents, "render-process-gone");
         this.win.webContents.forcefullyCrashRenderer();
         await crashEvent;
@@ -107,10 +107,12 @@ export class WindowMain {
         // initialization and is ready to create browser windows.
         // Some APIs can only be used after this event occurs.
         app.on("ready", async () => {
-          if (isLinux() && !isDev()) {
+          if (isMac() || isWindows()) {
+            this.enableRendererProcessForceCrashReload = true;
+          } else if (isLinux() && !isDev()) {
             if (await processisolations.isCoreDumpingDisabled()) {
               this.logService.info("Coredumps are disabled in renderer process");
-              this.crashDumpsDisabledInRenderer = true;
+              this.enableRendererProcessForceCrashReload = true;
             } else {
               this.logService.info("Disabling coredumps in main process");
               try {
