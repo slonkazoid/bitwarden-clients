@@ -499,12 +499,18 @@ export class VaultComponent implements OnInit, OnDestroy {
       }
     }
 
+    const canEditAttachments = await this.canEditAttachments(cipher);
+    const vaultBulkManagementActionEnabled = await firstValueFrom(
+      this.vaultBulkManagementActionEnabled$,
+    );
+
     let madeAttachmentChanges = false;
     const [modal] = await this.modalService.openViewRef(
       AttachmentsComponent,
       this.attachmentsModalRef,
       (comp) => {
         comp.cipherId = cipher.id;
+        comp.viewOnly = !canEditAttachments && vaultBulkManagementActionEnabled;
         comp.onUploadedAttachment
           .pipe(takeUntil(this.destroy$))
           .subscribe(() => (madeAttachmentChanges = true));
@@ -1040,6 +1046,17 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   private refresh() {
     this.refresh$.next();
+  }
+
+  private async canEditAttachments(cipher: CipherView) {
+    if (cipher.organizationId == null) {
+      return true;
+    }
+
+    const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
+
+    const organization = this.allOrganizations.find((o) => o.id === cipher.organizationId);
+    return organization.canEditAllCiphers(flexibleCollectionsV1Enabled, false) || cipher.edit;
   }
 
   private go(queryParams: any = null) {

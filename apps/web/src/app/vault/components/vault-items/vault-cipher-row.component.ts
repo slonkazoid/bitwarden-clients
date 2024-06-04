@@ -47,6 +47,10 @@ export class VaultCipherRowComponent {
     return this.cipher.hasOldAttachments && this.cipher.organizationId == null;
   }
 
+  protected get showAttachments() {
+    return this.canEditCipher || this.cipher.attachments?.length > 0;
+  }
+
   protected copy(field: "username" | "password" | "totp") {
     this.onEvent.emit({ type: "copyField", item: this.cipher, field });
   }
