@@ -1,5 +1,4 @@
 use anyhow::{bail, Result};
-use libc;
 
 pub fn disable_coredumps() -> Result<String> {
     bail!("Not implemented on Windows")
