@@ -1,0 +1,37 @@
+<app-header></app-header>
+
+<div class="tw-grid tw-grid-cols-12 tw-gap-4">
+  <div class="tw-col-span-6">
+    <img src="../images/sm.webp" class="tw-max-w-full" alt="Bitwarden" />
+  </div>
+  <div class="tw-col-span-6">
+    <h1>{{ "bitwardenSecretsManager" | i18n }}</h1>
+    <p>
+      Development, DevOps, and IT teams choose Bitwarden Secrets Manager to securely manage and
+      deploy their infrastructure and machine secrets.
+    </p>
+    <ul class="inset-list">
+      <li>
+        <b>{{ "centralizeSecretsManagement" | i18n }}</b>
+        {{ "centralizeSecretsManagementDescription" | i18n }}
+      </li>
+      <li>
+        <b>{{ "preventSecretLeaks" | i18n }}</b> {{ "preventSecretLeaksDescription" | i18n }}
+      </li>
+      <li>
+        <b>{{ "enhanceDeveloperProductivity" | i18n }}</b>
+        {{ "enhanceDeveloperProductivityDescription" | i18n }}
+      </li>
+      <li>
+        <b>{{ "strengthenBusinessSecurity" | i18n }}</b>
+        {{ "strengthenBusinessSecurityDescription" | i18n }}
+      </li>
+    </ul>
+    <button type="button" bitButton buttonType="primary" (click)="tryEnableSM()">
+      {{ "tryItNow" | i18n }}
+    </button>
+    <button type="button" bitLink class="tw-m-5" (click)="learnMore()">
+      {{ "learnMore" | i18n }}
+    </button>
+  </div>
+</div>

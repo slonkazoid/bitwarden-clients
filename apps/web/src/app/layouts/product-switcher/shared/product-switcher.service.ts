@@ -131,7 +131,7 @@ export class ProductSwitcherService {
           name: "Secrets Manager",
           icon: "bwi-cli",
           appRoute: ["/sm", smOrg?.id],
-          marketingRoute: "https://bitwarden.com/products/secrets-manager/",
+          marketingRoute: "/sm-landing",
           isActive: this.router.url.includes("/sm/"),
           otherProductOverrides: {
             supportingText: this.i18n.transform("secureYourInfrastructure"),

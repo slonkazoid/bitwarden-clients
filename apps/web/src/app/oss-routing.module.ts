@@ -44,6 +44,8 @@ import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
 import { DomainRulesComponent } from "./settings/domain-rules.component";
 import { PreferencesComponent } from "./settings/preferences.component";
+import { RequestSMAccessComponent } from "./shared/components/secrets-manager-landing/request-sm-access.component";
+import { SMLandingComponent } from "./shared/components/secrets-manager-landing/sm-landing.component";
 import { GeneratorComponent } from "./tools/generator.component";
 import { ReportsModule } from "./tools/reports";
 import { AccessComponent } from "./tools/send/access.component";
@@ -212,6 +214,16 @@ const routes: Routes = [
         loadChildren: () => VaultModule,
       },
       { path: "sends", component: SendComponent, data: { titleId: "send" } },
+      {
+        path: "sm-landing",
+        component: SMLandingComponent,
+        data: { titleId: "moreProductsFromBitwarden" },
+      },
+      {
+        path: "request-sm-access",
+        component: RequestSMAccessComponent,
+        data: { titleId: "requestAccessToSecretsManager" },
+      },
       {
         path: "create-organization",
         component: CreateOrganizationComponent,
