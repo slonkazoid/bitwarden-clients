@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
 use libc;
 
 pub fn disable_coredumps() -> Result<String> {
