@@ -42,7 +42,7 @@ export namespace clipboards {
   export function write(text: string, password: boolean): Promise<void>
 }
 export namespace processisolations {
-  export function disableCoredumps(): Promise<string>
+  export function disableCoredumps(): Promise<void>
   export function isCoreDumpingDisabled(): Promise<boolean>
-  export function disableMemoryAccess(): Promise<string>
+  export function disableMemoryAccess(): Promise<void>
 }

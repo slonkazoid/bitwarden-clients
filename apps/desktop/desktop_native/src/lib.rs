@@ -6,7 +6,7 @@ mod clipboard;
 mod crypto;
 mod error;
 mod password;
-mod processisolation;
+mod process_isolation;
 
 #[napi]
 pub mod passwords {
@@ -127,18 +127,18 @@ pub mod clipboards {
 #[napi]
 pub mod processisolations {
     #[napi]
-    pub async fn disable_coredumps() -> napi::Result<String> {
-        super::processisolation::disable_coredumps()
+    pub async fn disable_coredumps() -> napi::Result<()> {
+        super::process_isolation::disable_coredumps()
             .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
     #[napi]
     pub async fn is_core_dumping_disabled() -> napi::Result<bool> {
-        super::processisolation::is_core_dumping_disabled()
+        super::process_isolation::is_core_dumping_disabled()
             .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
     #[napi]
-    pub async fn disable_memory_access() -> napi::Result<String> {
-        super::processisolation::disable_memory_access()
+    pub async fn disable_memory_access() -> napi::Result<()> {
+        super::process_isolation::disable_memory_access()
             .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 }

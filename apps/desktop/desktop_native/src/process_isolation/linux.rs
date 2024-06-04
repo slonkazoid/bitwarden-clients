@@ -1,7 +1,7 @@
 use anyhow::Result;
 use libc;
 
-pub fn disable_coredumps() -> Result<String> {
+pub fn disable_coredumps() -> Result<()> {
     // RLIMIT_CORE is the maximum size of a core dump file. Setting both to 0 disables core dumps, on crashes
     // https://github.com/torvalds/linux/blob/1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0/include/uapi/asm-generic/resource.h#L20
     const RLIMIT_CORE: u32 = 4;
@@ -14,7 +14,7 @@ pub fn disable_coredumps() -> Result<String> {
         return Err(anyhow::anyhow!("failed to disable core dumping, memory might be persisted to disk on crashes {}", e))
     }
 
-    Ok("Core dumps disabled".to_string())
+    Ok(())
 }
 
 pub fn is_core_dumping_disabled() -> Result<bool> {
@@ -31,7 +31,7 @@ pub fn is_core_dumping_disabled() -> Result<bool> {
     Ok(rlimit.rlim_cur == 0 && rlimit.rlim_max == 0)
 }
 
-pub fn disable_memory_access() -> Result<String> {
+pub fn disable_memory_access() -> Result<()> {
     // PR_SET_DUMPABLE makes it so no other running process (root or same user) can dump the memory of this process
     // or attach a debugger to it.
     // https://github.com/torvalds/linux/blob/a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6/include/uapi/linux/prctl.h#L14
@@ -41,5 +41,5 @@ pub fn disable_memory_access() -> Result<String> {
         return Err(anyhow::anyhow!("failed to disable memory dumping, memory is dumpable by other processes {}", e))
     }
 
-    Ok("Memory dumps disabled".to_string())
+    Ok(())
 }
