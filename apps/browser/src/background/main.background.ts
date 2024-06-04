@@ -9,6 +9,7 @@ import {
   AuthRequestService,
   LoginEmailServiceAbstraction,
   LoginEmailService,
+  LogoutReason,
 } from "@bitwarden/auth/common";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -380,8 +381,17 @@ export default class MainBackground {
       }
     };
 
-    const logoutCallback = async (expired: boolean, userId?: UserId) =>
-      await this.logout(expired, userId);
+    const logoutCallback = async (logoutReason: LogoutReason, userId?: UserId) =>
+      await this.logout(logoutReason, userId);
+
+    const refreshAccessTokenErrorCallback = () => {
+      // Send toast to popup
+      this.messagingService.send("showToast", {
+        type: "error",
+        title: this.i18nService.t("errorRefreshingAccessToken"),
+        message: this.i18nService.t("errorRefreshingAccessTokenDesc"),
+      });
+    };
 
     const isDev = process.env.ENV === "development";
     this.logService = new ConsoleLogService(isDev);
@@ -536,6 +546,7 @@ export default class MainBackground {
       this.keyGenerationService,
       this.encryptService,
       this.logService,
+      logoutCallback,
     );
 
     const migrationRunner = new MigrationRunner(
@@ -621,9 +632,12 @@ export default class MainBackground {
       this.platformUtilsService,
       this.environmentService,
       this.appIdService,
+      refreshAccessTokenErrorCallback,
+      this.logService,
+      (logoutReason: LogoutReason, userId?: UserId) => this.logout(logoutReason, userId),
       this.vaultTimeoutSettingsService,
-      (expired: boolean) => this.logout(expired),
     );
+
     this.domainSettingsService = new DefaultDomainSettingsService(this.stateProvider);
     this.fileUploadService = new FileUploadService(this.logService);
     this.cipherFileUploadService = new CipherFileUploadService(
@@ -1306,7 +1320,7 @@ export default class MainBackground {
     }
   }
 
-  async logout(expired: boolean, userId?: UserId) {
+  async logout(logoutReason: LogoutReason, userId?: UserId) {
     const activeUserId = await firstValueFrom(
       this.accountService.activeAccount$.pipe(
         map((a) => a?.id),
@@ -1372,7 +1386,7 @@ export default class MainBackground {
     await logoutPromise;
 
     this.messagingService.send("doneLoggingOut", {
-      expired: expired,
+      logoutReason: logoutReason,
       userId: userBeingLoggedOut,
     });
 
