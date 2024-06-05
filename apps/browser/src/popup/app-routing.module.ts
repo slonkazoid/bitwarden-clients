@@ -56,6 +56,7 @@ import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filt
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
+import { AddEditV2Component } from "../vault/popup/components/vault-v2/add-edit/add-edit-v2.component";
 import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
 import { FoldersComponent } from "../vault/popup/settings/folders.component";
@@ -194,13 +195,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "cipher-password-history" },
   },
-  {
+  ...extensionRefreshSwap(AddEditComponent, AddEditV2Component, {
     path: "add-cipher",
-    component: AddEditComponent,
     canActivate: [AuthGuard, debounceNavigationGuard()],
     data: { state: "add-cipher" },
     runGuardsAndResolvers: "always",
-  },
+  }),
   {
     path: "edit-cipher",
     component: AddEditComponent,

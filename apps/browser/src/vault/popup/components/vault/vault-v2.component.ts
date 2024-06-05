@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { ButtonModule, Icons, NoItemsModule } from "@bitwarden/components";
+import { ButtonModule, Icons, NoItemsModule, MenuModule } from "@bitwarden/components";
 
 import { CurrentAccountComponent } from "../../../../auth/popup/account-switching/current-account.component";
 import { PopOutComponent } from "../../../../platform/popup/components/pop-out.component";
@@ -32,6 +32,7 @@ import { VaultV2SearchComponent } from "../vault-v2/vault-search/vault-v2-search
     ButtonModule,
     RouterLink,
     VaultV2SearchComponent,
+    MenuModule,
   ],
 })
 export class VaultV2Component implements OnInit, OnDestroy {

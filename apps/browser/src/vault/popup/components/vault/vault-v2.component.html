@@ -1,11 +1,29 @@
 <popup-page>
   <popup-header slot="header" [pageTitle]="'vault' | i18n">
     <ng-container slot="end">
-      <!-- TODO PM-6826: add selectedVault query param -->
-      <a bitButton buttonType="primary" type="button" routerLink="/add-cipher">
+      <button bitButton [bitMenuTriggerFor]="itemOptions" buttonType="primary">
         <i class="bwi bwi-plus-f" aria-hidden="true"></i>
         {{ "new" | i18n }}
-      </a>
+      </button>
+      <bit-menu #itemOptions>
+        <button type="button" bitMenuItem>
+          <i class="bwi bwi-globe" slot="start"></i>
+          <a routerLink="/add-cipher">{{ "typeLogin" | i18n }}</a>
+        </button>
+        <button type="button" bitMenuItem>
+          <i class="bwi bwi-credit-card" slot="start"></i>
+          {{ "typeCard" | i18n }}
+        </button>
+        <button type="button" bitMenuItem>
+          <i class="bwi bwi-id-card" slot="start"></i>
+          {{ "typeIdentity" | i18n }}
+        </button>
+        <button type="button" bitMenuItem>
+          <i class="bwi bwi-sticky-note" slot="start"></i>
+          {{ "note" | i18n }}
+        </button>
+      </bit-menu>
+
       <app-pop-out></app-pop-out>
       <app-current-account></app-current-account>
     </ng-container>
