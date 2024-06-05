@@ -51,6 +51,47 @@ export class VaultCipherRowComponent {
     return this.canEditCipher || this.cipher.attachments?.length > 0;
   }
 
+  protected get showAssignToCollections() {
+    return this.canEditCipher && !this.cipher.isDeleted;
+  }
+
+  protected get showClone() {
+    return this.cloneable && !this.cipher.isDeleted;
+  }
+
+  protected get showEventLogs() {
+    return this.useEvents && this.cipher.organizationId;
+  }
+
+  protected get isNotDeletedLoginCipher() {
+    return this.cipher.type === this.CipherType.Login && !this.cipher.isDeleted;
+  }
+
+  protected get showCopyPassword(): boolean {
+    return this.isNotDeletedLoginCipher && this.cipher.viewPassword;
+  }
+
+  protected get showCopyTotp(): boolean {
+    return this.isNotDeletedLoginCipher && this.showTotpCopyButton;
+  }
+
+  protected get showLaunchUri(): boolean {
+    return this.isNotDeletedLoginCipher && this.cipher.login.canLaunch;
+  }
+
+  protected get showMenu() {
+    return (
+      this.isNotDeletedLoginCipher ||
+      this.showCopyPassword ||
+      this.showCopyTotp ||
+      this.showLaunchUri ||
+      this.showAttachments ||
+      this.showClone ||
+      this.canEditCipher ||
+      this.cipher.isDeleted
+    );
+  }
+
   protected copy(field: "username" | "password" | "totp") {
     this.onEvent.emit({ type: "copyField", item: this.cipher, field });
   }
