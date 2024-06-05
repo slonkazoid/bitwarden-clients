@@ -60,4 +60,8 @@ export class VaultV2Component implements OnInit, OnDestroy {
     // TODO: Add currently filtered organization to query params if available
     void this.router.navigate(["/add-cipher"], {});
   }
+
+  newItemNavigate(type: string) {
+    void this.router.navigate(["/add-cipher"], { queryParams: { type: type, isNew: true } });
+  }
 }
