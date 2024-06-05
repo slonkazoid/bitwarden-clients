@@ -738,12 +738,12 @@ export class VaultComponent implements OnInit, OnDestroy {
     const activeOrgId = this.activeFilter.organizationId;
     let orgId: string | undefined;
 
-    // if activeFilter.organizationId is null or undefined then we need to get the organizationId from the ciphers
+    // If activeFilter.organizationId is null or undefined, determine the organizationId from the ciphers.
     if (!activeOrgId) {
       orgId = [...new Set(ciphers.map((c) => c.organizationId).filter((id) => id !== null))][0];
     }
 
-    // No organization id or it's MyVault means we have only personal ciphers
+    // If there is no organization id or if it's "MyVault", it means we are dealing with personal ciphers only.
     if (activeOrgId === "MyVault" || (!activeOrgId && !orgId)) {
       availableCollections = [];
     } else {

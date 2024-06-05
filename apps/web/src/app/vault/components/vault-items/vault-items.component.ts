@@ -288,7 +288,7 @@ export class VaultItemsComponent {
     );
     const canEditOrManageAllCiphers = organization?.canEditAllCiphers(
       this.flexibleCollectionsV1Enabled,
-      false,
+      this.restrictProviderAccess,
     );
 
     const collectionNotSelected =
@@ -311,7 +311,7 @@ export class VaultItemsComponent {
     const canEditOrManageAllCiphers =
       organizations.length > 0 &&
       organizations.every((org) =>
-        org?.canEditAllCiphers(this.flexibleCollectionsV1Enabled, false),
+        org?.canEditAllCiphers(this.flexibleCollectionsV1Enabled, this.restrictProviderAccess),
       );
 
     const canDeleteCollections = this.selection.selected
