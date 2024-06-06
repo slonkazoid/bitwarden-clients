@@ -6,19 +6,19 @@
         {{ "new" | i18n }}
       </button>
       <bit-menu #itemOptions>
-        <button type="button" bitMenuItem (click)="newItemNavigate('Login')">
+        <button type="button" bitMenuItem (click)="newItemNavigate(cipherType.Login)">
           <i class="bwi bwi-globe" slot="start"></i>
           {{ "typeLogin" | i18n }}
         </button>
-        <button type="button" bitMenuItem (click)="newItemNavigate('Card')">
+        <button type="button" bitMenuItem (click)="newItemNavigate(cipherType.Card)">
           <i class="bwi bwi-credit-card" slot="start"></i>
           {{ "typeCard" | i18n }}
         </button>
-        <button type="button" bitMenuItem (click)="newItemNavigate('Identity')">
+        <button type="button" bitMenuItem (click)="newItemNavigate(cipherType.Identity)">
           <i class="bwi bwi-id-card" slot="start"></i>
           {{ "typeIdentity" | i18n }}
         </button>
-        <button type="button" bitMenuItem (click)="newItemNavigate('Note')">
+        <button type="button" bitMenuItem (click)="newItemNavigate(cipherType.SecureNote)">
           <i class="bwi bwi-sticky-note" slot="start"></i>
           {{ "note" | i18n }}
         </button>

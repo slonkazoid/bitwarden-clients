@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { ButtonModule, Icons, NoItemsModule, MenuModule } from "@bitwarden/components";
 
 import { CurrentAccountComponent } from "../../../../auth/popup/account-switching/current-account.component";
@@ -36,6 +37,7 @@ import { VaultV2SearchComponent } from "../vault-v2/vault-search/vault-v2-search
   ],
 })
 export class VaultV2Component implements OnInit, OnDestroy {
+  cipherType = CipherType;
   protected favoriteCiphers$ = this.vaultPopupItemsService.favoriteCiphers$;
   protected remainingCiphers$ = this.vaultPopupItemsService.remainingCiphers$;
 
@@ -61,7 +63,7 @@ export class VaultV2Component implements OnInit, OnDestroy {
     void this.router.navigate(["/add-cipher"], {});
   }
 
-  newItemNavigate(type: string) {
+  newItemNavigate(type: CipherType) {
     void this.router.navigate(["/add-cipher"], { queryParams: { type: type, isNew: true } });
   }
 }

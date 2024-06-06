@@ -201,13 +201,12 @@ const routes: Routes = [
     data: { state: "add-cipher" },
     runGuardsAndResolvers: "always",
   }),
-  {
+  ...extensionRefreshSwap(AddEditComponent, AddEditV2Component, {
     path: "edit-cipher",
-    component: AddEditComponent,
     canActivate: [AuthGuard, debounceNavigationGuard()],
     data: { state: "edit-cipher" },
     runGuardsAndResolvers: "always",
-  },
+  }),
   {
     path: "share-cipher",
     component: ShareComponent,
