@@ -10,7 +10,7 @@ import { fromChromeEvent } from "../../browser/from-chrome-event";
 
 export const serializationIndicator = "__json__";
 
-type serializedObject = { [serializationIndicator]: true; value: string };
+export type SerializedValue = { [serializationIndicator]: true; value: string };
 
 export const objToStore = (obj: any) => {
   if (obj == null) {
@@ -22,7 +22,7 @@ export const objToStore = (obj: any) => {
   }
 
   return {
-    [serializationIndicator]: true,
+    [serializationIndicator]: true as const,
     value: JSON.stringify(obj),
   };
 };
@@ -105,7 +105,7 @@ export default abstract class AbstractChromeStorageService
   }
 
   /** Backwards compatible resolution of retrieved object with new serialized storage */
-  protected processGetObject<T>(obj: T | serializedObject): T | null {
+  protected processGetObject<T>(obj: T | SerializedValue): T | null {
     if (this.isSerialized(obj)) {
       obj = JSON.parse(obj.value);
     }
@@ -113,8 +113,8 @@ export default abstract class AbstractChromeStorageService
   }
 
   /** Type guard for whether an object is tagged as serialized */
-  protected isSerialized<T>(value: T | serializedObject): value is serializedObject {
-    const asSerialized = value as serializedObject;
+  protected isSerialized<T>(value: T | SerializedValue): value is SerializedValue {
+    const asSerialized = value as SerializedValue;
     return (
       asSerialized != null &&
       asSerialized[serializationIndicator] &&
