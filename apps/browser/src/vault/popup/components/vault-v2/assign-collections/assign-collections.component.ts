@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, first, firstValueFrom, map, take, tap } from "rxjs";
+import { Observable, combineLatest, first, firstValueFrom, map, tap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -85,19 +85,21 @@ export class AssignCollections {
     private logService: LogService,
     route: ActivatedRoute,
   ) {
-    // eslint-disable-next-line rxjs/no-async-subscribe
-    route.queryParams.pipe(takeUntilDestroyed(), first()).subscribe(async ({ cipherId }) => {
-      const cipherDomain = await this.cipherService.get(cipherId);
-      this.cipher = await cipherDomain.decrypt(
-        await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain),
-      );
-    });
+    combineLatest([route.queryParams, this.collectionService.decryptedCollections$])
+      .pipe(takeUntilDestroyed(), first())
+      // eslint-disable-next-line rxjs/no-async-subscribe
+      .subscribe(async ([{ cipherId }, collections]) => {
+        const cipherDomain = await this.cipherService.get(cipherId);
+        this.cipher = await cipherDomain.decrypt(
+          await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain),
+        );
 
-    this.collectionService.decryptedCollections$
-      .pipe(takeUntilDestroyed(), take(1))
-      .subscribe((collections) => {
         this.writeableCollections = collections.filter((c) => !c.readOnly);
         this.updateCollections();
+
+        this.transferForm.controls.collections.setValue(
+          this.collections.filter((c) => this.cipher.collectionIds.includes(c.id)),
+        );
       });
 
     this.organizations$ = this.organizationService.memberOrganizations$.pipe(
