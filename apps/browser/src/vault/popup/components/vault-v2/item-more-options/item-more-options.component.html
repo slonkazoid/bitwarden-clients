@@ -33,6 +33,7 @@
         [queryParams]="{ cipherId: this.cipher.id }"
         type="button"
         bitMenuItem
+        *ngIf="!cipher.organizationId"
       >
         {{ "assignCollections" | i18n }}
       </a>
