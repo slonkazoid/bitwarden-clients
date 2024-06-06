@@ -79,8 +79,8 @@ export class VaultCipherRowComponent {
     return this.isNotDeletedLoginCipher && this.cipher.login.canLaunch;
   }
 
-  protected get showMenu() {
-    return (
+  protected get disableMenu() {
+    return !(
       this.isNotDeletedLoginCipher ||
       this.showCopyPassword ||
       this.showCopyTotp ||

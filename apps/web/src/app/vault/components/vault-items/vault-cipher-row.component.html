@@ -69,9 +69,9 @@
 <td bitCell [ngClass]="RowHeightClass" *ngIf="viewingOrgVault"></td>
 <td bitCell [ngClass]="RowHeightClass" class="tw-text-right">
   <button
-    *ngIf="showMenu"
-    [disabled]="disabled"
+    [disabled]="disabled || disableMenu"
     [bitMenuTriggerFor]="cipherOptions"
+    [attr.title]="disableMenu ? ('missingPermissions' | i18n) : ''"
     size="small"
     bitIconButton="bwi-ellipsis-v"
     type="button"
