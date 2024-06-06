@@ -1,7 +1,7 @@
-import type { CustomMatchers } from "./test.setup";
+import type { CustomMatchers } from "./spec/matchers";
 
-// This declares the types for our custom matchers so that they're recognised by Typescript
-// This file must also be included in the TS compilation (via the tsconfig.json "include" property) to be recognised by
+// This declares the types for our custom matchers so that they're recognized by Typescript
+// This file must also be included in the TS compilation (via the tsconfig.json "include" property) to be recognized by
 // vscode
 
 /* eslint-disable */
