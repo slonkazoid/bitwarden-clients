@@ -54,9 +54,9 @@ export class BrowserTaskSchedulerServiceImplementation
     this.validateRegisteredTask(taskName);
 
     const delayInMinutes = delayInMs / 1000 / 60;
-    void this.scheduleAlarm(taskName, {
+    this.scheduleAlarm(taskName, {
       delayInMinutes: this.getUpperBoundDelayInMinutes(delayInMinutes),
-    });
+    }).catch((error) => this.logService.error("Failed to schedule alarm", error));
 
     // If the delay is less than a minute, we want to attempt to trigger the task through a setTimeout.
     // The alarm previously scheduled will be used as a backup in case the setTimeout fails.
@@ -71,7 +71,9 @@ export class BrowserTaskSchedulerServiceImplementation
       if (timeoutHandle) {
         globalThis.clearTimeout(timeoutHandle);
       }
-      void this.clearScheduledAlarm(taskName);
+      this.clearScheduledAlarm(taskName).catch((error) =>
+        this.logService.error("Failed to clear alarm", error),
+      );
     });
   }
 
@@ -100,12 +102,16 @@ export class BrowserTaskSchedulerServiceImplementation
       return this.setupSteppedIntervalAlarms(taskName, intervalInMs);
     }
 
-    void this.scheduleAlarm(taskName, {
+    this.scheduleAlarm(taskName, {
       periodInMinutes: this.getUpperBoundDelayInMinutes(intervalInMinutes),
       delayInMinutes: this.getUpperBoundDelayInMinutes(initialDelayInMinutes),
-    });
+    }).catch((error) => this.logService.error("Failed to schedule alarm", error));
 
-    return new Subscription(() => this.clearScheduledAlarm(taskName));
+    return new Subscription(() =>
+      this.clearScheduledAlarm(taskName).catch((error) =>
+        this.logService.error("Failed to clear alarm", error),
+      ),
+    );
   }
 
   /**
@@ -134,12 +140,14 @@ export class BrowserTaskSchedulerServiceImplementation
         alarmMinDelayInMinutes + intervalInMinutes * alarmIndex,
       );
 
-      void this.clearScheduledAlarm(steppedAlarmName).then(() => {
-        void this.scheduleAlarm(steppedAlarmName, {
-          periodInMinutes: steppedAlarmPeriodInMinutes,
-          delayInMinutes,
-        });
-      });
+      this.clearScheduledAlarm(steppedAlarmName)
+        .then(() =>
+          this.scheduleAlarm(steppedAlarmName, {
+            periodInMinutes: steppedAlarmPeriodInMinutes,
+            delayInMinutes,
+          }).catch((error) => this.logService.error("Failed to schedule alarm", error)),
+        )
+        .catch((error) => this.logService.error("Failed to clear alarm", error));
     }
 
     let elapsedMs = 0;
@@ -159,7 +167,11 @@ export class BrowserTaskSchedulerServiceImplementation
       if (intervalHandle) {
         globalThis.clearInterval(intervalHandle);
       }
-      steppedAlarmNames.forEach((alarmName) => void this.clearScheduledAlarm(alarmName));
+      steppedAlarmNames.forEach((alarmName) =>
+        this.clearScheduledAlarm(alarmName).catch((error) =>
+          this.logService.error("Failed to clear alarm", error),
+        ),
+      );
     });
   }
 
@@ -197,7 +209,9 @@ export class BrowserTaskSchedulerServiceImplementation
         continue;
       }
 
-      void this.scheduleAlarm(alarmName, createInfo);
+      this.scheduleAlarm(alarmName, createInfo).catch((error) =>
+        this.logService.error("Failed to schedule alarm", error),
+      );
     }
   }
 
