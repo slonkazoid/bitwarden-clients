@@ -4,7 +4,7 @@ import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CipherType } from "@bitwarden/common/vault/enums";
-import { ButtonModule, Icons, NoItemsModule, MenuModule } from "@bitwarden/components";
+import { ButtonModule, Icons, NoItemsModule } from "@bitwarden/components";
 
 import { CurrentAccountComponent } from "../../../../auth/popup/account-switching/current-account.component";
 import { PopOutComponent } from "../../../../platform/popup/components/pop-out.component";
@@ -12,6 +12,7 @@ import { PopupHeaderComponent } from "../../../../platform/popup/layout/popup-he
 import { PopupPageComponent } from "../../../../platform/popup/layout/popup-page.component";
 import { VaultPopupItemsService } from "../../services/vault-popup-items.service";
 import { AutofillVaultListItemsComponent, VaultListItemsContainerComponent } from "../vault-v2";
+import { NewItemDropdownV2Component } from "../vault-v2/new-item-dropdown/new-item-dropdown-v2.component";
 import { VaultListFiltersComponent } from "../vault-v2/vault-list-filters/vault-list-filters.component";
 import { VaultV2SearchComponent } from "../vault-v2/vault-search/vault-v2-search.component";
 
@@ -33,7 +34,7 @@ import { VaultV2SearchComponent } from "../vault-v2/vault-search/vault-v2-search
     ButtonModule,
     RouterLink,
     VaultV2SearchComponent,
-    MenuModule,
+    NewItemDropdownV2Component,
   ],
 })
 export class VaultV2Component implements OnInit, OnDestroy {
@@ -61,9 +62,5 @@ export class VaultV2Component implements OnInit, OnDestroy {
   addCipher() {
     // TODO: Add currently filtered organization to query params if available
     void this.router.navigate(["/add-cipher"], {});
-  }
-
-  newItemNavigate(type: CipherType) {
-    void this.router.navigate(["/add-cipher"], { queryParams: { type: type, isNew: true } });
   }
 }

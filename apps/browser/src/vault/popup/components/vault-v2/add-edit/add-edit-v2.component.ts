@@ -1,8 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription, first } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -38,9 +38,8 @@ export class AddEditV2Component {
     this.subscribeToParams();
   }
 
-  subscribeToParams(): Subscription {
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    return this.route.queryParams.pipe(first()).subscribe((params) => {
+  subscribeToParams(): void {
+    this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
       const isNew = params.isNew.toLowerCase() === "true";
       const cipherType = parseInt(params.type);
 
@@ -49,24 +48,17 @@ export class AddEditV2Component {
   }
 
   setHeader(isNew: boolean, type: CipherType) {
-    const headerOne = isNew ? this.i18nService.t("new") : this.i18nService.t("view");
-    let headerTwo;
+    const partOne = isNew ? "newItemHeader" : "editItemHeader";
 
     switch (type) {
       case CipherType.Login:
-        headerTwo = this.i18nService.t("typeLogin");
-        break;
+        return this.i18nService.t(partOne, this.i18nService.t("typeLogin"));
       case CipherType.Card:
-        headerTwo = this.i18nService.t("typeCard");
-        break;
+        return this.i18nService.t(partOne, this.i18nService.t("typeCard"));
       case CipherType.Identity:
-        headerTwo = this.i18nService.t("typeIdentity");
-        break;
+        return this.i18nService.t(partOne, this.i18nService.t("typeIdentity"));
       case CipherType.SecureNote:
-        headerTwo = this.i18nService.t("note");
-        break;
+        return this.i18nService.t(partOne, this.i18nService.t("note"));
     }
-
-    return `${headerOne} ${headerTwo}`;
   }
 }
