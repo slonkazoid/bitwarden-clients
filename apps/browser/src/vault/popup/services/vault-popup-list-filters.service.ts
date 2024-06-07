@@ -139,22 +139,22 @@ export class VaultPopupListFiltersService {
   readonly cipherTypes: ChipSelectOption<CipherType>[] = [
     {
       value: CipherType.Login,
-      label: this.i18nService.t("logins"),
+      label: this.i18nService.t("typeLogin"),
       icon: "bwi-globe",
     },
     {
       value: CipherType.Card,
-      label: this.i18nService.t("cards"),
+      label: this.i18nService.t("typeCard"),
       icon: "bwi-credit-card",
     },
     {
       value: CipherType.Identity,
-      label: this.i18nService.t("identities"),
+      label: this.i18nService.t("typeIdentity"),
       icon: "bwi-id-card",
     },
     {
       value: CipherType.SecureNote,
-      label: this.i18nService.t("notes"),
+      label: this.i18nService.t("note"),
       icon: "bwi-sticky-note",
     },
   ];
@@ -188,8 +188,11 @@ export class VaultPopupListFiltersService {
             if (!org.enabled) {
               // Show a warning icon if the organization is deactivated
               icon = "bwi-exclamation-triangle tw-text-danger";
-            } else if (org.planProductType === ProductType.Families) {
-              // Show a family icon if the organization is a family org
+            } else if (
+              org.planProductType === ProductType.Families ||
+              org.planProductType === ProductType.Free
+            ) {
+              // Show a family icon if the organization is a family or free org
               icon = "bwi-family";
             }
 
