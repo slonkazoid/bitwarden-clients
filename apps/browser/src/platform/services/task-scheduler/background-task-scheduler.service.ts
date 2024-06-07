@@ -25,6 +25,10 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
    * @param port - The port that was connected.
    */
   private handlePortOnConnect = (port: chrome.runtime.Port) => {
+    if (port.name !== BrowserTaskSchedulerPortName) {
+      return;
+    }
+
     this.ports.add(port);
     port.onMessage.addListener(this.handlePortMessage);
     port.onDisconnect.addListener(this.handlePortOnDisconnect);
@@ -50,10 +54,6 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
     message: BrowserTaskSchedulerPortMessage,
     port: chrome.runtime.Port,
   ) => {
-    if (port.name !== BrowserTaskSchedulerPortName) {
-      return;
-    }
-
     if (message.action === BrowserTaskSchedulerPortActions.setTimeout) {
       super.setTimeout(message.taskName, message.delayInMs);
       return;
@@ -65,8 +65,7 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
     }
 
     if (message.action === BrowserTaskSchedulerPortActions.clearAlarm) {
-      void super.clearScheduledAlarm(message.alarmName);
-      return;
+      super.clearScheduledAlarm(message.alarmName).catch((error) => this.logService.error(error));
     }
   };
 }
