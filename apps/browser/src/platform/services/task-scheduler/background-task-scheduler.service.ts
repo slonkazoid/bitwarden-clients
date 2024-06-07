@@ -48,12 +48,8 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
    * Handles a message from a port.
    *
    * @param message - The message that was received.
-   * @param port - The port that sent the message.
    */
-  private handlePortMessage = (
-    message: BrowserTaskSchedulerPortMessage,
-    port: chrome.runtime.Port,
-  ) => {
+  private handlePortMessage = (message: BrowserTaskSchedulerPortMessage) => {
     if (message.action === BrowserTaskSchedulerPortActions.setTimeout) {
       super.setTimeout(message.taskName, message.delayInMs);
       return;
