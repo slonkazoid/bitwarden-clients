@@ -48,20 +48,27 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
    * Handles a message from a port.
    *
    * @param message - The message that was received.
+   * @param port - The port that sent the message.
    */
-  private handlePortMessage = (message: BrowserTaskSchedulerPortMessage) => {
-    if (message.action === BrowserTaskSchedulerPortActions.setTimeout) {
-      super.setTimeout(message.taskName, message.delayInMs);
+  private handlePortMessage = (
+    message: BrowserTaskSchedulerPortMessage,
+    port: chrome.runtime.Port,
+  ) => {
+    const isTaskSchedulerPort = port.name === BrowserTaskSchedulerPortName;
+    const { action, taskName, alarmName, delayInMs, intervalInMs } = message;
+
+    if (isTaskSchedulerPort && action === BrowserTaskSchedulerPortActions.setTimeout) {
+      super.setTimeout(taskName, delayInMs);
       return;
     }
 
-    if (message.action === BrowserTaskSchedulerPortActions.setInterval) {
-      super.setInterval(message.taskName, message.intervalInMs);
+    if (isTaskSchedulerPort && action === BrowserTaskSchedulerPortActions.setInterval) {
+      super.setInterval(taskName, intervalInMs);
       return;
     }
 
-    if (message.action === BrowserTaskSchedulerPortActions.clearAlarm) {
-      super.clearScheduledAlarm(message.alarmName).catch((error) => this.logService.error(error));
+    if (isTaskSchedulerPort && action === BrowserTaskSchedulerPortActions.clearAlarm) {
+      super.clearScheduledAlarm(alarmName).catch((error) => this.logService.error(error));
     }
   };
 }
