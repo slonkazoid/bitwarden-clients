@@ -5,6 +5,7 @@ import {
   distinctUntilKeyChanged,
   from,
   map,
+  merge,
   Observable,
   of,
   shareReplay,
@@ -38,7 +39,8 @@ import { MY_VAULT_ID, VaultPopupListFiltersService } from "./vault-popup-list-fi
 })
 export class VaultPopupItemsService {
   private _refreshCurrentTab$ = new Subject<void>();
-  private searchText$ = new BehaviorSubject<string>("");
+  private _searchText$ = new BehaviorSubject<string>("");
+  latestSearchText$: Observable<string> = this._searchText$.asObservable();
 
   /**
    * Observable that contains the list of other cipher types that should be shown
@@ -77,10 +79,12 @@ export class VaultPopupItemsService {
    * Observable that contains the list of all decrypted ciphers.
    * @private
    */
-  private _cipherList$: Observable<PopupCipherView[]> = this.cipherService.ciphers$.pipe(
+  private _cipherList$: Observable<PopupCipherView[]> = merge(
+    this.cipherService.ciphers$,
+    this.cipherService.localData$,
+  ).pipe(
     runInsideAngular(inject(NgZone)), // Workaround to ensure cipher$ state provider emissions are run inside Angular
     switchMap(() => Utils.asyncToObservable(() => this.cipherService.getAllDecrypted())),
-    map((ciphers) => Object.values(ciphers)),
     switchMap((ciphers) =>
       combineLatest([
         this.organizationService.organizations$,
@@ -105,7 +109,7 @@ export class VaultPopupItemsService {
 
   private _filteredCipherList$: Observable<PopupCipherView[]> = combineLatest([
     this._cipherList$,
-    this.searchText$,
+    this._searchText$,
     this.vaultPopupListFiltersService.filterFunction$,
   ]).pipe(
     map(([ciphers, searchText, filterFunction]): [CipherView[], string] => [
@@ -179,7 +183,7 @@ export class VaultPopupItemsService {
    * Observable that indicates whether a filter is currently applied to the ciphers.
    */
   hasFilterApplied$ = combineLatest([
-    this.searchText$,
+    this._searchText$,
     this.vaultPopupListFiltersService.filters$,
   ]).pipe(
     switchMap(([searchText, filters]) => {
@@ -242,7 +246,7 @@ export class VaultPopupItemsService {
   }
 
   applyFilter(newSearchText: string) {
-    this.searchText$.next(newSearchText);
+    this._searchText$.next(newSearchText);
   }
 
   /**

@@ -10,10 +10,10 @@ import {
   IconButtonModule,
   ItemModule,
   SectionComponent,
+  SectionHeaderComponent,
   TypographyModule,
 } from "@bitwarden/components";
 
-import { PopupSectionHeaderComponent } from "../../../../../platform/popup/popup-section-header/popup-section-header.component";
 import { PopupCipherView } from "../../../views/popup-cipher.view";
 import { ItemCopyActionsComponent } from "../item-copy-action/item-copy-actions.component";
 import { ItemMoreOptionsComponent } from "../item-more-options/item-more-options.component";
@@ -28,7 +28,7 @@ import { ItemMoreOptionsComponent } from "../item-more-options/item-more-options
     SectionComponent,
     TypographyModule,
     JslibModule,
-    PopupSectionHeaderComponent,
+    SectionHeaderComponent,
     RouterLink,
     ItemCopyActionsComponent,
     ItemMoreOptionsComponent,
@@ -49,6 +49,13 @@ export class VaultListItemsContainerComponent {
    */
   @Input()
   title: string;
+
+  /**
+   * Optional description for the vault list item section. Will be shown below the title even when
+   * no ciphers are available.
+   */
+  @Input()
+  description: string;
 
   /**
    * Option to show a refresh button in the section header.

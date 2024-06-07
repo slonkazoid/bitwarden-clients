@@ -23,8 +23,8 @@ import { MessagingService } from "../platform/abstractions/messaging.service";
 import { StateService } from "../platform/abstractions/state.service";
 import { TaskSchedulerService } from "../platform/abstractions/task-scheduler.service";
 import { ScheduledTaskNames } from "../platform/enums/scheduled-task-name.enum";
+import { SyncService } from "../platform/sync/sync.service";
 import { UserId } from "../types/guid";
-import { SyncService } from "../vault/abstractions/sync/sync.service.abstraction";
 
 export class NotificationsService implements NotificationsServiceAbstraction {
   private signalrConnection: signalR.HubConnection;

@@ -25,8 +25,6 @@ import {
   PBKDF2KdfConfig,
 } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { TokenTwoFactorRequest } from "@bitwarden/common/auth/models/request/identity-token/token-two-factor.request";
-import { PasswordlessAuthRequest } from "@bitwarden/common/auth/models/request/passwordless-auth.request";
-import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
@@ -42,7 +40,6 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { KdfType } from "@bitwarden/common/platform/enums/kdf-type.enum";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { GlobalState, GlobalStateProvider } from "@bitwarden/common/platform/state";
 import { DeviceTrustServiceAbstraction } from "@bitwarden/common/src/auth/abstractions/device-trust.service.abstraction";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
@@ -269,47 +266,6 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
       }
     }
     return await this.cryptoService.makeMasterKey(masterPassword, email, kdfConfig);
-  }
-
-  // TODO: move to auth request service
-  async passwordlessLogin(
-    id: string,
-    key: string,
-    requestApproved: boolean,
-  ): Promise<AuthRequestResponse> {
-    const pubKey = Utils.fromB64ToArray(key);
-
-    const userId = (await firstValueFrom(this.accountService.activeAccount$)).id;
-    const masterKey = await firstValueFrom(this.masterPasswordService.masterKey$(userId));
-    let keyToEncrypt;
-    let encryptedMasterKeyHash = null;
-
-    if (masterKey) {
-      keyToEncrypt = masterKey.encKey;
-
-      // Only encrypt the master password hash if masterKey exists as
-      // we won't have a masterKeyHash without a masterKey
-      const masterKeyHash = await firstValueFrom(this.masterPasswordService.masterKeyHash$(userId));
-      if (masterKeyHash != null) {
-        encryptedMasterKeyHash = await this.cryptoService.rsaEncrypt(
-          Utils.fromUtf8ToArray(masterKeyHash),
-          pubKey,
-        );
-      }
-    } else {
-      const userKey = await this.cryptoService.getUserKey();
-      keyToEncrypt = userKey.key;
-    }
-
-    const encryptedKey = await this.cryptoService.rsaEncrypt(keyToEncrypt, pubKey);
-
-    const request = new PasswordlessAuthRequest(
-      encryptedKey.encryptedString,
-      encryptedMasterKeyHash?.encryptedString,
-      await this.appIdService.getAppId(),
-      requestApproved,
-    );
-    return await this.apiService.putAuthRequest(id, request);
   }
 
   private async clearCache(): Promise<void> {
