@@ -41,6 +41,7 @@ export class BackgroundTaskSchedulerService extends BrowserTaskSchedulerServiceI
    */
   private handlePortOnDisconnect = (port: chrome.runtime.Port) => {
     port.onMessage.removeListener(this.handlePortMessage);
+    port.onDisconnect.removeListener(this.handlePortOnDisconnect);
     this.ports.delete(port);
   };
 

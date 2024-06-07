@@ -68,6 +68,8 @@ describe("BackgroundTaskSchedulerService", () => {
 
       triggerPortOnDisconnectEvent(portMock);
       expect(backgroundTaskSchedulerService["ports"].size).toBe(0);
+      expect(portMock.onMessage.removeListener).toHaveBeenCalled();
+      expect(portMock.onDisconnect.removeListener).toHaveBeenCalled();
     });
   });
 
