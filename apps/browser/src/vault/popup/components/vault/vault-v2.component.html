@@ -15,9 +15,7 @@
     <bit-no-items [icon]="vaultIcon">
       <ng-container slot="title">{{ "yourVaultIsEmpty" | i18n }}</ng-container>
       <ng-container slot="description">{{ "autofillSuggestionsTip" | i18n }}</ng-container>
-      <button slot="button" type="button" bitButton buttonType="primary" (click)="addCipher()">
-        {{ "new" | i18n }}
-      </button>
+      <app-new-item-dropdown slot="button"></app-new-item-dropdown>
     </bit-no-items>
   </div>
 

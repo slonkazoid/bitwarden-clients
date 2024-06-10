@@ -90,9 +90,4 @@ export class VaultV2Component implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   ngOnDestroy(): void {}
-
-  addCipher() {
-    // TODO: Add currently filtered organization to query params if available
-    void this.router.navigate(["/add-cipher"], {});
-  }
 }
