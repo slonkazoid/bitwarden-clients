@@ -1,19 +1,21 @@
-<popup-page>
-  <popup-header slot="header" [pageTitle]="'assignCollections' | i18n" showBackButton>
-    <ng-container slot="end">
-      <app-pop-out></app-pop-out>
-    </ng-container>
-  </popup-header>
+<form
+  #form
+  id="transferForm"
+  [formGroup]="transferForm"
+  [bitSubmit]="submit"
+  [allowDisabledFormSubmit]="true"
+  class="tw-h-full"
+>
+  <popup-page>
+    <popup-header slot="header" [pageTitle]="'assignCollections' | i18n" showBackButton>
+      <ng-container slot="end">
+        <app-pop-out></app-pop-out>
+      </ng-container>
+    </popup-header>
 
-  <bit-card>
-    <p bitTypography="body1">{{ "itemWillBePermanentlyTransferred" | i18n }}</p>
-    <form
-      #form
-      id="transferForm"
-      [formGroup]="transferForm"
-      (ngSubmit)="submit()"
-      [appApiAction]="formPromise"
-    >
+    <bit-card>
+      <p bitTypography="body1">{{ "itemWillBePermanentlyTransferred" | i18n }}</p>
+
       <ng-container *ngIf="organizations$ | async as organizations">
         <bit-form-field>
           <bit-label>{{ "moveToOrganization" | i18n }}</bit-label>
@@ -44,21 +46,15 @@
         ></bit-multi-select>
         <bit-hint>{{ "onlyOrganizationMembersCanView" | i18n }}</bit-hint>
       </bit-form-field>
-    </form>
-  </bit-card>
+    </bit-card>
 
-  <popup-footer slot="footer">
-    <button
-      bitButton
-      buttonType="primary"
-      type="submit"
-      form="transferForm"
-      [disabled]="form.loading"
-    >
-      {{ "save" | i18n }}
-    </button>
-    <a bitButton buttonType="secondary" (click)="navigateBack()">
-      {{ "cancel" | i18n }}
-    </a>
-  </popup-footer>
-</popup-page>
+    <popup-footer slot="footer">
+      <button bitButton bitFormButton buttonType="primary" type="submit">
+        {{ "save" | i18n }}
+      </button>
+      <a bitButton buttonType="secondary" (click)="navigateBack()">
+        {{ "cancel" | i18n }}
+      </a>
+    </popup-footer>
+  </popup-page>
+</form>
