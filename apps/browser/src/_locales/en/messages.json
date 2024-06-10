@@ -3503,5 +3503,8 @@
   },
   "onlyOrganizationMembersCanView": {
     "message": "Only organization members with access to these collections will be able to see the item."
+  },
+  "itemWillBePermanentlyTransferred": {
+    "message": "1 item will be permanently transferred to the selected organization. You will no longer own this item."
   }
 }
