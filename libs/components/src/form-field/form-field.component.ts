@@ -30,6 +30,8 @@ export class BitFormFieldComponent implements AfterContentChecked {
   @ContentChildren(BitPrefixDirective) prefixChildren: QueryList<BitPrefixDirective>;
   @ContentChildren(BitSuffixDirective) suffixChildren: QueryList<BitSuffixDirective>;
 
+  @Input() showRequired: boolean | undefined = true;
+
   private _disableMargin = false;
   @Input() set disableMargin(value: boolean | "") {
     this._disableMargin = coerceBooleanProperty(value);
