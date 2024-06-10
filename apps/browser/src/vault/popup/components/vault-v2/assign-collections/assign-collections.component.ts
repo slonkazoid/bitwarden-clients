@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormBuilder, FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, combineLatest, first, firstValueFrom, map, tap } from "rxjs";
+import { Observable, combineLatest, first, firstValueFrom, map, switchMap, tap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -85,14 +85,19 @@ export class AssignCollections {
     private logService: LogService,
     route: ActivatedRoute,
   ) {
-    combineLatest([route.queryParams, this.collectionService.decryptedCollections$])
+    const $cipher: Observable<CipherView> = route.queryParams.pipe(
+      switchMap(({ cipherId }) => this.cipherService.get(cipherId)),
+      switchMap((cipherDomain) =>
+        this.cipherService
+          .getKeyForCipherKeyDecryption(cipherDomain)
+          .then(cipherDomain.decrypt.bind(cipherDomain)),
+      ),
+    );
+
+    combineLatest([$cipher, this.collectionService.decryptedCollections$])
       .pipe(takeUntilDestroyed(), first())
-      // eslint-disable-next-line rxjs/no-async-subscribe
-      .subscribe(async ([{ cipherId }, collections]) => {
-        const cipherDomain = await this.cipherService.get(cipherId);
-        this.cipher = await cipherDomain.decrypt(
-          await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain),
-        );
+      .subscribe(([cipherView, collections]) => {
+        this.cipher = cipherView;
 
         this.writeableCollections = collections.filter((c) => !c.readOnly);
         this.updateCollections();
