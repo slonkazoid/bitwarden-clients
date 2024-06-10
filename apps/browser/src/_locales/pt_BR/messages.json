@@ -173,13 +173,19 @@
     "message": "Continuar no aplicativo web?"
   },
   "continueToWebAppDesc": {
-    "message": "Explore more features of your Bitwarden account on the web app."
+    "message": "Explore mais recursos da sua conta no Bitwarden no aplicativo web."
   },
   "continueToHelpCenter": {
-    "message": "Continue to Help Center?"
+    "message": "Continuar no Centro de Ajuda?"
   },
   "continueToHelpCenterDesc": {
-    "message": "Learn more about how to use Bitwarden on the Help Center."
+    "message": "Saiba mais sobre como usar o Bitwarden no Centro de Ajuda."
+  },
+  "continueToBrowserExtensionStore": {
+    "message": "Continuar na extensão da loja do navegador?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Ajude outros a descobrir se o Bitwarden está certo para eles. Visite a loja de extensões do seu navegador e deixe uma classificação agora."
   },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Você pode alterar a sua senha mestra no aplicativo web Bitwarden."
@@ -199,43 +205,43 @@
     "message": "Encerrar Sessão"
   },
   "aboutBitwarden": {
-    "message": "About Bitwarden"
+    "message": "Sobre o Bitwarden"
   },
   "about": {
     "message": "Sobre"
   },
   "moreFromBitwarden": {
-    "message": "More from Bitwarden"
+    "message": "Mais do Bitwarden"
   },
   "continueToBitwardenDotCom": {
-    "message": "Continue to bitwarden.com?"
+    "message": "Continuar para bitwarden.com?"
   },
   "bitwardenForBusiness": {
-    "message": "Bitwarden for Business"
+    "message": "Bitwarden para Negócios"
   },
   "bitwardenAuthenticator": {
-    "message": "Bitwarden Authenticator"
+    "message": "Autenticador Bitwarden"
   },
   "continueToAuthenticatorPageDesc": {
-    "message": "Bitwarden Authenticator allows you to store authenticator keys and generate TOTP codes for 2-step verification flows. Learn more on the bitwarden.com website"
+    "message": "O Autenticador Bitwarden permite que você armazene as chaves do autenticador e gere códigos TOTP para fluxos de verificação de 2 etapas. Saiba mais no site bitwarden.com"
   },
   "bitwardenSecretsManager": {
-    "message": "Bitwarden Secrets Manager"
+    "message": "Gerenciador de Segredos Bitwarden"
   },
   "continueToSecretsManagerPageDesc": {
-    "message": "Securely store, manage, and share developer secrets with Bitwarden Secrets Manager. Learn more on the bitwarden.com website."
+    "message": "Armazene, gerencie e compartilhe segredos de desenvolvedor com o Gerenciador de segredos do Bitwarden. Saiba mais no site bitwarden.com."
   },
   "passwordlessDotDev": {
     "message": "Passwordless.dev"
   },
   "continueToPasswordlessDotDevPageDesc": {
-    "message": "Create smooth and secure login experiences free from traditional passwords with Passwordless.dev. Learn more on the bitwarden.com website."
+    "message": "Crie experiências de login suaves e seguras, livres de senhas tradicionais com Passwordless.dev. Saiba mais no site bitwarden.com."
   },
   "freeBitwardenFamilies": {
-    "message": "Free Bitwarden Families"
+    "message": "Famílias do Bitwarden Grátis"
   },
   "freeBitwardenFamiliesPageDesc": {
-    "message": "You are eligible for Free Bitwarden Families. Redeem this offer today in the web app."
+    "message": "Você é elegível para as Famílias do Bitwarden Grátis. Resgate esta oferta hoje no aplicativo web."
   },
   "version": {
     "message": "Versão"
@@ -296,7 +302,7 @@
     "message": "Gere automaticamente senhas fortes e únicas para as suas credenciais."
   },
   "bitWebVaultApp": {
-    "message": "Bitwarden web app"
+    "message": "Aplicativo Web Bitwarden"
   },
   "importItems": {
     "message": "Importar Itens"
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Favorito"
   },
+  "unfavorite": {
+    "message": "Desfavoritar"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Notas"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Abrir"
+  },
+  "launchWebsite": {
+    "message": "Abrir site"
   },
   "website": {
     "message": "Site"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Sessão encerrada"
   },
+  "loggedOutDesc": {
+    "message": "Você foi desconectado de sua conta."
+  },
   "loginExpired": {
     "message": "A sua sessão expirou."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Desbloquear"
   },
+  "additionalOptions": {
+    "message": "Opções adicionais"
+  },
   "enableContextMenuItem": {
     "message": "Mostrar opções de menu de contexto"
   },
@@ -793,11 +817,38 @@
     "message": "Solarized (escuro)",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportar de"
+  },
   "exportVault": {
     "message": "Exportar Cofre"
   },
   "fileFormat": {
     "message": "Formato de arquivo"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Esta arquivo de exportação será protegido por senha e precisará da mesma para ser descriptografado."
+  },
+  "filePassword": {
+    "message": "Senha do arquivo"
+  },
+  "exportPasswordDescription": {
+    "message": "Esta senha será usada para exportar e importar este arquivo"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+  },
+  "exportTypeHeading": {
+    "message": "Export type"
+  },
+  "accountRestricted": {
+    "message": "Account restricted"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“File password”  and “Confirm file password“ do not match."
   },
   "warning": {
     "message": "AVISO",
@@ -822,7 +873,7 @@
     "message": "Compartilhado"
   },
   "bitwardenForBusinessPageDesc": {
-    "message": "Bitwarden for Business allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website."
+    "message": "O Bitwarden para Business permite que você compartilhe os itens do seu cofre com outras pessoas usando uma organização. Saiba mais no site bitwarden.com."
   },
   "moveToOrganization": {
     "message": "Mover para a Organização"
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Especifique a URL de base da sua instalação local do Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
   },
   "customEnvironment": {
     "message": "Ambiente Personalizado"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Coleções"
   },
+  "nCollections": {
+    "message": "$COUNT$ collections",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Favoritos"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Item Restaurado"
   },
+  "alreadyHaveAccount": {
+    "message": "Já tem uma conta?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Sair irá remover todo o acesso ao seu cofre e requer autenticação online após o período de tempo limite. Tem certeza de que deseja usar esta configuração?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Autopreencher e Salvar"
+  },
+  "fillAndSave": {
+    "message": "Fill and save"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Item Auto-Preenchido e URI Salvo"
@@ -1705,6 +1780,12 @@
   "ok": {
     "message": "Ok"
   },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "desktopSyncVerificationTitle": {
     "message": "Verificação de sincronização do Desktop"
   },
@@ -1754,10 +1835,10 @@
     "message": "A biometria com o navegador não é suportada neste dispositivo."
   },
   "biometricsNotUnlockedTitle": {
-    "message": "User locked or logged out"
+    "message": "Usuário bloqueado ou desconectado"
   },
   "biometricsNotUnlockedDesc": {
-    "message": "Please unlock this user in the desktop application and try again."
+    "message": "Por favor, desbloqueie esse usuário no aplicativo da área de trabalho e tente novamente."
   },
   "biometricsFailedTitle": {
     "message": "Biometria falhou"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exporting organization vault"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Erro"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Identificador SSO da organização é necessário."
+  },
+  "creatingAccountOn": {
+    "message": "Criando conta em"
+  },
+  "checkYourEmail": {
+    "message": "Verifique seu e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Siga o link no e-mail enviado para"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "e continue criando a sua conta."
+  },
+  "noEmail": {
+    "message": "Sem e-mail?"
+  },
+  "goBack": {
+    "message": "Voltar"
+  },
+  "toEditYourEmailAddress": {
+    "message": "para editar o seu endereço de e-mail."
   },
   "eu": {
     "message": "Europa",
@@ -3177,21 +3291,21 @@
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
   "autofillSuggestions": {
-    "message": "Auto-fill suggestions"
+    "message": "Sugestões de autopreenchimento"
   },
   "autofillSuggestionsTip": {
-    "message": "Save a login item for this site to auto-fill"
+    "message": "Salvar um item de login para este site autopreenchimento"
   },
   "yourVaultIsEmpty": {
-    "message": "Your vault is empty"
+    "message": "Seu cofre está vazio"
   },
   "noItemsMatchSearch": {
-    "message": "No items match your search"
+    "message": "Nenhum item corresponde à sua pesquisa"
   },
   "clearFiltersOrTryAnother": {
-    "message": "Clear filters or try another search term"
+    "message": "Limpar filtros ou tentar outro termo de pesquisa"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Copy info, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Copy info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Copy Note, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Copy Note - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "More options, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "More options - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "View item - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Assign collections"
+  },
+  "copyEmail": {
+    "message": "Copy email"
+  },
+  "copyPhone": {
+    "message": "Copy phone"
+  },
+  "copyAddress": {
+    "message": "Copy address"
   },
   "adminConsole": {
     "message": "Painel de administração"
@@ -3230,7 +3406,7 @@
     "message": "Erro ao atribuir pasta de destino."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Visualizar itens em $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -3240,7 +3416,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Voltar para $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -3250,10 +3426,10 @@
     }
   },
   "new": {
-    "message": "New"
+    "message": "Novo"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Remover $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Items with no folder"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organization is deactivated"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Items in deactivated organizations cannot be accessed. Contact your organization owner for assistance."
   }
 }

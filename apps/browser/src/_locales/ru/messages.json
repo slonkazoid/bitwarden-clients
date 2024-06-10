@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Подробнее о том, как использовать Bitwarden, можно узнать в справочном центре."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Перейти в магазин расширений для браузера?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Помогите другим узнать, подходит ли им Bitwarden. Посетите магазин расширений вашего браузера и оставьте отзыв прямо сейчас."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Изменить мастер-пароль можно в веб-приложении Bitwarden."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Избранный"
   },
+  "unfavorite": {
+    "message": "Удалить из избранного"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Заметки"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Перейти"
+  },
+  "launchWebsite": {
+    "message": "Открыть сайт"
   },
   "website": {
     "message": "Сайт"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Вы вышли из хранилища"
   },
+  "loggedOutDesc": {
+    "message": "Вы вышли из своего аккаунта."
+  },
   "loginExpired": {
     "message": "Истек срок действия вашего сеанса."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Разблокировать"
   },
+  "additionalOptions": {
+    "message": "Дополнительные настройки"
+  },
   "enableContextMenuItem": {
     "message": "Показать опции контекстного меню"
   },
@@ -793,11 +817,38 @@
     "message": "Solarized dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Экспорт из"
+  },
   "exportVault": {
     "message": "Экспорт хранилища"
   },
   "fileFormat": {
     "message": "Формат файла"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Экспорт этого файла будет защищен паролем, и для расшифровки потребуется пароль файла."
+  },
+  "filePassword": {
+    "message": "Пароль к файлу"
+  },
+  "exportPasswordDescription": {
+    "message": "Этот пароль будет использоваться для экспорта и импорта этого файла"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Использовать ключ шифрования вашего аккаунта, полученный из имени пользователя и мастер-пароля, для шифрования экспорта и ограничения импорта только для текущего аккаунта Bitwarden."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Установите пароль файла для шифрования экспорта и импортируйте его в любую учетную запись Bitwarden, используя пароль для расшифровки."
+  },
+  "exportTypeHeading": {
+    "message": "Тип экспорта"
+  },
+  "accountRestricted": {
+    "message": "Ограничено аккаунтом"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Пароль к файлу\" и \"Подтверждение пароля к файлу\" не совпадают."
   },
   "warning": {
     "message": "ВНИМАНИЕ",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Укажите URL Bitwarden на вашем сервере."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Укажите базовый URL вашего локального хостинга Bitwarden. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для продвинутой конфигурации можно указать базовый URL каждой службы отдельно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Вы должны добавить либо базовый URL сервера, либо хотя бы одно пользовательское окружение."
   },
   "customEnvironment": {
     "message": "Пользовательское окружение"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Коллекции"
   },
+  "nCollections": {
+    "message": "Коллекций: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Избранные"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Элемент восстановлен"
   },
+  "alreadyHaveAccount": {
+    "message": "Уже зарегистрированы?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "По истечении тайм-аута будет выполнен выход, что приведет к отмене всех прав доступа к вашему хранилищу и потребует онлайн-аутентификации. Вы уверены, что хотите использовать этот параметр?"
   },
@@ -1607,6 +1679,9 @@
     "message": "Подтверждение действия по тайм-ауту"
   },
   "autoFillAndSave": {
+    "message": "Заполнить и сохранить"
+  },
+  "fillAndSave": {
     "message": "Заполнить и сохранить"
   },
   "autoFillSuccessAndSavedUri": {
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Ошибка обновления токена доступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не найдены токен обновления или ключи API. Пожалуйста, попробуйте выполнить выход и повторно авторизоваться."
   },
   "desktopSyncVerificationTitle": {
     "message": "Проверка синхронизации на компьютере"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Экспорт хранилища организации"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Будет экспортировано только хранилище организации, связанное с $ORGANIZATION$. Элементы из личных хранилищ и из других организаций включены не будут.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Ошибка"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Требуется идентификатор SSO организации."
+  },
+  "creatingAccountOn": {
+    "message": "Создание аккаунта"
+  },
+  "checkYourEmail": {
+    "message": "Проверьте свою почту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдите по ссылке из отправленного письма"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продолжите создание аккаунта."
+  },
+  "noEmail": {
+    "message": "Нет письма?"
+  },
+  "goBack": {
+    "message": "Вернуться"
+  },
+  "toEditYourEmailAddress": {
+    "message": "для изменения адреса email."
   },
   "eu": {
     "message": "Европа",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Очистите фильтры или попробуйте другой поисковый запрос"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Скопировать информацию, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Скопировать информацию - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Скопировать заметку, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Скопировать заметку - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Больше опций, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Больше опций - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Просмотр элемента - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Назначить коллекции"
+  },
+  "copyEmail": {
+    "message": "Скопировать email"
+  },
+  "copyPhone": {
+    "message": "Скопировать телефон"
+  },
+  "copyAddress": {
+    "message": "Скопировать адрес"
   },
   "adminConsole": {
     "message": "консоли администратора"
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Элементы без папки"
+  },
+  "organizationIsDeactivated": {
+    "message": "Организация деактивирована"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Доступ к элементам в деактивированных организациях невозможен. Обратитесь за помощью к владельцу организации."
   }
 }

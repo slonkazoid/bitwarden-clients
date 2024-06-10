@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Přečtěte si více o tom, jak používat Bitwarden v Centru nápovědy."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Pokračovat do obchdou s rozšířeními pro prohlížeč?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Pomozte ostatním zjistit, zda je Bitwarden pro ně správný. Navštivte obchod s rozšířeními pro prohlížeč a zanechte hodnocení."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Hlavní heslo můžete změnit ve webové aplikaci Bitwardenu."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Oblíbené"
   },
+  "unfavorite": {
+    "message": "Unfavorite"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Poznámky"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Spustit"
+  },
+  "launchWebsite": {
+    "message": "Launch website"
   },
   "website": {
     "message": "Webová stránka"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Odhlášení"
   },
+  "loggedOutDesc": {
+    "message": "Byli jste odhlášeni ze svého účtu."
+  },
   "loginExpired": {
     "message": "Platnost přihlášení vypršela."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Odemknout"
   },
+  "additionalOptions": {
+    "message": "Další volby"
+  },
   "enableContextMenuItem": {
     "message": "Zobrazit volby v kontextovém menu"
   },
@@ -793,11 +817,38 @@
     "message": "Tmavý (solarizovaný)",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportovat z"
+  },
   "exportVault": {
     "message": "Exportovat trezor"
   },
   "fileFormat": {
     "message": "Formát souboru"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Tento soubor exportu bude chráněn heslem a k dešifrování bude vyžadovat heslo souboru."
+  },
+  "filePassword": {
+    "message": "Heslo souboru"
+  },
+  "exportPasswordDescription": {
+    "message": "Toto heslo bude použito pro export a import tohoto souboru"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Pro zašifrování exportu a omezení importu pouze na aktuální účet Bitwardenu použijte šifrovací klíč Vašeho účtu odvozený z uživatelského jména a hlavního hesla."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Nastavte heslo pro šifrování exportu a importujte ho do libovolného účtu Bitwardenu pomocí hesla pro dešifrování."
+  },
+  "exportTypeHeading": {
+    "message": "Typ exportu"
+  },
+  "accountRestricted": {
+    "message": "Účet je omezený"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Heslo souboru\" a \"Potvrzení hesla souboru\" se neshodují."
   },
   "warning": {
     "message": "VAROVÁNÍ",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Zadejte základní URL adresu vlastní hostované aplikace Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Zadejte základní URL adresu Vaší vlastní hostované aplikace Bitwarden. Příklad: https://bitwarden.spolecnost.cz"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pro rozšířená nastavení můžete zadat základní URL adresu každé služby zvlášť."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musíte přidat buď základní adresu URL serveru nebo alespoň jedno vlastní prostředí."
   },
   "customEnvironment": {
     "message": "Vlastní prostředí"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Kolekce"
   },
+  "nCollections": {
+    "message": "$COUNT$ collections",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Oblíbené"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Položka byla obnovena"
   },
+  "alreadyHaveAccount": {
+    "message": "Už máte účet?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Po vypršení časového limitu dojde k odhlášení. Přístup k trezoru bude odebrán a pro opětovné přihlášení bude vyžadováno online ověření. Opravdu chcete použít toto nastavení?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Automaticky vyplnit a uložit"
+  },
+  "fillAndSave": {
+    "message": "Fill and save"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Položka byla automaticky vyplněna a URI bylo uloženo"
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "OK"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Chyba aktualizace přístupového tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nebyly nalezeny žádné obnovovací tokeny nebo API klíče. Zkuste se odhlásit a znovu se přihlásit."
   },
   "desktopSyncVerificationTitle": {
     "message": "Ověření synchronizace s aplikací pro počítač"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exportování trezoru organizace"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Exportován bude jen trezor organizace přidružený k položce $ORGANIZATION$. Osobní položky trezoru a položky z jiných organizací nebudou zahrnuty.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Chyba"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Je vyžadován SSO identifikátor organizace."
+  },
+  "creatingAccountOn": {
+    "message": "Vytváření účtu na"
+  },
+  "checkYourEmail": {
+    "message": "Zkontrolujte Váš e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Následujte pokyny v e-mailu poslaném na"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "a pokračujte ve vytváření Vašeho účtu."
+  },
+  "noEmail": {
+    "message": "Žádný e-mail?"
+  },
+  "goBack": {
+    "message": "Zpět"
+  },
+  "toEditYourEmailAddress": {
+    "message": "pro úpravu Vaší e-mailové adresy."
   },
   "eu": {
     "message": "EU",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Vymažte filtry nebo zkuste jiný hledaný výraz"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Kopírovat informace, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Kopírovat informace - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Kopírovat poznámku, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Kopírovat poznámku - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Více voleb, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Více voleb - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Zobrazit položku - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Assign collections"
+  },
+  "copyEmail": {
+    "message": "Kopírovat e-mail"
+  },
+  "copyPhone": {
+    "message": "Kopírovat telefon"
+  },
+  "copyAddress": {
+    "message": "Kopírovat adresu"
   },
   "adminConsole": {
     "message": "Konzole správce"
@@ -3230,7 +3406,7 @@
     "message": "Chyba při přiřazování cílové složky."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Zobrazit položky v $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -3240,7 +3416,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Zpět do $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -3253,7 +3429,7 @@
     "message": "Nové"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Odebrat $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Položky bez složky"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organizace je deaktivována"
+  },
+  "contactYourOrgAdmin": {
+    "message": "K položkám v deaktivované organizaci nemáte přístup. Požádejte o pomoc vlastníka organizace."
   }
 }

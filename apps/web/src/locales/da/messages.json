@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Adgangsniveau"
   },
+  "accessing": {
+    "message": "Tilgår"
+  },
   "loggedOut": {
     "message": "Logget ud"
+  },
+  "loggedOutDesc": {
+    "message": "Der er blevet logget ud af kontoen."
   },
   "loginExpired": {
     "message": "Login-session udløbet."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Kopiér UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Adgangstoken genopfriskningsfejl"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Ingen genopfriskningstoken eller API-nøgler fundet. Prøv at logge ud og dernæst ind igen."
   },
   "warning": {
     "message": "Advarsel"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Enhed"
+  },
+  "creatingAccountOn": {
+    "message": "Opretter konto på"
+  },
+  "checkYourEmail": {
+    "message": "Tjek din e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Følg linket i e-mailen sendt til"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "og fortsæt med kontooprettelsen."
+  },
+  "noEmail": {
+    "message": "Ingen e-mail?"
+  },
+  "goBack": {
+    "message": "Gå tilbage"
+  },
+  "toEditYourEmailAddress": {
+    "message": "for at redigere e-mailadressen."
   },
   "view": {
     "message": "Vis"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Rotering af faktureringssynk-tokenet vil ugyldiggøre det foregående token."
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "Selvhosting"
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Vær opdateret mod sikkerhedssårbarheder ved at opgradere til en betalt abonnementstype for forbedret monitorering."
+  },
+  "approveAllRequests": {
+    "message": "Godkend alle anmodninger"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Alle login-anmodninger godkendt"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Opdaterede momsoplysninger"
+  },
+  "unverified": {
+    "message": "Ubekræftet"
+  },
+  "verified": {
+    "message": "Bekræftet"
   }
 }

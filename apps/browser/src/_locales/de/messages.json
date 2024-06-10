@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Erfahre mehr über die Verwendung von Bitwarden im Hilfezentrum."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Weiter zum Store für Browser-Erweiterungen?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Hilf anderen herauszufinden, ob Bitwarden für sie das Richtige ist. Besuch den Erweiterungs-Store deines Browsers und hinterlasse jetzt eine Bewertung."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Du kannst dein Master-Passwort in der Bitwarden Web-App ändern."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Favoriten"
   },
+  "unfavorite": {
+    "message": "Unfavorite"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Notizen"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Öffnen"
+  },
+  "launchWebsite": {
+    "message": "Website öffnen"
   },
   "website": {
     "message": "Webseite"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Ausgeloggt"
   },
+  "loggedOutDesc": {
+    "message": "Du wurdest von deinem Konto abgemeldet."
+  },
   "loginExpired": {
     "message": "Ihre Login-Sitzung ist abgelaufen."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Entsperren"
   },
+  "additionalOptions": {
+    "message": "Weitere Optionen"
+  },
   "enableContextMenuItem": {
     "message": "Kontextmenüoptionen anzeigen"
   },
@@ -793,11 +817,38 @@
     "message": "Solarized Dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Export aus"
+  },
   "exportVault": {
     "message": "Tresor exportieren"
   },
   "fileFormat": {
     "message": "Dateiformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Dieser Datei-Export ist passwortgeschützt und erfordert das Dateipasswort zum Entschlüsseln."
+  },
+  "filePassword": {
+    "message": "Dateipasswort"
+  },
+  "exportPasswordDescription": {
+    "message": "Dieses Passwort wird zum Exportieren und Importieren dieser Datei verwendet"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Verwende den Verschlüsselungsschlüssel deines Kontos, abgeleitet vom Benutzernamen und Master-Passwort, um den Export zu verschlüsseln und den Import auf das aktuelle Bitwarden-Konto zu beschränken."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Lege ein Dateipasswort fest, um den Export zu verschlüsseln und importiere ihn in ein beliebiges Bitwarden-Konto, wobei das Passwort zum Entschlüsseln genutzt wird."
+  },
+  "exportTypeHeading": {
+    "message": "Exporttyp"
+  },
+  "accountRestricted": {
+    "message": "Konto eingeschränkt"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "„Dateipasswort“ und „Dateipasswort bestätigen“ stimmen nicht überein."
   },
   "warning": {
     "message": "ACHTUNG",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Bitte gib die Basis-URL deiner selbst gehosteten Bitwarden-Installation an."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Gib die Basis-URL deiner vor Ort gehosteten Bitwarden-Installation an. Beispiel: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Für eine erweiterte Konfiguration kannst du die Basis-URL jedes Dienstes unabhängig voneinander angeben."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Du musst entweder die Basis-Server-URL oder mindestens eine benutzerdefinierte Umgebung hinzufügen."
   },
   "customEnvironment": {
     "message": "Benutzerdefinierte Umgebung"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Sammlungen"
   },
+  "nCollections": {
+    "message": "$COUNT$ Sammlungen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Favoriten"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Eintrag wiederhergestellt"
   },
+  "alreadyHaveAccount": {
+    "message": "Hast du bereits ein Konto?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Nach dem Ausloggen verlierest du jeglichen Zugriff auf deinen Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchten?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Auto-Ausfüllen und speichern"
+  },
+  "fillAndSave": {
+    "message": "Ausfüllen und speichern"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Eintrag automatisch ausgefüllt und URI gespeichert"
@@ -1688,7 +1763,7 @@
     "message": "Ihr neues Master-Passwort entspricht nicht den Anforderungen der Richtlinie."
   },
   "acceptPolicies": {
-    "message": "Durch Anwählen dieses Kästchens erklären Sie sich mit folgendem einverstanden:"
+    "message": "Durch Anwählen dieses Kästchens erklärst du dich mit Folgendem einverstanden:"
   },
   "acceptPoliciesRequired": {
     "message": "Die Nutzungsbedingungen und Datenschutzerklärung wurden nicht akzeptiert."
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Zugangs-Token Aktualisierungsfehler"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Kein Aktualisierungs-Token oder API-Schlüssel gefunden. Bitte versuche dich ab- und wieder anzumelden."
   },
   "desktopSyncVerificationTitle": {
     "message": "Desktop-Sync-Überprüfung"
@@ -1757,7 +1838,7 @@
     "message": "Nutzer gesperrt oder abgemeldet"
   },
   "biometricsNotUnlockedDesc": {
-    "message": "Bitte entsperren Sie diesen Nutzer in der Desktop-Anwendung und versuchen Sie es erneut."
+    "message": "Bitte entsperre diesen Nutzer in der Desktop-Anwendung und versuche es erneut."
   },
   "biometricsFailedTitle": {
     "message": "Biometrie fehlgeschlagen"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Tresor der Organisation wird exportiert"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Nur der mit $ORGANIZATION$ verbundene Organisationstresor wird exportiert. Einträge in persönlichen Tresoren oder anderen Organisationen werden nicht berücksichtigt.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Fehler"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "SSO-Kennung der Organisation erforderlich."
+  },
+  "creatingAccountOn": {
+    "message": "Konto wird erstellt bei"
+  },
+  "checkYourEmail": {
+    "message": "Überprüfe deine E-Mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Folge dem Link in der E-Mail an"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "und fahre mit der Erstellung deines Kontos fort."
+  },
+  "noEmail": {
+    "message": "Keine E-Mail?"
+  },
+  "goBack": {
+    "message": "Geh zurück"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", um deine E-Mail-Adresse zu bearbeiten."
   },
   "eu": {
     "message": "EU",
@@ -3183,7 +3297,7 @@
     "message": "Speichere einen Login-Eintrag für diese Seite zum automatischen Ausfüllen"
   },
   "yourVaultIsEmpty": {
-    "message": "Ihr Tresor hat keine Einträge"
+    "message": "Dein Tresor hat keine Einträge"
   },
   "noItemsMatchSearch": {
     "message": "Deine Suche ergab keine Treffer"
@@ -3191,8 +3305,8 @@
   "clearFiltersOrTryAnother": {
     "message": "Entferne die Filter oder versuche einen anderen Suchbegriff"
   },
-  "copyInfo": {
-    "message": "Information kopieren, $ITEMNAME$",
+  "copyInfoLabel": {
+    "message": "Copy info, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
@@ -3201,8 +3315,38 @@
       }
     }
   },
-  "moreOptions": {
-    "message": "Weitere Optionen, $ITEMNAME$",
+  "copyInfoTitle": {
+    "message": "Copy info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Copy Note, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Copy Note - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
+    "message": "More options, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
       "itemname": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "More options - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "View item - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Sammlungen zuweisen"
+  },
+  "copyEmail": {
+    "message": "E-Mail-Adresse kopieren"
+  },
+  "copyPhone": {
+    "message": "Telefonnummer kopieren"
+  },
+  "copyAddress": {
+    "message": "Adresse kopieren"
   },
   "adminConsole": {
     "message": "Administrator-Konsole"
@@ -3230,7 +3406,7 @@
     "message": "Fehler beim Zuweisen des Ziel-Ordners."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Einträge in $NAME$ anzeigen",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -3240,7 +3416,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Zurück zu $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -3253,7 +3429,7 @@
     "message": "Neu"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "$NAME$ entfernen",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Einträge ohne Ordner"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organisation ist deaktiviert"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Auf Einträge in deaktivierten Organisationen kann nicht zugegriffen werden. Kontaktiere deinen Organisationseigentümer für Unterstützung."
   }
 }

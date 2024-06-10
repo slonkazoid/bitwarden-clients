@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Læs mere i Hjælpecenter om, hvordan man bruger Bitwarden."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Fortsæt til webbrowserudvidelsesbutik?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Hjælp andre med at finde ud af, om Bitwarden er det rigtige for dem. Besøg App Store og skriv en bedømmelse nu."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Hovedadgangskoden kan ændres via Bitwarden web-appen."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Favorit"
   },
+  "unfavorite": {
+    "message": "Fjern fra favorit"
+  },
+  "itemAddedToFavorites": {
+    "message": "Emne føjet til favoritter"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Emne fjernet fra favoritter"
+  },
   "notes": {
     "message": "Notater"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Start"
+  },
+  "launchWebsite": {
+    "message": "Åbn websted"
   },
   "website": {
     "message": "Hjemmeside"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Logget ud"
   },
+  "loggedOutDesc": {
+    "message": "Der er blevet logget ud af kontoen."
+  },
   "loginExpired": {
     "message": "Din login-session er udløbet."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Oplås"
   },
+  "additionalOptions": {
+    "message": "Yderligere indstillinger"
+  },
   "enableContextMenuItem": {
     "message": "Vis indstillinger i kontekstmenuen"
   },
@@ -793,11 +817,38 @@
     "message": "Solariseret mørk",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Eksportér fra"
+  },
   "exportVault": {
     "message": "Eksportér boks"
   },
   "fileFormat": {
     "message": "Filformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Denne fileksport vil være adgangskodebeskyttet og kræve filadgangskoden at dekryptere."
+  },
+  "filePassword": {
+    "message": "Filadgangskode"
+  },
+  "exportPasswordDescription": {
+    "message": "Denne adgangskode vil blive brugt ved eksport og import af denne fil"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Brug kontokrypteringsnøglen, dannet af kontobrugernavn og Hovedadgangskode, for at kryptere eksporten og hindre import til andre end den aktuelle Bitwarden-konto."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Opsæt en adgangskode til både at kryptere eksporten samt dekryptere denne ved import til enhver Bitwarden-konto."
+  },
+  "exportTypeHeading": {
+    "message": "Eksporttype"
+  },
+  "accountRestricted": {
+    "message": "Konto begrænset"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“Filadgangskode” og “Bekræft filadgangskode“ matcher ikke."
   },
   "warning": {
     "message": "ADVARSEL",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Angiv grund-URL'en i din lokal-hostede Bitwarden-installation."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
   },
   "customEnvironment": {
     "message": "Brugerdefineret miljø"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Samlinger"
   },
+  "nCollections": {
+    "message": "$COUNT$ samlinger",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Favoritter"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Element gendannet"
   },
+  "alreadyHaveAccount": {
+    "message": "Har allerede en konto?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Ved at logge ud fjernes al adgang til din boks og kræver online-godkendelse efter timeout-perioden. Er du sikker på, at du vil bruge denne indstilling?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Autoudfyld og gem"
+  },
+  "fillAndSave": {
+    "message": "Udfyld og gem"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Autoudfyldte element og URI gemt"
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Adgangstoken genopfriskningsfejl"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Ingen genopfriskningstoken eller API-nøgler fundet. Prøv at logge ud og dernæst ind igen."
   },
   "desktopSyncVerificationTitle": {
     "message": "Verifikation af skrivebordssynkronisering"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Eksport af organisationsboks"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Kun organisationsboksen tilknyttet $ORGANIZATION$ eksporteres. Emner i individuelle bokse eller andre organisationer medtages ikke.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Fejl"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Organisations SSO-identifikator kræves."
+  },
+  "creatingAccountOn": {
+    "message": "Opretter konto på"
+  },
+  "checkYourEmail": {
+    "message": "Tjek din e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Følg linket i e-mailen sendt til"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "og fortsæt med kontooprettelsen."
+  },
+  "noEmail": {
+    "message": "Ingen e-mail?"
+  },
+  "goBack": {
+    "message": "Gå tilbage"
+  },
+  "toEditYourEmailAddress": {
+    "message": "for at redigere e-mailadressen."
   },
   "eu": {
     "message": "EU",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Ryd filtre eller prøv med et andet søgeord"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Kopiér info, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Kopiér info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Kopiér notat, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Kopiér notat - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Flere valgmuligheder, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Flere valgmuligheder - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Vis emne - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Tildel samlinger"
+  },
+  "copyEmail": {
+    "message": "Kopiér e-mail"
+  },
+  "copyPhone": {
+    "message": "Kopiér telefon"
+  },
+  "copyAddress": {
+    "message": "Kopiér addresse"
   },
   "adminConsole": {
     "message": "Admin-konsol"
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Emner uden mappe"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organisation er deaktiveret"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Emner i deaktiverede organisationer kan ikke tilgås. Kontakt organisationsejeren for assistance."
   }
 }

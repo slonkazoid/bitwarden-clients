@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Obtén más sobre cómo utilizar Bitwarden en el Centro de Ayuda."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "¿Continuar a la tienda de extensiones del navegador?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Ayuda a otros a averiguar si Bitwarden es correcto para ellos. Visita la tienda de extensiones de tu navegador y deja una calificación ahora."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Puedes cambiar la contraseña maestra en la aplicación web de Bitwarden."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Favorito"
   },
+  "unfavorite": {
+    "message": "Eliminar favorito"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Notas"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Iniciar"
+  },
+  "launchWebsite": {
+    "message": "Iniciar página web"
   },
   "website": {
     "message": "Web"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Sesión terminada"
   },
+  "loggedOutDesc": {
+    "message": "Has cerrado sesión de tu cuenta."
+  },
   "loginExpired": {
     "message": "Tu sesión ha expirado."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Desbloquear"
   },
+  "additionalOptions": {
+    "message": "Opciones adicionales"
+  },
   "enableContextMenuItem": {
     "message": "Mostrar las opciones de menú contextuales"
   },
@@ -793,11 +817,38 @@
     "message": "Solarized Dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportar desde"
+  },
   "exportVault": {
     "message": "Exportar caja fuerte"
   },
   "fileFormat": {
     "message": "Formato de archivo"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Esta exportación de archivo estará protegida por contraseña y requerirá la contraseña del archivo para descifrarla."
+  },
+  "filePassword": {
+    "message": "Contraseña del archivo"
+  },
+  "exportPasswordDescription": {
+    "message": "Esta contraseña se utilizará para exportar e importar este archivo"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Utiliza la clave de cifrado de tu cuenta, derivada del nombre de usuario y la contraseña maestra de tu cuenta, para cifrar la exportación y restringir la importación solo a la cuenta actual de Bitwarden."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Establece una contraseña de archivo para cifrar la exportación e importarlo a cualquier cuenta de Bitwarden utilizando la contraseña para el descifrado."
+  },
+  "exportTypeHeading": {
+    "message": "Tipo de exportación"
+  },
+  "accountRestricted": {
+    "message": "Cuenta restringida"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Contraseña de archivo\" y \"Confirmar contraseña de archivo\" no coinciden."
   },
   "warning": {
     "message": "ADVERTENCIA",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Especifica la URL base de tu instalación de Bitwarden de alojamiento propio."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Especifica la dirección URL base de la instalación de Bitwarden alojada localmente. Ejemplo: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Para una configuración avanzada, puedes especificar la dirección URL base de cada servicio de forma independiente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Debes añadir la dirección URL del servidor base o al menos un entorno personalizado."
   },
   "customEnvironment": {
     "message": "Entorno personalizado"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Colecciones"
   },
+  "nCollections": {
+    "message": "$COUNT$ colecciones",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Favoritos"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Elemento restaurado"
   },
+  "alreadyHaveAccount": {
+    "message": "¿Ya tienes una cuenta?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Cerrar sesión eliminará todo el acceso a tu caja fuerte y requerirá autenticación en línea después del tiempo de espera. ¿Estás seguro de que quieres usar esta configuración?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Autorellenar y guardar"
+  },
+  "fillAndSave": {
+    "message": "Rellenar y guardar"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Objeto autorellenado y URI guardada"
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Error de actualización del token de acceso"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No se encontró ningún token de actualización ni clave de API. Intenta cerrar sesión y volver a iniciarla."
   },
   "desktopSyncVerificationTitle": {
     "message": "Verificación de sincronización del escritorio"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exportando caja fuerte de la organización"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Solo se exportará la caja fuerte de la organización asociada a $ORGANIZATION$. Los elementos en las cajas fuertes individuales o de otras organizaciones no serán incluidos.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Error"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Se requiere un identificador único de inicio de sesión de la organización."
+  },
+  "creatingAccountOn": {
+    "message": "Crea una cuenta en"
+  },
+  "checkYourEmail": {
+    "message": "Comprueba tu correo electrónico"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Sigue el enlace en el correo electrónico enviado a"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "y continúa creando tu cuenta."
+  },
+  "noEmail": {
+    "message": "¿Sin correo electrónico?"
+  },
+  "goBack": {
+    "message": "Volver"
+  },
+  "toEditYourEmailAddress": {
+    "message": "para editar la dirección de correo electrónico."
   },
   "eu": {
     "message": "Unión Europea",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Limpia los filtros o prueba otro término de búsqueda"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Copiar información, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,8 +3315,38 @@
       }
     }
   },
-  "moreOptions": {
-    "message": "Más información, $ITEMNAME$",
+  "copyInfoTitle": {
+    "message": "Copiar información - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Copiar nota, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Copiar nota - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
+    "message": "Más opciones, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
       "itemname": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Más opciones - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Ver elemento - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Asignar colecciones"
+  },
+  "copyEmail": {
+    "message": "Copiar correo electrónico"
+  },
+  "copyPhone": {
+    "message": "Copiar teléfono"
+  },
+  "copyAddress": {
+    "message": "Copiar dirección"
   },
   "adminConsole": {
     "message": "Consola de administrador"
@@ -3230,7 +3406,7 @@
     "message": "Error al asignar la carpeta de destino."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Ver elementos en $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -3240,7 +3416,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Volver a $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -3253,7 +3429,7 @@
     "message": "Nuevo"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Eliminar $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Elementos sin carpeta"
+  },
+  "organizationIsDeactivated": {
+    "message": "La organización está desactivada"
+  },
+  "contactYourOrgAdmin": {
+    "message": "No se puede acceder a los elementos de las organizaciones desactivadas. Ponte en contacto con el propietario de tu organización para obtener ayuda."
   }
 }
