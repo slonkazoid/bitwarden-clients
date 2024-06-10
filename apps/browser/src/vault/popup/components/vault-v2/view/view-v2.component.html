@@ -1,0 +1,9 @@
+<popup-page>
+  <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
+
+  <popup-footer slot="footer">
+    <a bitButton type="button" buttonType="primary" (click)="edit()">
+      {{ "edit" | i18n }}
+    </a>
+  </popup-footer>
+</popup-page>

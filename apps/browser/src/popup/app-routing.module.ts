@@ -69,6 +69,7 @@ import { extensionRefreshRedirect, extensionRefreshSwap } from "./extension-refr
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
+import { ViewV2Component } from "../vault/popup/components/vault-v2/view/view-v2.component";
 
 const unauthRouteOverrides = {
   homepage: () => {
@@ -184,12 +185,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "ciphers" },
   },
-  {
+  ...extensionRefreshSwap(ViewComponent, ViewV2Component, {
     path: "view-cipher",
-    component: ViewComponent,
     canActivate: [AuthGuard],
     data: { state: "view-cipher" },
-  },
+  }),
   {
     path: "cipher-password-history",
     component: PasswordHistoryComponent,
