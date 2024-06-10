@@ -695,6 +695,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Wpisz podstawowy adres URL hostowanej instalacji Bitwarden."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Określ bazowy adres URL swojej instalacji Bitwarden. Przykład: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Dla zaawansowanych konfiguracji możesz określić podstawowy adres URL niezależnie dla każdej usługi."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musisz dodać podstawowy adres URL serwera lub co najmniej jedno niestandardowe środowisko."
+  },
   "customEnvironment": {
     "message": "Niestandardowe środowisko"
   },
@@ -742,6 +751,9 @@
   },
   "loggedOut": {
     "message": "Wylogowano"
+  },
+  "loggedOutDesc": {
+    "message": "Zostałeś wylogowany z konta."
   },
   "loginExpired": {
     "message": "Twoja sesja wygasła."
@@ -1212,6 +1224,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Błąd podczas odświeżania tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nie znaleziono tokenu odświeżającego ani kluczy API. Spróbuj wylogować się i zalogować ponownie."
+  },
   "help": {
     "message": "Pomoc"
   },
@@ -1299,11 +1317,41 @@
     "message": "Hasło zostało zaktualizowane",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Eksportuj z"
+  },
   "exportVault": {
     "message": "Eksportuj sejf"
   },
   "fileFormat": {
     "message": "Format pliku"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Plik będzie chroniony hasłem, które będzie wymagane do odszyfrowania pliku."
+  },
+  "filePassword": {
+    "message": "Hasło do pliku"
+  },
+  "exportPasswordDescription": {
+    "message": "Hasło będzie używane do eksportowania i importowania pliku"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Użyj klucza szyfrowania konta, pochodzącego z nazwy użytkownika konta i hasła głównego, aby zaszyfrować eksport i ograniczyć import tylko do bieżącego konta Bitwarden."
+  },
+  "passwordProtected": {
+    "message": "Chroniona hasłem"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Ustaw hasło dla pliku, aby zaszyfrować eksport i zaimportować je na dowolne konto Bitwarden przy użyciu hasła do odszyfrowania."
+  },
+  "exportTypeHeading": {
+    "message": "Rodzaj eksportu"
+  },
+  "accountRestricted": {
+    "message": "Konto ograniczone"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“Hasło pliku” i “Potwierdź hasło pliku“ nie pasują do siebie."
   },
   "hCaptchaUrl": {
     "message": "Adres URL hCaptcha",
@@ -2050,6 +2098,9 @@
   "switchAccount": {
     "message": "Przełącz konto"
   },
+  "alreadyHaveAccount": {
+    "message": "Masz już konto?"
+  },
   "options": {
     "message": "Opcje"
   },
@@ -2065,6 +2116,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Eksportowanie sejfu organizacji"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Tylko sejf organizacji powiązany z $ORGANIZATION$ zostanie wyeksportowany. Pozycje w poszczególnych sejfach lub innych organizacji nie będą uwzględnione.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2390,6 +2453,27 @@
   "logInRequested": {
     "message": "Wysłano prośbę logowania"
   },
+  "creatingAccountOn": {
+    "message": "Tworzenie konta na"
+  },
+  "checkYourEmail": {
+    "message": "Sprawdź swoją pocztę e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Kliknij łącze w wiadomości e-mail wysłanej do"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "i kontynuuj tworzenie konta."
+  },
+  "noEmail": {
+    "message": "Brak wiadomości e-mail?"
+  },
+  "goBack": {
+    "message": "Wróć"
+  },
+  "toEditYourEmailAddress": {
+    "message": "aby edytować swój adres e-mail."
+  },
   "exposedMasterPassword": {
     "message": "Ujawnione hasło główne"
   },
@@ -2407,6 +2491,12 @@
   },
   "important": {
     "message": "Ważne:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Zostałeś wylogowany, ponieważ token dostępu nie mógł zostać odszyfrowany. Zaloguj się ponownie, aby rozwiązać ten problem."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Zostałeś wylogowany, ponieważ Twój token odświeżania nie mógł zostać pobrany. Zaloguj się ponownie, aby rozwiązać ten problem."
   },
   "masterPasswordHint": {
     "message": "Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz!"

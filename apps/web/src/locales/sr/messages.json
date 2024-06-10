@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Ниво приступа"
   },
+  "accessing": {
+    "message": "Приступ"
+  },
   "loggedOut": {
     "message": "Одјављено"
+  },
+  "loggedOutDesc": {
+    "message": "Одјављени сте са свог налога."
   },
   "loginExpired": {
     "message": "Ваша сесија је истекла."
@@ -1047,6 +1053,12 @@
   "copyUuid": {
     "message": "Копирај UUID"
   },
+  "errorRefreshingAccessToken": {
+    "message": "Грешка при освежавању токена приступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Није пронађен токен за освежавање или АПИ кључеви. Покушајте да се одјавите и поново пријавите."
+  },
   "warning": {
     "message": "Упозорење"
   },
@@ -1342,7 +1354,7 @@
     "message": "Ваш налог је затворен и сви повезани подаци су избрисани."
   },
   "deleteOrganizationWarning": {
-    "message": "Deleting your organization is permanent. It cannot be undone."
+    "message": "Брисање организације је трајно. Не може се поништити."
   },
   "myAccount": {
     "message": "Мој налог"
@@ -1714,10 +1726,10 @@
     "message": "Унесите информације о апликацији Bitwarden из администрације Duo."
   },
   "twoFactorDuoClientId": {
-    "message": "Client Id"
+    "message": "Ид клијента"
   },
   "twoFactorDuoClientSecret": {
-    "message": "Client Secret"
+    "message": "Тајна клијента"
   },
   "twoFactorDuoApiHostname": {
     "message": "API Име хоста"
@@ -3244,6 +3256,27 @@
   "device": {
     "message": "Уређај"
   },
+  "creatingAccountOn": {
+    "message": "Креирај налог на"
+  },
+  "checkYourEmail": {
+    "message": "Проверите свој имејл"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Пратите везу послатој на"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и наставите са креирањем налога."
+  },
+  "noEmail": {
+    "message": "Немате имејл?"
+  },
+  "goBack": {
+    "message": "Ићи назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": "да измените свој имејл."
+  },
   "view": {
     "message": "Приказ"
   },
@@ -3392,7 +3425,7 @@
     "message": "Затражили сте да избришете свој Bitwarden рачун. Кликните на доње дугме да бисте потврдили."
   },
   "deleteRecoverOrgConfirmDesc": {
-    "message": "You have requested to delete your Bitwarden organization."
+    "message": "Захтевали сте да избришете своју Bitwarden оранизацију."
   },
   "myOrganization": {
     "message": "Моја организација"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Rotating the billing sync token will invalidate the previous token."
+  },
+  "selfHostedServer": {
+    "message": "личан хостинг"
+  },
+  "customEnvironment": {
+    "message": "Прилагођено окружење"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Наведите основну УРЛ адресу вашег локалног хостовања Bitwarden-а. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "За напредну конфигурацију, можете навести основну УРЛ адресу сваке услуге независно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Морате додати или основни УРЛ сервера или бар једно прилагођено окружење."
+  },
+  "apiUrl": {
+    "message": "УРЛ АПИ Сервера"
+  },
+  "webVaultUrl": {
+    "message": "УРЛ сервера Сефа"
+  },
+  "identityUrl": {
+    "message": "УРЛ сервера идентитета"
+  },
+  "notificationsUrl": {
+    "message": "УРЛ сервера обавештења"
+  },
+  "iconsUrl": {
+    "message": "УРЛ сервера иконица"
+  },
+  "environmentSaved": {
+    "message": "УРЛ адресе окружења су сачуване"
   },
   "selfHostingTitle": {
     "message": "Ауто-хстинг"
@@ -8187,7 +8253,7 @@
     "message": "Управљајте наплатом из Provider Portal"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Видети ставке у $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8263,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Назад на $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8273,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Назад",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Уклонити $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8251,10 +8317,10 @@
     }
   },
   "lowKDFIterationsBanner": {
-    "message": "Low KDF iterations. Increase your iterations to improve the security of your account."
+    "message": "Ниске KDF итерације. Повећајте број понављања да бисте побољшали безбедност свог налога."
   },
   "changeKDFSettings": {
-    "message": "Change KDF settings"
+    "message": "Променити KDF подешавања"
   },
   "secureYourInfrastructure": {
     "message": "Обезбедите своју инфраструктуру"
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Будите испред безбедносних пропуста надоградњом на плаћени план за побољшано праћење."
+  },
+  "approveAllRequests": {
+    "message": "Одобри све захтеве"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Сви захтеви за пријаву су одобрени"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Ажуриране пореске информације"
+  },
+  "unverified": {
+    "message": "Непроверено"
+  },
+  "verified": {
+    "message": "Проверено"
   }
 }

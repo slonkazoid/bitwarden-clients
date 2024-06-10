@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Åtkomstnivå"
   },
+  "accessing": {
+    "message": "Accessing"
+  },
   "loggedOut": {
     "message": "Utloggad"
+  },
+  "loggedOutDesc": {
+    "message": "Du har blivit utloggad från ditt konto."
   },
   "loginExpired": {
     "message": "Din inloggningssession har upphört."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Kopiera UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "Varning"
@@ -2792,7 +2804,7 @@
     "message": "Alla"
   },
   "addAccess": {
-    "message": "Add Access"
+    "message": "Lägg till åtkomst"
   },
   "addAccessFilter": {
     "message": "Add Access Filter"
@@ -3098,7 +3110,7 @@
     }
   },
   "removeUserIdAccess": {
-    "message": "Remove $ID$ access",
+    "message": "Återkalla $ID$ åtkomst",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3125,7 +3137,7 @@
     }
   },
   "revokeUserId": {
-    "message": "Revoke $ID$ access",
+    "message": "Återkalla $ID$ åtkomst",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3244,6 +3256,27 @@
   "device": {
     "message": "Enhet"
   },
+  "creatingAccountOn": {
+    "message": "Skapa konto på"
+  },
+  "checkYourEmail": {
+    "message": "Kolla din e-post"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Följ länken i e-postmeddelandet som skickats till"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "och fortsätt att skapa ditt konto."
+  },
+  "noEmail": {
+    "message": "Ingen e-post?"
+  },
+  "goBack": {
+    "message": "Gå tillbaka"
+  },
+  "toEditYourEmailAddress": {
+    "message": "för att redigera din e-postadress."
+  },
   "view": {
     "message": "Visa"
   },
@@ -3353,7 +3386,7 @@
     "message": "Du kan komma åt denna organisation när en administratör har bekräftat ditt medlemskap. Vi skickar ett e-postmeddelande till dig när det sker."
   },
   "inviteInitAcceptedDesc": {
-    "message": "You can now access this organization."
+    "message": "Du har nu tillgång till denna organisation."
   },
   "inviteAcceptFailed": {
     "message": "Det gick inte att acceptera inbjudan. Be en administratör för organisationen att skicka en ny inbjudan."
@@ -3398,13 +3431,13 @@
     "message": "Min organisation"
   },
   "organizationInfo": {
-    "message": "Organization info"
+    "message": "Organisationsinformation"
   },
   "deleteOrganization": {
     "message": "Radera organisation"
   },
   "deletingOrganizationContentWarning": {
-    "message": "Enter the master password to confirm deletion of $ORGANIZATION$ and all associated data. Vault data in $ORGANIZATION$ includes:",
+    "message": "Ange huvudlösenordet för att bekräfta radering av $ORGANIZATION$ och allt tillhörande data. Valvdata i $ORGANIZATION$ inkluderar:",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -3551,7 +3584,7 @@
     }
   },
   "limitSubscription": {
-    "message": "Limit subscription (optional)"
+    "message": "Begränsa prenumeration (valfritt)"
   },
   "subscriptionSeats": {
     "message": "Prenumerationsplatser"
@@ -3572,7 +3605,7 @@
     "message": "Adjustments to your subscription will result in prorated changes to your billing totals. If newly invited members exceed your subscription seats, you will immediately receive a prorated charge for the additional members."
   },
   "smStandaloneTrialSeatCountUpdateMessageFragment1": {
-    "message": "If you want to add additional"
+    "message": "Om du vill lägga till ytterligare"
   },
   "smStandaloneTrialSeatCountUpdateMessageFragment2": {
     "message": "seats without the bundled offer, please contact"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Rotating the billing sync token will invalidate the previous token."
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "Self-hosting"
@@ -8207,7 +8273,7 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Tillbaka",
     "description": "Button text to navigate back"
   },
   "removeItem": {
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Godkänn alla förfrågningar"
+  },
+  "allLoginRequestsApproved": {
+    "message": "All login requests approved"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Updated tax information"
+  },
+  "unverified": {
+    "message": "Unverified"
+  },
+  "verified": {
+    "message": "Verified"
   }
 }

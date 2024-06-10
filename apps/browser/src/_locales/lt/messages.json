@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Learn more about how to use Bitwarden on the Help Center."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Continue to browser extension store?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Help others find out if Bitwarden is right for them. Visit your browser's extension store and leave a rating now."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Pagrindinį slaptažodį galite pakeisti „Bitwarden“ žiniatinklio programėlėje."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Mėgstamas"
   },
+  "unfavorite": {
+    "message": "Unfavorite"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Pastabos"
   },
@@ -404,6 +419,9 @@
   "launch": {
     "message": "Paleisti"
   },
+  "launchWebsite": {
+    "message": "Launch website"
+  },
   "website": {
     "message": "Tinklapis"
   },
@@ -417,7 +435,7 @@
     "message": "Kita"
   },
   "unlockMethods": {
-    "message": "Unlock options"
+    "message": "Atrakinti parinktis"
   },
   "unlockMethodNeededToChangeTimeoutActionDesc": {
     "message": "Nustatyk atrakinimo būdą, kad pakeistum saugyklos laiko limito veiksmą."
@@ -426,10 +444,10 @@
     "message": "Nustatykite nustatymuose atrakinimo metodą"
   },
   "sessionTimeoutHeader": {
-    "message": "Session timeout"
+    "message": "Baigėsi seanso laikas"
   },
   "otherOptions": {
-    "message": "Other options"
+    "message": "Kitos parinktys"
   },
   "rateExtension": {
     "message": "Įvertinkite šį plėtinį"
@@ -592,6 +610,9 @@
   },
   "loggedOut": {
     "message": "Atsijungta"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Sesijos laikas baigėsi."
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Atrakinti"
   },
+  "additionalOptions": {
+    "message": "Additional options"
+  },
   "enableContextMenuItem": {
     "message": "Rodyti kontekstinio meniu pasririnkimus"
   },
@@ -793,11 +817,38 @@
     "message": "Saulėtas tamsą",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Export from"
+  },
   "exportVault": {
     "message": "Eksportuoti saugyklą"
   },
   "fileFormat": {
     "message": "Failo formatas"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "filePassword": {
+    "message": "File password"
+  },
+  "exportPasswordDescription": {
+    "message": "This password will be used to export and import this file"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+  },
+  "exportTypeHeading": {
+    "message": "Export type"
+  },
+  "accountRestricted": {
+    "message": "Account restricted"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“File password”  and “Confirm file password“ do not match."
   },
   "warning": {
     "message": "ĮSPĖJIMAS",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Nurodykite vietinio priglobto „Bitwarden“ diegimo bazinį URL."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
   },
   "customEnvironment": {
     "message": "Individualizuota aplinka"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Kolekcijos"
   },
+  "nCollections": {
+    "message": "$COUNT$ collections",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Mėgstamiausi"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Elementas atkurtas"
   },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Atsijungus bus pašalinta visa Jūsų prieiga prie saugyklos, o pasibaigus skirtajam laikotarpiui bus reikalinga autentifikacija internetu. Ar tikrai norite naudoti šį nustatymą?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Automatiškai užpildyti ir išsaugoti"
+  },
+  "fillAndSave": {
+    "message": "Fill and save"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Elementas automatiškai užpildytas ir URI išsaugotas"
@@ -1705,6 +1780,12 @@
   "ok": {
     "message": "Gerai"
   },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "desktopSyncVerificationTitle": {
     "message": "Darbalaukio sinchronizavimo verifikavimas"
   },
@@ -1754,10 +1835,10 @@
     "message": "Šiame įrenginyje biometrikos negalima naudoti."
   },
   "biometricsNotUnlockedTitle": {
-    "message": "User locked or logged out"
+    "message": "Naudotojas užrakintas arba atsijungęs"
   },
   "biometricsNotUnlockedDesc": {
-    "message": "Please unlock this user in the desktop application and try again."
+    "message": "Atrakinkite šį naudotoją darbalaukio programoje ir bandykite dar kartą."
   },
   "biometricsFailedTitle": {
     "message": "Biometrika nepavyko"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exporting organization vault"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Klaida"
   },
@@ -2223,7 +2316,7 @@
     "message": "Sugeneruoti el. pašto slapyvardį su išorine persiuntimo paslauga."
   },
   "forwarderError": {
-    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "message": "„$SERVICENAME$“ klaida: $ERRORMESSAGE$.",
     "description": "Reports an error returned by a forwarding service to the user.",
     "placeholders": {
       "servicename": {
@@ -2237,11 +2330,11 @@
     }
   },
   "forwarderGeneratedBy": {
-    "message": "Generated by Bitwarden.",
+    "message": "Sugeneravo „Bitwarden“.",
     "description": "Displayed with the address on the forwarding service's configuration screen."
   },
   "forwarderGeneratedByWithWebsite": {
-    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "message": "Svetainė: $WEBSITE$. Sugeneravo „Bitwarden“.",
     "description": "Displayed with the address on the forwarding service's configuration screen.",
     "placeholders": {
       "WEBSITE": {
@@ -2251,7 +2344,7 @@
     }
   },
   "forwaderInvalidToken": {
-    "message": "Invalid $SERVICENAME$ API token",
+    "message": "Netinkamas „$SERVICENAME$“ API prieigos raktas.",
     "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2261,7 +2354,7 @@
     }
   },
   "forwaderInvalidTokenWithMessage": {
-    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "message": "Netinkamas „$SERVICENAME$“ API prieigos raktas: $ERRORMESSAGE$.",
     "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
     "placeholders": {
       "servicename": {
@@ -2275,7 +2368,7 @@
     }
   },
   "forwarderNoAccountId": {
-    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "message": "Nepavyksta gauti „$SERVICENAME$“ užmaskuoto el. pašto paskyros ID.",
     "description": "Displayed when the forwarding service fails to return an account ID.",
     "placeholders": {
       "servicename": {
@@ -2285,7 +2378,7 @@
     }
   },
   "forwarderNoDomain": {
-    "message": "Invalid $SERVICENAME$ domain.",
+    "message": "Netinkamas „$SERVICENAME$“ domenas.",
     "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2295,7 +2388,7 @@
     }
   },
   "forwarderNoUrl": {
-    "message": "Invalid $SERVICENAME$ url.",
+    "message": "Netinkamas „$SERVICENAME$“ URL.",
     "description": "Displayed when the url of the forwarding service wasn't supplied.",
     "placeholders": {
       "servicename": {
@@ -2305,7 +2398,7 @@
     }
   },
   "forwarderUnknownError": {
-    "message": "Unknown $SERVICENAME$ error occurred.",
+    "message": "Įvyko nežinoma „$SERVICENAME$“ klaida.",
     "description": "Displayed when the forwarding service failed due to an unknown error.",
     "placeholders": {
       "servicename": {
@@ -2315,7 +2408,7 @@
     }
   },
   "forwarderUnknownForwarder": {
-    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "message": "Nežinomas persiuntėjas: „$SERVICENAME$“.",
     "description": "Displayed when the forwarding service is not supported.",
     "placeholders": {
       "servicename": {
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Organizacijos SSO identifikatorius yra reikalingas."
+  },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "Check your email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Go back"
+  },
+  "toEditYourEmailAddress": {
+    "message": "to edit your email address."
   },
   "eu": {
     "message": "ES",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Clear filters or try another search term"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Copy info, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Copy info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Copy Note, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Copy Note - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "More options, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3211,17 +3355,49 @@
       }
     }
   },
+  "moreOptionsTitle": {
+    "message": "More options - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "View item - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Assign collections"
+  },
+  "copyEmail": {
+    "message": "Copy email"
+  },
+  "copyPhone": {
+    "message": "Copy phone"
+  },
+  "copyAddress": {
+    "message": "Copy address"
+  },
   "adminConsole": {
     "message": "Administratoriaus konsolės"
   },
   "accountSecurity": {
-    "message": "Account security"
+    "message": "Paskyros saugumas"
   },
   "notifications": {
-    "message": "Notifications"
+    "message": "Pranešimai"
   },
   "appearance": {
-    "message": "Appearance"
+    "message": "Išvaizda"
   },
   "errorAssigningTargetCollection": {
     "message": "Klaida priskiriant tikslinę kolekciją."
@@ -3250,7 +3426,7 @@
     }
   },
   "new": {
-    "message": "New"
+    "message": "Naujas"
   },
   "removeItem": {
     "message": "Remove $NAME$",
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Items with no folder"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organization is deactivated"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Items in deactivated organizations cannot be accessed. Contact your organization owner for assistance."
   }
 }

@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Рівень доступу"
   },
+  "accessing": {
+    "message": "Доступ"
+  },
   "loggedOut": {
     "message": "Ви вийшли"
+  },
+  "loggedOutDesc": {
+    "message": "Ви вийшли з облікового запису."
   },
   "loginExpired": {
     "message": "Тривалість вашого сеансу завершилась."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Копіювати UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Помилка оновлення токена доступу"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не знайдено токен оновлення або ключі API. Спробуйте вийти, а потім увійти знову."
   },
   "warning": {
     "message": "Попередження"
@@ -2370,7 +2382,7 @@
     "message": "Щоб оновити обліковий запис до Premium, вам необхідно вивантажити дійсний файл ліцензії."
   },
   "uploadLicenseFileOrg": {
-    "message": "Для створення організації з локальним хостингом вам необхідно вивантажити дійсний файл ліцензії."
+    "message": "Щоб створити організацію, розміщену на локальному хостингу, вам необхідно вивантажити дійсний файл ліцензії."
   },
   "accountEmailMustBeVerified": {
     "message": "Необхідно підтвердити адресу електронної пошти вашого облікового запису."
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Пристрій"
+  },
+  "creatingAccountOn": {
+    "message": "Створення облікового запису"
+  },
+  "checkYourEmail": {
+    "message": "Перевірте свою електронну пошту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдіть за посиланням у листі, надісланому на"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "і завершіть створення облікового запису."
+  },
+  "noEmail": {
+    "message": "Не отримали електронного листа?"
+  },
+  "goBack": {
+    "message": "Поверніться назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": "і виправте адресу електронної пошти."
   },
   "view": {
     "message": "Переглянути"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Оновлення токена платіжної синхронізації призведе до скасування попереднього токена."
+  },
+  "selfHostedServer": {
+    "message": "власне розміщення"
+  },
+  "customEnvironment": {
+    "message": "Власне середовище"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden. Зразок: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для розширеної конфігурації ви можете вказати основну URL-адресу окремо для кожної служби."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Необхідно додати URL-адресу основного сервера, або принаймні одне користувацьке середовище."
+  },
+  "apiUrl": {
+    "message": "URL-адреса сервера API"
+  },
+  "webVaultUrl": {
+    "message": "URL-адреса сервера веб сховища"
+  },
+  "identityUrl": {
+    "message": "URL-адреса сервера ідентифікації"
+  },
+  "notificationsUrl": {
+    "message": "URL-адреса сервера сповіщень"
+  },
+  "iconsUrl": {
+    "message": "URL-адреса сервера піктограм"
+  },
+  "environmentSaved": {
+    "message": "URL-адреси середовища збережено"
   },
   "selfHostingTitle": {
     "message": "Власне розміщення"
@@ -8187,7 +8253,7 @@
     "message": "Керування рахунками на порталі провайдера"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Переглянути записи в $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8263,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Назад до $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8273,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Назад",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Вилучити $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Попереджайте вразливості безпеки, передплативши тарифний план для посиленого моніторингу."
+  },
+  "approveAllRequests": {
+    "message": "Схвалити всі запити"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Усі запити на вхід схвалено"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Податкову інформацію оновлено"
+  },
+  "unverified": {
+    "message": "Не перевірений"
+  },
+  "verified": {
+    "message": "Перевірений"
   }
 }

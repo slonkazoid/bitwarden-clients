@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Toegangsniveau"
   },
+  "accessing": {
+    "message": "Toegang verkrijgen"
+  },
   "loggedOut": {
     "message": "Uitgelogd"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Je inlogsessie is verlopen."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "UUID kopiëren"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "Waarschuwing"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Apparaat"
+  },
+  "creatingAccountOn": {
+    "message": "Account maken bij"
+  },
+  "checkYourEmail": {
+    "message": "Check je e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Volg de link in de e-mail die verstuurd is naar"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "en ga verder met het aanmaken van je account."
+  },
+  "noEmail": {
+    "message": "Geen e-mail?"
+  },
+  "goBack": {
+    "message": "Ga terug"
+  },
+  "toEditYourEmailAddress": {
+    "message": "om je e-mailadres te bewerken."
   },
   "view": {
     "message": "Weergeven"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Het roteren van het factureringssynchronisatietoken maakt het vorige token ongeldig."
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "Zelfgehost"
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Alle verzoeken goedkeuren"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Alle inlogverzoeken goedgekeurd"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Updated tax information"
+  },
+  "unverified": {
+    "message": "Unverified"
+  },
+  "verified": {
+    "message": "Verified"
   }
 }

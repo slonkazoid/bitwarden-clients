@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Livello di accesso"
   },
+  "accessing": {
+    "message": "Accedendo a"
+  },
   "loggedOut": {
     "message": "Uscito"
+  },
+  "loggedOutDesc": {
+    "message": "Sei stato fatto uscire dal tuo account."
   },
   "loginExpired": {
     "message": "La tua sessione è scaduta."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Copia UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Errore di aggiornamento del token di accesso"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nessun token di aggiornamento o chiave API trovati. Prova ad uscire ed entrare di nuovo."
   },
   "warning": {
     "message": "Attenzione"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Dispositivo"
+  },
+  "creatingAccountOn": {
+    "message": "Creazione account su"
+  },
+  "checkYourEmail": {
+    "message": "Controlli la tua email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Segui il link nell'email inviata a"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "e continua a creare il tuo account."
+  },
+  "noEmail": {
+    "message": "Nessuna email?"
+  },
+  "goBack": {
+    "message": "Torna indietro"
+  },
+  "toEditYourEmailAddress": {
+    "message": "per modificare il tuo indirizzo email."
   },
   "view": {
     "message": "Visualizza"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "La rotazione del token di sincronizzazione della fatturazione invaliderà il token precedente."
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Ambiente personalizzato"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specifica lo URL principale della tua installazione self-hosted di Bitwarden. Esempio: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Per la configurazione avanzata, puoi specificare lo URL di base di ciascun servizio in modo indipendente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Devi aggiungere lo URL del server di base o almeno un ambiente personalizzato."
+  },
+  "apiUrl": {
+    "message": "URL del server API"
+  },
+  "webVaultUrl": {
+    "message": "URL della cassaforte web"
+  },
+  "identityUrl": {
+    "message": "URL del server di identità"
+  },
+  "notificationsUrl": {
+    "message": "URL del server delle notifiche"
+  },
+  "iconsUrl": {
+    "message": "URL del server di icone"
+  },
+  "environmentSaved": {
+    "message": "URL dell'ambiente salvati"
   },
   "selfHostingTitle": {
     "message": "Self-hosting"
@@ -8187,7 +8253,7 @@
     "message": "Gestisci la fatturazione dal Portale del Fornitore"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Visualizza gli elementi in $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8263,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Torna a $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8273,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Indietro",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Rimuovi $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Stai al passo con le vulnerabilità della sicurezza passando a un piano a pagamento per un monitoraggio più avanzato."
+  },
+  "approveAllRequests": {
+    "message": "Approva tutte le richieste"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Tutte le richieste di accesso approvate"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Informazioni fiscali aggiornate"
+  },
+  "unverified": {
+    "message": "Non verificato"
+  },
+  "verified": {
+    "message": "Verificato"
   }
 }

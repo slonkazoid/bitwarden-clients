@@ -695,6 +695,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Especifique o URL de base da sua instalação Bitwarden hospedada no local."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Especifique o URL de base da sua instalação Bitwarden hospedada no local. Exemplo: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Para uma configuração avançada, pode especificar o URL de base de cada serviço de forma independente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Deve adicionar o URL do servidor de base ou pelo menos um ambiente personalizado."
+  },
   "customEnvironment": {
     "message": "Ambiente personalizado"
   },
@@ -708,7 +717,7 @@
     "message": "URL do servidor da API"
   },
   "webVaultUrl": {
-    "message": "URL do servidor do cofre web"
+    "message": "URL do servidor do cofre Web"
   },
   "identityUrl": {
     "message": "URL do servidor de identidade"
@@ -742,6 +751,9 @@
   },
   "loggedOut": {
     "message": "Sessão terminada"
+  },
+  "loggedOutDesc": {
+    "message": "Foi terminada a sessão da sua conta."
   },
   "loginExpired": {
     "message": "A sua sessão expirou."
@@ -1212,6 +1224,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Erro no acesso ao token de atualização"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Não foi encontrado nenhum token de atualização ou chaves API. Por favor, tente terminar a sessão e voltar a iniciá-la."
+  },
   "help": {
     "message": "Ajuda"
   },
@@ -1299,11 +1317,41 @@
     "message": "Palavra-passe atualizada a",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Exportar de"
+  },
   "exportVault": {
     "message": "Exportar cofre"
   },
   "fileFormat": {
     "message": "Formato do ficheiro"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "A exportação deste ficheiro será protegida por uma palavra-passe e exigirá a palavra-passe do ficheiro para ser desencriptada."
+  },
+  "filePassword": {
+    "message": "Palavra-passe do ficheiro"
+  },
+  "exportPasswordDescription": {
+    "message": "Esta palavra-passe será utilizada para exportar e importar este ficheiro"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Utilize a chave de encriptação da sua conta, derivada do nome de utilizador e da palavra-passe mestra da sua conta, para encriptar a exportação e restringir a importação apenas à conta Bitwarden atual."
+  },
+  "passwordProtected": {
+    "message": "Protegido por palavra-passe"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Defina uma palavra-passe do ficheiro para encriptar a exportação e importe-a para qualquer conta Bitwarden utilizando a palavra-passe de desencriptação."
+  },
+  "exportTypeHeading": {
+    "message": "Tipo de exportação"
+  },
+  "accountRestricted": {
+    "message": "Conta restringida"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Palavra-passe do ficheiro\" e \"Confirmar palavra-passe do ficheiro\" não correspondem."
   },
   "hCaptchaUrl": {
     "message": "URL do hCaptcha",
@@ -2050,6 +2098,9 @@
   "switchAccount": {
     "message": "Mudar de conta"
   },
+  "alreadyHaveAccount": {
+    "message": "Já tem uma conta?"
+  },
   "options": {
     "message": "Opções"
   },
@@ -2065,6 +2116,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "A exportar o cofre da organização"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Apenas o cofre da organização associado a $ORGANIZATION$ será exportado. Os itens em cofres individuais ou noutras organizações não serão incluídos.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2390,6 +2453,27 @@
   "logInRequested": {
     "message": "Pedido de início de sessão"
   },
+  "creatingAccountOn": {
+    "message": "A criar uma conta em"
+  },
+  "checkYourEmail": {
+    "message": "Verifique o seu e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Siga o link no e-mail enviado para"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "e continue a criação da sua conta."
+  },
+  "noEmail": {
+    "message": "Não recebeu o e-mail?"
+  },
+  "goBack": {
+    "message": "Volte atrás"
+  },
+  "toEditYourEmailAddress": {
+    "message": "para editar o seu endereço de e-mail."
+  },
   "exposedMasterPassword": {
     "message": "Palavra-passe mestra exposta"
   },
@@ -2407,6 +2491,12 @@
   },
   "important": {
     "message": "Importante:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "A sua sessão foi encerrada porque o seu token de acesso não pôde ser desencriptado. Por favor, inicie sessão novamente para resolver este problema."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "A sessão foi encerrada porque o seu token de atualização não pôde ser recuperado. Por favor, inicie sessão novamente para resolver este problema."
   },
   "masterPasswordHint": {
     "message": "A sua palavra-passe mestra não pode ser recuperada se a esquecer!"
@@ -2824,7 +2914,7 @@
     "message": "Erro ao atribuir a pasta de destino."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Ver itens em $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -2834,7 +2924,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Voltar a $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -2844,11 +2934,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Voltar",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Remover $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {

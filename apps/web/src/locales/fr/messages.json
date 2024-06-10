@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Niveau d'accès"
   },
+  "accessing": {
+    "message": "Accès en cours"
+  },
   "loggedOut": {
     "message": "Déconnecté"
+  },
+  "loggedOutDesc": {
+    "message": "Vous avez été déconnecté de votre compte."
   },
   "loginExpired": {
     "message": "Votre session a expiré."
@@ -636,7 +642,7 @@
     "message": "Utilisez une clé d'accès générée qui vous connectera automatiquement sans mot de passe. La biométrie, comme la reconnaissance faciale ou les empreintes digitales, ou une autre méthode de sécurité FIDO2 vérifiera votre identité."
   },
   "newPasskey": {
-    "message": "Nouvelle clé d'accès"
+    "message": "Nouvelle clé d'identification (passkey)"
   },
   "learnMoreAboutPasswordless": {
     "message": "En savoir plus sur l'identification sans mots de passe"
@@ -654,7 +660,7 @@
     "message": "Il y a eu un problème lors de la crétion de votre clé d'accès."
   },
   "passkeySuccessfullyCreated": {
-    "message": "Clé d'accès créée avec succès!"
+    "message": "Clé d'identification (passkey) créée avec succès !"
   },
   "customPasskeyNameInfo": {
     "message": "Nommez votre clé d'accès pour vous aider à l'identifier."
@@ -690,10 +696,10 @@
     }
   },
   "passkeyRemoved": {
-    "message": "Clé d'accès supprimée"
+    "message": "Clé d'identification (passkey) retirée"
   },
   "removePasskey": {
-    "message": "Supprimer la clé d'accès"
+    "message": "Retirer la clé d'identification (passkey)"
   },
   "removePasskeyInfo": {
     "message": "Si toutes les clés d'accès sont supprimées, vous ne pourrez pas vous connecter à de nouveaux appareils sans votre mot de passe principal."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Copier l'UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Erreur d'Actualisation du Jeton d'Accès"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Aucun jeton de rafraîchissement ou clé d'API trouvé. Veuillez essayer de vous déconnecter et de vous reconnecter."
   },
   "warning": {
     "message": "Attention"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Appareil"
+  },
+  "creatingAccountOn": {
+    "message": "Création du compte sur"
+  },
+  "checkYourEmail": {
+    "message": "Vérifiez vos courriels"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Suivez le lien dans le courriel envoyé à"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "et continuer à créer votre compte."
+  },
+  "noEmail": {
+    "message": "Pas courriel?"
+  },
+  "goBack": {
+    "message": "Revenir en arrière"
+  },
+  "toEditYourEmailAddress": {
+    "message": "pour modifier votre adresse courriel."
   },
   "view": {
     "message": "Voir"
@@ -5562,6 +5595,39 @@
   "rotateBillingSyncTokenTitle": {
     "message": "Permuter le Jeton de Synchronisation de Facturation invalidera le jeton précédent."
   },
+  "selfHostedServer": {
+    "message": "auto-hébergé"
+  },
+  "customEnvironment": {
+    "message": "Environnement personnalisé"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Spécifiez l'URL de base de votre installation auto-hébergée par Bitwarden. Exemple: https://bitwarden.compagnie.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pour un configuration avancée. Vous pouvez spécifier l'URL de base indépendamment pour chaque service."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Vous devez ajouter soit l'URL du Serveur de base, soit au moins un environnement personnalisé."
+  },
+  "apiUrl": {
+    "message": "URL du serveur API"
+  },
+  "webVaultUrl": {
+    "message": "URL du serveur du coffre Web"
+  },
+  "identityUrl": {
+    "message": "URL du serveur d'identité"
+  },
+  "notificationsUrl": {
+    "message": "URL du serveur de notifications"
+  },
+  "iconsUrl": {
+    "message": "URL du serveur d’icônes"
+  },
+  "environmentSaved": {
+    "message": "URLs d'environnement enregistrées"
+  },
   "selfHostingTitle": {
     "message": "Auto-Hébergement"
   },
@@ -6113,7 +6179,7 @@
     "message": "Ce n'est pas vous ?"
   },
   "pickAnAvatarColor": {
-    "message": "Choisissez la couleur de votre avatar"
+    "message": "Choisissez une couleur d'avatar"
   },
   "customizeAvatar": {
     "message": "Personnaliser l'avatar"
@@ -7749,7 +7815,7 @@
     "message": "Vous ne pouvez vous ajoutez vous-même aux groupes."
   },
   "cannotAddYourselfToCollections": {
-    "message": "You cannot add yourself to collections."
+    "message": "Vous ne pouvez pas vous ajouter vous-même aux collections."
   },
   "assign": {
     "message": "Assigner"
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Restez en avance sur les vulnérabilités de sécurité en passant à un plan payant pour une surveillance améliorée."
+  },
+  "approveAllRequests": {
+    "message": "Approuver toutes les demandes"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Toutes les demandes de connexion approuvées"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Informations sur les taxes mises à jour"
+  },
+  "unverified": {
+    "message": "Non vérifié"
+  },
+  "verified": {
+    "message": "Vérifié"
   }
 }
