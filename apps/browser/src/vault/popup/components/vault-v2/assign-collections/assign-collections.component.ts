@@ -23,6 +23,7 @@ import {
   FormFieldModule,
   SelectItemView,
   ToastService,
+  AsyncActionsModule,
 } from "@bitwarden/components";
 
 import { PopOutComponent } from "../../../../../platform/popup/components/pop-out.component";
@@ -42,7 +43,6 @@ type TransferForm = {
   imports: [
     CommonModule,
     JslibModule,
-    ButtonModule,
     SelectModule,
     FormFieldModule,
     ReactiveFormsModule,
@@ -51,6 +51,8 @@ type TransferForm = {
     PopupFooterComponent,
     PopOutComponent,
     CardComponent,
+    AsyncActionsModule,
+    ButtonModule,
   ],
 })
 export class AssignCollections {
@@ -149,7 +151,7 @@ export class AssignCollections {
     }
   }
 
-  async submit() {
+  submit = async () => {
     const { collections, organizationId } = this.transferForm.getRawValue();
     const collectionIds = collections.map((c) => c.id);
 
@@ -181,12 +183,10 @@ export class AssignCollections {
         title: null,
         message: this.i18nService.t("movedItemToOrg", this.cipher.name, orgName),
       });
-      return true;
     } catch (e) {
       this.logService.error(e);
     }
-    return false;
-  }
+  };
 
   /** Navigates the user back to the previous screen */
   navigateBack() {
