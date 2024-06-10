@@ -162,17 +162,13 @@ export class AssignCollections {
       return;
     }
 
-    const cipherDomain = await this.cipherService.get(this.cipher.id);
-    const cipherView = await cipherDomain.decrypt(
-      await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain),
-    );
     const orgs = await firstValueFrom(this.organizations$);
     const orgName =
       orgs.find((o) => o.id === organizationId)?.name ?? this.i18nService.t("organization");
 
     try {
       this.formPromise = this.cipherService.shareWithServer(
-        cipherView,
+        this.cipher,
         organizationId,
         collectionIds,
       );
@@ -183,7 +179,7 @@ export class AssignCollections {
       this.toastService.showToast({
         variant: "success",
         title: null,
-        message: this.i18nService.t("movedItemToOrg", cipherView.name, orgName),
+        message: this.i18nService.t("movedItemToOrg", this.cipher.name, orgName),
       });
       return true;
     } catch (e) {
