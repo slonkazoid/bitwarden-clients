@@ -13,7 +13,7 @@ export default class BrowserLocalStorageService extends AbstractChromeStorageSer
   }
 
   /**
-   * Reeds, clears, and re-saves all data in local storage. This is a hack to remove previously stored sensitive data from
+   * Reads, clears, and re-saves all data in local storage. This is a hack to remove previously stored sensitive data from
    * local storage logs.
    *
    * @see https://github.com/bitwarden/clients/issues/485
