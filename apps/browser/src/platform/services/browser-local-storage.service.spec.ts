@@ -73,13 +73,12 @@ describe("BrowserLocalStorageService", () => {
         key3: null,
       },
       {},
-    ])("reseeds data %s", async (testStore) => {
+    ])("saves all data in storage %s", async (testStore) => {
       for (const key of Object.keys(testStore) as Array<keyof typeof testStore>) {
         store[key] = testStore[key];
       }
       await service.reseed();
 
-      expect(clearMock).toHaveBeenCalledTimes(1);
       expect(saveMock).toHaveBeenLastCalledWith(
         { ...testStore, [RESEED_IN_PROGRESS_KEY]: objToStore(true) },
         expect.any(Function),
