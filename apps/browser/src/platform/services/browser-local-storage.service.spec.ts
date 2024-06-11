@@ -147,19 +147,16 @@ describe("BrowserLocalStorageService", () => {
 
       const promise = service[method]("key", "value"); // note "value" is only used in save, but ignored in other methods
 
-      await expect(promise).not.toBeFulfilled();
+      await expect(promise).not.toBeFulfilled(10);
 
       endReseed();
-
-      await promise;
 
       await expect(promise).toBeResolved();
     });
 
     it("does not wait if reseed is not in progress", async () => {
       const promise = service[method]("key", "value");
-      await promise;
-      await expect(promise).toBeResolved();
+      await expect(promise).toBeResolved(1);
     });
   });
 });
