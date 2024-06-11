@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject, from, switchMap, takeUntil } from "rxjs";
 
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { SearchModule, TableDataSource } from "@bitwarden/components";
 
 import { HeaderModule } from "../../../../../../../apps/web/src/app/layouts/header/header.module";
@@ -16,6 +17,7 @@ import { MemberAccessReportView } from "./view/member-access-report.view";
   standalone: true,
 })
 export class MemberAccessReportComponent implements OnInit {
+  protected destroy$ = new Subject<void>();
   protected dataSource = new TableDataSource<MemberAccessReportView>();
   private _searchText$ = new BehaviorSubject<string>("");
 
@@ -25,10 +27,25 @@ export class MemberAccessReportComponent implements OnInit {
 
   set searchText(value: string) {
     this._searchText$.next(value);
+    this.dataSource.filter = value;
   }
-  constructor(protected reportService: MemberAccessReportService) {}
+
+  constructor(
+    protected reportService: MemberAccessReportService,
+    private searchService: SearchService,
+  ) {}
 
   ngOnInit() {
     this.dataSource.data = this.reportService.getMemberAccessMockData();
+
+    this._searchText$.pipe(
+      switchMap((searchText) => from(this.searchService.isSearchable(searchText))),
+      takeUntil(this.destroy$),
+    );
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
