@@ -10,7 +10,7 @@
   >
   </bit-nav-item>
   <section
-    *ngIf="true"
+    *ngIf="moreProducts$ != null || moreProductsInternal$ != null"
     class="tw-mt-2 tw-flex tw-w-full tw-flex-col tw-gap-2 tw-border-0 tw-border-t tw-border-solid tw-border-t-text-alt2"
   ></section>
   <ng-container *ngIf="moreProducts$ != null || moreProductsInternal$ != null">
