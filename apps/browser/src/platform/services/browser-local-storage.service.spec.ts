@@ -89,14 +89,11 @@ describe("BrowserLocalStorageService", () => {
       store.key1 = "value1";
       store.key2 = "value2";
 
-      const expectedStore = Object.entries(store).reduce(
-        (agg, [key, value]) => {
-          agg[key] = objToStore(value);
-          return agg;
-        },
-        {} as Record<string, unknown>,
-      );
-      expectedStore.reseedInProgress = objToStore(true);
+      const expectedStore = {
+        key1: objToStore("value1"),
+        key2: objToStore("value2"),
+        reseedInProgress: objToStore(true),
+      };
 
       await service.reseed();
 
