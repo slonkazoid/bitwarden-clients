@@ -12,6 +12,15 @@ export const serializationIndicator = "__json__";
 
 export type SerializedValue = { [serializationIndicator]: true; value: string };
 
+/**
+ * Serializes the given object and decorates it to indicate it is serialized.
+ *
+ * We have the problem that it is difficult to tell when a value has been serialized, by always
+ * storing objects decorated with this method, we can easily tell when a value has been serialized and
+ * deserialize it appropriately.
+ * @param obj object to decorate and serialize
+ * @returns a serialized version of the object, decorated to indicate that it is serialized
+ */
 export const objToStore = (obj: any) => {
   if (obj == null) {
     return null;
