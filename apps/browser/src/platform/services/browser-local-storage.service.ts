@@ -10,6 +10,9 @@ export const RESEED_IN_PROGRESS_KEY = "reseedInProgress";
 export default class BrowserLocalStorageService extends AbstractChromeStorageService {
   constructor() {
     super(chrome.storage.local);
+    this.chromeStorageApi.remove(RESEED_IN_PROGRESS_KEY, () => {
+      return;
+    });
   }
 
   /**
