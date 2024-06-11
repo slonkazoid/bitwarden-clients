@@ -85,6 +85,22 @@ describe("BrowserLocalStorageService", () => {
       );
     });
 
+    it.each([
+      {
+        key1: objToStore("value1"),
+        key2: objToStore("value2"),
+        key3: null,
+      },
+      {},
+    ])("results in the same store %s", async (testStore) => {
+      for (const key of Object.keys(testStore) as Array<keyof typeof testStore>) {
+        store[key] = testStore[key];
+      }
+      await service.reseed();
+
+      expect(store).toEqual(testStore);
+    });
+
     it("converts non-serialized values to serialized", async () => {
       store.key1 = "value1";
       store.key2 = "value2";
@@ -104,23 +120,6 @@ describe("BrowserLocalStorageService", () => {
       await service.reseed();
 
       expect(clearMock).toHaveBeenCalledTimes(1);
-    });
-
-    it("indicates a reseed is in progress", async () => {
-      await service.reseed();
-
-      expect(saveMock).toHaveBeenNthCalledWith(
-        1,
-        { reseedInProgress: objToStore(true) },
-        expect.any(Function),
-      );
-    });
-
-    it("removes the reseed in progress key", async () => {
-      await service.reseed();
-
-      expect(removeMock).toHaveBeenCalledTimes(1);
-      expect(removeMock).toHaveBeenCalledWith("reseedInProgress", expect.any(Function));
     });
   });
 
