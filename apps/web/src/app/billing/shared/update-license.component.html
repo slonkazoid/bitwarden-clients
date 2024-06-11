@@ -1,5 +1,5 @@
 <form [formGroup]="updateLicenseForm" [bitSubmit]="submit">
-  <bit-form-field [showRequired]="!showAutomaticSyncAndManualUpload">
+  <bit-form-field>
     <bit-label *ngIf="showAutomaticSyncAndManualUpload">{{ "licenseFile" | i18n }}</bit-label>
     <div>
       <button bitButton type="button" buttonType="secondary" (click)="fileSelector.click()">
