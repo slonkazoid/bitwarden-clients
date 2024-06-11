@@ -6,11 +6,9 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 
 import { ExposedPasswordsReportComponent } from "../../../admin-console/organizations/tools/exposed-passwords-report.component";
 import { InactiveTwoFactorReportComponent } from "../../../admin-console/organizations/tools/inactive-two-factor-report.component";
-import { MemberAccessReportComponent } from "../../../../../../../bitwarden_license/bit-web/src/app/tools/member-access-report/member-access-report.component";
 import { ReusedPasswordsReportComponent } from "../../../admin-console/organizations/tools/reused-passwords-report.component";
 import { UnsecuredWebsitesReportComponent } from "../../../admin-console/organizations/tools/unsecured-websites-report.component";
 import { WeakPasswordsReportComponent } from "../../../admin-console/organizations/tools/weak-passwords-report.component";
-import { IsEnterpriseOrgGuard } from "../guards/is-enterprise-org.guard";
 import { IsPaidOrgGuard } from "../guards/is-paid-org.guard";
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
 import { OrganizationRedirectGuard } from "../guards/org-redirect.guard";
@@ -82,12 +80,11 @@ const routes: Routes = [
             canActivate: [IsPaidOrgGuard],
           },
           {
-            path: "member-access-report",
-            component: MemberAccessReportComponent,
-            data: {
-              titleId: "memberAccessReport",
-            },
-            canActivate: [IsEnterpriseOrgGuard],
+            path: "",
+            loadChildren: () =>
+              import(
+                "../../../../../../../bitwarden_license/bit-web/src/app/tools/reports/reports.module"
+              ).then((m) => m.ReportsModule),
           },
         ],
       },

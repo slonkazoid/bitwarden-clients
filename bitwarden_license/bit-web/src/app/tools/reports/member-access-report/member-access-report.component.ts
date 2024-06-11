@@ -3,8 +3,8 @@ import { BehaviorSubject } from "rxjs";
 
 import { SearchModule, TableDataSource } from "@bitwarden/components";
 
-import { HeaderModule } from "../../../../../../apps/web/src/app/layouts/header/header.module";
-import { SharedModule } from "../../../../../../apps/web/src/app/shared";
+import { HeaderModule } from "../../../../../../../apps/web/src/app/layouts/header/header.module";
+import { SharedModule } from "../../../../../../../apps/web/src/app/shared";
 
 import { MemberAccessReportService } from "./member-access-report.service";
 import { MemberAccessReportView } from "./view/member-access-report.view";
