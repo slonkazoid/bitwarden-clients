@@ -344,6 +344,7 @@ const safeProviders: SafeProvider[] = [
       ScriptInjectorService,
       AccountServiceAbstraction,
       AuthService,
+      MessageListener,
     ],
   }),
   safeProvider({
