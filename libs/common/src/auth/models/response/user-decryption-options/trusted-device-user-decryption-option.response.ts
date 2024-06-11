@@ -5,6 +5,7 @@ export interface ITrustedDeviceUserDecryptionOptionServerResponse {
   HasAdminApproval: boolean;
   HasLoginApprovingDevice: boolean;
   HasManageResetPasswordPermission: boolean;
+  IsTdeOffboarding: boolean;
   EncryptedPrivateKey?: string;
   EncryptedUserKey?: string;
 }
