@@ -158,5 +158,17 @@ describe("BrowserLocalStorageService", () => {
       const promise = service[method]("key", "value");
       await expect(promise).toBeResolved(1);
     });
+
+    it("awaits prior reseed operations before starting a new one", async () => {
+      startReseed();
+
+      const promise = service.reseed();
+
+      await expect(promise).not.toBeFulfilled(10);
+
+      endReseed();
+
+      await expect(promise).toBeResolved();
+    });
   });
 });
