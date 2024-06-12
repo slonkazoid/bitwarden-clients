@@ -34,7 +34,7 @@
           class="tw-col-span-6"
           *ngFor="let k of formGroup.controls.keys.controls; let i = index"
         >
-          <div formGroupName="{{ i }}">
+          <div [formGroupName]="i">
             <bit-form-field *ngIf="!k.get('existingKey').value">
               <bit-label>{{ "yubikeyX" | i18n: i + 1 }}</bit-label>
               <input bitInput type="password" formControlName="key" appInputVerbatim />
@@ -65,12 +65,11 @@
       </button>
       <button
         *ngIf="enabled"
-        #disableBtn
         bitButton
         bitFormButton
         type="button"
         buttonType="secondary"
-        (click)="disable()"
+        [bitAction]="disable"
       >
         {{ "disableAllKeys" | i18n }}
       </button>

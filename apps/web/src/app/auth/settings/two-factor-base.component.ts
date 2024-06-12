@@ -47,6 +47,7 @@ export abstract class TwoFactorBaseComponent {
       this.onUpdated.emit(true);
     } catch (e) {
       this.logService.error(e);
+      throw e;
     }
   }
 

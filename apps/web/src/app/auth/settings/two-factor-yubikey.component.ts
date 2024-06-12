@@ -1,4 +1,4 @@
-import { DIALOG_DATA, DialogConfig } from "@angular/cdk/dialog";
+import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component, EventEmitter, Inject, Output } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
@@ -34,10 +34,11 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   disablePromise: Promise<unknown>;
 
   override componentName = "app-two-factor-yubikey";
-  formGroup: FormGroup<{ keys: FormArray<FormControl<any>>; nfc: FormControl<any> }>;
+  formGroup: FormGroup<{ keys: FormArray<FormControl<any>>; nfc: FormControl<boolean> }>;
 
   constructor(
     @Inject(DIALOG_DATA) protected data: AuthResponse<TwoFactorYubiKeyResponse>,
+    private dialogRef: DialogRef,
     apiService: ApiService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
@@ -54,7 +55,6 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
       userVerificationService,
       dialogService,
     );
-    this.auth(data);
   }
 
   get keyPass() {
@@ -62,6 +62,7 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   }
 
   ngOnInit() {
+    this.auth(this.data);
     this.formGroup = this.formBuilder.group({
       keys: this.formBuilder.array([]),
       nfc: this.formBuilder.control(this.nfc),
@@ -72,14 +73,11 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   patch() {
     const control = <FormArray>this.formGroup.get("keys");
     this.keyValues.forEach((val) => {
-      control.push(this.patchValues(val.key, val.existingKey));
-    });
-  }
-
-  patchValues(key: string, existingKey: string) {
-    return this.formBuilder.group({
-      key: [key],
-      existingKey: [existingKey],
+      const fb = this.formBuilder.group({
+        key: [val.key],
+        existingKey: [val.existingKey],
+      });
+      control.push(fb);
     });
   }
 
@@ -110,7 +108,15 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     });
   }
 
-  disable() {
+  disable = async () => {
+    await this.disableYubikey();
+    if (!this.enabled) {
+      this.onChangeStatus.emit(this.enabled);
+      this.dialogRef.close();
+    }
+  };
+
+  private async disableYubikey() {
     return super.disable(this.disablePromise);
   }
 
