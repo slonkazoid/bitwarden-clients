@@ -65,7 +65,7 @@ const routes: Routes = [
         children: [], // Children lets us have an empty component.
         canActivate: [redirectGuard()], // Redirects either to vault, login, or lock page.
       },
-      { path: "login", component: LoginComponent, canActivate: [unauthGuardFn] },
+      { path: "login", component: LoginComponent, canActivate: [unauthGuardFn()] },
       {
         path: "login-with-device",
         component: LoginViaAuthRequestComponent,
@@ -89,7 +89,7 @@ const routes: Routes = [
       {
         path: "register",
         component: TrialInitiationComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "createAccount" } satisfies DataProperties,
       },
       {
@@ -100,7 +100,7 @@ const routes: Routes = [
       {
         path: "sso",
         component: SsoComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "enterpriseSingleSignOn" } satisfies DataProperties,
       },
       {
@@ -111,7 +111,7 @@ const routes: Routes = [
       {
         path: "hint",
         component: HintComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "passwordHint" } satisfies DataProperties,
       },
       {
@@ -136,25 +136,25 @@ const routes: Routes = [
       {
         path: "recover-delete",
         component: RecoverDeleteComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "deleteAccount" } satisfies DataProperties,
       },
       {
         path: "verify-recover-delete",
         component: VerifyRecoverDeleteComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "deleteAccount" } satisfies DataProperties,
       },
       {
         path: "verify-recover-delete-org",
         component: VerifyRecoverDeleteOrgComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "deleteOrganization" },
       },
       {
         path: "verify-recover-delete-provider",
         component: VerifyRecoverDeleteProviderComponent,
-        canActivate: [unauthGuardFn],
+        canActivate: [unauthGuardFn()],
         data: { titleId: "deleteAccount" } satisfies DataProperties,
       },
       {
