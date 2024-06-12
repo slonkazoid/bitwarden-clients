@@ -11,14 +11,15 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { NoItemsModule, SearchModule } from "@bitwarden/components";
 
-import { SharedModule } from "../..";
-import { HeaderModule } from "../../../layouts/header/header.module";
+import { HeaderModule } from "../../layouts/header/header.module";
+import { OssModule } from "../../oss.module";
+import { SharedModule } from "../../shared/shared.module";
 
 @Component({
   selector: "app-request-sm-access",
   standalone: true,
-  imports: [SharedModule, SearchModule, NoItemsModule, HeaderModule],
   templateUrl: "request-sm-access.component.html",
+  imports: [SharedModule, SearchModule, NoItemsModule, HeaderModule, OssModule],
 })
 export class RequestSMAccessComponent implements OnInit {
   requestAccessForm: FormGroup;

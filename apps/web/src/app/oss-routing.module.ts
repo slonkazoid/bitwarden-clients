@@ -46,10 +46,10 @@ import { EnvironmentSelectorComponent } from "./components/environment-selector/
 import { DataProperties } from "./core";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
+import { RequestSMAccessComponent } from "./secrets-manager/secrets-manager-landing/request-sm-access.component";
+import { SMLandingComponent } from "./secrets-manager/secrets-manager-landing/sm-landing.component";
 import { DomainRulesComponent } from "./settings/domain-rules.component";
 import { PreferencesComponent } from "./settings/preferences.component";
-import { RequestSMAccessComponent } from "./shared/components/secrets-manager-landing/request-sm-access.component";
-import { SMLandingComponent } from "./shared/components/secrets-manager-landing/sm-landing.component";
 import { GeneratorComponent } from "./tools/generator.component";
 import { ReportsModule } from "./tools/reports";
 import { AccessComponent } from "./tools/send/access.component";

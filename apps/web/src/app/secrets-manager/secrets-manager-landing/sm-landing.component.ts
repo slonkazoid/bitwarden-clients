@@ -5,8 +5,8 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { NoItemsModule, SearchModule } from "@bitwarden/components";
 
-import { SharedModule } from "../..";
-import { HeaderModule } from "../../../layouts/header/header.module";
+import { HeaderModule } from "../../layouts/header/header.module";
+import { SharedModule } from "../../shared/shared.module";
 
 @Component({
   selector: "app-landing",
