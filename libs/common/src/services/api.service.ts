@@ -1570,7 +1570,7 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async requestSMAccessFromAdmins(request: RequestSMAccessRequest): Promise<any> {
-    return this.send("POST", "/accounts/request-sm-access", request, true, false);
+    return this.send("POST", "/request-access/request-sm-access", request, true, false);
   }
 
   // Helpers
