@@ -121,7 +121,7 @@ export class ViewV2Component implements OnDestroy {
     }
   }
 
-  async editCipher() {
+  editCipher() {
     if (this.cipher.isDeleted) {
       return false;
     }
@@ -135,4 +135,6 @@ export class ViewV2Component implements OnDestroy {
   }
 
   deleteCipher() {}
+
+  openPasswordHistory() {}
 }

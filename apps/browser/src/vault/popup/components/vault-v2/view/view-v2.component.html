@@ -1,11 +1,12 @@
 <popup-page>
   <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
 
-  <div>
+  <!-- ITEM DETAILS SECTION -->
+  <div class="tw-mb-6">
     <h5 class="tw-pl-2 tw-font-bold">{{ "itemDetails" | i18n }}</h5>
     <div class="box-content-row" *ngIf="cipher.login.username">
       <div class="row-border-bottom">
-        <label for="loginUsername" class="row-label draggable" draggable="true">
+        <label for="loginUsername" class="row-label">
           {{ "itemName" | i18n }}
         </label>
         <input
@@ -16,6 +17,7 @@
           aria-readonly="true"
         />
       </div>
+
       <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
         <div *ngIf="cipher.organizationId" class="tw-mb-3">
           <i class="bwi bwi-business bwi-lg bwi-fw"></i> {{ organization.name }}
@@ -28,6 +30,89 @@
         <div *ngIf="cipher.folderId" class="tw-mb-3">
           <i class="bwi bwi-folder bwi-lg bwi-fw"></i> {{ folder.name }}
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADDITIONAL INFORMATION SECTION -->
+  <div class="tw-mb-6">
+    <h5 class="tw-pl-2 tw-font-bold">{{ "additionalInformation" | i18n }}</h5>
+    <div class="box-content-row tw-flex tw-justify-between" *ngIf="cipher.notes">
+      <div class="tw-grow">
+        <label for="loginUsername" class="row-label">
+          {{ "note" | i18n }}
+        </label>
+        <input
+          id="loginUsername"
+          type="text"
+          [value]="cipher.notes"
+          readonly
+          aria-readonly="true"
+        />
+      </div>
+      <div class="tw-flex tw-justify-end tw-items-center">
+        <i class="bwi bwi-clone bwi-lg bwi-fw"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATTACHMENTS SECTION -->
+  <div class="tw-mb-6">
+    <h5 class="tw-pl-2 tw-font-bold">{{ "attachments" | i18n }}</h5>
+    <div class="box-content-row" *ngIf="cipher.attachments">
+      <div>
+        <h5>Attachments</h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" *ngIf="cipher.hasAttachments">
+    <h2 class="box-header">
+      {{ "attachments" | i18n }}
+    </h2>
+    <div class="box-content single-line">
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        *ngFor="let attachment of cipher.attachments"
+        appStopClick
+      >
+        <span class="row-main">{{ attachment.fileName }}</span>
+        <small class="row-sub-label">{{ attachment.sizeName }}</small>
+        <i
+          class="bwi bwi-download bwi-fw row-sub-icon"
+          *ngIf="!$any(attachment).downloading"
+          aria-hidden="true"
+        ></i>
+        <i
+          class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
+          *ngIf="$any(attachment).downloading"
+          aria-hidden="true"
+        ></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ITEM HISTORY SECTION -->
+  <div class="tw-mb-6">
+    <h5 class="tw-pl-2 tw-font-bold">{{ "itemHistory" | i18n }}</h5>
+    <div class="box-content-row">
+      <div>
+        <b class="tw-font-semibold">{{ "lastEdited" | i18n }}:</b>
+        {{ cipher.revisionDate | date: "medium" }}
+      </div>
+      <div *ngIf="cipher.creationDate">
+        <b class="tw-font-semibold">{{ "dateCreated" | i18n }}:</b>
+        {{ cipher.creationDate | date: "medium" }}
+      </div>
+      <div *ngIf="cipher.passwordRevisionDisplayDate">
+        <b class="tw-font-semibold">{{ "datePasswordUpdated" | i18n }}:</b>
+        {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
+      </div>
+      <div *ngIf="cipher.hasPasswordHistory">
+        <a (click)="openPasswordHistory()" class="tw-font-semibold">{{
+          "passwordHistory" | i18n
+        }}</a>
       </div>
     </div>
   </div>
