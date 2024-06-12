@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "@bitwarden/angular/auth/guards";
+import { authGuard } from "@bitwarden/angular/auth/guards";
 import { Provider } from "@bitwarden/common/admin-console/models/domain/provider";
 import { ProvidersComponent } from "@bitwarden/web-vault/app/admin-console/providers/providers.component";
 import { FrontendLayoutComponent } from "@bitwarden/web-vault/app/layouts/frontend-layout.component";
@@ -28,12 +28,12 @@ import { SetupComponent } from "./setup/setup.component";
 const routes: Routes = [
   {
     path: "",
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     component: UserLayoutComponent,
     children: [
       {
         path: "",
-        canActivate: [AuthGuard],
+        canActivate: [authGuard],
         component: ProvidersComponent,
         data: { titleId: "providers" },
       },
@@ -57,7 +57,7 @@ const routes: Routes = [
   },
   {
     path: "",
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: "setup",
