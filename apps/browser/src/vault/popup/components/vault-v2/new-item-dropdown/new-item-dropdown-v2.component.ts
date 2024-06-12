@@ -1,16 +1,10 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { ButtonModule, NoItemsModule, MenuModule } from "@bitwarden/components";
-
-import {
-  MY_VAULT_ID,
-  VaultPopupListFiltersService,
-} from "../../../services/vault-popup-list-filters.service";
 
 @Component({
   selector: "app-new-item-dropdown",
@@ -19,19 +13,11 @@ import {
   imports: [NoItemsModule, JslibModule, CommonModule, ButtonModule, RouterLink, MenuModule],
 })
 export class NewItemDropdownV2Component implements OnInit, OnDestroy {
-  private selectedVaultId: string | null | undefined = null;
+  @Input() selectedVaultId: string;
 
   cipherType = CipherType;
 
-  constructor(
-    private router: Router,
-    vaultPopupListFiltersService: VaultPopupListFiltersService,
-  ) {
-    vaultPopupListFiltersService.filters$.pipe(takeUntilDestroyed()).subscribe((filters) => {
-      this.selectedVaultId =
-        filters.organization?.id !== MY_VAULT_ID ? filters.organization?.id : null;
-    });
-  }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
