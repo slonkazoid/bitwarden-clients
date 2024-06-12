@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
 import { combineLatest, filter, map } from "rxjs";
@@ -49,7 +49,7 @@ enum VaultState {
     NewItemDropdownV2Component,
   ],
 })
-export class VaultV2Component implements OnInit, OnDestroy {
+export class VaultV2Component {
   cipherType = CipherType;
 
   protected favoriteCiphers$ = this.vaultPopupItemsService.favoriteCiphers$;
@@ -96,8 +96,4 @@ export class VaultV2Component implements OnInit, OnDestroy {
         }
       });
   }
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
 }

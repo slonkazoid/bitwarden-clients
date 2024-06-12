@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -12,16 +12,12 @@ import { ButtonModule, NoItemsModule, MenuModule } from "@bitwarden/components";
   standalone: true,
   imports: [NoItemsModule, JslibModule, CommonModule, ButtonModule, RouterLink, MenuModule],
 })
-export class NewItemDropdownV2Component implements OnInit, OnDestroy {
+export class NewItemDropdownV2Component {
   @Input() selectedVaultId: string;
 
   cipherType = CipherType;
 
   constructor(private router: Router) {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
 
   newItemNavigate(type: CipherType) {
     const selectedVault = this.selectedVaultId;
