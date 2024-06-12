@@ -99,7 +99,6 @@ export class MemberDialogComponent implements OnDestroy {
     emails: [""],
     type: OrganizationUserType.User,
     externalId: this.formBuilder.control({ value: "", disabled: true }),
-    accessAllCollections: false,
     accessSecretsManager: false,
     access: [[] as AccessItemValue[]],
     groups: [[] as AccessItemValue[]],
@@ -107,14 +106,9 @@ export class MemberDialogComponent implements OnDestroy {
 
   protected allowAdminAccessToAllCollectionItems$: Observable<boolean>;
   protected restrictEditingSelf$: Observable<boolean>;
-  protected canEditAnyCollection$: Observable<boolean>;
+  protected canAssignAccessToAnyCollection$: Observable<boolean>;
 
   protected permissionsGroup = this.formBuilder.group({
-    manageAssignedCollectionsGroup: this.formBuilder.group<Record<string, boolean>>({
-      manageAssignedCollections: false,
-      editAssignedCollections: false,
-      deleteAssignedCollections: false,
-    }),
     manageAllCollectionsGroup: this.formBuilder.group<Record<string, boolean>>({
       manageAllCollections: false,
       createNewCollections: false,
@@ -135,10 +129,6 @@ export class MemberDialogComponent implements OnDestroy {
 
   get customUserTypeSelected(): boolean {
     return this.formGroup.value.type === OrganizationUserType.Custom;
-  }
-
-  get accessAllCollections(): boolean {
-    return this.formGroup.value.accessAllCollections;
   }
 
   constructor(
@@ -189,7 +179,7 @@ export class MemberDialogComponent implements OnDestroy {
       this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
     ]).pipe(
       map(([organization, flexibleCollectionsV1Enabled]) => {
-        if (!flexibleCollectionsV1Enabled || !organization.flexibleCollections) {
+        if (!flexibleCollectionsV1Enabled) {
           return true;
         }
 
@@ -222,12 +212,17 @@ export class MemberDialogComponent implements OnDestroy {
       FeatureFlag.FlexibleCollectionsV1,
     );
 
-    this.canEditAnyCollection$ = combineLatest([
+    this.canAssignAccessToAnyCollection$ = combineLatest([
       this.organization$,
       flexibleCollectionsV1Enabled$,
+      this.allowAdminAccessToAllCollectionItems$,
     ]).pipe(
-      map(([org, flexibleCollectionsV1Enabled]) =>
-        org.canEditAnyCollection(flexibleCollectionsV1Enabled),
+      map(
+        ([org, flexibleCollectionsV1Enabled, allowAdminAccessToAllCollectionItems]) =>
+          org.canEditAnyCollection(flexibleCollectionsV1Enabled) ||
+          // Manage Users custom permission cannot edit any collection but they can assign access from this dialog
+          // if permitted by collection management settings
+          (org.permissions.manageUsers && allowAdminAccessToAllCollectionItems),
       ),
     );
 
@@ -311,13 +306,6 @@ export class MemberDialogComponent implements OnDestroy {
     this.showNoMasterPasswordWarning =
       userDetails.status > OrganizationUserStatusType.Invited &&
       userDetails.hasMasterPassword === false;
-    const assignedCollectionsPermissions = {
-      editAssignedCollections: userDetails.permissions.editAssignedCollections,
-      deleteAssignedCollections: userDetails.permissions.deleteAssignedCollections,
-      manageAssignedCollections:
-        userDetails.permissions.editAssignedCollections &&
-        userDetails.permissions.deleteAssignedCollections,
-    };
     const allCollectionsPermissions = {
       createNewCollections: userDetails.permissions.createNewCollections,
       editAnyCollection: userDetails.permissions.editAnyCollection,
@@ -337,7 +325,6 @@ export class MemberDialogComponent implements OnDestroy {
         managePolicies: userDetails.permissions.managePolicies,
         manageUsers: userDetails.permissions.manageUsers,
         manageResetPassword: userDetails.permissions.manageResetPassword,
-        manageAssignedCollectionsGroup: assignedCollectionsPermissions,
         manageAllCollectionsGroup: allCollectionsPermissions,
       });
     }
@@ -373,7 +360,6 @@ export class MemberDialogComponent implements OnDestroy {
     this.formGroup.patchValue({
       type: userDetails.type,
       externalId: userDetails.externalId,
-      accessAllCollections: userDetails.accessAll,
       access: accessSelections,
       accessSecretsManager: userDetails.accessSecretsManager,
       groups: groupAccessSelections,
@@ -409,10 +395,6 @@ export class MemberDialogComponent implements OnDestroy {
       editAnyCollection: this.permissionsGroup.value.manageAllCollectionsGroup.editAnyCollection,
       deleteAnyCollection:
         this.permissionsGroup.value.manageAllCollectionsGroup.deleteAnyCollection,
-      editAssignedCollections:
-        this.permissionsGroup.value.manageAssignedCollectionsGroup.editAssignedCollections,
-      deleteAssignedCollections:
-        this.permissionsGroup.value.manageAssignedCollectionsGroup.deleteAssignedCollections,
     };
 
     return Object.assign(p, partialPermissions);
@@ -462,7 +444,6 @@ export class MemberDialogComponent implements OnDestroy {
     const userView = new OrganizationUserAdminView();
     userView.id = this.params.organizationUserId;
     userView.organizationId = this.params.organizationId;
-    userView.accessAll = this.accessAllCollections;
     userView.type = this.formGroup.value.type;
     userView.permissions = this.setRequestPermissions(
       userView.permissions ?? new PermissionsApi(),

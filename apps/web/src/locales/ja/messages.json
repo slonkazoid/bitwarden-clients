@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "アクセスレベル"
   },
+  "accessing": {
+    "message": "アクセス中"
+  },
   "loggedOut": {
     "message": "ログアウトしました"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "ログインセッションの有効期限が切れています。"
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "UUID をコピー"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "注意"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "デバイス"
+  },
+  "creatingAccountOn": {
+    "message": "アカウント作成："
+  },
+  "checkYourEmail": {
+    "message": "メールをご確認ください"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "アカウントの作成を続けるには"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "に送られたメールのリンクを開いてください。"
+  },
+  "noEmail": {
+    "message": "メールがありませんか?"
+  },
+  "goBack": {
+    "message": "戻って"
+  },
+  "toEditYourEmailAddress": {
+    "message": "メールアドレスを編集してください。"
   },
   "view": {
     "message": "表示"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "請求同期トークンを更新すると、前のトークンは無効になります。"
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "セルフホスティング"
@@ -8187,7 +8253,7 @@
     "message": "プロバイダーポータルからの請求を管理"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "$NAME$ のアイテムを表示",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8263,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "$NAME$ に戻る",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8273,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "戻る",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "$NAME$ を削除",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "監視を強化できる有料プランにアップグレードすると、セキュリティ脆弱性に素早く対応できます。"
+  },
+  "approveAllRequests": {
+    "message": "すべての要求を承認する"
+  },
+  "allLoginRequestsApproved": {
+    "message": "すべてのログイン要求を承認しました"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "ビットコイン"
+  },
+  "updatedTaxInformation": {
+    "message": "更新された税情報"
+  },
+  "unverified": {
+    "message": "未認証"
+  },
+  "verified": {
+    "message": "認証済み"
   }
 }

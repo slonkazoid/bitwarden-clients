@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Dowiedz się więcej o tym, jak korzystać z centrum pomocy Bitwarden."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Kontynuować do sklepu z rozszerzeniami przeglądarki?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Pomóż innym dowiedzieć się, czy Bitwarden jest dla nich odpowiedni. Odwiedź swój sklep z rozszerzeniami do przeglądarki i zostaw ocenę."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Możesz zmienić swoje hasło główne w aplikacji internetowej Bitwarden."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Ulubione"
   },
+  "unfavorite": {
+    "message": "Usuń z ulubionych"
+  },
+  "itemAddedToFavorites": {
+    "message": "Element dodany do ulubionych"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Element usunięty z ulubionych"
+  },
   "notes": {
     "message": "Notatki"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Uruchom"
+  },
+  "launchWebsite": {
+    "message": "Otwórz stronę"
   },
   "website": {
     "message": "Strona"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Wylogowano"
   },
+  "loggedOutDesc": {
+    "message": "Zostałeś wylogowany z konta."
+  },
   "loginExpired": {
     "message": "Twoja sesja wygasła."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Odblokuj"
   },
+  "additionalOptions": {
+    "message": "Dodatkowe opcje"
+  },
   "enableContextMenuItem": {
     "message": "Pokaż opcje menu kontekstowego"
   },
@@ -793,11 +817,38 @@
     "message": "Solarized Dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Eksportuj z"
+  },
   "exportVault": {
     "message": "Eksportuj sejf"
   },
   "fileFormat": {
     "message": "Format pliku"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Plik będzie chroniony hasłem, które będzie wymagane do odszyfrowania pliku."
+  },
+  "filePassword": {
+    "message": "Hasło do pliku"
+  },
+  "exportPasswordDescription": {
+    "message": "Hasło będzie używane do eksportowania i importowania pliku"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Użyj klucza szyfrowania konta, pochodzącego z nazwy użytkownika konta i hasła głównego, aby zaszyfrować eksport i ograniczyć import tylko do bieżącego konta Bitwarden."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Ustaw hasło dla pliku, aby zaszyfrować eksport i zaimportować je na dowolne konto Bitwarden przy użyciu hasła do odszyfrowania."
+  },
+  "exportTypeHeading": {
+    "message": "Rodzaj eksportu"
+  },
+  "accountRestricted": {
+    "message": "Konto ograniczone"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“Hasło pliku” i “Potwierdź hasło pliku“ nie pasują do siebie."
   },
   "warning": {
     "message": "UWAGA",
@@ -1070,6 +1121,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Wpisz podstawowy adres URL hostowanej instalacji Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Określ bazowy adres URL swojej instalacji Bitwarden. Przykład: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Dla zaawansowanych konfiguracji możesz określić podstawowy adres URL niezależnie dla każdej usługi."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musisz dodać podstawowy adres URL serwera lub co najmniej jedno niestandardowe środowisko."
   },
   "customEnvironment": {
     "message": "Niestandardowe środowisko"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Kolekcje"
   },
+  "nCollections": {
+    "message": "$COUNT$ collections",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Ulubione"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Element został przywrócony"
   },
+  "alreadyHaveAccount": {
+    "message": "Masz już konto?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Po wylogowaniu się z sejfu musisz ponownie zalogować się, aby uzyskać do niego dostęp. Czy na pewno chcesz użyć tego ustawienia?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Automatycznie uzupełnij i zapisz"
+  },
+  "fillAndSave": {
+    "message": "Wypełnij i zapisz"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "URI został zapisany i automatycznie uzupełniony"
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Błąd podczas odświeżania tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nie znaleziono tokenu odświeżającego ani kluczy API. Spróbuj wylogować się i zalogować ponownie."
   },
   "desktopSyncVerificationTitle": {
     "message": "Weryfikacja synchronizacji z aplikacją desktopową"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Eksportowanie sejfu organizacji"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Tylko sejf organizacji powiązany z $ORGANIZATION$ zostanie wyeksportowany. Pozycje w poszczególnych sejfach lub innych organizacji nie będą uwzględnione.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Błąd"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Identyfikator organizacji jest wymagany."
+  },
+  "creatingAccountOn": {
+    "message": "Tworzenie konta na"
+  },
+  "checkYourEmail": {
+    "message": "Sprawdź swoją pocztę e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Kliknij łącze w wiadomości e-mail wysłanej do"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "i kontynuuj tworzenie konta."
+  },
+  "noEmail": {
+    "message": "Brak wiadomości e-mail?"
+  },
+  "goBack": {
+    "message": "Wróć"
+  },
+  "toEditYourEmailAddress": {
+    "message": "aby edytować swój adres e-mail."
   },
   "eu": {
     "message": "UE",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Wyczyść filtry lub użyj innej frazy"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Skopiuj informacje, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Skopiuj informacje - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Skopiuj notatkę, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Skopiuj notatkę - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Więcej opcji, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Więcej opcji - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Zobacz element - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Przypisz kolekcje"
+  },
+  "copyEmail": {
+    "message": "Skopiuj e-mail"
+  },
+  "copyPhone": {
+    "message": "Skopiuj telefon"
+  },
+  "copyAddress": {
+    "message": "Skopiuj adres"
   },
   "adminConsole": {
     "message": "Konsola Administracyjna"
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Elementy bez folderu"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organizacja jest wyłączona"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Nie można uzyskać dostępu do elementów w wyłączonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
   }
 }

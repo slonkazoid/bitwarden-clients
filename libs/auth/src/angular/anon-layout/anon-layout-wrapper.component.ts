@@ -9,6 +9,7 @@ export interface AnonLayoutWrapperData {
   pageTitle?: string;
   pageSubtitle?: string;
   pageIcon?: Icon;
+  showReadonlyHostname?: boolean;
 }
 
 @Component({
@@ -20,13 +21,27 @@ export class AnonLayoutWrapperComponent {
   protected pageTitle: string;
   protected pageSubtitle: string;
   protected pageIcon: Icon;
+  protected showReadonlyHostname: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private i18nService: I18nService,
   ) {
-    this.pageTitle = this.i18nService.t(this.route.snapshot.firstChild.data["pageTitle"]);
-    this.pageSubtitle = this.i18nService.t(this.route.snapshot.firstChild.data["pageSubtitle"]);
-    this.pageIcon = this.route.snapshot.firstChild.data["pageIcon"]; // don't translate
+    const routeData = this.route.snapshot.firstChild?.data;
+
+    if (!routeData) {
+      return;
+    }
+
+    if (routeData["pageTitle"] !== undefined) {
+      this.pageTitle = this.i18nService.t(routeData["pageTitle"]);
+    }
+
+    if (routeData["pageSubtitle"] !== undefined) {
+      this.pageSubtitle = this.i18nService.t(routeData["pageSubtitle"]);
+    }
+
+    this.pageIcon = routeData["pageIcon"];
+    this.showReadonlyHostname = routeData["showReadonlyHostname"];
   }
 }

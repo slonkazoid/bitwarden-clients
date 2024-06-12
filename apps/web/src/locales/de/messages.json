@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Zugriffsebene"
   },
+  "accessing": {
+    "message": "Zugriff auf"
+  },
   "loggedOut": {
     "message": "Ausgeloggt"
+  },
+  "loggedOutDesc": {
+    "message": "Du wurdest von deinem Konto abgemeldet."
   },
   "loginExpired": {
     "message": "Ihre Anmeldungsitzung ist abgelaufen."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "UUID kopieren"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Zugangs-Token Aktualisierungsfehler"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Kein Aktualisierungs-Token oder API-Schlüssel gefunden. Bitte versuche dich ab- und wieder anzumelden."
   },
   "warning": {
     "message": "Warnung"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Gerät"
+  },
+  "creatingAccountOn": {
+    "message": "Konto wird erstellt bei"
+  },
+  "checkYourEmail": {
+    "message": "Überprüfe deine E-Mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Folge dem Link in der E-Mail an"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "und fahre mit der Erstellung deines Kontos fort."
+  },
+  "noEmail": {
+    "message": "Keine E-Mail?"
+  },
+  "goBack": {
+    "message": "Geh zurück"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", um deine E-Mail-Adresse zu bearbeiten."
   },
   "view": {
     "message": "Anzeigen"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Durch Erneuerung des Rechnungssynchronisierungs-Token wird der vorherige Token ungültig."
+  },
+  "selfHostedServer": {
+    "message": "selbst gehostet"
+  },
+  "customEnvironment": {
+    "message": "Benutzerdefinierte Umgebung"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Gib die Basis-URL deiner vor Ort gehosteten Bitwarden-Installation an. Beispiel: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Für eine erweiterte Konfiguration kannst du die Basis-URL jedes Dienstes unabhängig voneinander angeben."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Du musst entweder die Basis-Server-URL oder mindestens eine benutzerdefinierte Umgebung hinzufügen."
+  },
+  "apiUrl": {
+    "message": "API Server-URL"
+  },
+  "webVaultUrl": {
+    "message": "URL des Web-Tresor-Servers"
+  },
+  "identityUrl": {
+    "message": "URL des Identitätsservers"
+  },
+  "notificationsUrl": {
+    "message": "URL des Benachrichtigungsservers"
+  },
+  "iconsUrl": {
+    "message": "URL des Icons-Servers"
+  },
+  "environmentSaved": {
+    "message": "URLs der Umgebung gespeichert"
   },
   "selfHostingTitle": {
     "message": "Selbst gehostet"
@@ -8187,7 +8253,7 @@
     "message": "Rechnungen über das Anbieter-Portal verwalten"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Einträge in $NAME$ anzeigen",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8263,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Zurück zu $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8273,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Zurück",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "$NAME$ entfernen",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Schütze dich vor Sicherheitsschwachstellen, indem du ein kostenpflichtiges Abo für eine verbesserte Sicherheitskontrolle abschließt."
+  },
+  "approveAllRequests": {
+    "message": "Alle Anfragen genehmigen"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Alle Anmeldeanfragen genehmigt"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Steuerinformationen aktualisiert"
+  },
+  "unverified": {
+    "message": "Nicht verifiziert"
+  },
+  "verified": {
+    "message": "Verifiziert"
   }
 }

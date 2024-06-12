@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Уровень доступа"
   },
+  "accessing": {
+    "message": "Доступ"
+  },
   "loggedOut": {
     "message": "Вы вышли из хранилища"
+  },
+  "loggedOutDesc": {
+    "message": "Вы вышли из своего аккаунта."
   },
   "loginExpired": {
     "message": "Истек срок действия вашей сессии."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Скопировать UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Ошибка обновления токена доступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не найдены токен обновления или ключи API. Пожалуйста, попробуйте выполнить выход и повторно авторизоваться."
   },
   "warning": {
     "message": "Предупреждение"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Устройство"
+  },
+  "creatingAccountOn": {
+    "message": "Создание аккаунта"
+  },
+  "checkYourEmail": {
+    "message": "Проверьте свою почту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдите по ссылке из отправленного письма"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продолжите создание аккаунта."
+  },
+  "noEmail": {
+    "message": "Нет письма?"
+  },
+  "goBack": {
+    "message": "Вернуться"
+  },
+  "toEditYourEmailAddress": {
+    "message": "для изменения адреса email."
   },
   "view": {
     "message": "Просмотр"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Смена токена синхронизации биллинга сделает предыдущий токен недействительным."
+  },
+  "selfHostedServer": {
+    "message": "собственный хостинг"
+  },
+  "customEnvironment": {
+    "message": "Пользовательское окружение"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Укажите базовый URL вашего локального хостинга Bitwarden. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для продвинутой конфигурации можно указать базовый URL каждой службы отдельно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Вы должны добавить либо базовый URL сервера, либо хотя бы одно пользовательское окружение."
+  },
+  "apiUrl": {
+    "message": "URL API сервера"
+  },
+  "webVaultUrl": {
+    "message": "URL сервера веб-хранилища"
+  },
+  "identityUrl": {
+    "message": "URL сервера идентификации"
+  },
+  "notificationsUrl": {
+    "message": "URL сервера уведомлений"
+  },
+  "iconsUrl": {
+    "message": "URL сервера значков"
+  },
+  "environmentSaved": {
+    "message": "URL окружения сохранены"
   },
   "selfHostingTitle": {
     "message": "Собственное размещение"
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Опережайте уязвимости в системе безопасности, перейдя на платный тарифный план для расширенного мониторинга."
+  },
+  "approveAllRequests": {
+    "message": "Одобрить все запросы"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Все запросы на вход одобрены"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Обновление сведений о налогах"
+  },
+  "unverified": {
+    "message": "Неверифицирован"
+  },
+  "verified": {
+    "message": "Верифицирован"
   }
 }

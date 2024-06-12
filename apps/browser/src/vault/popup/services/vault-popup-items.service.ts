@@ -1,22 +1,38 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable, NgZone } from "@angular/core";
 import {
+  BehaviorSubject,
   combineLatest,
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
+  from,
   map,
+  merge,
   Observable,
   of,
   shareReplay,
   startWith,
   Subject,
   switchMap,
+  tap,
+  withLatestFrom,
 } from "rxjs";
 
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { BrowserApi } from "../../../platform/browser/browser-api";
+import { runInsideAngular } from "../../../platform/browser/run-inside-angular.operator";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
+import { PopupCipherView } from "../views/popup-cipher.view";
+
+import { MY_VAULT_ID, VaultPopupListFiltersService } from "./vault-popup-list-filters.service";
 
 /**
  * Service for managing the various item lists on the new Vault tab in the browser popup.
@@ -26,6 +42,15 @@ import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 })
 export class VaultPopupItemsService {
   private _refreshCurrentTab$ = new Subject<void>();
+  private _searchText$ = new BehaviorSubject<string>("");
+
+  /**
+   * Subject that emits whenever new ciphers are being processed/filtered.
+   * @private
+   */
+  private _ciphersLoading$ = new Subject<void>();
+
+  latestSearchText$: Observable<string> = this._searchText$.asObservable();
 
   /**
    * Observable that contains the list of other cipher types that should be shown
@@ -64,9 +89,50 @@ export class VaultPopupItemsService {
    * Observable that contains the list of all decrypted ciphers.
    * @private
    */
-  private _cipherList$: Observable<CipherView[]> = this.cipherService.cipherViews$.pipe(
-    map((ciphers) => Object.values(ciphers)),
-    shareReplay({ refCount: false, bufferSize: 1 }),
+  private _cipherList$: Observable<PopupCipherView[]> = merge(
+    this.cipherService.ciphers$,
+    this.cipherService.localData$,
+  ).pipe(
+    runInsideAngular(inject(NgZone)), // Workaround to ensure cipher$ state provider emissions are run inside Angular
+    tap(() => this._ciphersLoading$.next()),
+    switchMap(() => Utils.asyncToObservable(() => this.cipherService.getAllDecrypted())),
+    switchMap((ciphers) =>
+      combineLatest([
+        this.organizationService.organizations$,
+        this.collectionService.decryptedCollections$,
+      ]).pipe(
+        map(([organizations, collections]) => {
+          const orgMap = Object.fromEntries(organizations.map((org) => [org.id, org]));
+          const collectionMap = Object.fromEntries(collections.map((col) => [col.id, col]));
+          return ciphers.map(
+            (cipher) =>
+              new PopupCipherView(
+                cipher,
+                cipher.collectionIds?.map((colId) => collectionMap[colId as CollectionId]),
+                orgMap[cipher.organizationId as OrganizationId],
+              ),
+          );
+        }),
+      ),
+    ),
+    shareReplay({ refCount: true, bufferSize: 1 }),
+  );
+
+  private _filteredCipherList$: Observable<PopupCipherView[]> = combineLatest([
+    this._cipherList$,
+    this._searchText$,
+    this.vaultPopupListFiltersService.filterFunction$,
+  ]).pipe(
+    tap(() => this._ciphersLoading$.next()),
+    map(([ciphers, searchText, filterFunction]): [CipherView[], string] => [
+      filterFunction(ciphers),
+      searchText,
+    ]),
+    switchMap(
+      ([ciphers, searchText]) =>
+        this.searchService.searchCiphers(searchText, null, ciphers) as Promise<PopupCipherView[]>,
+    ),
+    shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
   /**
@@ -75,8 +141,8 @@ export class VaultPopupItemsService {
    *
    * See {@link refreshCurrentTab} to trigger re-evaluation of the current tab.
    */
-  autoFillCiphers$: Observable<CipherView[]> = combineLatest([
-    this._cipherList$,
+  autoFillCiphers$: Observable<PopupCipherView[]> = combineLatest([
+    this._filteredCipherList$,
     this._otherAutoFillTypes$,
     this._currentAutofillTab$,
   ]).pipe(
@@ -94,10 +160,8 @@ export class VaultPopupItemsService {
    * List of favorite ciphers that are not currently suggested for autofill.
    * Ciphers are sorted by last used date, then by name.
    */
-  favoriteCiphers$: Observable<CipherView[]> = combineLatest([
-    this.autoFillCiphers$,
-    this._cipherList$,
-  ]).pipe(
+  favoriteCiphers$: Observable<PopupCipherView[]> = this.autoFillCiphers$.pipe(
+    withLatestFrom(this._filteredCipherList$),
     map(([autoFillCiphers, ciphers]) =>
       ciphers.filter((cipher) => cipher.favorite && !autoFillCiphers.includes(cipher)),
     ),
@@ -111,12 +175,9 @@ export class VaultPopupItemsService {
    * List of all remaining ciphers that are not currently suggested for autofill or marked as favorite.
    * Ciphers are sorted by name.
    */
-  remainingCiphers$: Observable<CipherView[]> = combineLatest([
-    this.autoFillCiphers$,
-    this.favoriteCiphers$,
-    this._cipherList$,
-  ]).pipe(
-    map(([autoFillCiphers, favoriteCiphers, ciphers]) =>
+  remainingCiphers$: Observable<PopupCipherView[]> = this.favoriteCiphers$.pipe(
+    withLatestFrom(this._filteredCipherList$, this.autoFillCiphers$),
+    map(([favoriteCiphers, ciphers, autoFillCiphers]) =>
       ciphers.filter(
         (cipher) => !autoFillCiphers.includes(cipher) && !favoriteCiphers.includes(cipher),
       ),
@@ -126,10 +187,29 @@ export class VaultPopupItemsService {
   );
 
   /**
-   * Observable that indicates whether a filter is currently applied to the ciphers.
-   * @todo Implement filter/search functionality in PM-6824 and PM-6826.
+   * Observable that indicates whether the service is currently loading ciphers.
    */
-  hasFilterApplied$: Observable<boolean> = of(false);
+  loading$: Observable<boolean> = merge(
+    this._ciphersLoading$.pipe(map(() => true)),
+    this.remainingCiphers$.pipe(map(() => false)),
+  ).pipe(startWith(true), distinctUntilChanged(), shareReplay({ refCount: false, bufferSize: 1 }));
+
+  /**
+   * Observable that indicates whether a filter is currently applied to the ciphers.
+   */
+  hasFilterApplied$ = combineLatest([
+    this._searchText$,
+    this.vaultPopupListFiltersService.filters$,
+  ]).pipe(
+    switchMap(([searchText, filters]) => {
+      return from(this.searchService.isSearchable(searchText)).pipe(
+        map(
+          (isSearchable) =>
+            isSearchable || Object.values(filters).some((filter) => filter !== null),
+        ),
+      );
+    }),
+  );
 
   /**
    * Observable that indicates whether autofill is allowed in the current context.
@@ -144,13 +224,33 @@ export class VaultPopupItemsService {
 
   /**
    * Observable that indicates whether there are no ciphers to show with the current filter.
-   * @todo Implement filter/search functionality in PM-6824 and PM-6826.
    */
-  noFilteredResults$: Observable<boolean> = of(false);
+  noFilteredResults$: Observable<boolean> = this._filteredCipherList$.pipe(
+    map((ciphers) => !ciphers.length),
+  );
+
+  /** Observable that indicates when the user should see the deactivated org state */
+  showDeactivatedOrg$: Observable<boolean> = combineLatest([
+    this.vaultPopupListFiltersService.filters$.pipe(distinctUntilKeyChanged("organization")),
+    this.organizationService.organizations$,
+  ]).pipe(
+    map(([filters, orgs]) => {
+      if (!filters.organization || filters.organization.id === MY_VAULT_ID) {
+        return false;
+      }
+
+      const org = orgs.find((o) => o.id === filters.organization.id);
+      return org ? !org.enabled : false;
+    }),
+  );
 
   constructor(
     private cipherService: CipherService,
     private vaultSettingsService: VaultSettingsService,
+    private vaultPopupListFiltersService: VaultPopupListFiltersService,
+    private organizationService: OrganizationService,
+    private searchService: SearchService,
+    private collectionService: CollectionService,
   ) {}
 
   /**
@@ -158,6 +258,10 @@ export class VaultPopupItemsService {
    */
   refreshCurrentTab() {
     this._refreshCurrentTab$.next(null);
+  }
+
+  applyFilter(newSearchText: string) {
+    this._searchText$.next(newSearchText);
   }
 
   /**

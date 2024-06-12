@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Úroveň přístupu"
   },
+  "accessing": {
+    "message": "Přistupování"
+  },
   "loggedOut": {
     "message": "Odhlášení"
+  },
+  "loggedOutDesc": {
+    "message": "Byli jste odhlášeni ze svého účtu."
   },
   "loginExpired": {
     "message": "Platnost přihlášení vypršela."
@@ -1046,6 +1052,12 @@
   },
   "copyUuid": {
     "message": "Kopírovat UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Chyba aktualizace přístupového tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nebyly nalezeny žádné obnovovací tokeny nebo API klíče. Zkuste se odhlásit a znovu se přihlásit."
   },
   "warning": {
     "message": "Varování"
@@ -3243,6 +3255,27 @@
   },
   "device": {
     "message": "Zařízení"
+  },
+  "creatingAccountOn": {
+    "message": "Vytváření účtu na"
+  },
+  "checkYourEmail": {
+    "message": "Zkontrolujte Váš e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Následujte pokyny v e-mailu poslaném na"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "a pokračujte ve vytváření Vašeho účtu."
+  },
+  "noEmail": {
+    "message": "Žádný e-mail?"
+  },
+  "goBack": {
+    "message": "Zpět"
+  },
+  "toEditYourEmailAddress": {
+    "message": "pro úpravu Vaší e-mailové adresy."
   },
   "view": {
     "message": "Zobrazit"
@@ -5561,6 +5594,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Měnění fakturačního synchronizačního tokenu zruší platnost předchozího tokenu."
+  },
+  "selfHostedServer": {
+    "message": "vlastní hosting"
+  },
+  "customEnvironment": {
+    "message": "Vlastní prostředí"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Zadejte základní URL adresu Vaší vlastní hostované aplikace Bitwarden. Příklad: https://bitwarden.spolecnost.cz"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pro rozšířená nastavení můžete zadat základní URL adresu každé služby zvlášť."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musíte přidat buď základní adresu URL serveru nebo alespoň jedno vlastní prostředí."
+  },
+  "apiUrl": {
+    "message": "URL API serveru"
+  },
+  "webVaultUrl": {
+    "message": "URL serveru webového trezoru"
+  },
+  "identityUrl": {
+    "message": "URL serveru identity"
+  },
+  "notificationsUrl": {
+    "message": "URL serveru pro oznámení"
+  },
+  "iconsUrl": {
+    "message": "URL serveru ikon"
+  },
+  "environmentSaved": {
+    "message": "URL adresy prostředí uloženy"
   },
   "selfHostingTitle": {
     "message": "Vlastní hosting"
@@ -8187,7 +8253,7 @@
     "message": "Spravovat fakturaci z portálu poskytovatele"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Zobrazit položky v $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8263,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Zpět do $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8273,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Zpět",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Odebrat $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8333,26 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Přechodem na placený plán rozšířeného monitorování získáte náskok před zranitelnostmi zabezpečení."
+  },
+  "approveAllRequests": {
+    "message": "Schválit všechny požadavky"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Všechny žádosti o přihlášení byly schváleny"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Aktualizované daňové údaje"
+  },
+  "unverified": {
+    "message": "Neověřeno"
+  },
+  "verified": {
+    "message": "Ověřeno"
   }
 }
