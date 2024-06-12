@@ -55,10 +55,8 @@ export class VaultV2Component {
   protected favoriteCiphers$ = this.vaultPopupItemsService.favoriteCiphers$;
   protected remainingCiphers$ = this.vaultPopupItemsService.remainingCiphers$;
 
-  protected selectedVaultId$ = this.vaultPopupListFiltersService.filters$.pipe(
-    filter((filters) => filters.organization?.id !== MY_VAULT_ID),
-    map((filters) => filters.organization?.id),
-  );
+  /** The `id` of the filtered organization */
+  protected selectedVaultId: string | null = null;
 
   /** Visual state of the vault */
   protected vaultState: VaultState | null = null;
@@ -94,6 +92,16 @@ export class VaultV2Component {
           default:
             this.vaultState = null;
         }
+      });
+
+    this.vaultPopupListFiltersService.filters$
+      .pipe(
+        takeUntilDestroyed(),
+        filter((filters) => filters.organization?.id !== MY_VAULT_ID),
+        map((filters) => filters.organization?.id ?? null),
+      )
+      .subscribe((organizationId) => {
+        this.selectedVaultId = organizationId;
       });
   }
 }
