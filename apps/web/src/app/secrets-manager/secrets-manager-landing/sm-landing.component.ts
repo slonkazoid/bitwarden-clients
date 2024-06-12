@@ -28,7 +28,7 @@ export class SMLandingComponent {
   ) {}
 
   async learnMore() {
-    window.open("https://bitwarden.com/help/secrets-manager-overview/", "_blank"); // Opens the URL in a new tab
+    window.open("https://bitwarden.com/help/secrets-manager-overview/", "_blank");
   }
 
   async tryEnableSM() {
