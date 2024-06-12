@@ -3500,5 +3500,8 @@
   },
   "itemWillBePermanentlyTransferred": {
     "message": "1 item will be permanently transferred to the selected organization. You will no longer own this item."
+  },
+  "assign": {
+    "message": "Assign"
   }
 }
