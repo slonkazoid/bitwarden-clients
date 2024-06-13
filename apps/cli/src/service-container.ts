@@ -65,8 +65,10 @@ import { StateFactory } from "@bitwarden/common/platform/factories/state-factory
 import { MessageSender } from "@bitwarden/common/platform/messaging";
 import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
-import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/scheduling/default-task-scheduler.service";
-import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
+import {
+  TaskSchedulerService,
+  DefaultTaskSchedulerService,
+} from "@bitwarden/common/platform/scheduling";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { DefaultConfigService } from "@bitwarden/common/platform/services/config/default-config.service";

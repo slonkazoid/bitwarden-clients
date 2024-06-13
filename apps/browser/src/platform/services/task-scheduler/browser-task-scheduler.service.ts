@@ -1,8 +1,10 @@
 import { firstValueFrom, map, Observable, Subscription } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/scheduling/default-task-scheduler.service";
-import { ScheduledTaskName } from "@bitwarden/common/platform/scheduling/scheduled-task-name.enum";
+import {
+  DefaultTaskSchedulerService,
+  ScheduledTaskName,
+} from "@bitwarden/common/platform/scheduling";
 import {
   TASK_SCHEDULER_DISK,
   GlobalState,
