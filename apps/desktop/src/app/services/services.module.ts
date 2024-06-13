@@ -44,13 +44,13 @@ import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwar
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/platform/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
 import { SystemService as SystemServiceAbstraction } from "@bitwarden/common/platform/abstractions/system.service";
-import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { Message, MessageListener, MessageSender } from "@bitwarden/common/platform/messaging";
 // eslint-disable-next-line no-restricted-imports -- Used for dependency injection
 import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
 import { SystemService } from "@bitwarden/common/platform/services/system.service";

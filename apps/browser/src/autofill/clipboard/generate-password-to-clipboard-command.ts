@@ -1,8 +1,8 @@
 import { firstValueFrom, Subscription } from "rxjs";
 
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
-import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
-import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { ClearClipboard } from "./clear-clipboard";

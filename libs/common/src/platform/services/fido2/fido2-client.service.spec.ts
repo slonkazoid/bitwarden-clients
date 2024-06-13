@@ -4,7 +4,6 @@ import { of } from "rxjs";
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
-import { TaskSchedulerService } from "../../../platform/abstractions/task-scheduler.service";
 import { Utils } from "../../../platform/misc/utils";
 import { VaultSettingsService } from "../../../vault/abstractions/vault-settings/vault-settings.service";
 import { ConfigService } from "../../abstractions/config/config.service";
@@ -19,6 +18,7 @@ import {
   CreateCredentialParams,
   FallbackRequestedError,
 } from "../../abstractions/fido2/fido2-client.service.abstraction";
+import { TaskSchedulerService } from "../../scheduling/task-scheduler.service";
 
 import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
 import { Fido2ClientService } from "./fido2-client.service";

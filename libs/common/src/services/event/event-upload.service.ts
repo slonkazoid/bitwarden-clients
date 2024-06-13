@@ -7,8 +7,8 @@ import { AuthenticationStatus } from "../../auth/enums/authentication-status";
 import { EventData } from "../../models/data/event.data";
 import { EventRequest } from "../../models/request/event.request";
 import { LogService } from "../../platform/abstractions/log.service";
-import { TaskSchedulerService } from "../../platform/abstractions/task-scheduler.service";
-import { ScheduledTaskNames } from "../../platform/enums/scheduled-task-name.enum";
+import { ScheduledTaskNames } from "../../platform/scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../../platform/scheduling/task-scheduler.service";
 import { StateProvider } from "../../platform/state";
 import { UserId } from "../../types/guid";
 

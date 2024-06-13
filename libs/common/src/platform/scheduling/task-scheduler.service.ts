@@ -1,6 +1,6 @@
 import { Subscription } from "rxjs";
 
-import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
+import { ScheduledTaskName } from "./scheduled-task-name.enum";
 
 export abstract class TaskSchedulerService {
   protected taskHandlers: Map<string, () => void>;

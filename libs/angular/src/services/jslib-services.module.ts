@@ -140,7 +140,6 @@ import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/comm
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/platform/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
-import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { ValidationService as ValidationServiceAbstraction } from "@bitwarden/common/platform/abstractions/validation.service";
 import {
   BiometricStateService,
@@ -153,6 +152,8 @@ import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/inter
 import { devFlagEnabled, flagEnabled } from "@bitwarden/common/platform/misc/flags";
 import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/scheduling/default-task-scheduler.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { DefaultConfigService } from "@bitwarden/common/platform/services/config/default-config.service";
@@ -162,7 +163,6 @@ import { EncryptServiceImplementation } from "@bitwarden/common/platform/service
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/multithread-encrypt.service.implementation";
 import { DefaultBroadcasterService } from "@bitwarden/common/platform/services/default-broadcaster.service";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
-import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import { FileUploadService } from "@bitwarden/common/platform/services/file-upload/file-upload.service";
 import { KeyGenerationService } from "@bitwarden/common/platform/services/key-generation.service";
 import { MigrationBuilderService } from "@bitwarden/common/platform/services/migration-builder.service";

@@ -1,7 +1,7 @@
 import { mock, MockProxy } from "jest-mock-extended";
 import { BehaviorSubject, Observable } from "rxjs";
 
-import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/scheduling/scheduled-task-name.enum";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { GlobalState, StateProvider } from "@bitwarden/common/platform/state";
 

@@ -4,8 +4,6 @@ import { parse } from "tldts";
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
-import { TaskSchedulerService } from "../../../platform/abstractions/task-scheduler.service";
-import { ScheduledTaskNames } from "../../../platform/enums/scheduled-task-name.enum";
 import { VaultSettingsService } from "../../../vault/abstractions/vault-settings/vault-settings.service";
 import { ConfigService } from "../../abstractions/config/config.service";
 import {
@@ -29,6 +27,8 @@ import {
 } from "../../abstractions/fido2/fido2-client.service.abstraction";
 import { LogService } from "../../abstractions/log.service";
 import { Utils } from "../../misc/utils";
+import { ScheduledTaskNames } from "../../scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../../scheduling/task-scheduler.service";
 
 import { isValidRpId } from "./domain-utils";
 import { Fido2Utils } from "./fido2-utils";

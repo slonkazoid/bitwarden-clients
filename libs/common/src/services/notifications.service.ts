@@ -21,8 +21,8 @@ import { EnvironmentService } from "../platform/abstractions/environment.service
 import { LogService } from "../platform/abstractions/log.service";
 import { MessagingService } from "../platform/abstractions/messaging.service";
 import { StateService } from "../platform/abstractions/state.service";
-import { TaskSchedulerService } from "../platform/abstractions/task-scheduler.service";
-import { ScheduledTaskNames } from "../platform/enums/scheduled-task-name.enum";
+import { ScheduledTaskNames } from "../platform/scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../platform/scheduling/task-scheduler.service";
 import { SyncService } from "../platform/sync/sync.service";
 import { UserId } from "../types/guid";
 

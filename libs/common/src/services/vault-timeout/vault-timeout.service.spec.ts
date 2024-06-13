@@ -2,7 +2,7 @@ import { MockProxy, any, mock } from "jest-mock-extended";
 import { BehaviorSubject, from, of } from "rxjs";
 
 import { LogoutReason } from "@bitwarden/auth/common";
-import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
 
 import { FakeAccountService, mockAccountServiceWith } from "../../../spec/fake-account-service";
 import { SearchService } from "../../abstractions/search.service";

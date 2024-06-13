@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 
-import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
-import { ScheduledTaskName } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
+import { ScheduledTaskName } from "@bitwarden/common/platform/scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
 
 export const BrowserTaskSchedulerPortName = "browser-task-scheduler-port";
 

@@ -1,8 +1,8 @@
 import { Subscription } from "rxjs";
 
 import { LogService } from "../abstractions/log.service";
-import { TaskSchedulerService } from "../abstractions/task-scheduler.service";
-import { ScheduledTaskName } from "../enums/scheduled-task-name.enum";
+import { ScheduledTaskName } from "../scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../scheduling/task-scheduler.service";
 
 export class DefaultTaskSchedulerService extends TaskSchedulerService {
   constructor(protected logService: LogService) {

@@ -96,7 +96,6 @@ import {
   BiometricStateService,
   DefaultBiometricStateService,
 } from "@bitwarden/common/platform/biometrics/biometric-state.service";
-import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { Message, MessageListener, MessageSender } from "@bitwarden/common/platform/messaging";
 // eslint-disable-next-line no-restricted-imports -- Used for dependency creation
@@ -105,6 +104,7 @@ import { Lazy } from "@bitwarden/common/platform/misc/lazy";
 import { clearCaches } from "@bitwarden/common/platform/misc/sequentialize";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/scheduling/scheduled-task-name.enum";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { DefaultConfigService } from "@bitwarden/common/platform/services/config/default-config.service";

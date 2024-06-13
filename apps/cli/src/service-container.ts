@@ -56,7 +56,6 @@ import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstract
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
-import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import {
   BiometricStateService,
   DefaultBiometricStateService,
@@ -66,6 +65,8 @@ import { StateFactory } from "@bitwarden/common/platform/factories/state-factory
 import { MessageSender } from "@bitwarden/common/platform/messaging";
 import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/scheduling/default-task-scheduler.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling/task-scheduler.service";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { DefaultConfigService } from "@bitwarden/common/platform/services/config/default-config.service";
@@ -73,7 +74,6 @@ import { ContainerService } from "@bitwarden/common/platform/services/container.
 import { CryptoService } from "@bitwarden/common/platform/services/crypto.service";
 import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
-import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import { FileUploadService } from "@bitwarden/common/platform/services/file-upload/file-upload.service";
 import { KeyGenerationService } from "@bitwarden/common/platform/services/key-generation.service";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";

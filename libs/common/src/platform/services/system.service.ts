@@ -12,10 +12,10 @@ import { MessagingService } from "../abstractions/messaging.service";
 import { PlatformUtilsService } from "../abstractions/platform-utils.service";
 import { StateService } from "../abstractions/state.service";
 import { SystemService as SystemServiceAbstraction } from "../abstractions/system.service";
-import { TaskSchedulerService } from "../abstractions/task-scheduler.service";
 import { BiometricStateService } from "../biometrics/biometric-state.service";
-import { ScheduledTaskNames } from "../enums/scheduled-task-name.enum";
 import { Utils } from "../misc/utils";
+import { ScheduledTaskNames } from "../scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../scheduling/task-scheduler.service";
 
 export class SystemService implements SystemServiceAbstraction {
   private reloadInterval: any = null;

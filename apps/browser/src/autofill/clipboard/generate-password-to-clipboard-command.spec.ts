@@ -2,7 +2,7 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { firstValueFrom, Subscription } from "rxjs";
 
 import { AutofillSettingsService } from "@bitwarden/common/autofill/services/autofill-settings.service";
-import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
+import { ScheduledTaskNames } from "@bitwarden/common/platform/scheduling/scheduled-task-name.enum";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
