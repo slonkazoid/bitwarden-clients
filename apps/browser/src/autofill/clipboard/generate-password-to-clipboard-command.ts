@@ -1,10 +1,9 @@
 import { firstValueFrom, Subscription } from "rxjs";
 
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { ScheduledTaskNames } from "@bitwarden/common/platform/enums/scheduled-task-name.enum";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-
-import { BrowserTaskSchedulerService } from "../../platform/services/abstractions/browser-task-scheduler.service";
 
 import { ClearClipboard } from "./clear-clipboard";
 import { copyToClipboard } from "./copy-to-clipboard-command";
@@ -15,7 +14,7 @@ export class GeneratePasswordToClipboardCommand {
   constructor(
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
-    private taskSchedulerService: BrowserTaskSchedulerService,
+    private taskSchedulerService: TaskSchedulerService,
   ) {
     this.taskSchedulerService.registerTaskHandler(
       ScheduledTaskNames.generatePasswordClearClipboardTimeout,

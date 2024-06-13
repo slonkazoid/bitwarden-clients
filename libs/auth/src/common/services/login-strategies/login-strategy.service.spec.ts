@@ -26,8 +26,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/abstractions/task-scheduler.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
-import { DefaultTaskSchedulerService } from "@bitwarden/common/platform/services/default-task-scheduler.service";
 import {
   FakeAccountService,
   FakeGlobalState,
@@ -73,7 +73,7 @@ describe("LoginStrategyService", () => {
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
   let vaultTimeoutSettingsService: MockProxy<VaultTimeoutSettingsService>;
   let kdfConfigService: MockProxy<KdfConfigService>;
-  let taskSchedulerService: MockProxy<DefaultTaskSchedulerService>;
+  let taskSchedulerService: MockProxy<TaskSchedulerService>;
 
   let stateProvider: FakeGlobalStateProvider;
   let loginStrategyCacheExpirationState: FakeGlobalState<Date | null>;
@@ -105,7 +105,7 @@ describe("LoginStrategyService", () => {
     stateProvider = new FakeGlobalStateProvider();
     vaultTimeoutSettingsService = mock<VaultTimeoutSettingsService>();
     kdfConfigService = mock<KdfConfigService>();
-    taskSchedulerService = mock<DefaultTaskSchedulerService>();
+    taskSchedulerService = mock<TaskSchedulerService>();
 
     sut = new LoginStrategyService(
       accountService,
