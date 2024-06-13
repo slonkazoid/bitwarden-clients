@@ -283,9 +283,9 @@ export class VaultItemsComponent {
       return hasPersonalItems;
     }
 
-    const organization = this.allOrganizations.find(
-      (o) => o.id === uniqueCipherOrgIds.values().next().value,
-    );
+    const [orgId] = uniqueCipherOrgIds;
+    const organization = this.allOrganizations.find((o) => o.id === orgId);
+
     const canEditOrManageAllCiphers = organization?.canEditAllCiphers(
       this.flexibleCollectionsV1Enabled,
       this.restrictProviderAccess,

@@ -735,19 +735,12 @@ export class VaultComponent implements OnInit, OnDestroy {
     }
 
     let availableCollections: CollectionView[] = [];
-    const activeOrgId = this.activeFilter.organizationId;
-    let orgId: string | undefined;
+    const orgId =
+      this.activeFilter.organizationId ||
+      this.ciphers.find((c) => c.organizationId !== null)?.organizationId;
 
-    // If activeFilter.organizationId is null or undefined, determine the organizationId from the ciphers.
-    if (!activeOrgId) {
-      orgId = [...new Set(ciphers.map((c) => c.organizationId).filter((id) => id !== null))][0];
-    }
-
-    // If there is no organization id or if it's "MyVault", it means we are dealing with personal ciphers only.
-    if (activeOrgId === "MyVault" || (!activeOrgId && !orgId)) {
-      availableCollections = [];
-    } else {
-      const organization = this.allOrganizations.find((o) => o.id === (activeOrgId || orgId));
+    if (orgId) {
+      const organization = this.allOrganizations.find((o) => o.id === orgId);
       const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
       availableCollections = this.allCollections.filter(
         (c) =>
@@ -759,7 +752,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     const dialog = BulkCollectionAssignmentDialogComponent.open(this.dialogService, {
       data: {
         ciphers,
-        organizationId: (activeOrgId ?? orgId) as OrganizationId,
+        organizationId: orgId as OrganizationId,
         availableCollections,
         activeCollection: this.activeFilter?.selectedCollectionNode?.node,
       },
