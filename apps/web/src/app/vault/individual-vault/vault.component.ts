@@ -737,7 +737,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     let availableCollections: CollectionView[] = [];
     const orgId =
       this.activeFilter.organizationId ||
-      this.ciphers.find((c) => c.organizationId !== null)?.organizationId;
+      ciphers.find((c) => c.organizationId !== null)?.organizationId;
 
     if (orgId) {
       const organization = this.allOrganizations.find((o) => o.id === orgId);
