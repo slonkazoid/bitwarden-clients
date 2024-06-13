@@ -80,15 +80,17 @@ export class VaultCipherRowComponent {
   }
 
   protected get disableMenu() {
-    return !(
-      this.isNotDeletedLoginCipher ||
-      this.showCopyPassword ||
-      this.showCopyTotp ||
-      this.showLaunchUri ||
-      this.showAttachments ||
-      this.showClone ||
-      this.canEditCipher ||
-      this.cipher.isDeleted
+    return (
+      !(
+        this.isNotDeletedLoginCipher ||
+        this.showCopyPassword ||
+        this.showCopyTotp ||
+        this.showLaunchUri ||
+        this.showAttachments ||
+        this.showClone ||
+        this.canEditCipher ||
+        this.cipher.isDeleted
+      ) && this.vaultBulkManagementActionEnabled
     );
   }
 
