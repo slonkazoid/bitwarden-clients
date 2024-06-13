@@ -35,15 +35,14 @@ export interface CustomMatchers<R = unknown> {
    */
   toBeFulfilled(withinMs?: number): Promise<R>;
   /**
- * Matches whether the received promise has been resolved.
- *
- * Failure if the promise is not currently fulfilled or if it has been rejected.
- * 
- * @param received The promise to test
- * @param withinMs The time within the promise should be resolved. Defaults to 0, indicating that the promise should already be resolved
- * @returns CustomMatcherResult indicating whether or not the test passed
-
- */
+   * Matches whether the received promise has been resolved.
+   *
+   * Failure if the promise is not currently fulfilled or if it has been rejected.
+   *
+   * @param received The promise to test
+   * @param withinMs The time within the promise should be resolved. Defaults to 0, indicating that the promise should already be resolved
+   * @returns CustomMatcherResult indicating whether or not the test passed
+   */
   toBeResolved(withinMs?: number): Promise<R>;
   /**
    * Matches whether the received promise has been rejected.
