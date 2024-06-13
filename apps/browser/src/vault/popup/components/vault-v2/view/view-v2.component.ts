@@ -9,6 +9,7 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -54,6 +55,7 @@ export class ViewV2Component implements OnDestroy {
     private organizationService: OrganizationService,
     private collectionService: CollectionService,
     private folderService: FolderService,
+    private platformUtilsService: PlatformUtilsService,
   ) {
     this.subscribeToParams();
   }
@@ -137,4 +139,9 @@ export class ViewV2Component implements OnDestroy {
   deleteCipher() {}
 
   openPasswordHistory() {}
+
+  copy(textData: string) {
+    this.platformUtilsService.copyToClipboard(textData, null);
+    this.platformUtilsService.showToast("info", null, "Copy Successful");
+  }
 }

@@ -3,22 +3,19 @@
 
   <!-- ITEM DETAILS SECTION -->
   <div class="tw-mb-6">
-    <h5 class="tw-pl-2 tw-font-bold">{{ "itemDetails" | i18n }}</h5>
+    <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemDetails" | i18n }}</h5>
     <div class="box-content-row" *ngIf="cipher.login.username">
       <div class="row-border-bottom">
-        <label for="loginUsername" class="row-label">
+        <label class="row-label">
           {{ "itemName" | i18n }}
         </label>
-        <input
-          id="loginUsername"
-          type="text"
-          [value]="cipher.login.username"
-          readonly
-          aria-readonly="true"
-        />
+        <input type="text" [value]="cipher.login.username" readonly aria-readonly="true" />
       </div>
 
       <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
+        <div *ngIf="!cipher.organizationId" class="tw-mb-3">
+          <i class="bwi bwi-user bwi-lg bwi-fw"></i> {{ "ownerYou" | i18n }}
+        </div>
         <div *ngIf="cipher.organizationId" class="tw-mb-3">
           <i class="bwi bwi-business bwi-lg bwi-fw"></i> {{ organization.name }}
         </div>
@@ -36,83 +33,103 @@
 
   <!-- ADDITIONAL INFORMATION SECTION -->
   <div class="tw-mb-6">
-    <h5 class="tw-pl-2 tw-font-bold">{{ "additionalInformation" | i18n }}</h5>
-    <div class="box-content-row tw-flex tw-justify-between" *ngIf="cipher.notes">
-      <div class="tw-grow">
-        <label for="loginUsername" class="row-label">
-          {{ "note" | i18n }}
-        </label>
-        <input
-          id="loginUsername"
-          type="text"
-          [value]="cipher.notes"
-          readonly
-          aria-readonly="true"
-        />
+    <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "additionalInformation" | i18n }}</h5>
+    <div class="box-content-row">
+      <div
+        *ngIf="cipher.notes"
+        class="tw-flex tw-justify-between"
+        [ngClass]="{ 'row-border-bottom': cipher.fields }"
+      >
+        <div class="tw-grow">
+          <label class="row-label">
+            {{ "note" | i18n }}
+          </label>
+          <input type="text" [value]="cipher.notes" readonly aria-readonly="true" />
+        </div>
+        <div class="tw-flex tw-justify-end tw-items-center">
+          <i (click)="copy(cipher.notes)" class="bwi bwi-clone bwi-lg bwi-fw"></i>
+        </div>
       </div>
-      <div class="tw-flex tw-justify-end tw-items-center">
-        <i class="bwi bwi-clone bwi-lg bwi-fw"></i>
-      </div>
+      <ng-container *ngIf="cipher.fields">
+        <div
+          class="row-border-bottom tw-flex tw-justify-between"
+          *ngFor="let field of cipher.fields"
+        >
+          <ng-container *ngIf="field.type === 0">
+            <div class="tw-grow">
+              <label class="row-label">
+                {{ field.name }}
+              </label>
+              <input type="text" [value]="field.value" readonly aria-readonly="true" />
+            </div>
+          </ng-container>
+          <ng-container *ngIf="field.type === 1">
+            <div class="tw-grow">
+              <label class="row-label">
+                {{ field.name }}
+              </label>
+              <input type="password" [value]="field.value" readonly aria-readonly="true" />
+            </div>
+          </ng-container>
+          <ng-container *ngIf="field.type === 2">
+            <div class="tw-grow tw-flex tw-my-2">
+              <input type="checkbox" [value]="field.value" readonly aria-readonly="true" />
+              <h5 class="tw-ml-3">
+                {{ field.name }}
+              </h5>
+            </div>
+          </ng-container>
+          <div class="tw-flex tw-justify-end tw-items-center">
+            <i *ngIf="field.type === 1" class="bwi bwi-eye bwi-lg bwi-fw tw-mr-1"></i>
+            <i
+              *ngIf="field.type !== 2"
+              (click)="copy(field.value)"
+              class="bwi bwi-clone bwi-lg bwi-fw"
+            ></i>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 
   <!-- ATTACHMENTS SECTION -->
-  <div class="tw-mb-6">
-    <h5 class="tw-pl-2 tw-font-bold">{{ "attachments" | i18n }}</h5>
-    <div class="box-content-row" *ngIf="cipher.attachments">
-      <div>
-        <h5>Attachments</h5>
+  <div class="tw-mb-6" *ngIf="cipher.attachments">
+    <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "attachments" | i18n }}</h5>
+    <div class="box-content-row tw-p-2" *ngFor="let attachment of cipher.attachments">
+      <div class="tw-flex tw-justify-between">
+        <div>
+          <h3 class="tw-grow">
+            {{ attachment.fileName }}
+          </h3>
+          <div class="box-footer row-label">
+            {{ attachment.sizeName }}
+          </div>
+        </div>
+        <div class="tw-flex tw-items-center">
+          <i class="bwi bwi-eye bwi-lg bwi-fw"></i>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="box" *ngIf="cipher.hasAttachments">
-    <h2 class="box-header">
-      {{ "attachments" | i18n }}
-    </h2>
-    <div class="box-content single-line">
-      <button
-        type="button"
-        class="box-content-row box-content-row-flex text-default"
-        *ngFor="let attachment of cipher.attachments"
-        appStopClick
-      >
-        <span class="row-main">{{ attachment.fileName }}</span>
-        <small class="row-sub-label">{{ attachment.sizeName }}</small>
-        <i
-          class="bwi bwi-download bwi-fw row-sub-icon"
-          *ngIf="!$any(attachment).downloading"
-          aria-hidden="true"
-        ></i>
-        <i
-          class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
-          *ngIf="$any(attachment).downloading"
-          aria-hidden="true"
-        ></i>
-      </button>
     </div>
   </div>
 
   <!-- ITEM HISTORY SECTION -->
   <div class="tw-mb-6">
-    <h5 class="tw-pl-2 tw-font-bold">{{ "itemHistory" | i18n }}</h5>
+    <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemHistory" | i18n }}</h5>
     <div class="box-content-row">
-      <div>
-        <b class="tw-font-semibold">{{ "lastEdited" | i18n }}:</b>
+      <p class="row-label">
+        <span class="tw-font-bold">{{ "lastEdited" | i18n }}:</span>
         {{ cipher.revisionDate | date: "medium" }}
-      </div>
-      <div *ngIf="cipher.creationDate">
-        <b class="tw-font-semibold">{{ "dateCreated" | i18n }}:</b>
+      </p>
+      <p class="row-label">
+        <span class="tw-font-bold">{{ "dateCreated" | i18n }}:</span>
         {{ cipher.creationDate | date: "medium" }}
-      </div>
-      <div *ngIf="cipher.passwordRevisionDisplayDate">
-        <b class="tw-font-semibold">{{ "datePasswordUpdated" | i18n }}:</b>
+      </p>
+      <p class="row-label">
+        <span class="tw-font-bold">{{ "datePasswordUpdated" | i18n }}:</span>
         {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
-      </div>
+      </p>
       <div *ngIf="cipher.hasPasswordHistory">
-        <a (click)="openPasswordHistory()" class="tw-font-semibold">{{
-          "passwordHistory" | i18n
-        }}</a>
+        <a (click)="openPasswordHistory()">{{ "passwordHistory" | i18n }}</a>
       </div>
     </div>
   </div>

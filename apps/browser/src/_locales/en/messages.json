@@ -3488,5 +3488,8 @@
   },
   "lastEdited": {
     "message": "Last edited"
+  },
+  "ownerYou":{
+    "message": "Owner: You"
   }
 }
