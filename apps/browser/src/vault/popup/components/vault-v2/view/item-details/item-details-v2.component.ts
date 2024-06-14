@@ -3,6 +3,10 @@ import { Component, Input } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { SearchModule, ButtonModule } from "@bitwarden/components";
 
 @Component({
@@ -12,10 +16,10 @@ import { SearchModule, ButtonModule } from "@bitwarden/components";
   imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule],
 })
 export class ItemDetailsV2Component {
-  @Input() cipher: any;
-  @Input() organization?: any;
-  @Input() collections?: any;
-  @Input() folder?: any;
+  @Input() cipher: CipherView;
+  @Input() organization?: Organization;
+  @Input() collections?: CollectionView[];
+  @Input() folder?: FolderView;
 
   constructor() {}
 }

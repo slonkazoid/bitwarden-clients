@@ -9,7 +9,6 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CollectionId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -24,6 +23,7 @@ import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup
 import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-page.component";
 
+import { AdditionalInformationV2Component } from "./additional-information/additional-information-v2.component";
 import { ItemDetailsV2Component } from "./item-details/item-details-v2.component";
 
 @Component({
@@ -40,13 +40,13 @@ import { ItemDetailsV2Component } from "./item-details/item-details-v2.component
     PopupHeaderComponent,
     PopupFooterComponent,
     ItemDetailsV2Component,
+    AdditionalInformationV2Component,
   ],
 })
 export class ViewV2Component implements OnDestroy {
   headerText: string;
   cipherId: string;
   cipher: CipherView;
-  cipher$: Observable<any>;
   organization$: Observable<Organization>;
   folder$: Observable<FolderView>;
   collections$: Observable<CollectionView[]>;
@@ -60,7 +60,6 @@ export class ViewV2Component implements OnDestroy {
     private organizationService: OrganizationService,
     private collectionService: CollectionService,
     private folderService: FolderService,
-    private platformUtilsService: PlatformUtilsService,
   ) {
     this.subscribeToParams();
   }
@@ -135,9 +134,4 @@ export class ViewV2Component implements OnDestroy {
   deleteCipher() {}
 
   openPasswordHistory() {}
-
-  copy(textData: string) {
-    this.platformUtilsService.copyToClipboard(textData, null);
-    this.platformUtilsService.showToast("info", null, "Copy Successful");
-  }
 }
