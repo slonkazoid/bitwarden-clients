@@ -120,9 +120,11 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     return super.disable(this.disablePromise);
   }
 
-  remove(key: Key) {
-    key.existingKey = null;
-    key.key = null;
+  remove(control: FormControl<Key>) {
+    control.setValue({
+      existingKey: null,
+      key: null,
+    });
   }
 
   private processResponse(response: TwoFactorYubiKeyResponse) {
