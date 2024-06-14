@@ -4,6 +4,7 @@ import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { FieldType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { SearchModule, ButtonModule } from "@bitwarden/components";
 
@@ -16,6 +17,7 @@ import { SearchModule, ButtonModule } from "@bitwarden/components";
 export class AdditionalInformationV2Component implements OnInit {
   @Input() cipher: CipherView;
   hiddenFields: any = {};
+  fieldType = FieldType;
 
   constructor(private platformUtilsService: PlatformUtilsService) {}
 
