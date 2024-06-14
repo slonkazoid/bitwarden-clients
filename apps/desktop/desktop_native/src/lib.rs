@@ -6,6 +6,7 @@ mod clipboard;
 mod crypto;
 mod error;
 mod password;
+mod powermonitor;
 
 #[napi]
 pub mod passwords {
@@ -121,4 +122,20 @@ pub mod clipboards {
         super::clipboard::write(&text, password)
             .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
+}
+
+#[napi]
+pub mod powermonitors {
+    use napi::threadsafe_function::{ErrorStrategy::CalleeHandled, ThreadsafeFunction};
+
+    #[napi]
+    pub async fn on_lock(callback: ThreadsafeFunction<(), CalleeHandled>) -> napi::Result<()> {
+        super::powermonitor::on_lock(callback).await.map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
+
+    #[napi]
+    pub async fn is_lock_monitor_available() -> napi::Result<bool> {
+        Ok(super::powermonitor::is_lock_monitor_available().await)
+    }
+
 }

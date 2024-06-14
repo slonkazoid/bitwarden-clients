@@ -233,7 +233,7 @@ export class Main {
       this.messagingMain.onMessage(message);
     });
 
-    this.powerMonitorMain = new PowerMonitorMain(this.messagingService);
+    this.powerMonitorMain = new PowerMonitorMain(this.messagingService, this.logService);
     this.menuMain = new MenuMain(
       this.i18nService,
       this.messagingService,

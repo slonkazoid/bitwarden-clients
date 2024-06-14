@@ -174,13 +174,6 @@ export class SettingsComponent implements OnInit {
       { name: this.i18nService.t("onSleep"), value: VaultTimeoutStringType.OnSleep },
     ];
 
-    if (this.platformUtilsService.getDevice() !== DeviceType.LinuxDesktop) {
-      this.vaultTimeoutOptions.push({
-        name: this.i18nService.t("onLocked"),
-        value: VaultTimeoutStringType.OnLocked,
-      });
-    }
-
     this.vaultTimeoutOptions = this.vaultTimeoutOptions.concat([
       { name: this.i18nService.t("onRestart"), value: VaultTimeoutStringType.OnRestart },
       { name: this.i18nService.t("never"), value: VaultTimeoutStringType.Never },
@@ -217,6 +210,21 @@ export class SettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (await ipc.platform.powermonitor.isLockMonitorAvailable()) {
+      const onSleepIndex = this.vaultTimeoutOptions.indexOf({
+        name: this.i18nService.t("onSleep"),
+        value: VaultTimeoutStringType.OnSleep,
+      });
+
+      // insert onLocked after onSleep
+      this.vaultTimeoutOptions = this.vaultTimeoutOptions
+        .slice(0, onSleepIndex + 1)
+        .concat([
+          { name: this.i18nService.t("onLocked"), value: VaultTimeoutStringType.OnLocked },
+        ] as VaultTimeoutOption[])
+        .concat(this.vaultTimeoutOptions.slice(onSleepIndex + 1));
+    }
+
     this.userHasMasterPassword = await this.userVerificationService.hasMasterPassword();
 
     this.isWindows = (await this.platformUtilsService.getDevice()) === DeviceType.WindowsDesktop;
