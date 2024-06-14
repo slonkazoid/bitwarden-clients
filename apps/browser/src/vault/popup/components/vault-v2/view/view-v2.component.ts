@@ -26,6 +26,7 @@ import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-p
 import { AdditionalInformationV2Component } from "./additional-information/additional-information-v2.component";
 import { AttachmentsV2Component } from "./attachments/attachments-v2.component";
 import { ItemDetailsV2Component } from "./item-details/item-details-v2.component";
+import { ItemHistoryV2Component } from "./item-history/item-history-v2.component";
 
 @Component({
   selector: "app-view-v2",
@@ -43,6 +44,7 @@ import { ItemDetailsV2Component } from "./item-details/item-details-v2.component
     ItemDetailsV2Component,
     AdditionalInformationV2Component,
     AttachmentsV2Component,
+    ItemHistoryV2Component,
   ],
 })
 export class ViewV2Component implements OnDestroy {
@@ -134,6 +136,4 @@ export class ViewV2Component implements OnDestroy {
   }
 
   deleteCipher() {}
-
-  openPasswordHistory() {}
 }

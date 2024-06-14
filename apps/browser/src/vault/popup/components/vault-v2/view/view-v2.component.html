@@ -1,6 +1,7 @@
 <popup-page>
   <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
 
+  <!-- ITEM DETAILS -->
   <ng-container *ngIf="!!cipher">
     <app-item-details-v2
       [cipher]="cipher"
@@ -11,6 +12,7 @@
     </app-item-details-v2>
   </ng-container>
 
+  <!-- ADDITIONAL INFORMATION -->
   <ng-container *ngIf="!!cipher">
     <app-additional-information-v2 [cipher]="cipher"> </app-additional-information-v2>
   </ng-container>
@@ -21,32 +23,14 @@
   </ng-container>
 
   <!-- ITEM HISTORY SECTION -->
-  <div class="tw-mb-6">
-    <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemHistory" | i18n }}</h5>
-    <div class="box-content-row">
-      <p class="row-label">
-        <span class="tw-font-bold">{{ "lastEdited" | i18n }}:</span>
-        {{ cipher.revisionDate | date: "medium" }}
-      </p>
-      <p class="row-label">
-        <span class="tw-font-bold">{{ "dateCreated" | i18n }}:</span>
-        {{ cipher.creationDate | date: "medium" }}
-      </p>
-      <p class="row-label">
-        <span class="tw-font-bold">{{ "datePasswordUpdated" | i18n }}:</span>
-        {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
-      </p>
-      <div *ngIf="cipher.hasPasswordHistory">
-        <a (click)="openPasswordHistory()">{{ "passwordHistory" | i18n }}</a>
-      </div>
-    </div>
-  </div>
+  <ng-container *ngIf="!!cipher">
+    <app-item-history-v2 [cipher]="cipher"> </app-item-history-v2>
+  </ng-container>
 
   <popup-footer slot="footer">
     <a bitButton type="button" buttonType="primary" (click)="editCipher()">
       {{ "edit" | i18n }}
     </a>
-
     <ng-container slot="end">
       <button
         type="button"
