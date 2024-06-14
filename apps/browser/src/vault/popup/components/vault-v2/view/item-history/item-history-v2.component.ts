@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -10,7 +11,7 @@ import { SearchModule, ButtonModule } from "@bitwarden/components";
   selector: "app-item-history-v2",
   templateUrl: "item-history-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule],
+  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, RouterModule],
 })
 export class ItemHistoryV2Component {
   @Input() cipher: CipherView;
