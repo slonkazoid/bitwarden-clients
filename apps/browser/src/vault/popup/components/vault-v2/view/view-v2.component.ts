@@ -3,13 +3,14 @@ import { Component, OnDestroy } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, firstValueFrom, takeUntil } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { CollectionId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -22,6 +23,8 @@ import { SearchModule, ButtonModule } from "@bitwarden/components";
 import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup-footer.component";
 import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-page.component";
+
+import { ItemDetailsV2Component } from "./item-details/item-details-v2.component";
 
 @Component({
   selector: "app-view-v2",
@@ -36,15 +39,17 @@ import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-p
     PopupPageComponent,
     PopupHeaderComponent,
     PopupFooterComponent,
+    ItemDetailsV2Component,
   ],
 })
 export class ViewV2Component implements OnDestroy {
   headerText: string;
   cipherId: string;
   cipher: CipherView;
-  organization: Organization;
-  cipherCollections: CollectionView[];
-  folder: FolderView;
+  cipher$: Observable<any>;
+  organization$: Observable<Organization>;
+  folder$: Observable<FolderView>;
+  collections$: Observable<CollectionView[]>;
   private destroyed$: Subject<void> = new Subject();
 
   constructor(
@@ -96,30 +101,21 @@ export class ViewV2Component implements OnDestroy {
     );
 
     if (this.cipher.collectionIds.length > 0) {
-      const allCollections = await this.collectionService.getAllDecrypted();
-
-      this.cipherCollections = allCollections.filter((collection) => {
-        if (this.cipher.collectionIds.includes(collection.id)) {
-          return collection;
-        }
-      });
+      this.collections$ = this.collectionService
+        .decryptedCollectionViews$(this.cipher.collectionIds as CollectionId[])
+        .pipe(takeUntil(this.destroyed$));
     }
 
     if (this.cipher.organizationId) {
-      this.organizationService
+      this.organization$ = this.organizationService
         .get$(this.cipher.organizationId)
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((org) => {
-          this.organization = org;
-        });
+        .pipe(takeUntil(this.destroyed$));
     }
 
     if (this.cipher.folderId) {
-      if (this.cipher.folderId) {
-        this.folder = await (
-          await firstValueFrom(this.folderService.folderViews$)
-        ).find((f) => f.id == this.cipher.folderId);
-      }
+      this.folder$ = this.folderService
+        .getDecrypted$(this.cipher.folderId)
+        .pipe(takeUntil(this.destroyed$));
     }
   }
 

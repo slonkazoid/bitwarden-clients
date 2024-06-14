@@ -1,35 +1,15 @@
 <popup-page>
   <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
 
-  <!-- ITEM DETAILS SECTION -->
-  <div class="tw-mb-6">
-    <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemDetails" | i18n }}</h5>
-    <div class="box-content-row" *ngIf="cipher.login.username">
-      <div class="row-border-bottom">
-        <label class="row-label">
-          {{ "itemName" | i18n }}
-        </label>
-        <input type="text" [value]="cipher.login.username" readonly aria-readonly="true" />
-      </div>
-
-      <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
-        <div *ngIf="!cipher.organizationId" class="tw-mb-3">
-          <i class="bwi bwi-user bwi-lg bwi-fw"></i> {{ "ownerYou" | i18n }}
-        </div>
-        <div *ngIf="cipher.organizationId" class="tw-mb-3">
-          <i class="bwi bwi-business bwi-lg bwi-fw"></i> {{ organization.name }}
-        </div>
-        <div *ngIf="cipher.collectionIds" class="tw-mb-3">
-          <h3 *ngFor="let collection of cipherCollections">
-            <i class="bwi bwi-collection bwi-lg bwi-fw"></i> {{ collection.name }}
-          </h3>
-        </div>
-        <div *ngIf="cipher.folderId" class="tw-mb-3">
-          <i class="bwi bwi-folder bwi-lg bwi-fw"></i> {{ folder.name }}
-        </div>
-      </div>
-    </div>
-  </div>
+  <ng-container *ngIf="!!cipher">
+    <app-item-details-v2
+      [cipher]="cipher"
+      [organization]="organization$ | async"
+      [collections]="collections$ | async"
+      [folder]="folder$ | async"
+    >
+    </app-item-details-v2>
+  </ng-container>
 
   <!-- ADDITIONAL INFORMATION SECTION -->
   <div class="tw-mb-6">
