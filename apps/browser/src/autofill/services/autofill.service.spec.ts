@@ -1,6 +1,8 @@
 import { mock, mockReset, MockProxy } from "jest-mock-extended";
-import { BehaviorSubject, of } from "rxjs";
+import { BehaviorSubject, of, Subject } from "rxjs";
 
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { UserVerificationService } from "@bitwarden/common/auth/services/user-verification/user-verification.service";
 import { AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsService } from "@bitwarden/common/autofill/services/autofill-settings.service";
@@ -14,12 +16,14 @@ import { EventType } from "@bitwarden/common/enums";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { MessageListener } from "@bitwarden/common/platform/messaging";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import {
   FakeStateProvider,
   FakeAccountService,
   mockAccountServiceWith,
+  subscribeTo,
 } from "@bitwarden/common/spec";
 import { UserId } from "@bitwarden/common/types/guid";
 import { FieldType, LinkedIdType, LoginLinkedId, CipherType } from "@bitwarden/common/vault/enums";
@@ -35,6 +39,7 @@ import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
+import { AutofillMessageCommand, AutofillMessageSender } from "../enums/autofill-message.enums";
 import { AutofillPort } from "../enums/autofill-port.enums";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
@@ -50,6 +55,7 @@ import { flushPromises, triggerTestFailure } from "../spec/testing-utils";
 
 import {
   AutoFillOptions,
+  CollectPageDetailsResponseMessage,
   GenerateFillScriptOptions,
   PageDetail,
 } from "./abstractions/autofill.service";
@@ -78,12 +84,19 @@ describe("AutofillService", () => {
   const userVerificationService = mock<UserVerificationService>();
   const billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
   const platformUtilsService = mock<PlatformUtilsService>();
+  let activeAccountStatusMock$: BehaviorSubject<AuthenticationStatus>;
+  let authService: MockProxy<AuthService>;
+  let messageListener: MockProxy<MessageListener>;
 
   beforeEach(() => {
     scriptInjectorService = new BrowserScriptInjectorService(platformUtilsService, logService);
     inlineMenuVisibilityMock$ = new BehaviorSubject(AutofillOverlayVisibility.OnFieldFocus);
     autofillSettingsService = mock<AutofillSettingsService>();
     (autofillSettingsService as any).inlineMenuVisibility$ = inlineMenuVisibilityMock$;
+    activeAccountStatusMock$ = new BehaviorSubject(AuthenticationStatus.Unlocked);
+    authService = mock<AuthService>();
+    authService.activeAccountStatus$ = activeAccountStatusMock$;
+    messageListener = mock<MessageListener>();
     autofillService = new AutofillService(
       cipherService,
       autofillSettingsService,
@@ -95,15 +108,95 @@ describe("AutofillService", () => {
       billingAccountProfileStateService,
       scriptInjectorService,
       accountService,
+      authService,
+      messageListener,
     );
-
     domainSettingsService = new DefaultDomainSettingsService(fakeStateProvider);
     domainSettingsService.equivalentDomains$ = of(mockEquivalentDomains);
+    jest.spyOn(BrowserApi, "tabSendMessage");
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     mockReset(cipherService);
+  });
+
+  describe("collectPageDetailsFromTab$", () => {
+    const tab = mock<chrome.tabs.Tab>({ id: 1 });
+    const messages = new Subject<CollectPageDetailsResponseMessage>();
+
+    function mockCollectPageDetailsResponseMessage(
+      tab: chrome.tabs.Tab,
+      webExtSender: chrome.runtime.MessageSender = mock<chrome.runtime.MessageSender>(),
+      sender: string = AutofillMessageSender.collectPageDetailsFromTabObservable,
+    ): CollectPageDetailsResponseMessage {
+      return mock<CollectPageDetailsResponseMessage>({
+        tab,
+        webExtSender,
+        sender,
+      });
+    }
+
+    beforeEach(() => {
+      messageListener.messages$.mockReturnValue(messages.asObservable());
+    });
+
+    it("sends a `collectPageDetails` message to the passed tab", () => {
+      autofillService.collectPageDetailsFromTab$(tab);
+
+      expect(BrowserApi.tabSendMessage).toHaveBeenCalledWith(tab, {
+        command: AutofillMessageCommand.collectPageDetails,
+        sender: AutofillMessageSender.collectPageDetailsFromTabObservable,
+        tab,
+      });
+    });
+
+    it("builds an array of page details from received `collectPageDetailsResponse` messages", async () => {
+      const topLevelSender = mock<chrome.runtime.MessageSender>({ tab, frameId: 0 });
+      const subFrameSender = mock<chrome.runtime.MessageSender>({ tab, frameId: 1 });
+
+      const tracker = subscribeTo(autofillService.collectPageDetailsFromTab$(tab));
+      const pausePromise = tracker.pauseUntilReceived(2);
+
+      messages.next(mockCollectPageDetailsResponseMessage(tab, topLevelSender));
+      messages.next(mockCollectPageDetailsResponseMessage(tab, subFrameSender));
+
+      await pausePromise;
+
+      expect(tracker.emissions[1].length).toBe(2);
+    });
+
+    it("ignores messages from a different tab", async () => {
+      const otherTab = mock<chrome.tabs.Tab>({ id: 2 });
+
+      const tracker = subscribeTo(autofillService.collectPageDetailsFromTab$(tab));
+      const pausePromise = tracker.pauseUntilReceived(1);
+
+      messages.next(mockCollectPageDetailsResponseMessage(tab));
+      messages.next(mockCollectPageDetailsResponseMessage(otherTab));
+
+      await pausePromise;
+
+      expect(tracker.emissions[1]).toBeUndefined();
+    });
+
+    it("ignores messages from a different sender", async () => {
+      const tracker = subscribeTo(autofillService.collectPageDetailsFromTab$(tab));
+      const pausePromise = tracker.pauseUntilReceived(1);
+
+      messages.next(mockCollectPageDetailsResponseMessage(tab));
+      messages.next(
+        mockCollectPageDetailsResponseMessage(
+          tab,
+          mock<chrome.runtime.MessageSender>(),
+          "some-other-sender",
+        ),
+      );
+
+      await pausePromise;
+
+      expect(tracker.emissions[1]).toBeUndefined();
+    });
   });
 
   describe("loadAutofillScriptsOnInstall", () => {
@@ -117,6 +210,9 @@ describe("AutofillService", () => {
       tab3 = createChromeTabMock({ id: 3, url: "chrome-extension://some-extension-route" });
       jest.spyOn(BrowserApi, "tabsQuery").mockResolvedValueOnce([tab1, tab2]);
       jest
+        .spyOn(BrowserApi, "getAllFrameDetails")
+        .mockResolvedValue([mock<chrome.webNavigation.GetAllFrameResultDetails>({ frameId: 0 })]);
+      jest
         .spyOn(autofillService, "getOverlayVisibility")
         .mockResolvedValue(AutofillOverlayVisibility.OnFieldFocus);
       jest.spyOn(autofillService, "getAutofillOnPageLoad").mockResolvedValue(true);
@@ -126,6 +222,7 @@ describe("AutofillService", () => {
       jest.spyOn(autofillService, "injectAutofillScripts");
 
       await autofillService.loadAutofillScriptsOnInstall();
+      await flushPromises();
 
       expect(BrowserApi.tabsQuery).toHaveBeenCalledWith({});
       expect(autofillService.injectAutofillScripts).toHaveBeenCalledWith(tab1, 0, false);
@@ -277,6 +374,18 @@ describe("AutofillService", () => {
 
     it("skips injecting autofiller script when autofill on load setting is disabled", async () => {
       jest.spyOn(autofillService, "getAutofillOnPageLoad").mockResolvedValue(false);
+
+      await autofillService.injectAutofillScripts(sender.tab, sender.frameId, true);
+
+      expect(BrowserApi.executeScriptInTab).not.toHaveBeenCalledWith(tabMock.id, {
+        file: "content/autofiller.js",
+        frameId: sender.frameId,
+        ...defaultExecuteScriptOptions,
+      });
+    });
+
+    it("skips injecting the autofiller script when the user's account is not unlocked", async () => {
+      activeAccountStatusMock$.next(AuthenticationStatus.Locked);
 
       await autofillService.injectAutofillScripts(sender.tab, sender.frameId, true);
 

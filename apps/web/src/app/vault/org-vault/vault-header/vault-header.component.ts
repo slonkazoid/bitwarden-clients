@@ -68,7 +68,7 @@ export class VaultHeaderComponent implements OnInit {
   protected organizations$ = this.organizationService.organizations$;
 
   protected flexibleCollectionsV1Enabled = false;
-  private restrictProviderAccessFlag = false;
+  protected restrictProviderAccessFlag = false;
 
   constructor(
     private organizationService: OrganizationService,
@@ -89,9 +89,7 @@ export class VaultHeaderComponent implements OnInit {
   }
 
   get title() {
-    const headerType = this.organization?.flexibleCollections
-      ? this.i18nService.t("collections").toLowerCase()
-      : this.i18nService.t("vault").toLowerCase();
+    const headerType = this.i18nService.t("collections").toLowerCase();
 
     if (this.collection != null) {
       return this.collection.node.name;
@@ -222,7 +220,11 @@ export class VaultHeaderComponent implements OnInit {
   }
 
   get canCreateCipher(): boolean {
-    if (this.organization?.isProviderUser && this.restrictProviderAccessFlag) {
+    if (
+      this.organization?.isProviderUser &&
+      this.restrictProviderAccessFlag &&
+      !this.organization?.isMember
+    ) {
       return false;
     }
     return true;

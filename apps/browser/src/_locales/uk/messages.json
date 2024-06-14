@@ -181,6 +181,12 @@
   "continueToHelpCenterDesc": {
     "message": "Дізнайтеся більше про те, як використовувати Bitwarden в довідковому центрі."
   },
+  "continueToBrowserExtensionStore": {
+    "message": "Перейти до вебмагазину розширень?"
+  },
+  "continueToBrowserExtensionStoreDesc": {
+    "message": "Допоможіть іншим дізнатися про Bitwarden. Відвідайте вебмагазин розширень для вашого браузера і поставте оцінку."
+  },
   "changeMasterPasswordOnWebConfirmation": {
     "message": "Ви можете змінити головний пароль у вебпрограмі Bitwarden."
   },
@@ -383,6 +389,15 @@
   "favorite": {
     "message": "Обране"
   },
+  "unfavorite": {
+    "message": "Вилучити з обраного"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item added to favorites"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removed from favorites"
+  },
   "notes": {
     "message": "Нотатки"
   },
@@ -403,6 +418,9 @@
   },
   "launch": {
     "message": "Перейти"
+  },
+  "launchWebsite": {
+    "message": "Відкрити вебсайт"
   },
   "website": {
     "message": "Вебсайт"
@@ -593,6 +611,9 @@
   "loggedOut": {
     "message": "Ви вийшли"
   },
+  "loggedOutDesc": {
+    "message": "Ви вийшли з облікового запису."
+  },
   "loginExpired": {
     "message": "Тривалість вашого сеансу завершилась."
   },
@@ -756,6 +777,9 @@
   "notificationUnlock": {
     "message": "Розблокувати"
   },
+  "additionalOptions": {
+    "message": "Додаткові налаштування"
+  },
   "enableContextMenuItem": {
     "message": "Показувати в контекстному меню"
   },
@@ -793,11 +817,38 @@
     "message": "Solarized темна",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Експортувати з"
+  },
   "exportVault": {
     "message": "Експортувати сховище"
   },
   "fileFormat": {
     "message": "Формат файлу"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Цей експортований файл буде захищений паролем, який необхідно ввести для його розшифрування."
+  },
+  "filePassword": {
+    "message": "Пароль файлу"
+  },
+  "exportPasswordDescription": {
+    "message": "Цей пароль буде використано для експортування та імпортування цього файлу"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Використовуйте ключ шифрування свого облікового запису, створений на основі імені користувача й головного пароля, щоб зашифрувати експортовані дані та обмежити можливість імпортування лише до поточного облікового запису Bitwarden."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Встановіть пароль файлу, щоб зашифрувати експортовані дані та імпортувати до будь-якого облікового запису Bitwarden за допомогою цього пароля."
+  },
+  "exportTypeHeading": {
+    "message": "Тип експорту"
+  },
+  "accountRestricted": {
+    "message": "Обмежено обліковим записом"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "Пароль файлу та підтвердження пароля відрізняються."
   },
   "warning": {
     "message": "ПОПЕРЕДЖЕННЯ",
@@ -1069,7 +1120,16 @@
     "message": "Середовище власного хостингу"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Вкажіть основну URL-адресу Bitwarden, встановленого на локальному хостингу."
+    "message": "Вкажіть основну URL-адресу локально розміщеного встановлення Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden. Зразок: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для розширеної конфігурації ви можете вказати основну URL-адресу окремо для кожної служби."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Необхідно додати URL-адресу основного сервера, або принаймні одне користувацьке середовище."
   },
   "customEnvironment": {
     "message": "Власне середовище"
@@ -1383,6 +1443,15 @@
   "collections": {
     "message": "Збірки"
   },
+  "nCollections": {
+    "message": "$COUNT$ збірок",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "favorites": {
     "message": "Обране"
   },
@@ -1600,6 +1669,9 @@
   "restoredItem": {
     "message": "Запис відновлено"
   },
+  "alreadyHaveAccount": {
+    "message": "Вже маєте обліковий запис?"
+  },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Вихід скасує всі права доступу до вашого сховища і вимагатиме автентифікацію після завершення часу очікування. Ви дійсно хочете використати цей параметр?"
   },
@@ -1608,6 +1680,9 @@
   },
   "autoFillAndSave": {
     "message": "Заповнити і зберегти"
+  },
+  "fillAndSave": {
+    "message": "Заповнити й зберегти"
   },
   "autoFillSuccessAndSavedUri": {
     "message": "Запис заповнено і збережено"
@@ -1704,6 +1779,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Помилка оновлення токена доступу"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не знайдено токен оновлення або ключі API. Спробуйте вийти, а потім увійти знову."
   },
   "desktopSyncVerificationTitle": {
     "message": "Перевірка синхронізації на комп'ютері"
@@ -2173,6 +2254,18 @@
       }
     }
   },
+  "exportingOrganizationVaultTitle": {
+    "message": "Експортування сховища організації"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Буде експортовано лише сховище організації, пов'язане з $ORGANIZATION$. Елементи особистих сховищ або інших організацій не будуть включені.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
+      }
+    }
+  },
   "error": {
     "message": "Помилка"
   },
@@ -2534,6 +2627,27 @@
   },
   "ssoIdentifierRequired": {
     "message": "Потрібен SSO-ідентифікатор організації."
+  },
+  "creatingAccountOn": {
+    "message": "Створення облікового запису"
+  },
+  "checkYourEmail": {
+    "message": "Перевірте свою електронну пошту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдіть за посиланням у листі, надісланому на"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "і завершіть створення облікового запису."
+  },
+  "noEmail": {
+    "message": "Не отримали електронного листа?"
+  },
+  "goBack": {
+    "message": "Поверніться назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": "і виправте адресу електронної пошти."
   },
   "eu": {
     "message": "ЄС",
@@ -3191,7 +3305,7 @@
   "clearFiltersOrTryAnother": {
     "message": "Скиньте фільтри або спробуйте іншу умову пошуку"
   },
-  "copyInfo": {
+  "copyInfoLabel": {
     "message": "Копіювати інформацію, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
@@ -3201,7 +3315,37 @@
       }
     }
   },
-  "moreOptions": {
+  "copyInfoTitle": {
+    "message": "Копіювати інформацію – $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "copyNoteLabel": {
+    "message": "Копіювати нотатку, $ITEMNAME$",
+    "description": "Aria label for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "copyNoteTitle": {
+    "message": "Копіювати нотатку – $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Інші можливості, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3210,6 +3354,38 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Інші можливості – $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Переглянути запис – $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "assignCollections": {
+    "message": "Призначити збірки"
+  },
+  "copyEmail": {
+    "message": "Копіювати е-пошту"
+  },
+  "copyPhone": {
+    "message": "Копіювати телефон"
+  },
+  "copyAddress": {
+    "message": "Копіювати адресу"
   },
   "adminConsole": {
     "message": "консолі адміністратора,"
@@ -3230,7 +3406,7 @@
     "message": "Помилка призначення цільової теки."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Переглянути записи в $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -3240,7 +3416,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Назад до $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -3253,7 +3429,7 @@
     "message": "Новий"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Вилучити $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -3261,5 +3437,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Елементи без теки"
+  },
+  "organizationIsDeactivated": {
+    "message": "Організацію деактивовано"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Елементи в деактивованих організаціях недоступні. Зверніться до власника вашої організації для отримання допомоги."
   }
 }

@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Adgangsniveau"
   },
+  "accessing": {
+    "message": "Tilgår"
+  },
   "loggedOut": {
     "message": "Logget ud"
+  },
+  "loggedOutDesc": {
+    "message": "Der er blevet logget ud af kontoen."
   },
   "loginExpired": {
     "message": "Login-session udløbet."
@@ -715,6 +721,9 @@
   },
   "logIn": {
     "message": "Log ind"
+  },
+  "verifyIdentity": {
+    "message": "Bekræft din identitet"
   },
   "logInInitiated": {
     "message": "Indlogning påbegyndt"
@@ -1046,6 +1055,12 @@
   },
   "copyUuid": {
     "message": "Kopiér UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Adgangstoken genopfriskningsfejl"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Ingen genopfriskningstoken eller API-nøgler fundet. Prøv at logge ud og dernæst ind igen."
   },
   "warning": {
     "message": "Advarsel"
@@ -2782,12 +2797,6 @@
   "userDesc": {
     "message": "Tilgå og føj emner til tildelte samlinger"
   },
-  "manager": {
-    "message": "Manager"
-  },
-  "managerDesc": {
-    "message": "Opret, slet og håndtér adgang i tildelte samlinger"
-  },
   "all": {
     "message": "Alle"
   },
@@ -3243,6 +3252,27 @@
   },
   "device": {
     "message": "Enhed"
+  },
+  "creatingAccountOn": {
+    "message": "Opretter konto på"
+  },
+  "checkYourEmail": {
+    "message": "Tjek din e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Følg linket i e-mailen sendt til"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "og fortsæt med kontooprettelsen."
+  },
+  "noEmail": {
+    "message": "Ingen e-mail?"
+  },
+  "goBack": {
+    "message": "Gå tilbage"
+  },
+  "toEditYourEmailAddress": {
+    "message": "for at redigere e-mailadressen."
   },
   "view": {
     "message": "Vis"
@@ -4543,12 +4573,6 @@
   "permission": {
     "message": "Tilladelse"
   },
-  "managerPermissions": {
-    "message": "Bestyrer-tilladelser"
-  },
-  "adminPermissions": {
-    "message": "Admin-tilladelser"
-  },
   "accessEventLogs": {
     "message": "Tilgå begivenhedslogger"
   },
@@ -4572,9 +4596,6 @@
   },
   "deleteAnyCollection": {
     "message": "Slet enhver samling"
-  },
-  "manageAssignedCollections": {
-    "message": "Håndtér tildelte samlinger"
   },
   "editAssignedCollections": {
     "message": "Redigér tildelte samlinger"
@@ -5561,6 +5582,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Rotering af faktureringssynk-tokenet vil ugyldiggøre det foregående token."
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "Selvhosting"
@@ -6603,12 +6657,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Man kan kun tildele samlinger, man selv håndterer."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Tildel adgang til alle nuværende og fremtidige samlinger."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Hvis afkrydset, erstatter dette alle andre samlingstilladelser."
-  },
   "selectMembers": {
     "message": "Vælg medlemmer"
   },
@@ -6650,12 +6698,6 @@
   },
   "group": {
     "message": "Gruppe"
-  },
-  "groupAccessAll": {
-    "message": "Denne gruppe kan tilgå og ændre alle emner."
-  },
-  "memberAccessAll": {
-    "message": "Dette medlem kan tilgå og ændre alle emner."
   },
   "domainVerification": {
     "message": "Domænebekræftelse"
@@ -8267,5 +8309,36 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Vær opdateret mod sikkerhedssårbarheder ved at opgradere til en betalt abonnementstype for forbedret monitorering."
+  },
+  "approveAllRequests": {
+    "message": "Godkend alle anmodninger"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Alle login-anmodninger godkendt"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Opdaterede momsoplysninger"
+  },
+  "unverified": {
+    "message": "Ubekræftet"
+  },
+  "verified": {
+    "message": "Bekræftet"
+  },
+  "viewSecret": {
+    "message": "Vis hemmelighed"
+  },
+  "noClients": {
+    "message": "Der er ingen klienter at vise"
+  },
+  "providerBillingEmailHint": {
+    "message": "Denne e-mailadresse vil modtage alle fakturaer vedr. denne udbyder",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
   }
 }

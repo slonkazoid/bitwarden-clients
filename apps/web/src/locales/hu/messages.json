@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Hozzáférési szint"
   },
+  "accessing": {
+    "message": "Elérés"
+  },
   "loggedOut": {
     "message": "Megtörtént a kijelentkezés."
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "A bejelentkezési munkamenet lejárt."
@@ -715,6 +721,9 @@
   },
   "logIn": {
     "message": "Bejelentkezés"
+  },
+  "verifyIdentity": {
+    "message": "Személyazonosság ellenőrzése"
   },
   "logInInitiated": {
     "message": "A bejelentkezés elindításra került."
@@ -1046,6 +1055,12 @@
   },
   "copyUuid": {
     "message": "UUID másolása"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "Figyelmeztetés"
@@ -2782,12 +2797,6 @@
   "userDesc": {
     "message": "Normál felhasználó a szervezeti gyűjtemények elérésével."
   },
-  "manager": {
-    "message": "Menedzser"
-  },
-  "managerDesc": {
-    "message": "A menedzserek hozzáférhetnek a szervezet összes gyűjteményéhez, valamint kezelhetik azokat."
-  },
   "all": {
     "message": "Összes"
   },
@@ -3243,6 +3252,27 @@
   },
   "device": {
     "message": "Eszköz"
+  },
+  "creatingAccountOn": {
+    "message": "Fiók létrehozása:"
+  },
+  "checkYourEmail": {
+    "message": "Email cím postaláda ellenőrzése"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Kövessük a hivatkozást az elküldött emailben"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "és folytassuk a fiók létrehozását."
+  },
+  "noEmail": {
+    "message": "Nem érkezett email?"
+  },
+  "goBack": {
+    "message": "Vissza"
+  },
+  "toEditYourEmailAddress": {
+    "message": "az email cím szerkesztéséhez."
   },
   "view": {
     "message": "Megtekintés"
@@ -4543,12 +4573,6 @@
   "permission": {
     "message": "Jogosultság"
   },
-  "managerPermissions": {
-    "message": "Jogosultságok kezelése"
-  },
-  "adminPermissions": {
-    "message": "Adminisztrátori jogosultságok"
-  },
   "accessEventLogs": {
     "message": "Eseménynapló elérése"
   },
@@ -4572,9 +4596,6 @@
   },
   "deleteAnyCollection": {
     "message": "Bármely gyűjtemény törlése"
-  },
-  "manageAssignedCollections": {
-    "message": "Hozzárendelt gyűjtemények kezelése"
   },
   "editAssignedCollections": {
     "message": "Hozzárendelt gyűjtemények szerkesztése"
@@ -5561,6 +5582,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "A Számlázási szinkron vezérjel gördülő váltása érvényteleníti ez előző vezérjelet."
+  },
+  "selfHostedServer": {
+    "message": "saját üzemeltetésű"
+  },
+  "customEnvironment": {
+    "message": "Egyedi környezet"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Adjuk meg a helyileg tárolt Bitwarden telepítés alap webcímét. Példa: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Speciális konfigurációhoz külön-külön megadhatjuk az egyes szolgáltatások alap webcímét."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Hozzá kell adni az alapszerver webcímét vagy legalább egy egyedi környezetet."
+  },
+  "apiUrl": {
+    "message": "API szerver webcím"
+  },
+  "webVaultUrl": {
+    "message": "Webes széf szerver webcím"
+  },
+  "identityUrl": {
+    "message": "Személyazonosság szerver webcím"
+  },
+  "notificationsUrl": {
+    "message": "Értesítési szerver webcím"
+  },
+  "iconsUrl": {
+    "message": "Ikonok szerver webcím"
+  },
+  "environmentSaved": {
+    "message": "A környezeti webcímek mentésre kerültek."
   },
   "selfHostingTitle": {
     "message": "Saját kiszolgáló"
@@ -6603,12 +6657,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Csak a saját kezelésű gyűjteményeket lehet hozzárendelni."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Hozzáférés kiosztása az összes jelenlegi és jövőbeli gyűjteményhez."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Bejelöllve lecseréli az összes gyűjtemény jogosultságot."
-  },
   "selectMembers": {
     "message": "Tagok kválasztása"
   },
@@ -6650,12 +6698,6 @@
   },
   "group": {
     "message": "Csoport"
-  },
-  "groupAccessAll": {
-    "message": "A csoport elérheti és módosíthatja az összes elemet."
-  },
-  "memberAccessAll": {
-    "message": "Ez a felhasználó minden elemhez hozzáférhet és módosíthatja az összes elemet."
   },
   "domainVerification": {
     "message": "Domain ellenőrzés"
@@ -8187,7 +8229,7 @@
     "message": "A számlázás kezelése a szolgáltatói portálon keresztül"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "$NAME$ elemek megtekintése",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8239,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Vissza: $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8249,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Vissza",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "$NAME$ eltávolítása",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8309,36 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Összes kérelem jóváhagyása"
+  },
+  "allLoginRequestsApproved": {
+    "message": "At összes bejelentkezési kérés óváhagyásra került."
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Frissített adó információ"
+  },
+  "unverified": {
+    "message": "Nem ellenőrzött"
+  },
+  "verified": {
+    "message": "Ellenőrzött"
+  },
+  "viewSecret": {
+    "message": "Titkos kód megtekintése"
+  },
+  "noClients": {
+    "message": "Nincsenek listázandó ügyfelek."
+  },
+  "providerBillingEmailHint": {
+    "message": "Erre az email címre érkezik az ehhez a szolgáltatóhoz kapcsolódó összes számla.",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
   }
 }

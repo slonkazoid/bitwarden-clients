@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "アクセスレベル"
   },
+  "accessing": {
+    "message": "アクセス中"
+  },
   "loggedOut": {
     "message": "ログアウトしました"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "ログインセッションの有効期限が切れています。"
@@ -715,6 +721,9 @@
   },
   "logIn": {
     "message": "ログイン"
+  },
+  "verifyIdentity": {
+    "message": "本人確認"
   },
   "logInInitiated": {
     "message": "ログイン開始"
@@ -1046,6 +1055,12 @@
   },
   "copyUuid": {
     "message": "UUID をコピー"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "注意"
@@ -2782,12 +2797,6 @@
   "userDesc": {
     "message": "あなたの組織に割り当てられたコレクションへのアクセス権を持つ標準ユーザーです。"
   },
-  "manager": {
-    "message": "マネージャー"
-  },
-  "managerDesc": {
-    "message": "マネージャーは組織内の割り当てられたコレクションへアクセスし管理することができます。"
-  },
   "all": {
     "message": "すべて"
   },
@@ -3243,6 +3252,27 @@
   },
   "device": {
     "message": "デバイス"
+  },
+  "creatingAccountOn": {
+    "message": "アカウント作成："
+  },
+  "checkYourEmail": {
+    "message": "メールをご確認ください"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "アカウントの作成を続けるには"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "に送られたメールのリンクを開いてください。"
+  },
+  "noEmail": {
+    "message": "メールがありませんか?"
+  },
+  "goBack": {
+    "message": "戻って"
+  },
+  "toEditYourEmailAddress": {
+    "message": "メールアドレスを編集してください。"
   },
   "view": {
     "message": "表示"
@@ -4543,12 +4573,6 @@
   "permission": {
     "message": "権限"
   },
-  "managerPermissions": {
-    "message": "管理者権限"
-  },
-  "adminPermissions": {
-    "message": "管理者権限"
-  },
   "accessEventLogs": {
     "message": "イベントログにアクセス"
   },
@@ -4572,9 +4596,6 @@
   },
   "deleteAnyCollection": {
     "message": "任意のコレクションを削除"
-  },
-  "manageAssignedCollections": {
-    "message": "割り当てられたコレクションの管理"
   },
   "editAssignedCollections": {
     "message": "割り当てられたコレクションを編集"
@@ -5561,6 +5582,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "請求同期トークンを更新すると、前のトークンは無効になります。"
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "セルフホスティング"
@@ -6603,12 +6657,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "自分が管理しているコレクションのみを割り当てることができます。"
   },
-  "accessAllCollectionsDesc": {
-    "message": "現在および将来のすべてのコレクションへのアクセスを許可します。"
-  },
-  "accessAllCollectionsHelp": {
-    "message": "チェックされている場合、他のすべてのコレクション権限が置き換えられます。"
-  },
   "selectMembers": {
     "message": "メンバーを選択"
   },
@@ -6650,12 +6698,6 @@
   },
   "group": {
     "message": "グループ"
-  },
-  "groupAccessAll": {
-    "message": "このグループはすべてのアイテムにアクセスして変更できます。"
-  },
-  "memberAccessAll": {
-    "message": "このメンバーはすべてのアイテムにアクセスして変更できます。"
   },
   "domainVerification": {
     "message": "ドメイン検証"
@@ -8187,7 +8229,7 @@
     "message": "プロバイダーポータルからの請求を管理"
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "$NAME$ のアイテムを表示",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -8197,7 +8239,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "$NAME$ に戻る",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -8207,11 +8249,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "戻る",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "$NAME$ を削除",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -8267,5 +8309,36 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "監視を強化できる有料プランにアップグレードすると、セキュリティ脆弱性に素早く対応できます。"
+  },
+  "approveAllRequests": {
+    "message": "すべての要求を承認する"
+  },
+  "allLoginRequestsApproved": {
+    "message": "すべてのログイン要求を承認しました"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "ビットコイン"
+  },
+  "updatedTaxInformation": {
+    "message": "更新された税情報"
+  },
+  "unverified": {
+    "message": "未認証"
+  },
+  "verified": {
+    "message": "認証済み"
+  },
+  "viewSecret": {
+    "message": "シークレットを表示"
+  },
+  "noClients": {
+    "message": "一覧表示するクライアントがありません"
+  },
+  "providerBillingEmailHint": {
+    "message": "このメールアドレスは、このプロバイダに関連するすべての請求書を受信します",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
   }
 }

@@ -581,8 +581,14 @@
   "accessLevel": {
     "message": "Poziom dostępu"
   },
+  "accessing": {
+    "message": "Accessing"
+  },
   "loggedOut": {
     "message": "Wylogowano"
+  },
+  "loggedOutDesc": {
+    "message": "Zostałeś wylogowany z konta."
   },
   "loginExpired": {
     "message": "Twoja sesja wygasła."
@@ -715,6 +721,9 @@
   },
   "logIn": {
     "message": "Zaloguj się"
+  },
+  "verifyIdentity": {
+    "message": "Zweryfikuj swoją tożsamość"
   },
   "logInInitiated": {
     "message": "Logowanie rozpoczęte"
@@ -1046,6 +1055,12 @@
   },
   "copyUuid": {
     "message": "Skopiuj UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Błąd podczas odświeżania tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nie znaleziono tokenu odświeżającego ani kluczy API. Spróbuj wylogować się i zalogować ponownie."
   },
   "warning": {
     "message": "Ostrzeżenie"
@@ -2782,12 +2797,6 @@
   "userDesc": {
     "message": "Standardowy użytkownik, posiadający dostęp do kolekcji w Twojej organizacji."
   },
-  "manager": {
-    "message": "Menedżer"
-  },
-  "managerDesc": {
-    "message": "Menedżerowie mogą uzyskiwać dostęp do przypisanych kolekcji i zarządzać nimi w organizacji."
-  },
   "all": {
     "message": "Wszyscy"
   },
@@ -3243,6 +3252,27 @@
   },
   "device": {
     "message": "Urządzenie"
+  },
+  "creatingAccountOn": {
+    "message": "Tworzenie konta na"
+  },
+  "checkYourEmail": {
+    "message": "Sprawdź swoją pocztę e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Kliknij łącze w wiadomości e-mail wysłanej do"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "i kontynuuj tworzenie konta."
+  },
+  "noEmail": {
+    "message": "Brak wiadomości e-mail?"
+  },
+  "goBack": {
+    "message": "Wróć"
+  },
+  "toEditYourEmailAddress": {
+    "message": "aby edytować swój adres e-mail."
   },
   "view": {
     "message": "Widok"
@@ -4543,12 +4573,6 @@
   "permission": {
     "message": "Uprawnienie"
   },
-  "managerPermissions": {
-    "message": "Menedżer uprawnień"
-  },
-  "adminPermissions": {
-    "message": "Administrator uprawnień"
-  },
   "accessEventLogs": {
     "message": "Dostęp do dziennika zdarzeń"
   },
@@ -4572,9 +4596,6 @@
   },
   "deleteAnyCollection": {
     "message": "Usuń dowolną kolekcję"
-  },
-  "manageAssignedCollections": {
-    "message": "Zarządzaj przypisanymi kolekcjami"
   },
   "editAssignedCollections": {
     "message": "Edytuj przypisane kolekcje"
@@ -5561,6 +5582,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Wymiana tokenu synchronizacji płatności spowoduje unieważnienie poprzedniego tokenu."
+  },
+  "selfHostedServer": {
+    "message": "samodzielnie hostowany"
+  },
+  "customEnvironment": {
+    "message": "Niestandardowe środowisko"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Określ bazowy adres URL swojej instalacji Bitwarden. Przykład: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Dla zaawansowanych konfiguracji możesz określić podstawowy adres URL niezależnie dla każdej usługi."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musisz dodać podstawowy adres URL serwera lub co najmniej jedno niestandardowe środowisko."
+  },
+  "apiUrl": {
+    "message": "Adres URL serwera API"
+  },
+  "webVaultUrl": {
+    "message": "Adres URL serwera sejfu internetowego"
+  },
+  "identityUrl": {
+    "message": "Adres URL serwera tożsamości"
+  },
+  "notificationsUrl": {
+    "message": "Adres URL serwera powiadomień"
+  },
+  "iconsUrl": {
+    "message": "Adres URL serwera ikon"
+  },
+  "environmentSaved": {
+    "message": "Adresy URL środowiska zostały zapisane"
   },
   "selfHostingTitle": {
     "message": "Samodzielnie hostowany"
@@ -6603,12 +6657,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Możesz przypisać tylko kolekcje, którymi zarządzasz."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Udziel dostępu do wszystkich bieżących i przyszłych kolekcji."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Jeśli zaznaczone, zastąpi to wszystkie inne uprawnienia kolekcji."
-  },
   "selectMembers": {
     "message": "Wybierz członków"
   },
@@ -6650,12 +6698,6 @@
   },
   "group": {
     "message": "Grupa"
-  },
-  "groupAccessAll": {
-    "message": "Ta grupa może wyświetlać i modyfikować wszystkie elementy."
-  },
-  "memberAccessAll": {
-    "message": "Ten użytkownik może wyświetlać i modyfikować wszystkie elementy."
   },
   "domainVerification": {
     "message": "Weryfikacja domeny"
@@ -8267,5 +8309,36 @@
   },
   "upgradeOrganizationCloseSecurityGapsDesc": {
     "message": "Bądź na bieżąco z lukami bezpieczeństwa dzięki zmianie na płatny plan z bardziej rozbudowanym monitorowaniem."
+  },
+  "approveAllRequests": {
+    "message": "Zatwierdź wszystkie prośby"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Wszystkie prośby o logowanie zatwierdzone"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Zaktualizowane informacje podatkowe"
+  },
+  "unverified": {
+    "message": "Niezweryfikowane"
+  },
+  "verified": {
+    "message": "Zweryfikowane"
+  },
+  "viewSecret": {
+    "message": "Zobacz sekret"
+  },
+  "noClients": {
+    "message": "Brak klientów do wyświetlenia"
+  },
+  "providerBillingEmailHint": {
+    "message": "Ten adres e-mail otrzyma wszystkie faktury dotyczące tego dostawcy",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
   }
 }
