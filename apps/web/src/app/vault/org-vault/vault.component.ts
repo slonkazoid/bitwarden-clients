@@ -166,7 +166,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   protected get hideVaultFilters(): boolean {
-    return this.restrictProviderAccessEnabled && this.organization?.isProviderUser;
+    return (
+      this.restrictProviderAccessEnabled &&
+      this.organization?.isProviderUser &&
+      !this.organization?.isMember
+    );
   }
 
   private searchText$ = new Subject<string>();
@@ -311,10 +315,6 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     this.editableCollections$ = this.allCollectionsWithoutUnassigned$.pipe(
       map((collections) => {
-        // If restricted, providers can not add items to any collections or edit those items
-        if (this.organization.isProviderUser && this.restrictProviderAccessEnabled) {
-          return [];
-        }
         // Users that can edit all ciphers can implicitly add to / edit within any collection
         if (
           this.organization.canEditAllCiphers(
@@ -356,7 +356,13 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
         let ciphers;
 
-        if (organization.isProviderUser && this.restrictProviderAccessEnabled) {
+        // Restricted providers (who are not members) do not have access org cipher endpoint below
+        // Return early to avoid 404 response
+        if (
+          this.restrictProviderAccessEnabled &&
+          !organization.isMember &&
+          organization.isProviderUser
+        ) {
           return [];
         }
 
@@ -488,10 +494,6 @@ export class VaultComponent implements OnInit, OnDestroy {
       organization$,
     ]).pipe(
       map(([filter, collection, organization]) => {
-        if (organization.isProviderUser && this.restrictProviderAccessEnabled) {
-          return collection != undefined || filter.collectionId === Unassigned;
-        }
-
         return (
           (filter.collectionId === Unassigned &&
             !organization.canEditUnassignedCiphers(this.restrictProviderAccessEnabled)) ||
