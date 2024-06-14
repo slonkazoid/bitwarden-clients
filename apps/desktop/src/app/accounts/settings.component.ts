@@ -46,7 +46,7 @@ export class SettingsComponent implements OnInit {
   protected readonly VaultTimeoutAction = VaultTimeoutAction;
 
   showMinToTray = false;
-  vaultTimeoutOptions: VaultTimeoutOption[];
+  vaultTimeoutOptions: VaultTimeoutOption[] = [];
   localeOptions: any[];
   themeOptions: any[];
   clearClipboardOptions: any[];
@@ -161,22 +161,6 @@ export class SettingsComponent implements OnInit {
     // DuckDuckGo browser is only for macos initially
     this.showDuckDuckGoIntegrationOption = isMac;
 
-    this.vaultTimeoutOptions = [
-      { name: this.i18nService.t("oneMinute"), value: 1 },
-      { name: this.i18nService.t("fiveMinutes"), value: 5 },
-      { name: this.i18nService.t("fifteenMinutes"), value: 15 },
-      { name: this.i18nService.t("thirtyMinutes"), value: 30 },
-      { name: this.i18nService.t("oneHour"), value: 60 },
-      { name: this.i18nService.t("fourHours"), value: 240 },
-      { name: this.i18nService.t("onIdle"), value: VaultTimeoutStringType.OnIdle },
-      { name: this.i18nService.t("onSleep"), value: VaultTimeoutStringType.OnSleep },
-    ];
-
-    this.vaultTimeoutOptions = this.vaultTimeoutOptions.concat([
-      { name: this.i18nService.t("onRestart"), value: VaultTimeoutStringType.OnRestart },
-      { name: this.i18nService.t("never"), value: VaultTimeoutStringType.Never },
-    ]);
-
     const localeOptions: any[] = [];
     this.i18nService.supportedTranslationLocales.forEach((locale) => {
       let name = locale;
@@ -208,20 +192,29 @@ export class SettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (await ipc.platform.powermonitor.isLockMonitorAvailable()) {
-      const onSleepIndex = this.vaultTimeoutOptions.indexOf({
-        name: this.i18nService.t("onSleep"),
-        value: VaultTimeoutStringType.OnSleep,
-      });
+    let vaultTimeoutOptions: VaultTimeoutOption[] = [
+      { name: this.i18nService.t("oneMinute"), value: 1 },
+      { name: this.i18nService.t("fiveMinutes"), value: 5 },
+      { name: this.i18nService.t("fifteenMinutes"), value: 15 },
+      { name: this.i18nService.t("thirtyMinutes"), value: 30 },
+      { name: this.i18nService.t("oneHour"), value: 60 },
+      { name: this.i18nService.t("fourHours"), value: 240 },
+      { name: this.i18nService.t("onIdle"), value: VaultTimeoutStringType.OnIdle },
+      { name: this.i18nService.t("onSleep"), value: VaultTimeoutStringType.OnSleep },
+    ];
 
-      // insert onLocked after onSleep
-      this.vaultTimeoutOptions = this.vaultTimeoutOptions
-        .slice(0, onSleepIndex + 1)
-        .concat([
-          { name: this.i18nService.t("onLocked"), value: VaultTimeoutStringType.OnLocked },
-        ] as VaultTimeoutOption[])
-        .concat(this.vaultTimeoutOptions.slice(onSleepIndex + 1));
+    if (await ipc.platform.powermonitor.isLockMonitorAvailable()) {
+      vaultTimeoutOptions.push({
+        name: this.i18nService.t("onLocked"),
+        value: VaultTimeoutStringType.OnLocked,
+      });
     }
+
+    vaultTimeoutOptions = vaultTimeoutOptions.concat([
+      { name: this.i18nService.t("onRestart"), value: VaultTimeoutStringType.OnRestart },
+      { name: this.i18nService.t("never"), value: VaultTimeoutStringType.Never },
+    ]);
+    this.vaultTimeoutOptions = vaultTimeoutOptions;
 
     this.userHasMasterPassword = await this.userVerificationService.hasMasterPassword();
 
