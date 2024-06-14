@@ -1,4 +1,6 @@
+import { Guid } from "@bitwarden/common/src/types/guid";
+
 export class RequestSMAccessRequest {
-  OrganizationId: string;
+  OrganizationId: Guid;
   EmailContent: JSON;
 }
