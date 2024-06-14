@@ -24,6 +24,7 @@ import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup
 import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-page.component";
 
 import { AdditionalInformationV2Component } from "./additional-information/additional-information-v2.component";
+import { AttachmentsV2Component } from "./attachments/attachments-v2.component";
 import { ItemDetailsV2Component } from "./item-details/item-details-v2.component";
 
 @Component({
@@ -41,6 +42,7 @@ import { ItemDetailsV2Component } from "./item-details/item-details-v2.component
     PopupFooterComponent,
     ItemDetailsV2Component,
     AdditionalInformationV2Component,
+    AttachmentsV2Component,
   ],
 })
 export class ViewV2Component implements OnDestroy {

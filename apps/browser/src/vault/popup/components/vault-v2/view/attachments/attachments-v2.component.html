@@ -1,0 +1,18 @@
+<div class="tw-mb-6">
+  <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "attachments" | i18n }}</h5>
+  <div class="box-content-row tw-p-2" *ngFor="let attachment of attachments">
+    <div class="tw-flex tw-justify-between">
+      <div>
+        <h3 class="tw-grow">
+          {{ attachment.fileName }}
+        </h3>
+        <div class="box-footer row-label">
+          {{ attachment.sizeName }}
+        </div>
+      </div>
+      <div class="tw-flex tw-items-center">
+        <i class="bwi bwi-eye bwi-lg bwi-fw"></i>
+      </div>
+    </div>
+  </div>
+</div>
