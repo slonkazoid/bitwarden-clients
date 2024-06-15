@@ -1942,6 +1942,9 @@
   "emailVerificationRequired": {
     "message": "Email verification required"
   },
+  "emailVerifiedV2": {
+    "message": "Email verified"
+  },
   "emailVerificationRequiredDesc": {
     "message": "You must verify your email to use this feature."
   },

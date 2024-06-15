@@ -1,1 +1,5 @@
-<h3>This component will be built in the next phase of email verification work.</h3>
+<auth-input-password
+  *ngIf="email"
+  [email]="email"
+  (onPasswordFormSubmit)="handlePasswordFormSubmit($event)"
+></auth-input-password>

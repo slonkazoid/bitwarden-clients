@@ -49,7 +49,7 @@ export interface PasswordInputResult {
   ],
 })
 export class InputPasswordComponent implements OnInit {
-  @Output() onPasswordFormSubmit = new EventEmitter();
+  @Output() onPasswordFormSubmit = new EventEmitter<PasswordInputResult>();
 
   @Input({ required: true }) email: string;
   @Input() protected buttonText: string;
