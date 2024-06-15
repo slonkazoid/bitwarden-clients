@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, RouterModule } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { ToastService } from "@bitwarden/components";
 
@@ -27,6 +28,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private toastService: ToastService,
     private i18nService: I18nService,
+    private cryptoService: CryptoService,
   ) {}
 
   async ngOnInit() {
@@ -49,7 +51,15 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
     });
   }
 
-  handlePasswordFormSubmit(result: PasswordInputResult) {}
+  async handlePasswordFormSubmit(result: PasswordInputResult) {
+    // TODO: Should this be in a register service or something?
+    // const [newUserKey, newEncUserKey] = await this.cryptoService.makeUserKey(result.masterKey);
+    // if (!newUserKey || !newEncUserKey) {
+    //   throw new Error("User key could not be created");
+    // }
+    // const userAsymmetricKeys = await this.cryptoService.makeKeyPair(newUserKey);
+    // TODO: handle org invite. Discuss existing modifyRegisterRequest approach.
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
