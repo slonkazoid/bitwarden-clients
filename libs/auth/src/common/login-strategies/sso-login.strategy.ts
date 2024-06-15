@@ -245,6 +245,7 @@ export class SsoLoginStrategy extends LoginStrategy {
         await this.authRequestService.setKeysAfterDecryptingSharedMasterKeyAndHash(
           adminAuthReqResponse,
           adminAuthReqStorable.privateKey,
+          userId,
         );
       } else {
         // if masterPasswordHash is null, we will always receive authReqResponse.key
@@ -252,6 +253,7 @@ export class SsoLoginStrategy extends LoginStrategy {
         await this.authRequestService.setUserKeyAfterDecryptingSharedUserKey(
           adminAuthReqResponse,
           adminAuthReqStorable.privateKey,
+          userId,
         );
       }
 
@@ -291,7 +293,7 @@ export class SsoLoginStrategy extends LoginStrategy {
     );
 
     if (userKey) {
-      await this.cryptoService.setUserKey(userKey);
+      await this.cryptoService.setUserKey(userKey, userId);
     }
   }
 
@@ -307,7 +309,7 @@ export class SsoLoginStrategy extends LoginStrategy {
     }
 
     const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
-    await this.cryptoService.setUserKey(userKey);
+    await this.cryptoService.setUserKey(userKey, userId);
   }
 
   protected override async setPrivateKey(
