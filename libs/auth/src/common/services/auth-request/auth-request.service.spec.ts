@@ -133,7 +133,11 @@ describe("AuthRequestService", () => {
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
       // Act
-      await sut.setUserKeyAfterDecryptingSharedUserKey(mockAuthReqResponse, mockPrivateKey);
+      await sut.setUserKeyAfterDecryptingSharedUserKey(
+        mockAuthReqResponse,
+        mockPrivateKey,
+        mockUserId,
+      );
 
       // Assert
       expect(sut.decryptPubKeyEncryptedUserKey).toBeCalledWith(
@@ -169,7 +173,11 @@ describe("AuthRequestService", () => {
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
       // Act
-      await sut.setKeysAfterDecryptingSharedMasterKeyAndHash(mockAuthReqResponse, mockPrivateKey);
+      await sut.setKeysAfterDecryptingSharedMasterKeyAndHash(
+        mockAuthReqResponse,
+        mockPrivateKey,
+        mockUserId,
+      );
 
       // Assert
       expect(sut.decryptPubKeyEncryptedMasterKeyAndHash).toBeCalledWith(
