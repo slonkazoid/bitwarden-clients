@@ -143,9 +143,8 @@ describe("AuthRequestService", () => {
       expect(sut.decryptPubKeyEncryptedUserKey).toBeCalledWith(
         mockAuthReqResponse.key,
         mockPrivateKey,
-        mockUserId,
       );
-      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey);
+      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey, mockUserId);
     });
   });
 
@@ -185,7 +184,6 @@ describe("AuthRequestService", () => {
         mockAuthReqResponse.key,
         mockAuthReqResponse.masterPasswordHash,
         mockPrivateKey,
-        mockUserId,
       );
       expect(masterPasswordService.mock.setMasterKey).toHaveBeenCalledWith(
         mockDecryptedMasterKey,
@@ -200,7 +198,7 @@ describe("AuthRequestService", () => {
         undefined,
         undefined,
       );
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey, mockUserId);
     });
   });
 

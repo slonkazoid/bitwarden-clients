@@ -705,13 +705,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @param key The user key
    * @param userId The desired user
    */
-  protected async storeAdditionalKeys(key: UserKey, userId?: UserId) {
-    userId ??= await firstValueFrom(this.stateProvider.activeUserId$);
-
-    if (userId == null) {
-      throw new Error("Cannot store additional keys, no user Id resolved.");
-    }
-
+  protected async storeAdditionalKeys(key: UserKey, userId: UserId) {
     const storeAuto = await this.shouldStoreKey(KeySuffixOptions.Auto, userId);
     if (storeAuto) {
       await this.stateService.setUserKeyAutoUnlock(key.keyB64, { userId: userId });
