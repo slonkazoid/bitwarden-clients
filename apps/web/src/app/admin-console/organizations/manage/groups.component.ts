@@ -38,16 +38,6 @@ import {
 
 type GroupDetailsRow = {
   /**
-   * Group Id (used for searching)
-   */
-  id: string;
-
-  /**
-   * Group name (used for searching)
-   */
-  name: string;
-
-  /**
    * Details used for displaying group information
    */
   details: GroupView;
@@ -63,6 +53,23 @@ type GroupDetailsRow = {
   collectionNames?: string[];
 };
 
+/**
+ * A custom TableDataSource class that only searches by group name and id.
+ * This is because the default implementation searches by all properties, which can unintentionally match with members'
+ * names (who are assigned to the group) or collection names (which the group has access to).
+ */
+class GroupDetailsDataSource extends TableDataSource<GroupDetailsRow> {
+  protected override filterPredicate(data: GroupDetailsRow, filter: string): boolean {
+    const transformedFilter = filter.trim().toLowerCase();
+    const group = data.details;
+
+    return (
+      group.id.toLowerCase().indexOf(transformedFilter) != -1 ||
+      group.name.toLowerCase().indexOf(transformedFilter) != -1
+    );
+  }
+}
+
 @Component({
   templateUrl: "groups.component.html",
 })
@@ -70,7 +77,7 @@ export class GroupsComponent {
   loading = true;
   organizationId: string;
 
-  protected dataSource = new TableDataSource<GroupDetailsRow>();
+  protected dataSource = new GroupDetailsDataSource();
   protected searchControl = new FormControl("");
 
   // Fixed sizes used for cdkVirtualScroll
