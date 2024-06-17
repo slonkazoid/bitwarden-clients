@@ -4,8 +4,12 @@ import { ActivatedRoute, Params, RouterModule } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
+import { RegisterFinishRequest } from "@bitwarden/common/auth/models/request/registration/register-finish.request";
+import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { EncString, EncryptedString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { ToastService } from "@bitwarden/components";
 
 import {
@@ -24,11 +28,19 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
 
   email: string;
 
+  // Note: this token is the email verification token. It is always supplied as a query param, but
+  // it either comes from the email verification email or, if email verification is disabled server side
+  // via global settings, it comes directly from the registration-start component directly.
+  emailVerificationToken: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private toastService: ToastService,
     private i18nService: I18nService,
     private cryptoService: CryptoService,
+    private accountApiService: AccountApiService,
+    // private platformUtilsService: PlatformUtilsService,
+    // private acceptOrgInviteService: AcceptOrganizationInviteService,
   ) {}
 
   async ngOnInit() {
@@ -41,6 +53,10 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
         this.email = qParams.email;
       }
 
+      if (qParams.token != null) {
+        this.emailVerificationToken = qParams.token;
+      }
+
       if (qParams.fromEmail && qParams.fromEmail === "true") {
         this.toastService.showToast({
           title: null,
@@ -51,14 +67,56 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
     });
   }
 
-  async handlePasswordFormSubmit(result: PasswordInputResult) {
+  async handlePasswordFormSubmit(passwordInputResult: PasswordInputResult) {
     // TODO: Should this be in a register service or something?
-    // const [newUserKey, newEncUserKey] = await this.cryptoService.makeUserKey(result.masterKey);
-    // if (!newUserKey || !newEncUserKey) {
-    //   throw new Error("User key could not be created");
-    // }
-    // const userAsymmetricKeys = await this.cryptoService.makeKeyPair(newUserKey);
+    const [newUserKey, newEncUserKey] = await this.cryptoService.makeUserKey(
+      passwordInputResult.masterKey,
+    );
+    if (!newUserKey || !newEncUserKey) {
+      throw new Error("User key could not be created");
+    }
+    const userAsymmetricKeys = await this.cryptoService.makeKeyPair(newUserKey);
+
+    const registerRequest = await this.buildRegisterRequest(
+      this.email,
+      passwordInputResult,
+      newEncUserKey.encryptedString,
+      userAsymmetricKeys,
+    );
+
     // TODO: handle org invite. Discuss existing modifyRegisterRequest approach.
+    // if (this.platformUtilsService.getClientType() === ClientType.Web) {
+    //   // Only web can have org invites in state.
+    //   // Org invites are deep linked. Non-existent accounts are redirected to the register page.
+    //   // Org user id and token are included here only for validation and two factor purposes.
+    //   const orgInvite = await acceptOrgInviteService.getOrganizationInvite();
+    // }
+
+    await this.accountApiService.registerFinish(registerRequest);
+  }
+
+  private async buildRegisterRequest(
+    email: string,
+    passwordInputResult: PasswordInputResult,
+    encryptedUserKey: EncryptedString,
+    userAsymmetricKeys: [string, EncString],
+  ): Promise<RegisterFinishRequest> {
+    // create keysRequest
+    const userAsymmetricKeysRequest = new KeysRequest(
+      userAsymmetricKeys[0],
+      userAsymmetricKeys[1].encryptedString,
+    );
+
+    return new RegisterFinishRequest(
+      this.email,
+      this.emailVerificationToken,
+      passwordInputResult.masterKeyHash,
+      passwordInputResult.hint,
+      encryptedUserKey,
+      userAsymmetricKeysRequest,
+      passwordInputResult.kdfConfig.kdfType,
+      passwordInputResult.kdfConfig.iterations,
+    );
   }
 
   ngOnDestroy(): void {
