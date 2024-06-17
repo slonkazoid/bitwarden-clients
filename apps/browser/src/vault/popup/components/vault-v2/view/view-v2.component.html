@@ -19,7 +19,7 @@
 
   <!-- ATTACHMENTS SECTION -->
   <ng-container *ngIf="!!cipher && cipher.attachments">
-    <app-attachments-v2 [attachments]="cipher.attachments"> </app-attachments-v2>
+    <app-attachments-v2 [cipher]="cipher"> </app-attachments-v2>
   </ng-container>
 
   <!-- ITEM HISTORY SECTION -->
