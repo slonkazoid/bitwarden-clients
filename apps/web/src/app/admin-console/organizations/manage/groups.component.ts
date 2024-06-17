@@ -58,7 +58,7 @@ type GroupDetailsRow = {
  * This is because the default implementation searches by all properties, which can unintentionally match with members'
  * names (who are assigned to the group) or collection names (which the group has access to).
  */
-class GroupDetailsDataSource extends TableDataSource<GroupDetailsRow> {
+class GroupTableDataSource extends TableDataSource<GroupDetailsRow> {
   protected override filterPredicate(data: GroupDetailsRow, filter: string): boolean {
     const transformedFilter = filter.trim().toLowerCase();
     const group = data.details;
@@ -77,7 +77,7 @@ export class GroupsComponent {
   loading = true;
   organizationId: string;
 
-  protected dataSource = new GroupDetailsDataSource();
+  protected dataSource = new GroupTableDataSource();
   protected searchControl = new FormControl("");
 
   // Fixed sizes used for cdkVirtualScroll
