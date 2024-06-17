@@ -11,6 +11,8 @@ import {
 } from "@angular/core";
 
 import { BitHintComponent } from "../form-control/hint.component";
+import { BitLabel } from "../form-control/label.directive";
+import { inputBorderClasses } from "../input/input.directive";
 
 import { BitErrorComponent } from "./error.component";
 import { BitFormFieldControl } from "./form-field-control";
@@ -29,6 +31,7 @@ export class BitFormFieldComponent implements AfterContentChecked {
 
   @ContentChildren(BitPrefixDirective) prefixChildren: QueryList<BitPrefixDirective>;
   @ContentChildren(BitSuffixDirective) suffixChildren: QueryList<BitSuffixDirective>;
+  @ContentChildren(BitLabel) labelChildren: QueryList<BitLabel>;
 
   private _disableMargin = false;
   @Input() set disableMargin(value: boolean | "") {
@@ -36,6 +39,32 @@ export class BitFormFieldComponent implements AfterContentChecked {
   }
   get disableMargin() {
     return this._disableMargin;
+  }
+
+  get labelText() {
+    return this.labelChildren?.first?.labelText;
+  }
+
+  get inputBorderClasses(): string {
+    const groupClasses = [
+      this.input.hasError
+        ? "group-hover/input:tw-border-danger-700"
+        : "group-hover/input:tw-border-primary-500",
+      "group-focus-within/input:tw-outline-none",
+      "group-focus-within/input:tw-border-2",
+      "group-focus-within/input:tw-border-primary-500",
+      "group-focus-within/input:group-hover/input:tw-border-primary-500",
+      // "group-focus-within/input:tw-ring-1",
+      // "group-focus-within/input:tw-ring-inset",
+      // "group-focus-within/input:tw-ring-primary-400",
+      // "group-focus-within/input:tw-z-10",
+    ];
+
+    const baseInputBorderClasses = inputBorderClasses(this.input.hasError);
+
+    const borderClasses = baseInputBorderClasses.concat(groupClasses);
+
+    return borderClasses.join(" ");
   }
 
   @HostBinding("class")

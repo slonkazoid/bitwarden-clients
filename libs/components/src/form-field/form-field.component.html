@@ -1,14 +1,50 @@
-<label class="tw-mb-1 tw-block tw-font-semibold tw-text-main" [attr.for]="input.labelForId">
-  <ng-content select="bit-label"></ng-content>
-  <span *ngIf="input.required" class="tw-text-xs tw-font-normal"> ({{ "required" | i18n }})</span>
-</label>
-<div class="tw-flex">
-  <div *ngIf="prefixChildren.length" class="tw-flex">
-    <ng-content select="[bitPrefix]"></ng-content>
+<div class="tw-w-full tw-relative tw-group/input">
+  <div class="tw-absolute tw-w-full tw-h-full">
+    <label
+      class="tw-text-muted tw-absolute tw-translate-x-3 -tw-translate-y-3 tw-px-1 tw-mb-0 tw-z-10"
+      [attr.for]="input.labelForId"
+    >
+      <ng-content select="bit-label"></ng-content>
+      <span *ngIf="input.required" class="tw-text-xs tw-font-normal">
+        ({{ "required" | i18n }})</span
+      >
+    </label>
+    <div class="tw-w-full tw-h-full tw-flex">
+      <div
+        class="{{
+          inputBorderClasses
+        }} tw-w-3 tw-border-r-0 group-focus-within/input:tw-border-r-0 !tw-rounded-l-lg"
+      ></div>
+      <div
+        class="tw-px-1 {{
+          inputBorderClasses
+        }} tw-border-x-0 tw-border-t-0 group-focus-within/input:tw-border-x-0 group-focus-within/input:tw-border-t-0"
+        *ngIf="labelText"
+      >
+        <div class="tw-opacity-0" aria-hidden="true">
+          <span>{{ labelText }}</span>
+          <span *ngIf="input.required" class="tw-text-xs tw-font-normal">
+            ({{ "required" | i18n }})</span
+          >
+        </div>
+      </div>
+      <div
+        class="tw-grow {{
+          inputBorderClasses
+        }} tw-border-l-0 group-focus-within/input:tw-border-l-0 !tw-rounded-r-lg"
+      ></div>
+    </div>
   </div>
-  <ng-content></ng-content>
-  <div *ngIf="suffixChildren.length" class="tw-flex">
-    <ng-content select="[bitSuffix]"></ng-content>
+  <div class="tw-flex tw-px-3 tw-py-1.5">
+    <div *ngIf="prefixChildren.length" class="tw-flex tw-items-center">
+      <ng-content select="[bitPrefix]"></ng-content>
+    </div>
+    <div class="tw-w-full tw-relative">
+      <ng-content></ng-content>
+    </div>
+    <div *ngIf="suffixChildren.length" class="tw-flex tw-items-center">
+      <ng-content select="[bitSuffix]"></ng-content>
+    </div>
   </div>
 </div>
 <ng-container [ngSwitch]="input.hasError">

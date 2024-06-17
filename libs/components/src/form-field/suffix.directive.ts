@@ -12,11 +12,13 @@ export class BitSuffixDirective {
 
   @HostBinding("class") @Input() get classList() {
     return PrefixClasses.concat([
-      "tw-border-l-0",
-      "last:tw-rounded-r",
-
-      "focus-visible:tw-border-l",
-      "focus-visible:tw-ml-[-1px]",
+      "tw-pl-1",
+      "tw-pr-1",
+      "last:tw-pr-0",
+      // "tw-border-l-0",
+      // "last:tw-rounded-r-lg",
+      // "focus-visible:tw-border-l",
+      // "focus-visible:tw-ml-[-1px]",
     ]).concat(this.buttonComponent != undefined ? PrefixButtonClasses : PrefixStaticContentClasses);
   }
 
