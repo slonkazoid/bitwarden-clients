@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -7,9 +8,7 @@ import {
   from,
   lastValueFrom,
   map,
-  Subject,
   switchMap,
-  takeUntil,
   tap,
 } from "rxjs";
 import { first } from "rxjs/operators";
@@ -74,7 +73,7 @@ type GroupDetailsRow = {
 @Component({
   templateUrl: "groups.component.html",
 })
-export class GroupsComponent implements OnInit, OnDestroy {
+export class GroupsComponent {
   loading = true;
   organizationId: string;
   groups: GroupDetailsRow[];
@@ -87,7 +86,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private pagedGroups: GroupDetailsRow[];
   private searchedGroups: GroupDetailsRow[];
   private _searchText$ = new BehaviorSubject<string>("");
-  private destroy$ = new Subject<void>();
   private refreshGroups$ = new BehaviorSubject<void>(null);
   private isSearching: boolean = false;
 
@@ -127,9 +125,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     private logService: LogService,
     private collectionService: CollectionService,
     private searchPipe: SearchPipe,
-  ) {}
-
-  async ngOnInit() {
+  ) {
     this.route.params
       .pipe(
         tap((params) => (this.organizationId = params.organizationId)),
@@ -158,7 +154,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
                 .sort(this.i18nService.collator?.compare),
             }));
         }),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
       )
       .subscribe((groups) => {
         this.groups = groups;
@@ -173,23 +169,18 @@ export class GroupsComponent implements OnInit, OnDestroy {
         concatMap(async (qParams) => {
           this.searchText = qParams.search;
         }),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
       )
       .subscribe();
 
     this._searchText$
       .pipe(
         switchMap((searchText) => this.searchService.isSearchable(searchText)),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(),
       )
       .subscribe((isSearchable) => {
         this.isSearching = isSearchable;
       });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   loadMore() {
