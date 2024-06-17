@@ -71,7 +71,7 @@ export class InputsFieldMatch {
   }
 
   /**
-   * Checks that two form controls do not have the same input value (except for empty string values).
+   * Checks whether two form controls do or do not have the same input value (except for empty string values).
    *
    * - Validation is controlled from either form control.
    * - The error message is displayed under controlB by default, but can be set to controlA.

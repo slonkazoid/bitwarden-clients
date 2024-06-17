@@ -10,12 +10,12 @@ import { LogoutCommand } from "./auth/commands/logout.command";
 import { UnlockCommand } from "./auth/commands/unlock.command";
 import { BaseProgram } from "./base-program";
 import { CompletionCommand } from "./commands/completion.command";
-import { ConfigCommand } from "./commands/config.command";
 import { EncodeCommand } from "./commands/encode.command";
 import { StatusCommand } from "./commands/status.command";
 import { UpdateCommand } from "./commands/update.command";
 import { Response } from "./models/response";
 import { MessageResponse } from "./models/response/message.response";
+import { ConfigCommand } from "./platform/commands/config.command";
 import { GenerateCommand } from "./tools/generate.command";
 import { CliUtils } from "./utils";
 import { SyncCommand } from "./vault/sync.command";
@@ -270,16 +270,14 @@ export class Program extends BaseProgram {
             this.serviceContainer.accountService,
             this.serviceContainer.masterPasswordService,
             this.serviceContainer.cryptoService,
-            this.serviceContainer.stateService,
+            this.serviceContainer.userVerificationService,
             this.serviceContainer.cryptoFunctionService,
-            this.serviceContainer.apiService,
             this.serviceContainer.logService,
             this.serviceContainer.keyConnectorService,
             this.serviceContainer.environmentService,
             this.serviceContainer.syncService,
             this.serviceContainer.organizationApiService,
             async () => await this.serviceContainer.logout(),
-            this.serviceContainer.kdfConfigService,
           );
           const response = await command.run(password, cmd);
           this.processResponse(response);
@@ -405,7 +403,10 @@ export class Program extends BaseProgram {
         writeLn("", true);
       })
       .action(async (setting, value, options) => {
-        const command = new ConfigCommand(this.serviceContainer.environmentService);
+        const command = new ConfigCommand(
+          this.serviceContainer.environmentService,
+          this.serviceContainer.accountService,
+        );
         const response = await command.run(setting, value, options);
         this.processResponse(response);
       });

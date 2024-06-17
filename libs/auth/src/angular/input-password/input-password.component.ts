@@ -9,6 +9,7 @@ import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/mod
 import { PBKDF2KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { DEFAULT_KDF_CONFIG } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { MasterKey } from "@bitwarden/common/types/key";
 import {
@@ -61,6 +62,7 @@ export class InputPasswordComponent implements OnInit {
   protected maxHintLength = 50;
 
   protected minPasswordLength = Utils.minimumPasswordLength;
+  protected minPasswordMsg = "";
   protected masterPasswordPolicy: MasterPasswordPolicyOptions;
   protected passwordStrengthResult: any;
   protected showErrorSummary = false;
@@ -109,6 +111,15 @@ export class InputPasswordComponent implements OnInit {
     this.masterPasswordPolicy = await this.policyApiService.getMasterPasswordPolicyOptsForOrgUser(
       this.orgId,
     );
+
+    if (this.masterPasswordPolicy != null && this.masterPasswordPolicy.minLength > 0) {
+      this.minPasswordMsg = this.i18nService.t(
+        "characterMinimum",
+        this.masterPasswordPolicy.minLength,
+      );
+    } else {
+      this.minPasswordMsg = this.i18nService.t("characterMinimum", this.minPasswordLength);
+    }
   }
 
   getPasswordStrengthResult(result: any) {
@@ -161,21 +172,21 @@ export class InputPasswordComponent implements OnInit {
     }
 
     // Create and hash new master key
-    const kdfConfig = new PBKDF2KdfConfig();
+    const kdfConfig = DEFAULT_KDF_CONFIG;
+
     const masterKey = await this.cryptoService.makeMasterKey(
       password,
       this.email.trim().toLowerCase(),
       kdfConfig,
     );
+
     const masterKeyHash = await this.cryptoService.hashMasterKey(password, masterKey);
 
-    const passwordInputResult: PasswordInputResult = {
+    this.onPasswordFormSubmit.emit({
       masterKey,
       masterKeyHash,
       kdfConfig,
       hint: this.formGroup.controls.hint.value,
-    };
-
-    this.onPasswordFormSubmit.emit(passwordInputResult);
+    });
   };
 }
