@@ -20,7 +20,8 @@ import {
   elementIsTextAreaElement,
   nodeIsFormElement,
   nodeIsInputElement,
-  sendExtensionMessage,
+  // sendExtensionMessage,
+  requestIdleCallbackPolyfill,
 } from "../utils";
 
 import { AutofillOverlayContentService } from "./abstractions/autofill-overlay-content.service";
@@ -56,7 +57,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     "image",
     "file",
   ]);
-  private useTreeWalkerStrategyFlagSet = false;
+  private useTreeWalkerStrategyFlagSet = true;
 
   constructor(
     domElementVisibilityService: DomElementVisibilityService,
@@ -71,10 +72,10 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     }
     this.formFieldQueryString = `${inputQuery}, textarea:not([data-bwignore]), select:not([data-bwignore]), span[data-bwautofill]`;
 
-    void sendExtensionMessage("getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag").then(
-      (useTreeWalkerStrategyFlag) =>
-        (this.useTreeWalkerStrategyFlagSet = !!useTreeWalkerStrategyFlag?.result),
-    );
+    // void sendExtensionMessage("getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag").then(
+    //   (useTreeWalkerStrategyFlag) =>
+    //     (this.useTreeWalkerStrategyFlagSet = !!useTreeWalkerStrategyFlag?.result),
+    // );
   }
 
   /**
@@ -1057,7 +1058,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
     }
 
     if (!this.mutationsQueue.length) {
-      globalThis.requestIdleCallback(this.processMutations, { timeout: 500 });
+      requestIdleCallbackPolyfill(this.processMutations, { timeout: 500 });
     }
     this.mutationsQueue.push(mutations);
   };
@@ -1194,7 +1195,7 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
         continue;
       }
 
-      globalThis.requestIdleCallback(
+      requestIdleCallbackPolyfill(
         // We are setting this item to a -1 index because we do not know its position in the DOM.
         // This value should be updated with the next call to collect page details.
         () => void this.buildAutofillFieldItem(node as ElementWithOpId<FormFieldElement>, -1),
