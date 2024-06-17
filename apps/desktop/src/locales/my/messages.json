@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Create account"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Log in"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Your new master password does not meet the policy requirements."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "By checking this box you agree to the following:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Deny login"
   },
-  "approveLoginRequests": {
-    "message": "Approve login requests"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Login confirmed for $EMAIL$ on $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "This request is no longer valid."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Use this device to approve login requests made from other devices."
   },
   "confirmLoginAtemptForMail": {
     "message": "Confirm login attempt for $EMAIL$",

@@ -1,6 +1,6 @@
 import { Jsonify } from "type-fest";
 
-import { ProductType } from "../../../enums";
+import { ProductTierType } from "../../../billing/enums";
 import { OrganizationUserStatusType, OrganizationUserType, ProviderType } from "../../enums";
 import { PermissionsApi } from "../api/permissions.api";
 import { OrganizationData } from "../data/organization.data";
@@ -58,7 +58,7 @@ export class Organization {
   isMember: boolean;
   familySponsorshipFriendlyName: string;
   familySponsorshipAvailable: boolean;
-  planProductType: ProductType;
+  productTierType: ProductTierType;
   keyConnectorEnabled: boolean;
   keyConnectorUrl: string;
   familySponsorshipLastSyncDate?: Date;
@@ -123,7 +123,7 @@ export class Organization {
     this.isMember = obj.isMember;
     this.familySponsorshipFriendlyName = obj.familySponsorshipFriendlyName;
     this.familySponsorshipAvailable = obj.familySponsorshipAvailable;
-    this.planProductType = obj.planProductType;
+    this.productTierType = obj.productTierType;
     this.keyConnectorEnabled = obj.keyConnectorEnabled;
     this.keyConnectorUrl = obj.keyConnectorUrl;
     this.familySponsorshipLastSyncDate = obj.familySponsorshipLastSyncDate;
@@ -195,10 +195,18 @@ export class Organization {
   }
 
   canEditUnassignedCiphers(restrictProviderAccessFlagEnabled: boolean) {
-    if (this.isProviderUser) {
-      return !restrictProviderAccessFlagEnabled;
+    // Providers can access items until the restrictProviderAccess flag is enabled
+    // After the flag is enabled and removed, this block will be deleted
+    // so that they permanently lose access to items
+    if (this.isProviderUser && !restrictProviderAccessFlagEnabled) {
+      return true;
     }
-    return this.isAdmin || this.permissions.editAnyCollection;
+
+    return (
+      this.type === OrganizationUserType.Admin ||
+      this.type === OrganizationUserType.Owner ||
+      this.permissions.editAnyCollection
+    );
   }
 
   canEditAllCiphers(
@@ -210,8 +218,11 @@ export class Organization {
       return this.isAdmin || this.permissions.editAnyCollection;
     }
 
-    if (this.isProviderUser) {
-      return !restrictProviderAccessFlagEnabled;
+    // Providers can access items until the restrictProviderAccess flag is enabled
+    // After the flag is enabled and removed, this block will be deleted
+    // so that they permanently lose access to items
+    if (this.isProviderUser && !restrictProviderAccessFlagEnabled) {
+      return true;
     }
 
     // Post Flexible Collections V1, the allowAdminAccessToAllCollectionItems flag can restrict admins
