@@ -9,7 +9,16 @@ import {
   UnauthGuard,
   unauthGuardFn,
 } from "@bitwarden/angular/auth/guards";
-import { AnonLayoutWrapperComponent, AnonLayoutWrapperData } from "@bitwarden/auth/angular";
+import { canAccessFeature } from "@bitwarden/angular/platform/guard/feature-flag.guard";
+import {
+  AnonLayoutWrapperComponent,
+  AnonLayoutWrapperData,
+  RegistrationFinishComponent,
+  RegistrationStartComponent,
+  RegistrationStartSecondaryComponent,
+  RegistrationStartSecondaryComponentData,
+} from "@bitwarden/auth/angular";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
 import { flagEnabled, Flags } from "../utils/flags";
 
@@ -178,16 +187,51 @@ const routes: Routes = [
     component: AnonLayoutWrapperComponent,
     children: [
       {
+        path: "signup",
+        canActivate: [canAccessFeature(FeatureFlag.EmailVerification), unauthGuardFn()],
+        data: { pageTitle: "createAccount", titleId: "createAccount" } satisfies DataProperties &
+          AnonLayoutWrapperData,
+        children: [
+          {
+            path: "",
+            component: RegistrationStartComponent,
+          },
+          {
+            path: "",
+            component: RegistrationStartSecondaryComponent,
+            outlet: "secondary",
+            data: {
+              loginRoute: "/login",
+            } satisfies RegistrationStartSecondaryComponentData,
+          },
+        ],
+      },
+      {
+        path: "finish-signup",
+        canActivate: [canAccessFeature(FeatureFlag.EmailVerification), unauthGuardFn()],
+        data: {
+          pageTitle: "setAStrongPassword",
+          pageSubtitle: "finishCreatingYourAccountBySettingAPassword",
+          titleId: "setAStrongPassword",
+        } satisfies DataProperties & AnonLayoutWrapperData,
+        children: [
+          {
+            path: "",
+            component: RegistrationFinishComponent,
+          },
+        ],
+      },
+      {
         path: "sso",
         canActivate: [unauthGuardFn()],
+        data: {
+          pageTitle: "enterpriseSingleSignOn",
+          titleId: "enterpriseSingleSignOn",
+        } satisfies DataProperties & AnonLayoutWrapperData,
         children: [
           {
             path: "",
             component: SsoComponent,
-            data: {
-              pageTitle: "enterpriseSingleSignOn",
-              titleId: "enterpriseSingleSignOn",
-            } satisfies DataProperties & AnonLayoutWrapperData,
           },
           {
             path: "",
@@ -216,11 +260,21 @@ const routes: Routes = [
       },
       {
         path: "2fa",
-        component: TwoFactorComponent,
         canActivate: [unauthGuardFn()],
+        children: [
+          {
+            path: "",
+            component: TwoFactorComponent,
+          },
+          {
+            path: "",
+            component: EnvironmentSelectorComponent,
+            outlet: "environment-selector",
+          },
+        ],
         data: {
           pageTitle: "verifyIdentity",
-        },
+        } satisfies DataProperties & AnonLayoutWrapperData,
       },
       {
         path: "recover-2fa",
@@ -244,14 +298,14 @@ const routes: Routes = [
       {
         path: "accept-emergency",
         canActivate: [deepLinkGuard()],
+        data: {
+          pageTitle: "emergencyAccess",
+          titleId: "acceptEmergency",
+          doNotSaveUrl: false,
+        } satisfies DataProperties & AnonLayoutWrapperData,
         children: [
           {
             path: "",
-            data: {
-              pageTitle: "emergencyAccess",
-              titleId: "acceptEmergency",
-              doNotSaveUrl: false,
-            } satisfies DataProperties & AnonLayoutWrapperData,
             loadComponent: () =>
               import("./auth/emergency-access/accept/accept-emergency.component").then(
                 (mod) => mod.AcceptEmergencyComponent,
@@ -262,14 +316,14 @@ const routes: Routes = [
       {
         path: "recover-delete",
         canActivate: [unauthGuardFn()],
+        data: {
+          pageTitle: "deleteAccount",
+          titleId: "deleteAccount",
+        } satisfies DataProperties & AnonLayoutWrapperData,
         children: [
           {
             path: "",
             component: RecoverDeleteComponent,
-            data: {
-              pageTitle: "deleteAccount",
-              titleId: "deleteAccount",
-            } satisfies DataProperties & AnonLayoutWrapperData,
           },
           {
             path: "",

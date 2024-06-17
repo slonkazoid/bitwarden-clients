@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Стварыць уліковы запіс"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Увайсці"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новы асноўны пароль не адпавядае патрабаванням палітыкі."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Ставячы гэты сцяжок вы пагаджаецеся з наступным:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Адхіліць уваход"
   },
-  "approveLoginRequests": {
-    "message": "Ухваліць запыт уваходу"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Уваход пацверджаны для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Гэты запыт больш не дзейнічае."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Выкарыстоўваць гэту прыладу для ўхвалення запытаў на ўваход, якія зроблены з іншых прылад."
   },
   "confirmLoginAtemptForMail": {
     "message": "Пацвердзіць спробу ўваходу для $EMAIL$",

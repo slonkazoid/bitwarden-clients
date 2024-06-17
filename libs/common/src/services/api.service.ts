@@ -70,7 +70,6 @@ import { IdentityCaptchaResponse } from "../auth/models/response/identity-captch
 import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { MasterPasswordPolicyResponse } from "../auth/models/response/master-password-policy.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
@@ -422,12 +421,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   postAccountVerifyEmailToken(request: VerifyEmailRequest): Promise<any> {
     return this.send("POST", "/accounts/verify-email-token", request, false, false);
-  }
-
-  postAccountVerifyPassword(
-    request: SecretVerificationRequest,
-  ): Promise<MasterPasswordPolicyResponse> {
-    return this.send("POST", "/accounts/verify-password", request, true, true);
   }
 
   postAccountRecoverDelete(request: DeleteRecoverRequest): Promise<any> {
@@ -1883,9 +1876,12 @@ export class ApiService implements ApiServiceAbstraction {
 
     const responseType = response.headers.get("content-type");
     const responseIsJson = responseType != null && responseType.indexOf("application/json") !== -1;
+    const responseIsCsv = responseType != null && responseType.indexOf("text/csv") !== -1;
     if (hasResponse && response.status === 200 && responseIsJson) {
       const responseJson = await response.json();
       return responseJson;
+    } else if (hasResponse && response.status === 200 && responseIsCsv) {
+      return await response.text();
     } else if (response.status !== 200) {
       const error = await this.handleError(response, false, authed);
       return Promise.reject(error);

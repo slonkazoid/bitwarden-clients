@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Vytvoriť účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavte silné heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Zdajte heslo na vytvorenie účtu"
+  },
   "logIn": {
     "message": "Prihlásiť sa"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavné heslo nespĺňa pravidlá."
   },
+  "receiveMarketingEmails": {
+    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  },
+  "unsubscribe": {
+    "message": "Odhlásiť sa z odberu"
+  },
+  "atAnyTime": {
+    "message": "môžete kedykoľvek."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračovaním súhlasíte s"
+  },
+  "and": {
+    "message": "a"
+  },
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Odmietnuť prihlásenie"
   },
-  "approveLoginRequests": {
-    "message": "Schvaľovanie žiadostí o prihlásenie"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Potvrdené prihlásenie pomocou $EMAIL$ na $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Táto žiadosť už nie je platná."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Použiť toto zariadenie na schvaľovanie požiadaviek na prihlásenie z iných zariadení."
   },
   "confirmLoginAtemptForMail": {
     "message": "Potvrdiť pokus o prihlásenie pomocou $EMAIL$",
