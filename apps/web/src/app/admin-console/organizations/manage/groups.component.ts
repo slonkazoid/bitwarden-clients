@@ -16,7 +16,6 @@ import { debounceTime, first } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -89,18 +88,8 @@ export class GroupsComponent {
   private pagedGroupsCount = 0;
   private pagedGroups: GroupDetailsRow[];
   private searchedGroups: GroupDetailsRow[];
-  private _searchText$ = new BehaviorSubject<string>("");
   private refreshGroups$ = new BehaviorSubject<void>(null);
   private isSearching: boolean = false;
-
-  get searchText() {
-    return this._searchText$.value;
-  }
-  set searchText(value: string) {
-    this._searchText$.next(value);
-    // Manually update as we are not using the search pipe in the template
-    this.updateSearchedGroups();
-  }
 
   /**
    * The list of groups that should be visible in the table.
@@ -125,7 +114,6 @@ export class GroupsComponent {
     private i18nService: I18nService,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
-    private searchService: SearchService,
     private logService: LogService,
     private collectionService: CollectionService,
     private searchPipe: SearchPipe,
@@ -161,35 +149,18 @@ export class GroupsComponent {
         takeUntilDestroyed(),
       )
       .subscribe((groups) => {
-        this.groups = groups;
-        this.resetPaging();
-        this.updateSearchedGroups();
+        this.dataSource.data = groups;
         this.loading = false;
-      });
-
-    this.route.queryParams
-      .pipe(
-        first(),
-        concatMap(async (qParams) => {
-          this.searchText = qParams.search;
-        }),
-        takeUntilDestroyed(),
-      )
-      .subscribe();
-
-    this._searchText$
-      .pipe(
-        switchMap((searchText) => this.searchService.isSearchable(searchText)),
-        takeUntilDestroyed(),
-      )
-      .subscribe((isSearchable) => {
-        this.isSearching = isSearchable;
       });
 
     // Connect the search input to the table dataSource filter input
     this.searchControl.valueChanges
       .pipe(debounceTime(200), takeUntilDestroyed())
       .subscribe((v) => (this.dataSource.filter = v));
+
+    this.route.queryParams.pipe(first(), takeUntilDestroyed()).subscribe((qParams) => {
+      this.searchControl.setValue(qParams.search);
+    });
   }
 
   loadMore() {
@@ -323,7 +294,6 @@ export class GroupsComponent {
     if (index > -1) {
       this.groups.splice(index, 1);
       this.resetPaging();
-      this.updateSearchedGroups();
     }
   }
 
@@ -338,17 +308,5 @@ export class GroupsComponent {
     decryptedCollections.forEach((c) => (collectionMap[c.id] = c));
 
     return collectionMap;
-  }
-
-  private updateSearchedGroups() {
-    if (this.isSearching) {
-      // Making use of the pipe in the component as we need know which groups where filtered
-      this.searchedGroups = this.searchPipe.transform(
-        this.groups,
-        this.searchText,
-        (group) => group.details.name,
-        (group) => group.details.id,
-      );
-    }
   }
 }
