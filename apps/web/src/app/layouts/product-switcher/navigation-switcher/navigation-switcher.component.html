@@ -10,18 +10,17 @@
   >
   </bit-nav-item>
   <section
-    *ngIf="moreProducts$ != null || moreProductsInternal$ != null"
+    *ngIf="(moreProducts$ | async)?.length > 0 || (moreProductsInternal$ | async)?.length > 0"
     class="tw-mt-2 tw-flex tw-w-full tw-flex-col tw-gap-2 tw-border-0 tw-border-t tw-border-solid tw-border-t-text-alt2"
   >
     <span class="tw-text-xs !tw-text-alt2 tw-p-2 tw-pb-0 tw-border-0">{{
       "moreFromBitwarden" | i18n
     }}</span>
   </section>
-  <ng-container *ngIf="moreProducts$ | async as moreProducts">
-    <section
-      *ngIf="moreProducts.length > 0"
-      class="tw-mt-2 tw-flex tw-w-full tw-flex-col tw-gap-2 tw-border-0"
-    >
+  <ng-container
+    *ngIf="(moreProducts$ | async)?.length > 0 && moreProducts$ | async as moreProducts"
+  >
+    <section class="tw-mt-2 tw-flex tw-w-full tw-flex-col tw-gap-2 tw-border-0">
       <a
         *ngFor="let more of moreProducts"
         [href]="more.marketingRoute"
@@ -39,11 +38,13 @@
       </a>
     </section>
   </ng-container>
-  <ng-container *ngIf="moreProductsInternal$ | async as moreProductsInternal">
-    <section
-      *ngIf="moreProductsInternal != null"
-      class="tw-mt-2 tw-flex tw-w-full tw-flex-col tw-gap-2"
-    >
+  <ng-container
+    *ngIf="
+      (moreProductsInternal$ | async)?.length > 0 && moreProductsInternal$
+        | async as moreProductsInternal
+    "
+  >
+    <section class="tw-mt-2 tw-flex tw-w-full tw-flex-col tw-gap-2">
       <a
         *ngFor="let more of moreProductsInternal"
         [routerLink]="[more.marketingRoute]"

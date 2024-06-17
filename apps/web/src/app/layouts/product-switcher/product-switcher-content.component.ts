@@ -15,4 +15,8 @@ export class ProductSwitcherContentComponent {
   constructor(private productSwitcherService: ProductSwitcherService) {}
 
   protected readonly products$ = this.productSwitcherService.products$;
+
+  isInternalMarketingRoute(marketingRoute: any) {
+    return marketingRoute.startsWith("/");
+  }
 }

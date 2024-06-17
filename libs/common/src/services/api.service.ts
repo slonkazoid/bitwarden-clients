@@ -49,7 +49,6 @@ import { KeyConnectorUserKeyRequest } from "../auth/models/request/key-connector
 import { PasswordHintRequest } from "../auth/models/request/password-hint.request";
 import { PasswordRequest } from "../auth/models/request/password.request";
 import { PasswordlessAuthRequest } from "../auth/models/request/passwordless-auth.request";
-import { RequestSMAccessRequest } from "../auth/models/request/request-sm-access.request";
 import { SecretVerificationRequest } from "../auth/models/request/secret-verification.request";
 import { SetKeyConnectorKeyRequest } from "../auth/models/request/set-key-connector-key.request";
 import { SetPasswordRequest } from "../auth/models/request/set-password.request";
@@ -1567,10 +1566,6 @@ export class ApiService implements ApiServiceAbstraction {
       true,
     );
     return new OrganizationExportResponse(r);
-  }
-
-  async requestSMAccessFromAdmins(request: RequestSMAccessRequest): Promise<any> {
-    return this.send("POST", "/request-access/request-sm-access", request, true, false);
   }
 
   // Helpers

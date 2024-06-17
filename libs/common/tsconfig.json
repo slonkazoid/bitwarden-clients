@@ -1,5 +1,10 @@
 {
   "extends": "../shared/tsconfig.libs",
-  "include": ["src", "spec", "./custom-matchers.d.ts"],
+  "include": [
+    "src",
+    "spec",
+    "./custom-matchers.d.ts",
+    "../../apps/web/src/app/secrets-manager/models/Requests/request-sm-access.request.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

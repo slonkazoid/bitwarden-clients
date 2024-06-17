@@ -2,18 +2,16 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { RequestSMAccessRequest } from "@bitwarden/common/auth/models/request/request-sm-access.request";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { NoItemsModule, SearchModule } from "@bitwarden/components";
+import { NoItemsModule, SearchModule, ToastService } from "@bitwarden/components";
 
 import { HeaderModule } from "../../layouts/header/header.module";
 import { OssModule } from "../../oss.module";
 import { SharedModule } from "../../shared/shared.module";
+import { RequestSMAccessRequest } from "../models/Requests/request-sm-access.request";
+import { SmLandingApiService } from "../secrets-manager-landing/SmLandingApiService.service";
 
 @Component({
   selector: "app-request-sm-access",
@@ -28,11 +26,10 @@ export class RequestSMAccessComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private apiService: ApiService,
-    private platformUtilsService: PlatformUtilsService,
-    private logService: LogService,
     private i18nService: I18nService,
     private organizationService: OrganizationService,
+    private smLandingApiService: SmLandingApiService,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -44,7 +41,7 @@ export class RequestSMAccessComponent implements OnInit {
     this.organizations = (await this.organizationService.getAll()).filter((e) => e.enabled);
 
     if (this.organizations == null || this.organizations.length < 1) {
-      await this.returnToLandingPage();
+      await this.navigateToCreateOrganizationPage();
     }
   }
 
@@ -59,20 +56,16 @@ export class RequestSMAccessComponent implements OnInit {
     request.OrganizationId = formValue.selectedOrganization.id;
     request.EmailContent = formValue.requestAccessEmailContents;
 
-    try {
-      await this.apiService.requestSMAccessFromAdmins(request);
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("smAccessRequestEmailSent"),
-      );
-      await this.router.navigate(["/"]);
-    } catch (e) {
-      this.logService.error(e);
-    }
+    await this.smLandingApiService.requestSMAccessFromAdmins(request);
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("smAccessRequestEmailSent"),
+    });
+    await this.router.navigate(["/"]);
   };
 
-  async returnToLandingPage() {
-    await this.router.navigate(["/landing"]);
+  async navigateToCreateOrganizationPage() {
+    await this.router.navigate(["/create-organization"]);
   }
 }
