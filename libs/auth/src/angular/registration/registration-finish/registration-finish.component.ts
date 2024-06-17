@@ -53,6 +53,8 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
         this.email = qParams.email;
       }
 
+      // TODO: query param name of token must be specific to the email verification token
+      // or the org invite token
       if (qParams.token != null) {
         this.emailVerificationToken = qParams.token;
       }
@@ -84,13 +86,24 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
       userAsymmetricKeys,
     );
 
+    // TODO: create registration-finish.service.ts
+    // override on web to add org invite logic
+
     // TODO: handle org invite. Discuss existing modifyRegisterRequest approach.
-    // if (this.platformUtilsService.getClientType() === ClientType.Web) {
-    //   // Only web can have org invites in state.
-    //   // Org invites are deep linked. Non-existent accounts are redirected to the register page.
-    //   // Org user id and token are included here only for validation and two factor purposes.
-    //   const orgInvite = await acceptOrgInviteService.getOrganizationInvite();
+    // // if (this.platformUtilsService.getClientType() === ClientType.Web) {
+    // Org invites are deep linked. Non-existent accounts are redirected to the register page.
+    // Org user id and token are included here only for validation and two factor purposes.
+    // const orgInvite = await acceptOrgInviteService.getOrganizationInvite();
+    // if (orgInvite != null) {
+    //   request.organizationUserId = orgInvite.organizationUserId;
+    //   request.token = orgInvite.token;
     // }
+    // Invite is accepted after login (on deep link redirect).
+    // // }
+
+    // TODO: either send email verification token or org invite token but not both
+    // but must have separate props on the register request object
+    // so that the server can differentiate between the two
 
     await this.accountApiService.registerFinish(registerRequest);
   }

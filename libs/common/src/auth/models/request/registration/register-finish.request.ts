@@ -10,7 +10,7 @@ export class RegisterFinishRequest {
     public masterPasswordHash: string,
     public masterPasswordHint: string,
 
-    public encryptedUserKey: EncryptedString,
+    public userSymmetricKey: EncryptedString,
     public userAsymmetricKeys: KeysRequest,
 
     public kdf: KdfType,
