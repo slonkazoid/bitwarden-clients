@@ -77,6 +77,10 @@ export class GroupsComponent {
   protected dataSource = new TableDataSource<GroupDetailsRow>();
   protected searchControl = new FormControl("");
 
+  // Fixed sizes used for cdkVirtualScroll
+  protected rowHeight = 46;
+  protected rowHeightClass = `tw-h-[46px]`;
+
   protected ModalTabType = GroupAddEditTabType;
   private refreshGroups$ = new BehaviorSubject<void>(null);
 
