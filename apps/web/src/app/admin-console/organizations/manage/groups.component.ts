@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FormControl } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -11,7 +12,7 @@ import {
   switchMap,
   tap,
 } from "rxjs";
-import { first } from "rxjs/operators";
+import { debounceTime, first } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -29,7 +30,7 @@ import {
   CollectionResponse,
 } from "@bitwarden/common/vault/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, TableDataSource } from "@bitwarden/components";
 
 import { InternalGroupService as GroupService, GroupView } from "../core";
 
@@ -77,6 +78,9 @@ export class GroupsComponent {
   loading = true;
   organizationId: string;
   groups: GroupDetailsRow[];
+
+  protected dataSource = new TableDataSource<GroupDetailsRow>();
+  protected searchControl = new FormControl("");
 
   protected didScroll = false;
   protected pageSize = 100;
@@ -181,6 +185,11 @@ export class GroupsComponent {
       .subscribe((isSearchable) => {
         this.isSearching = isSearchable;
       });
+
+    // Connect the search input to the table dataSource filter input
+    this.searchControl.valueChanges
+      .pipe(debounceTime(200), takeUntilDestroyed())
+      .subscribe((v) => (this.dataSource.filter = v));
   }
 
   loadMore() {

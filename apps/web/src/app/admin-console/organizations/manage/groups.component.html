@@ -1,7 +1,7 @@
 <app-header>
   <bit-search
     [placeholder]="'searchGroups' | i18n"
-    [(ngModel)]="searchText"
+    [formControl]="searchControl"
     class="tw-w-80"
   ></bit-search>
   <button bitButton type="button" buttonType="primary" (click)="add()">
