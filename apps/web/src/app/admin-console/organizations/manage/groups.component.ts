@@ -36,10 +36,6 @@ import {
   openGroupAddEditDialog,
 } from "./group-add-edit.component";
 
-type CollectionViewMap = {
-  [id: string]: CollectionView;
-};
-
 type GroupDetailsRow = {
   /**
    * Group Id (used for searching)
@@ -249,7 +245,7 @@ export class GroupsComponent {
     const decryptedCollections = await this.collectionService.decryptMany(collections);
 
     // Convert to an object using collection Ids as keys for faster name lookups
-    const collectionMap: CollectionViewMap = {};
+    const collectionMap: Record<string, CollectionView> = {};
     decryptedCollections.forEach((c) => (collectionMap[c.id] = c));
 
     return collectionMap;
