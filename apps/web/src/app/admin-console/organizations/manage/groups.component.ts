@@ -19,7 +19,6 @@ import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { Collection } from "@bitwarden/common/vault/models/domain/collection";
@@ -108,17 +107,15 @@ export class GroupsComponent {
           ]),
         ),
         map(([collectionMap, groups]) => {
-          return groups
-            .sort(Utils.getSortFunction(this.i18nService, "name"))
-            .map<GroupDetailsRow>((g) => ({
-              id: g.id,
-              name: g.name,
-              details: g,
-              checked: false,
-              collectionNames: g.collections
-                .map((c) => collectionMap[c.id]?.name)
-                .sort(this.i18nService.collator?.compare),
-            }));
+          return groups.map<GroupDetailsRow>((g) => ({
+            id: g.id,
+            name: g.name,
+            details: g,
+            checked: false,
+            collectionNames: g.collections
+              .map((c) => collectionMap[c.id]?.name)
+              .sort(this.i18nService.collator?.compare),
+          }));
         }),
         takeUntilDestroyed(),
       )

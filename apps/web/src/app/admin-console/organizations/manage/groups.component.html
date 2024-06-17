@@ -20,7 +20,7 @@
 </ng-container>
 <ng-container *ngIf="!loading">
   <p *ngIf="!dataSource.filteredData.length">{{ "noGroupsInList" | i18n }}</p>
-  <bit-table *ngIf="dataSource.filteredData.length">
+  <bit-table *ngIf="dataSource.filteredData.length" [dataSource]="dataSource">
     <ng-container header>
       <tr>
         <th bitCell class="tw-w-20">
@@ -35,7 +35,7 @@
             "all" | i18n
           }}</label>
         </th>
-        <th bitCell>{{ "name" | i18n }}</th>
+        <th bitCell bitSortable="name" default>{{ "name" | i18n }}</th>
         <th bitCell>{{ "collections" | i18n }}</th>
         <th bitCell class="tw-w-10">
           <button
@@ -56,8 +56,8 @@
         </th>
       </tr>
     </ng-container>
-    <ng-template body>
-      <tr bitRow *ngFor="let g of dataSource.filteredData">
+    <ng-template body let-rows$>
+      <tr bitRow *ngFor="let g of rows$ | async">
         <td bitCell (click)="check(g)" class="tw-cursor-pointer">
           <input type="checkbox" bitCheckbox [(ngModel)]="g.checked" />
         </td>
