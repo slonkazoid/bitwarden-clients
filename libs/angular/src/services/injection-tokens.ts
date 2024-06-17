@@ -1,5 +1,4 @@
 import { InjectionToken } from "@angular/core";
-import { CanActivateFn } from "@angular/router";
 import { Observable, Subject } from "rxjs";
 
 import { LogoutReason } from "@bitwarden/auth/common";
@@ -59,5 +58,3 @@ export const CLIENT_TYPE = new SafeInjectionToken<ClientType>("CLIENT_TYPE");
 export const REFRESH_ACCESS_TOKEN_ERROR_CALLBACK = new SafeInjectionToken<() => void>(
   "REFRESH_ACCESS_TOKEN_ERROR_CALLBACK",
 );
-export const AUTH_GUARD = new SafeInjectionToken<CanActivateFn>("AUTH_GUARD");
-export const UNAUTH_GUARD = new SafeInjectionToken<CanActivateFn>("UNAUTH_GUARD");
