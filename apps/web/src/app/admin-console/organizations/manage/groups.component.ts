@@ -18,7 +18,6 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { Collection } from "@bitwarden/common/vault/models/domain/collection";
@@ -27,7 +26,7 @@ import {
   CollectionResponse,
 } from "@bitwarden/common/vault/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
-import { DialogService, TableDataSource } from "@bitwarden/components";
+import { DialogService, TableDataSource, ToastService } from "@bitwarden/components";
 
 import { InternalGroupService as GroupService, GroupView } from "../core";
 
@@ -87,9 +86,9 @@ export class GroupsComponent {
     private route: ActivatedRoute,
     private i18nService: I18nService,
     private dialogService: DialogService,
-    private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
     private collectionService: CollectionService,
+    private toastService: ToastService,
   ) {
     this.route.params
       .pipe(
@@ -171,11 +170,11 @@ export class GroupsComponent {
 
     try {
       await this.groupService.delete(this.organizationId, groupRow.details.id);
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("deletedGroupId", groupRow.details.name),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("deletedGroupId", groupRow.details.name),
+      });
       this.removeGroup(groupRow.details.id);
     } catch (e) {
       this.logService.error(e);
@@ -207,11 +206,11 @@ export class GroupsComponent {
         this.organizationId,
         groupsToDelete.map((g) => g.details.id),
       );
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("deletedManyGroups", groupsToDelete.length.toString()),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("deletedManyGroups", groupsToDelete.length.toString()),
+      });
 
       groupsToDelete.forEach((g) => this.removeGroup(g.details.id));
     } catch (e) {
