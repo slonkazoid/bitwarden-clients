@@ -21,7 +21,7 @@ export class NavigationProductSwitcherComponent {
       // from product & design
       map((products) =>
         products
-          .filter((e) => e.name == "Secrets Manager")
+          .filter((product) => product.name === "Secrets Manager")
           .sort((product) => (product.name === "Organizations" ? -1 : 1)),
       ),
     );
