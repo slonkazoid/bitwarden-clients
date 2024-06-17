@@ -63,8 +63,8 @@ export class OrganizationLayoutComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private organizationService: OrganizationService,
     private platformUtilsService: PlatformUtilsService,
-    private policyService: PolicyService,
     private configService: ConfigService,
+    private policyService: PolicyService,
     private providerService: ProviderService,
   ) {}
 
