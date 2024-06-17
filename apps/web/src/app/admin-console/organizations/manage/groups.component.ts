@@ -14,7 +14,6 @@ import {
 } from "rxjs";
 import { debounceTime, first } from "rxjs/operators";
 
-import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -76,36 +75,12 @@ type GroupDetailsRow = {
 export class GroupsComponent {
   loading = true;
   organizationId: string;
-  groups: GroupDetailsRow[];
 
   protected dataSource = new TableDataSource<GroupDetailsRow>();
   protected searchControl = new FormControl("");
 
-  protected didScroll = false;
-  protected pageSize = 100;
   protected ModalTabType = GroupAddEditTabType;
-
-  private pagedGroupsCount = 0;
-  private pagedGroups: GroupDetailsRow[];
-  private searchedGroups: GroupDetailsRow[];
   private refreshGroups$ = new BehaviorSubject<void>(null);
-  private isSearching: boolean = false;
-
-  /**
-   * The list of groups that should be visible in the table.
-   * This is needed as there are two modes (paging/searching) and
-   * we need a reference to the currently visible groups for
-   * the Select All checkbox
-   */
-  get visibleGroups(): GroupDetailsRow[] {
-    if (this.isPaging()) {
-      return this.pagedGroups;
-    }
-    if (this.isSearching) {
-      return this.searchedGroups;
-    }
-    return this.groups;
-  }
 
   constructor(
     private apiService: ApiService,
@@ -116,7 +91,6 @@ export class GroupsComponent {
     private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
     private collectionService: CollectionService,
-    private searchPipe: SearchPipe,
   ) {
     this.route.params
       .pipe(
@@ -161,24 +135,6 @@ export class GroupsComponent {
     this.route.queryParams.pipe(first(), takeUntilDestroyed()).subscribe((qParams) => {
       this.searchControl.setValue(qParams.search);
     });
-  }
-
-  loadMore() {
-    if (!this.groups || this.groups.length <= this.pageSize) {
-      return;
-    }
-    const pagedLength = this.pagedGroups.length;
-    let pagedSize = this.pageSize;
-    if (pagedLength === 0 && this.pagedGroupsCount > this.pageSize) {
-      pagedSize = this.pagedGroupsCount;
-    }
-    if (this.groups.length > pagedLength) {
-      this.pagedGroups = this.pagedGroups.concat(
-        this.groups.slice(pagedLength, pagedLength + pagedSize),
-      );
-    }
-    this.pagedGroupsCount = this.pagedGroups.length;
-    this.didScroll = this.pagedGroups.length > this.pageSize;
   }
 
   async edit(
@@ -232,7 +188,7 @@ export class GroupsComponent {
   }
 
   async deleteAllSelected() {
-    const groupsToDelete = this.groups.filter((g) => g.checked);
+    const groupsToDelete = this.dataSource.data.filter((g) => g.checked);
 
     if (groupsToDelete.length == 0) {
       return;
@@ -268,32 +224,23 @@ export class GroupsComponent {
     }
   }
 
-  resetPaging() {
-    this.pagedGroups = [];
-    this.loadMore();
-  }
-
   check(groupRow: GroupDetailsRow) {
     groupRow.checked = !groupRow.checked;
   }
 
   toggleAllVisible(event: Event) {
-    this.visibleGroups.forEach((g) => (g.checked = (event.target as HTMLInputElement).checked));
-  }
-
-  isPaging() {
-    const searching = this.isSearching;
-    if (searching && this.didScroll) {
-      this.resetPaging();
-    }
-    return !searching && this.groups && this.groups.length > this.pageSize;
+    this.dataSource.filteredData.forEach(
+      (g) => (g.checked = (event.target as HTMLInputElement).checked),
+    );
   }
 
   private removeGroup(id: string) {
-    const index = this.groups.findIndex((g) => g.details.id === id);
+    const index = this.dataSource.data.findIndex((g) => g.details.id === id);
     if (index > -1) {
-      this.groups.splice(index, 1);
-      this.resetPaging();
+      // Clone the array so that the setter for dataSource.data is triggered to update the table rendering
+      const updatedData = [...this.dataSource.data];
+      updatedData.splice(index, 1);
+      this.dataSource.data = updatedData;
     }
   }
 

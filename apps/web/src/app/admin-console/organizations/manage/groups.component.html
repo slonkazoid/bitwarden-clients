@@ -18,15 +18,9 @@
   ></i>
   <span class="sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
-<ng-container *ngIf="!loading && visibleGroups">
-  <p *ngIf="!visibleGroups.length">{{ "noGroupsInList" | i18n }}</p>
-  <bit-table
-    *ngIf="visibleGroups.length"
-    infinite-scroll
-    [infiniteScrollDistance]="1"
-    [infiniteScrollDisabled]="!isPaging()"
-    (scrolled)="loadMore()"
-  >
+<ng-container *ngIf="!loading">
+  <p *ngIf="!dataSource.filteredData.length">{{ "noGroupsInList" | i18n }}</p>
+  <bit-table *ngIf="dataSource.filteredData.length">
     <ng-container header>
       <tr>
         <th bitCell class="tw-w-20">
@@ -63,7 +57,7 @@
       </tr>
     </ng-container>
     <ng-template body>
-      <tr bitRow *ngFor="let g of visibleGroups">
+      <tr bitRow *ngFor="let g of dataSource.filteredData">
         <td bitCell (click)="check(g)" class="tw-cursor-pointer">
           <input type="checkbox" bitCheckbox [(ngModel)]="g.checked" />
         </td>
