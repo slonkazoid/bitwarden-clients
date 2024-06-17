@@ -1,6 +1,5 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, Subject, takeUntil } from "rxjs";
@@ -75,7 +74,7 @@ export class ViewV2Component implements OnDestroy {
 
   subscribeToParams(): void {
     // eslint-disable-next-line rxjs/no-async-subscribe
-    this.route.queryParams.pipe(takeUntilDestroyed()).subscribe(async (params) => {
+    this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(async (params) => {
       const cipherType = parseInt(params.type);
       this.cipherId = params.cipherId;
 

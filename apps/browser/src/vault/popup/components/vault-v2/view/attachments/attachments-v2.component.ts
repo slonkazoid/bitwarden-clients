@@ -1,16 +1,20 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { NEVER, Subject, switchMap, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { EncArrayBuffer } from "@bitwarden/common/platform/models/domain/enc-array-buffer";
+import { StateProvider } from "@bitwarden/common/platform/state";
+import { OrganizationId } from "@bitwarden/common/types/guid";
+import { OrgKey } from "@bitwarden/common/types/key";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { SearchModule, ButtonModule, ToastService } from "@bitwarden/components";
@@ -23,11 +27,13 @@ import { PasswordRepromptService } from "../../../../../../../../../libs/vault/s
   standalone: true,
   imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule],
 })
-export class AttachmentsV2Component {
+export class AttachmentsV2Component implements OnDestroy {
   @Input() cipher: CipherView;
 
-  private passwordReprompted = false;
   canAccessPremium: boolean;
+  orgKey: OrgKey;
+  private destroyed$: Subject<void> = new Subject();
+  private passwordReprompted = false;
 
   constructor(
     protected passwordRepromptService: PasswordRepromptService,
@@ -37,15 +43,36 @@ export class AttachmentsV2Component {
     protected cryptoService: CryptoService,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
     private toastService: ToastService,
+    protected stateProvider: StateProvider,
+    protected encryptService: EncryptService,
   ) {
     this.subscribeToHasPremiumCheck();
+    this.subscribeToOrgKey();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   subscribeToHasPremiumCheck() {
     this.billingAccountProfileStateService.hasPremiumFromAnySource$
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntil(this.destroyed$))
       .subscribe((data) => {
         this.canAccessPremium = data;
+      });
+  }
+
+  subscribeToOrgKey() {
+    this.stateProvider.activeUserId$
+      .pipe(
+        switchMap((userId) => (userId != null ? this.cryptoService.orgKeys$(userId) : NEVER)),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe((data: Record<OrganizationId, OrgKey> | null) => {
+        if (data) {
+          this.orgKey = data[this.cipher.organizationId as OrganizationId];
+        }
       });
   }
 
@@ -107,11 +134,8 @@ export class AttachmentsV2Component {
 
     try {
       const encBuf = await EncArrayBuffer.fromResponse(response);
-      const key =
-        attachment.key != null
-          ? attachment.key
-          : await this.cryptoService.getOrgKey(this.cipher.organizationId);
-      const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
+      const key = attachment.key != null ? attachment.key : this.orgKey;
+      const decBuf = await this.encryptService.decryptToBytes(encBuf, key);
       this.fileDownloadService.download({
         fileName: attachment.fileName,
         blobData: decBuf,
