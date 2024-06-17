@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Создать аккаунт"
   },
+  "setAStrongPassword": {
+    "message": "Задайте надежный пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершите создание аккаунта, задав пароль"
+  },
   "login": {
     "message": "Войти"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Избранный"
   },
+  "unfavorite": {
+    "message": "Удалить из избранного"
+  },
+  "itemAddedToFavorites": {
+    "message": "Элемент добавлен в избранное"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Элемент удален из избранного"
+  },
   "notes": {
     "message": "Заметки"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Перейти"
+  },
+  "launchWebsite": {
+    "message": "Открыть сайт"
   },
   "website": {
     "message": "Сайт"
@@ -599,6 +617,9 @@
   "loggedOut": {
     "message": "Вы вышли из хранилища"
   },
+  "loggedOutDesc": {
+    "message": "Вы вышли из своего аккаунта."
+  },
   "loginExpired": {
     "message": "Истек срок действия вашего сеанса."
   },
@@ -763,7 +784,7 @@
     "message": "Разблокировать"
   },
   "additionalOptions": {
-    "message": "Additional options"
+    "message": "Дополнительные настройки"
   },
   "enableContextMenuItem": {
     "message": "Показать опции контекстного меню"
@@ -1107,6 +1128,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Укажите URL Bitwarden на вашем сервере."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Укажите базовый URL вашего локального хостинга Bitwarden. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для продвинутой конфигурации можно указать базовый URL каждой службы отдельно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Вы должны добавить либо базовый URL сервера, либо хотя бы одно пользовательское окружение."
+  },
   "customEnvironment": {
     "message": "Пользовательское окружение"
   },
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Личная информация"
   },
+  "newItemHeader": {
+    "message": "Новый $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Изменить $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "История паролей"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Коллекции"
+  },
+  "nCollections": {
+    "message": "Коллекций: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Избранные"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Заполнить и сохранить"
   },
+  "fillAndSave": {
+    "message": "Заполнить и сохранить"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "URI элемента заполнен и сохранен"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новый мастер-пароль не соответствует требованиям политики."
   },
+  "receiveMarketingEmails": {
+    "message": "Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований."
+  },
+  "unsubscribe": {
+    "message": "Отписаться"
+  },
+  "atAnyTime": {
+    "message": "в любое время."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продолжая, вы соглашаетесь с"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Ошибка обновления токена доступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не найдены токен обновления или ключи API. Пожалуйста, попробуйте выполнить выход и повторно авторизоваться."
   },
   "desktopSyncVerificationTitle": {
     "message": "Проверка синхронизации на компьютере"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Очистите фильтры или попробуйте другой поисковый запрос"
   },
-  "copyInfo": {
-    "message": "Скопировать информацию, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Скопировать информацию - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Скопировать заметку - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Больше опций, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Больше опций - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Просмотр элемента - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Автозаполнение - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Нет значений для копирования"
+  },
+  "assignCollections": {
+    "message": "Назначить коллекции"
+  },
+  "copyEmail": {
+    "message": "Скопировать email"
+  },
+  "copyPhone": {
+    "message": "Скопировать телефон"
+  },
+  "copyAddress": {
+    "message": "Скопировать адрес"
   },
   "adminConsole": {
     "message": "консоли администратора"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Элементы без папки"
+  },
+  "organizationIsDeactivated": {
+    "message": "Организация деактивирована"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Доступ к элементам в деактивированных организациях невозможен. Обратитесь за помощью к владельцу организации."
   }
 }

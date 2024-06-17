@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Hesab yarat"
   },
+  "setAStrongPassword": {
+    "message": "Güclü bir parol təyin et"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Bir parol təyin edərək hesabınızı yaratmağı başa çatdırın"
+  },
   "login": {
     "message": "Giriş et"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Sevimli"
   },
+  "unfavorite": {
+    "message": "Sevimlilərdən sil"
+  },
+  "itemAddedToFavorites": {
+    "message": "Element sevimlilərə əlavə edildi"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Element sevimlilərdən çıxarıldı"
+  },
   "notes": {
     "message": "Notlar"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Başlat"
+  },
+  "launchWebsite": {
+    "message": "Veb saytı başlat"
   },
   "website": {
     "message": "Veb sayt"
@@ -599,6 +617,9 @@
   "loggedOut": {
     "message": "Çıxış edildi"
   },
+  "loggedOutDesc": {
+    "message": "Hesabınızdan çıxış etmisiniz."
+  },
   "loginExpired": {
     "message": "Giriş seansınızın müddəti bitdi."
   },
@@ -763,7 +784,7 @@
     "message": "Kilidi aç"
   },
   "additionalOptions": {
-    "message": "Additional options"
+    "message": "Əlavə seçimlər"
   },
   "enableContextMenuItem": {
     "message": "Konteks menyu seçimlərini göstər"
@@ -803,7 +824,7 @@
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Buradan xaricə köçür"
   },
   "exportVault": {
     "message": "Anbarı xaricə köçür"
@@ -812,28 +833,28 @@
     "message": "Fayl formatı"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Bu faylın xaricə köçürülməsi, parolla qorunacaq və şifrəsini açmaq üçün fayl parolu tələb olunacaq."
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Fayl parolu"
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Bu parol, bu faylı daxilə və xaricə köçürmək üçün istifadə olunacaq"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Xaricə köçürməni şifrələmək və daxilə köçürməni yalnız mövcud Bitwarden hesabı ilə məhdudlaşdırmaq üçün hesabınızın istifadəçi adı və Ana Parolundan əldə edilən hesab şifrələmə açarınızı istifadə edin."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Xaricə köçürməni şifrələmək üçün bir fayl parolu təyin edin və şifrəni açma parolunu istifadə edərək bunu istənilən Bitwarden hesabına köçürün."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Xaricə köçürmə növü"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Hesab məhdudlaşdırıldı"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "\"Fayl parolu\" və \"Fayl parolunu təsdiqlə\" uyuşmur."
   },
   "warning": {
     "message": "XƏBƏRDARLIQ",
@@ -1106,6 +1127,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Öz-özünə sahiblik edən Bitwarden quraşdırmasının baza URL-sini müəyyənləşdirin."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Şirkət daxili sahiblik edən Bitwarden quraşdırmasının təməl URL-sini qeyd edin. Nümunə: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Qabaqcıl konfiqurasiya üçün hər xidmətin təməl URL-sini müstəqil olaraq qeyd edə bilərsiniz."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Təməl server URL-sini və ya ən azı bir özəl mühiti əlavə etməlisiniz."
   },
   "customEnvironment": {
     "message": "Özəl mühit"
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Kimlik"
   },
+  "newItemHeader": {
+    "message": "Yeni $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "$TYPE$ - düzəliş et",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Parol tarixçəsi"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Kolleksiyalar"
+  },
+  "nCollections": {
+    "message": "$COUNT$ kolleksiya",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Sevimlilər"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Avto-doldur və saxla"
   },
+  "fillAndSave": {
+    "message": "Doldur və saxla"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Element avto-dolduruldu və URI saxlanıldı"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolunuz siyasət tələblərini qarşılamır."
   },
+  "receiveMarketingEmails": {
+    "message": "Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın."
+  },
+  "unsubscribe": {
+    "message": "Abunəlikdən çıx"
+  },
+  "atAnyTime": {
+    "message": "istənilən vaxt."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Davam edərək, bunlarla razılaşırsınız"
+  },
+  "and": {
+    "message": "və"
+  },
   "acceptPolicies": {
     "message": "Bu qutunu işarələyərək aşağıdakılarla razılaşırsınız:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Oldu"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Müraciət tokeni təzələmə xətası"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Təzələmə tokeni və ya API açarlar tapılmadı. Lütfən çıxış edib yenidən giriş etməyə çalışın."
   },
   "desktopSyncVerificationTitle": {
     "message": "Masaüstü sinxr doğrulaması"
@@ -2213,10 +2294,10 @@
     }
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Təşkilat anbarını xaricə köçürmə"
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "message": "Yalnız $ORGANIZATION$ ilə əlaqələndirilmiş təşkilat anbarı ixrac ediləcək. Fərdi anbardakı və digər təşkilat elementlər daxil edilmir.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Filtrləri təmizləyin və ya başqa bir axtarış terminini sınayın"
   },
-  "copyInfo": {
-    "message": "Məlumatları kopyala, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Məlumatları kopyala - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Notu kopyala - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Daha çox seçim, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Daha çox seçim - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "$ITEMNAME$ elementinə bax",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Avto-doldur - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Kopyalanacaq dəyər yoxdur"
+  },
+  "assignCollections": {
+    "message": "Kolleksiyaları təyin et"
+  },
+  "copyEmail": {
+    "message": "E-poçtu kopyala"
+  },
+  "copyPhone": {
+    "message": "Telefonu kopyala"
+  },
+  "copyAddress": {
+    "message": "Ünvanı kopyala"
   },
   "adminConsole": {
     "message": "Admin Konsolu"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Qovluğu olmayan elementlər"
+  },
+  "organizationIsDeactivated": {
+    "message": "Təşkilat deaktiv edildi"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Deaktiv edilmiş təşkilatlardakı elementlərə müraciət edilə bilməz. Kömək üçün təşkilatınızın sahibi ilə əlaqə saxlayın."
   }
 }

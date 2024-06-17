@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "アカウントの作成"
   },
+  "setAStrongPassword": {
+    "message": "強力なパスワードを設定する"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "パスワードを設定してアカウントの作成を完了してください"
+  },
   "logIn": {
     "message": "ログイン"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "セルフホスティングしている Bitwarden のベース URL を指定してください。"
   },
+  "selfHostedBaseUrlHint": {
+    "message": "オンプレミスホストした Bitwarden のベース URL を指定してください。例: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "高度な設定では、各サービスのベース URL を個別に指定できます。"
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "ベース サーバー URL または少なくとも 1 つのカスタム環境を追加する必要があります。"
+  },
   "customEnvironment": {
     "message": "カスタム環境"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "ログアウトしました"
+  },
+  "loggedOutDesc": {
+    "message": "アカウントからログアウトしました。"
   },
   "loginExpired": {
     "message": "ログインセッションの有効期限が切れています。"
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "アクセストークンの更新エラー"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "リフレッシュトークンや API キーが見つかりませんでした。ログアウトして再度ログインしてください。"
+  },
   "help": {
     "message": "ヘルプ"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "新しいマスターパスワードは最低要件を満たしていません。"
+  },
+  "receiveMarketingEmails": {
+    "message": "Bitwarden からのお知らせ、アドバイス、アンケート調査等のメールを受信します。"
+  },
+  "unsubscribe": {
+    "message": "配信停止"
+  },
+  "atAnyTime": {
+    "message": "はいつでもできます。"
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "続行すると以下に同意したものとみなします："
+  },
+  "and": {
+    "message": "と"
   },
   "acceptPolicies": {
     "message": "以下に同意しチェックします:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "ログインを拒否"
   },
-  "approveLoginRequests": {
-    "message": "ログインリクエストを承認する"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$EMAIL$ に $DEVICE$ でのログインを承認しました",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "このリクエストは無効になりました。"
-  },
-  "approveLoginRequestDesc": {
-    "message": "このデバイスを使用して、他のデバイスからのログインリクエストを承認します。"
   },
   "confirmLoginAtemptForMail": {
     "message": "$EMAIL$ のログイン試行を確認",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "重要"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "アクセストークンを復号できなかったためログアウトしました。この問題を解決するためには再度ログインしてください。"
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "リフレッシュトークンを取得できなかったためログアウトしました。この問題を解決するためには再度ログインしてください。"
   },
   "masterPasswordHint": {
     "message": "マスターパスワードを忘れた場合は復元できません！"

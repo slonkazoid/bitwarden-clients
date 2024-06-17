@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "创建账户"
   },
+  "setAStrongPassword": {
+    "message": "设置强密码"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "设置密码后就能完成账户创建"
+  },
   "login": {
     "message": "登录"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "收藏"
   },
+  "unfavorite": {
+    "message": "取消收藏"
+  },
+  "itemAddedToFavorites": {
+    "message": "项目已添加到收藏夹"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "项目已移出收藏夹"
+  },
   "notes": {
     "message": "备注"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "前往"
+  },
+  "launchWebsite": {
+    "message": "启动网站"
   },
   "website": {
     "message": "网站"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "已注销"
+  },
+  "loggedOutDesc": {
+    "message": "您已注销您的账户。"
   },
   "loginExpired": {
     "message": "您的登录会话已过期。"
@@ -821,10 +842,10 @@
     "message": "此密码将用于导出和导入此文件"
   },
   "accountRestrictedOptionDescription": {
-    "message": "使用衍生自您账户的用户名和主密码的加密密钥，以加密此导出并限制只能导入到当前的 Bitwarden 账户。"
+    "message": "使用衍生自您账户的用户名和主密码的账户加密密钥，以加密此导出并限制只能导入到当前的 Bitwarden 账户。"
   },
   "passwordProtectedOptionDescription": {
-    "message": "设置一个密码用来加密导出的数据，并使用此密码解密以导入到任意 Bitwarden 账户。"
+    "message": "设置一个文件密码用来加密此导出，并使用此密码解密以导入到任意 Bitwarden 账户。"
   },
   "exportTypeHeading": {
     "message": "导出类型"
@@ -1106,6 +1127,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "指定您本地托管的 Bitwarden 安装的基础 URL。"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "指定您的本地托管 Bitwarden 安装的基础 URL。例如：https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "对于高级配置，您可以单独指定每个服务的基础 URL。"
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "您必须添加基础服务器 URL 或至少添加一个自定义环境。"
   },
   "customEnvironment": {
     "message": "自定义环境"
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "身份"
   },
+  "newItemHeader": {
+    "message": "新增 $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "编辑 $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "密码历史记录"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "集合"
+  },
+  "nCollections": {
+    "message": "$COUNT$ 个集合",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "收藏夹"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "自动填充并保存"
   },
+  "fillAndSave": {
+    "message": "填充并保存"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "项目已自动填充且 URI 已保存"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "您的新主密码不符合策略要求。"
   },
+  "receiveMarketingEmails": {
+    "message": "接收来自 Bitwarden 的电子邮件，以获取公告、建议和调研。"
+  },
+  "unsubscribe": {
+    "message": "取消订阅"
+  },
+  "atAnyTime": {
+    "message": "随时"
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "若继续，代表您同意"
+  },
+  "and": {
+    "message": "以及"
+  },
   "acceptPolicies": {
     "message": "选中此框表示您同意："
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "确定"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "访问令牌刷新错误"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "未找到刷新令牌或 API 密钥。请尝试注销然后重新登录。"
   },
   "desktopSyncVerificationTitle": {
     "message": "桌面同步验证"
@@ -2633,7 +2714,7 @@
     "message": "批准后，您将收到通知。"
   },
   "troubleLoggingIn": {
-    "message": "登录遇到问题？"
+    "message": "登录遇到问题吗？"
   },
   "loginApproved": {
     "message": "登录已批准"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "清除筛选器或尝试另一个搜索词"
   },
-  "copyInfo": {
-    "message": "复制信息，$ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "复制信息 - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "复制备注 - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "更多选项，$ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "更多选项 - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "查看项目 - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "自动填充 - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "没有要复制的值"
+  },
+  "assignCollections": {
+    "message": "分配集合"
+  },
+  "copyEmail": {
+    "message": "复制电子邮件地址"
+  },
+  "copyPhone": {
+    "message": "复制电话号码"
+  },
+  "copyAddress": {
+    "message": "复制地址"
   },
   "adminConsole": {
     "message": "管理控制台"
@@ -3322,7 +3458,7 @@
     }
   },
   "new": {
-    "message": "新建"
+    "message": "新增"
   },
   "removeItem": {
     "message": "删除 $NAME$",
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "无文件夹的项目"
+  },
+  "organizationIsDeactivated": {
+    "message": "组织已停用"
+  },
+  "contactYourOrgAdmin": {
+    "message": "无法访问已停用组织中的项目。请联系您的组织所有者获取协助。"
   }
 }

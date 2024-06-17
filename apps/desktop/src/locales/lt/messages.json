@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Sukurti paskyrą"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Prisijungti"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Nurodykite pagrindinį URL adresą savo patalpose esančio Bitwarden įdiegimo."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
   "customEnvironment": {
     "message": "Individualizuota aplinka"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Atsijungta"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Sesijos laikas baigėsi."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "help": {
     "message": "Pagalba"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Jūsų naujasis pagrindinis slaptažodis neatitinka politikos reikalavimų."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
   },
   "acceptPolicies": {
     "message": "Pažymėdami šį laukelį, sutinkate su šiais dalykais:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Neleisti prisijungti"
   },
-  "approveLoginRequests": {
-    "message": "Patvirtinti prisijungimo užklausas"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$EMAIL$ prisijungimas patvirtinas $DEVICE$ įrenginyje",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Ši užklausa nebegalioja."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Naudokite šį įrenginį, kad patvirtintumėte prisijungimo užklausas, pateiktas iš kitų įrenginių."
   },
   "confirmLoginAtemptForMail": {
     "message": "Patvirtinti bandymą prisijungti iš $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Svarbu:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "You have been logged out because your access token could not be decrypted. Please log in again to resolve this issue."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "You have been logged out because your refresh token could not be retrieved. Please log in again to resolve this issue."
   },
   "masterPasswordHint": {
     "message": "Pagrindinis slaptažodis negali būti atkurtas, jei jį pamiršite!"

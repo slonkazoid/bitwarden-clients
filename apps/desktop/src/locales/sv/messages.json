@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Skapa konto"
   },
+  "setAStrongPassword": {
+    "message": "Ställ in ett starkt lösenord"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Logga in"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Ange bas-URL:en för din \"on-premises\"-hostade Bitwarden-installation."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
   "customEnvironment": {
     "message": "Anpassad miljö"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Utloggad"
+  },
+  "loggedOutDesc": {
+    "message": "Du har blivit utloggad från ditt konto."
   },
   "loginExpired": {
     "message": "Din inloggningssession har löpt ut."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "help": {
     "message": "Hjälp"
   },
@@ -1300,7 +1324,7 @@
     "description": "ex. Date this password was updated"
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Exportera från"
   },
   "exportVault": {
     "message": "Exportera valv"
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ditt nya huvudlösenord uppfyller inte kraven i policyn."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "och"
   },
   "acceptPolicies": {
     "message": "Genom att markera denna ruta godkänner du följande:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Neka inloggning"
   },
-  "approveLoginRequests": {
-    "message": "Godkänn inloggningsförfrågningar"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Inloggning bekräftad för $EMAIL$ på $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Denna begäran är inte längre giltig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Använd denna enhet för att godkänna inloggningsförfrågningar från andra enheter."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bekräfta inloggningsförsök för $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Viktigt:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "You have been logged out because your access token could not be decrypted. Please log in again to resolve this issue."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "You have been logged out because your refresh token could not be retrieved. Please log in again to resolve this issue."
   },
   "masterPasswordHint": {
     "message": "Ditt huvudlösenord kan inte återställas om du glömmer det!"

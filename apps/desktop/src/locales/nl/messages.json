@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Account aanmaken"
   },
+  "setAStrongPassword": {
+    "message": "Sterk wachtwoord instellen"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Rond het aanmaken van je account af met het instellen van een wachtwoord"
+  },
   "logIn": {
     "message": "Inloggen"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Geef de basis-URL van jouw zelfgehoste Bitwarden-installatie."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Specificeer de basis-URL van je zelfgehoste Bitwarden-installatie. Bijvoorbeeld: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Voor geavanceerde instellingen, kun je de basis-URL van iedere dienst afzonderlijk instellen."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Je moet de basisserver-URL of ten minste één aangepaste omgeving toevoegen."
+  },
   "customEnvironment": {
     "message": "Aangepaste omgeving"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Uitgelogd"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Je inlogsessie is verlopen."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "help": {
     "message": "Help"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Je nieuwe hoofdwachtwoord voldoet niet aan de beleidseisen."
+  },
+  "receiveMarketingEmails": {
+    "message": "Ontvang e-mailberichten van Bitwarden voor aankondigingen, advies en onderzoeksmogelijkheden."
+  },
+  "unsubscribe": {
+    "message": "Afmelden"
+  },
+  "atAnyTime": {
+    "message": "op ieder moment."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Door verder te gaan, ga je akkoord met de"
+  },
+  "and": {
+    "message": "en"
   },
   "acceptPolicies": {
     "message": "Door dit vakje aan te vinken, ga je akkoord met het volgende:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Inloggen afwijzen"
   },
-  "approveLoginRequests": {
-    "message": "Inlogverzoeken goedkeuren"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Inloggen voor $EMAIL$ bevestigd op $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Dit verzoek is niet langer geldig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Gebruik dit apparaat voor het goedkeuren van inlogverzoeken van andere apparaten."
   },
   "confirmLoginAtemptForMail": {
     "message": "Inlogpoging voor $EMAIL$ bevestigen",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Belangrijk:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "You have been logged out because your access token could not be decrypted. Please log in again to resolve this issue."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "You have been logged out because your refresh token could not be retrieved. Please log in again to resolve this issue."
   },
   "masterPasswordHint": {
     "message": "Je hoofdwachtwoord kan niet hersteld worden als je het vergeet!"

@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Створити обліковий запис"
   },
+  "setAStrongPassword": {
+    "message": "Встановіть надійний пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершіть створення облікового запису, встановивши пароль"
+  },
   "logIn": {
     "message": "Увійти"
   },
@@ -693,7 +699,16 @@
     "message": "Середовище власного хостингу"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Вкажіть основну URL-адресу Bitwarden, встановленого на локальному хостингу."
+    "message": "Вкажіть основну URL-адресу локально розміщеного встановлення Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden. Зразок: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для розширеної конфігурації ви можете вказати основну URL-адресу окремо для кожної служби."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Необхідно додати URL-адресу основного сервера, або принаймні одне користувацьке середовище."
   },
   "customEnvironment": {
     "message": "Власне середовище"
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Ви вийшли"
+  },
+  "loggedOutDesc": {
+    "message": "Ви вийшли з облікового запису."
   },
   "loginExpired": {
     "message": "Тривалість вашого сеансу завершилась."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Помилка оновлення токена доступу"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не знайдено токен оновлення або ключі API. Спробуйте вийти, а потім увійти знову."
+  },
   "help": {
     "message": "Допомога"
   },
@@ -1300,7 +1324,7 @@
     "description": "ex. Date this password was updated"
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Експортувати з"
   },
   "exportVault": {
     "message": "Експортувати сховище"
@@ -1309,31 +1333,31 @@
     "message": "Формат файлу"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Цей експортований файл буде захищений паролем, який необхідно ввести для його розшифрування."
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Пароль файлу"
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Цей пароль буде використано для експортування та імпортування цього файлу"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Використовуйте ключ шифрування свого облікового запису, створений на основі імені користувача й головного пароля, щоб зашифрувати експортовані дані та обмежити можливість імпортування лише до поточного облікового запису Bitwarden."
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Захищено паролем"
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Встановіть пароль файлу, щоб зашифрувати експортовані дані та імпортувати до будь-якого облікового запису Bitwarden за допомогою цього пароля."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Тип експорту"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Обмежено обліковим записом"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "Пароль файлу та підтвердження пароля відрізняються."
   },
   "hCaptchaUrl": {
     "message": "URL-адреса hCaptcha",
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новий головний пароль не задовольняє вимоги політики."
+  },
+  "receiveMarketingEmails": {
+    "message": "Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості."
+  },
+  "unsubscribe": {
+    "message": "Відписатися"
+  },
+  "atAnyTime": {
+    "message": "можна будь-коли."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продовжуючи, ви погоджуєтеся з"
+  },
+  "and": {
+    "message": "і"
   },
   "acceptPolicies": {
     "message": "Позначивши цей прапорець, ви погоджуєтеся з:"
@@ -2102,10 +2141,10 @@
     }
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Експортування сховища організації"
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "message": "Буде експортовано лише сховище організації, пов'язане з $ORGANIZATION$. Елементи особистих сховищ або інших організацій не будуть включені.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Заборонити вхід"
   },
-  "approveLoginRequests": {
-    "message": "Схвалювати запити на вхід"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Підтверджено вхід для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Цей запит більше недійсний."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Схвалювати запити на вхід, виконані з інших пристроїв."
   },
   "confirmLoginAtemptForMail": {
     "message": "Підтвердити спробу входу для $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Важливо:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Ви вийшли з системи, оскільки неможливо розшифрувати ваш токен доступу. Увійдіть знову, щоб виправити цю проблему."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Ви вийшли з системи, оскільки неможливо отримати ваш токен оновлення. Увійдіть знову, щоб виправити цю проблему."
   },
   "masterPasswordHint": {
     "message": "Головний пароль неможливо відновити, якщо ви його втратите!"

@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Vytvoriť účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavte silné heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Zdajte heslo na vytvorenie účtu"
+  },
   "login": {
     "message": "Prihlásiť sa"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Obľúbené"
   },
+  "unfavorite": {
+    "message": "Odstrániť z obľúbených"
+  },
+  "itemAddedToFavorites": {
+    "message": "Položka pridaná medzi obľúbené"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Položka odobraná z obľúbených"
+  },
   "notes": {
     "message": "Poznámky"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Spustiť"
+  },
+  "launchWebsite": {
+    "message": "Otvoriť stránku"
   },
   "website": {
     "message": "Webstránka"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "Odhlásený"
+  },
+  "loggedOutDesc": {
+    "message": "Boli ste odhlásení zo svojho účtu."
   },
   "loginExpired": {
     "message": "Vaša relácia vypršala."
@@ -1107,6 +1128,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Zadajte základnú URL adresu lokálne hosťovanej inštalácie Bitwarden."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Zadajte základnú URL adresu lokálne hosťovanej inštalácie Bitwarden. Napríklad: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pre rozšírenú konfiguráciu môžete zadať základnú adresu URL každej služby nezávisle."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musíte pridať buď základnú adresu URL servera, alebo aspoň jedno vlastné prostredie."
+  },
   "customEnvironment": {
     "message": "Vlastné prostredie"
   },
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Identita"
   },
+  "newItemHeader": {
+    "message": "Nové $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Upraviť $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "História hesla"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Zbierky"
+  },
+  "nCollections": {
+    "message": "$COUNT$ zbierok",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Obľúbené"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Auto-vyplniť a Uložiť"
   },
+  "fillAndSave": {
+    "message": "Vyplniť a uložiť"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Automatické vypĺnenie a uloženie úspešné"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové heslo nespĺňa pravidlá."
   },
+  "receiveMarketingEmails": {
+    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  },
+  "unsubscribe": {
+    "message": "Odhlásiť sa z odberu"
+  },
+  "atAnyTime": {
+    "message": "môžete kedykoľvek."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračovaním súhlasíte s"
+  },
+  "and": {
+    "message": "a"
+  },
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Chyba obnovenia prístupového tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nenašiel sa žiadny token obnovenia ani kľúče API. Skúste sa odhlásiť a znova prihlásiť."
   },
   "desktopSyncVerificationTitle": {
     "message": "Overenie synchronizácie desktopu"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Vymažte filtre alebo zmeňte vyhľadávaný výraz"
   },
-  "copyInfo": {
-    "message": "Skopírovať info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Skopírovať info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Skopírovať poznámku - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Ďalšie možnosti, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Ďalšie možnosti - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Zobrazit položku - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Automatické vyplnenie - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Nie je čo kopírovať"
+  },
+  "assignCollections": {
+    "message": "Prideliť zbierky"
+  },
+  "copyEmail": {
+    "message": "Skopírovať e-mail"
+  },
+  "copyPhone": {
+    "message": "Skopírovať telefón"
+  },
+  "copyAddress": {
+    "message": "Skopírovať adresu"
   },
   "adminConsole": {
     "message": "Správcovská konzola"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Položky bez priečinka"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organizácia je vypnutá"
+  },
+  "contactYourOrgAdmin": {
+    "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
   }
 }

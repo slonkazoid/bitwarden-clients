@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Crea account"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Accedi"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Specifica l'URL principale della tua installazione self-hosted di Bitwarden."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Specifica lo URL principale della tua installazione self-hosted di Bitwarden. Esempio: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Per la configurazione avanzata, puoi specificare lo URL di base di ciascun servizio in modo indipendente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Devi aggiungere lo URL del server di base o almeno un ambiente personalizzato."
+  },
   "customEnvironment": {
     "message": "Ambiente personalizzato"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Uscito"
+  },
+  "loggedOutDesc": {
+    "message": "Sei stato fatto uscire dal tuo account."
   },
   "loginExpired": {
     "message": "La tua sessione è scaduta."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Errore di aggiornamento del token di accesso"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nessun token di aggiornamento o chiave API trovati. Prova ad uscire ed entrare di nuovo."
+  },
   "help": {
     "message": "Aiuto"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "La tua nuova password principale non soddisfa i requisiti di sicurezza."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
   },
   "acceptPolicies": {
     "message": "Selezionando questa casella accetti quanto segue:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Nega accesso"
   },
-  "approveLoginRequests": {
-    "message": "Approva richieste di accesso"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Login per $EMAIL$ da $DEVICE$ confermato",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "La richiesta non è più valida."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Usa questo dispositivo per approvare le richieste di accesso fatte da altri dispositivi."
   },
   "confirmLoginAtemptForMail": {
     "message": "Conferma il tentativo di accesso di $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Importante:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Sei stato fatto uscire perché non è stato possibile decrittografare il tuo token di accesso. Entra di nuovo per risolvere il problema."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Sei stato fatto uscire perché non è stato possibile recuperare il token di aggiornamento. Entra di nuovo per risolvere il problema."
   },
   "masterPasswordHint": {
     "message": "La tua password principale non può essere recuperata se la dimentichi!"

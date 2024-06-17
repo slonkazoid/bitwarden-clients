@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Создать аккаунт"
   },
+  "setAStrongPassword": {
+    "message": "Задайте надежный пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершите создание аккаунта, задав пароль"
+  },
   "logIn": {
     "message": "Войти"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Укажите URL Bitwarden на вашем сервере."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Укажите базовый URL вашего локального хостинга Bitwarden. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для продвинутой конфигурации можно указать базовый URL каждой службы отдельно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Вы должны добавить либо базовый URL сервера, либо хотя бы одно пользовательское окружение."
+  },
   "customEnvironment": {
     "message": "Пользовательское окружение"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Вы вышли из хранилища"
+  },
+  "loggedOutDesc": {
+    "message": "Вы вышли из своего аккаунта."
   },
   "loginExpired": {
     "message": "Истек срок действия вашего сеанса."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Ошибка обновления токена доступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не найдены токен обновления или ключи API. Пожалуйста, попробуйте выполнить выход и повторно авторизоваться."
+  },
   "help": {
     "message": "Помощь"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новый мастер-пароль не соответствует требованиям политики."
+  },
+  "receiveMarketingEmails": {
+    "message": "Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований."
+  },
+  "unsubscribe": {
+    "message": "Отписаться"
+  },
+  "atAnyTime": {
+    "message": "в любое время."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продолжая, вы соглашаетесь с"
+  },
+  "and": {
+    "message": "и"
   },
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Запретить вход"
   },
-  "approveLoginRequests": {
-    "message": "Одобрение запросов на вход"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Вход подтвержден для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Этот запрос больше не действителен."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Использовать это устройство для подтверждения запросов на вход, сделанных с других устройств."
   },
   "confirmLoginAtemptForMail": {
     "message": "Подтвердите попытку входа для $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Важно:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Вы были деавторизованы, поскольку ваш токен доступа не удалось расшифровать. Чтобы решить эту проблему, авторизуйтесь снова."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Вы были деавторизованы, поскольку ваш токен обновления не удалось получить. Чтобы решить эту проблему, авторизуйтесь снова."
   },
   "masterPasswordHint": {
     "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"

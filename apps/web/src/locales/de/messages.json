@@ -582,10 +582,13 @@
     "message": "Zugriffsebene"
   },
   "accessing": {
-    "message": "Accessing"
+    "message": "Zugriff auf"
   },
   "loggedOut": {
     "message": "Ausgeloggt"
+  },
+  "loggedOutDesc": {
+    "message": "Du wurdest von deinem Konto abgemeldet."
   },
   "loginExpired": {
     "message": "Ihre Anmeldungsitzung ist abgelaufen."
@@ -710,6 +713,12 @@
   "createAccount": {
     "message": "Konto erstellen"
   },
+  "setAStrongPassword": {
+    "message": "Ein starkes Passwort festlegen"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Schließe die Erstellung deines Kontos ab, indem du ein Passwort festlegst"
+  },
   "newAroundHere": {
     "message": "Neu hier?"
   },
@@ -718,6 +727,9 @@
   },
   "logIn": {
     "message": "Anmelden"
+  },
+  "verifyIdentity": {
+    "message": "Verifiziere deine Identität"
   },
   "logInInitiated": {
     "message": "Anmeldung eingeleitet"
@@ -1049,6 +1061,12 @@
   },
   "copyUuid": {
     "message": "UUID kopieren"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Zugangs-Token Aktualisierungsfehler"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Kein Aktualisierungs-Token oder API-Schlüssel gefunden. Bitte versuche dich ab- und wieder anzumelden."
   },
   "warning": {
     "message": "Warnung"
@@ -2785,12 +2803,6 @@
   "userDesc": {
     "message": "Kann auf Einträge zugewiesener Sammlungen zugreifen und neue hinzufügen"
   },
-  "manager": {
-    "message": "Manager"
-  },
-  "managerDesc": {
-    "message": "Kann Einträge in zugewiesenen Sammlungen erstellen, löschen und Zugriff darauf verwalten"
-  },
   "all": {
     "message": "Alle"
   },
@@ -3718,6 +3730,21 @@
   "nothingSelected": {
     "message": "Sie haben keine Auswahl getroffen."
   },
+  "receiveMarketingEmails": {
+    "message": "Erhalte E-Mails von Bitwarden für Ankündigungen, Ratschläge und Forschungsmöglichkeiten."
+  },
+  "unsubscribe": {
+    "message": "Deabonnieren"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Durch Anwählen dieses Kästchens erklärst du dich mit Folgendem einverstanden:"
   },
@@ -4567,12 +4594,6 @@
   "permission": {
     "message": "Berechtigung"
   },
-  "managerPermissions": {
-    "message": "Manager-Berechtigungen"
-  },
-  "adminPermissions": {
-    "message": "Administrator-Berechtigungen"
-  },
   "accessEventLogs": {
     "message": "Zugriff auf Ereignisprotokolle"
   },
@@ -4596,9 +4617,6 @@
   },
   "deleteAnyCollection": {
     "message": "Jede Sammlung löschen"
-  },
-  "manageAssignedCollections": {
-    "message": "Zugewiesene Sammlungen verwalten"
   },
   "editAssignedCollections": {
     "message": "Zugewiesene Sammlungen bearbeiten"
@@ -5585,6 +5603,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Durch Erneuerung des Rechnungssynchronisierungs-Token wird der vorherige Token ungültig."
+  },
+  "selfHostedServer": {
+    "message": "selbst gehostet"
+  },
+  "customEnvironment": {
+    "message": "Benutzerdefinierte Umgebung"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Gib die Basis-URL deiner vor Ort gehosteten Bitwarden-Installation an. Beispiel: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Für eine erweiterte Konfiguration kannst du die Basis-URL jedes Dienstes unabhängig voneinander angeben."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Du musst entweder die Basis-Server-URL oder mindestens eine benutzerdefinierte Umgebung hinzufügen."
+  },
+  "apiUrl": {
+    "message": "API Server-URL"
+  },
+  "webVaultUrl": {
+    "message": "URL des Web-Tresor-Servers"
+  },
+  "identityUrl": {
+    "message": "URL des Identitätsservers"
+  },
+  "notificationsUrl": {
+    "message": "URL des Benachrichtigungsservers"
+  },
+  "iconsUrl": {
+    "message": "URL des Icons-Servers"
+  },
+  "environmentSaved": {
+    "message": "URLs der Umgebung gespeichert"
   },
   "selfHostingTitle": {
     "message": "Selbst gehostet"
@@ -6627,12 +6678,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Du kannst nur von dir verwaltete Sammlungen zuweisen."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Gewähre Zugriff auf alle aktuellen und zukünftigen Sammlungen."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Wenn aktiviert, ersetzt dies alle anderen Sammlungsberechtigungen."
-  },
   "selectMembers": {
     "message": "Mitglieder auswählen"
   },
@@ -6674,12 +6719,6 @@
   },
   "group": {
     "message": "Gruppe"
-  },
-  "groupAccessAll": {
-    "message": "Diese Gruppe darf auf alle Einträge zugreifen und diese ändern."
-  },
-  "memberAccessAll": {
-    "message": "Dieses Mitglied darf auf alle Einträge zugreifen und diese ändern."
   },
   "domainVerification": {
     "message": "Domain-Verifizierung"
@@ -8141,11 +8180,17 @@
   "setUpGithubActions": {
     "message": "GitHub Actions einrichten"
   },
+  "setUpKubernetes": {
+    "message": "Kubernetes einrichten"
+  },
   "setUpGitlabCICD": {
     "message": "GitLab CI/CD einrichten"
   },
   "setUpAnsible": {
     "message": "Ansible einrichten"
+  },
+  "rustSDKRepo": {
+    "message": "Rust-Repository anzeigen"
   },
   "cSharpSDKRepo": {
     "message": "C#-Repository anzeigen"
@@ -8297,5 +8342,40 @@
   },
   "allLoginRequestsApproved": {
     "message": "Alle Anmeldeanfragen genehmigt"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Steuerinformationen aktualisiert"
+  },
+  "unverified": {
+    "message": "Nicht verifiziert"
+  },
+  "verified": {
+    "message": "Verifiziert"
+  },
+  "viewSecret": {
+    "message": "Geheimnis anzeigen"
+  },
+  "noClients": {
+    "message": "There are no clients to list"
+  },
+  "providerBillingEmailHint": {
+    "message": "Diese E-Mail-Adresse wird alle Rechnungen erhalten, die diesen Anbieter betreffen",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "date": {
+    "message": "Datum"
+  },
+  "exportClientReport": {
+    "message": "Kundenbericht exportieren"
+  },
+  "invoiceNumberHeader": {
+    "message": "Rechnungsnummer",
+    "description": "A table header for an invoice's number"
   }
 }

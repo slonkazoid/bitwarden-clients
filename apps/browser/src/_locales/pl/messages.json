@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Utwórz konto"
   },
+  "setAStrongPassword": {
+    "message": "Ustaw silne hasło"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Ukończ tworzenie konta poprzez ustawienie hasła"
+  },
   "login": {
     "message": "Zaloguj się"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Ulubione"
   },
+  "unfavorite": {
+    "message": "Usuń z ulubionych"
+  },
+  "itemAddedToFavorites": {
+    "message": "Element dodany do ulubionych"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Element usunięty z ulubionych"
+  },
   "notes": {
     "message": "Notatki"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Uruchom"
+  },
+  "launchWebsite": {
+    "message": "Otwórz stronę"
   },
   "website": {
     "message": "Strona"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "Wylogowano"
+  },
+  "loggedOutDesc": {
+    "message": "Zostałeś wylogowany z konta."
   },
   "loginExpired": {
     "message": "Twoja sesja wygasła."
@@ -1107,6 +1128,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Wpisz podstawowy adres URL hostowanej instalacji Bitwarden."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Określ bazowy adres URL swojej instalacji Bitwarden. Przykład: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Dla zaawansowanych konfiguracji możesz określić podstawowy adres URL niezależnie dla każdej usługi."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musisz dodać podstawowy adres URL serwera lub co najmniej jedno niestandardowe środowisko."
+  },
   "customEnvironment": {
     "message": "Niestandardowe środowisko"
   },
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Tożsamość"
   },
+  "newItemHeader": {
+    "message": "Nowy $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Edytuj $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Historia hasła"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Kolekcje"
+  },
+  "nCollections": {
+    "message": "Kolekcje: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Ulubione"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Automatycznie uzupełnij i zapisz"
   },
+  "fillAndSave": {
+    "message": "Wypełnij i zapisz"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "URI został zapisany i automatycznie uzupełniony"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Nowe hasło główne nie spełnia wymaganych zasad."
   },
+  "receiveMarketingEmails": {
+    "message": "Otrzymuj e-maile od Bitwarden z ogłoszeniami, poradami i badaniami."
+  },
+  "unsubscribe": {
+    "message": "Anuluj subskrypcję"
+  },
+  "atAnyTime": {
+    "message": "w każdej chwili."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Kontynuując, zgadzasz się na"
+  },
+  "and": {
+    "message": "i"
+  },
   "acceptPolicies": {
     "message": "Zaznaczając tę opcję, akceptujesz:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Błąd podczas odświeżania tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nie znaleziono tokenu odświeżającego ani kluczy API. Spróbuj wylogować się i zalogować ponownie."
   },
   "desktopSyncVerificationTitle": {
     "message": "Weryfikacja synchronizacji z aplikacją desktopową"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Wyczyść filtry lub użyj innej frazy"
   },
-  "copyInfo": {
-    "message": "Skopiuj informacje, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Skopiuj informacje - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Skopiuj notatkę - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Więcej opcji, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Więcej opcji - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Zobacz element - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Autouzupełnij - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Brak wartości do skopiowania"
+  },
+  "assignCollections": {
+    "message": "Przypisz kolekcje"
+  },
+  "copyEmail": {
+    "message": "Skopiuj e-mail"
+  },
+  "copyPhone": {
+    "message": "Skopiuj telefon"
+  },
+  "copyAddress": {
+    "message": "Skopiuj adres"
   },
   "adminConsole": {
     "message": "Konsola Administracyjna"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Elementy bez folderu"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organizacja jest wyłączona"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Nie można uzyskać dostępu do elementów w wyłączonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
   }
 }

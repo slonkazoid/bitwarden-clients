@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "ಖಾತೆ ತೆರೆ"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "ಲಾಗಿನ್"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "ನಿಮ್ಮ ಆನ್-ಪ್ರಮೇಯ ಹೋಸ್ಟ್ ಮಾಡಿದ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ಥಾಪನೆಯ ಮೂಲ URL ಅನ್ನು ನಿರ್ದಿಷ್ಟಪಡಿಸಿ."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
   "customEnvironment": {
     "message": "ಕಸ್ಟಮ್ ಪರಿಸರ"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "ಲಾಗ್ ಔಟ್"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "ನಿಮ್ಮ ಲಾಗಿನ್ ಸೆಷನ್ ಅವಧಿ ಮೀರಿದೆ."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "help": {
     "message": "ಸಹಾಯ"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "ನಿಮ್ಮ ಹೊಸ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ನೀತಿಯ ಅವಶ್ಯಕತೆಗಳನ್ನು ಪೂರೈಸುವುದಿಲ್ಲ."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
   },
   "acceptPolicies": {
     "message": "ಈ ಪೆಟ್ಟಿಗೆಯನ್ನು ಪರಿಶೀಲಿಸುವ ಮೂಲಕ ನೀವು ಈ ಕೆಳಗಿನವುಗಳನ್ನು ಒಪ್ಪುತ್ತೀರಿ:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Deny login"
   },
-  "approveLoginRequests": {
-    "message": "Approve login requests"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Login confirmed for $EMAIL$ on $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "This request is no longer valid."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Use this device to approve login requests made from other devices."
   },
   "confirmLoginAtemptForMail": {
     "message": "Confirm login attempt for $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Important:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "You have been logged out because your access token could not be decrypted. Please log in again to resolve this issue."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "You have been logged out because your refresh token could not be retrieved. Please log in again to resolve this issue."
   },
   "masterPasswordHint": {
     "message": "Your master password cannot be recovered if you forget it!"

@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "アカウントの作成"
   },
+  "setAStrongPassword": {
+    "message": "強力なパスワードを設定する"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "パスワードを設定してアカウントの作成を完了してください"
+  },
   "login": {
     "message": "ログイン"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "お気に入り"
   },
+  "unfavorite": {
+    "message": "お気に入り解除"
+  },
+  "itemAddedToFavorites": {
+    "message": "アイテムをお気に入りに追加しました"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "アイテムをお気に入りから削除しました"
+  },
   "notes": {
     "message": "メモ"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "開く"
+  },
+  "launchWebsite": {
+    "message": "ウェブサイトを開く"
   },
   "website": {
     "message": "ウェブサイト"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "ログアウトしました"
+  },
+  "loggedOutDesc": {
+    "message": "アカウントからログアウトしました。"
   },
   "loginExpired": {
     "message": "ログインセッションの有効期限が切れています。"
@@ -1107,6 +1128,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "セルフホスティングしている Bitwarden のベース URL を指定してください。"
   },
+  "selfHostedBaseUrlHint": {
+    "message": "オンプレミスホストした Bitwarden のベース URL を指定してください。例: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "高度な設定では、各サービスのベース URL を個別に指定できます。"
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "ベース サーバー URL または少なくとも 1 つのカスタム環境を追加する必要があります。"
+  },
   "customEnvironment": {
     "message": "カスタム環境"
   },
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "ID"
   },
+  "newItemHeader": {
+    "message": "$TYPE$ を新規作成",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "$TYPE$ を編集",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "パスワードの履歴"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "コレクション"
+  },
+  "nCollections": {
+    "message": "$COUNT$ 個のコレクション",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "お気に入り"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "自動入力して保存"
   },
+  "fillAndSave": {
+    "message": "入力して保存"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "アイテムを自動入力して URI を保存しました"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "新しいマスターパスワードは最低要件を満たしていません。"
   },
+  "receiveMarketingEmails": {
+    "message": "Bitwarden からのお知らせ、アドバイス、アンケート調査等のメールを受信します。"
+  },
+  "unsubscribe": {
+    "message": "配信停止"
+  },
+  "atAnyTime": {
+    "message": "はいつでもできます。"
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "続行すると以下に同意したものとみなします："
+  },
+  "and": {
+    "message": "と"
+  },
   "acceptPolicies": {
     "message": "以下に同意しチェックします:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "OK"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "アクセストークンの更新エラー"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "リフレッシュトークンや API キーが見つかりませんでした。ログアウトして再度ログインしてください。"
   },
   "desktopSyncVerificationTitle": {
     "message": "デスクトップ同期の検証"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "フィルタをクリアするか、別の検索ワードをお試しください"
   },
-  "copyInfo": {
-    "message": "$ITEMNAME$ の情報をコピー",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "情報をコピー - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "メモをコピー - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "$ITEMNAME$ のその他のオプション",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "その他のオプション - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "アイテムを表示 - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "自動入力 - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "コピーする値がありません"
+  },
+  "assignCollections": {
+    "message": "コレクションを割り当て"
+  },
+  "copyEmail": {
+    "message": "メールアドレスをコピー"
+  },
+  "copyPhone": {
+    "message": "電話番号をコピー"
+  },
+  "copyAddress": {
+    "message": "住所をコピー"
   },
   "adminConsole": {
     "message": "管理コンソール"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "フォルダーがないアイテム"
+  },
+  "organizationIsDeactivated": {
+    "message": "組織は無効化されています"
+  },
+  "contactYourOrgAdmin": {
+    "message": "無効化された組織のアイテムにアクセスすることはできません。組織の所有者に連絡してください。"
   }
 }

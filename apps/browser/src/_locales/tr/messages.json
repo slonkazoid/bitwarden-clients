@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Hesap oluştur"
   },
+  "setAStrongPassword": {
+    "message": "Güçlü bir parola belirleyin"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Parolanızı belirleyerek hesabınızı oluşturmayı tamamlayın"
+  },
   "login": {
     "message": "Giriş yap"
   },
@@ -226,7 +232,7 @@
     "message": "Bitwarden Authenticator allows you to store authenticator keys and generate TOTP codes for 2-step verification flows. Learn more on the bitwarden.com website"
   },
   "bitwardenSecretsManager": {
-    "message": "Bitwarden Secrets Manager"
+    "message": "Bitwarden Sır Yöneticisi"
   },
   "continueToSecretsManagerPageDesc": {
     "message": "Securely store, manage, and share developer secrets with Bitwarden Secrets Manager. Learn more on the bitwarden.com website."
@@ -238,7 +244,7 @@
     "message": "Create smooth and secure login experiences free from traditional passwords with Passwordless.dev. Learn more on the bitwarden.com website."
   },
   "freeBitwardenFamilies": {
-    "message": "Free Bitwarden Families"
+    "message": "Ücretsiz Bitwarden Aile"
   },
   "freeBitwardenFamiliesPageDesc": {
     "message": "You are eligible for Free Bitwarden Families. Redeem this offer today in the web app."
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Favori"
   },
+  "unfavorite": {
+    "message": "Favorilerden kaldır"
+  },
+  "itemAddedToFavorites": {
+    "message": "Kayıt favorilere eklendi"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Kayıt favorilerden silindi"
+  },
   "notes": {
     "message": "Notlar"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Aç"
+  },
+  "launchWebsite": {
+    "message": "Web sitesini aç"
   },
   "website": {
     "message": "Web sitesi"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "Çıkış yapıldı"
+  },
+  "loggedOutDesc": {
+    "message": "Hesabınızdan çıkış yapıldı."
   },
   "loginExpired": {
     "message": "Oturumunuz zaman aşımına uğradı."
@@ -803,7 +824,7 @@
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Dışa aktarılacak konum"
   },
   "exportVault": {
     "message": "Kasayı dışa aktar"
@@ -812,7 +833,7 @@
     "message": "Dosya biçimi"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Dışarı aktarılan bu dosya parola korumalı olacak ve dosyanın çözülmesi için parolayı girmeniz gerekecek."
   },
   "filePassword": {
     "message": "Dosya parolası"
@@ -1106,6 +1127,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Kurum içinde barındırılan Bitwarden kurulumunuzun taban URL'sini belirtin."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
   },
   "customEnvironment": {
     "message": "Özel ortam"
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Kimlik"
   },
+  "newItemHeader": {
+    "message": "Yeni $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "$TYPE$ düzenle",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Parola geçmişi"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Koleksiyonlar"
+  },
+  "nCollections": {
+    "message": "$COUNT$ koleksiyon",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Favoriler"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Otomatik doldur ve kaydet"
   },
+  "fillAndSave": {
+    "message": "Doldur ve kaydet"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Kayıt otomatik dolduruldu ve URI kaydedildi"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolanız ilke gereksinimlerini karşılamıyor."
   },
+  "receiveMarketingEmails": {
+    "message": "Bitwarden'dan duyurular, öneriler ve araştırmalarla ilgili e-postalar alın."
+  },
+  "unsubscribe": {
+    "message": "İstediğiniz zaman"
+  },
+  "atAnyTime": {
+    "message": "aboneliğinizi iptal edebilirsiniz."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Devam ederek şunları kabul etmiş olursunuz:"
+  },
+  "and": {
+    "message": "ve"
+  },
   "acceptPolicies": {
     "message": "Bu kutuyu işaretleyerek aşağıdakileri kabul etmiş olursunuz:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Tamam"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "desktopSyncVerificationTitle": {
     "message": "Masaüstü eşitleme doğrulaması"
@@ -2587,19 +2668,19 @@
     "message": "Kuruluş SSO tanımlayıcısı gereklidir."
   },
   "creatingAccountOn": {
-    "message": "Creating account on"
+    "message": "Hesap oluşturuluyor:"
   },
   "checkYourEmail": {
     "message": "E-postanızı kontrol edin"
   },
   "followTheLinkInTheEmailSentTo": {
-    "message": "Follow the link in the email sent to"
+    "message": "Hesabınızı oluşturmaya devam etmek için"
   },
   "andContinueCreatingYourAccount": {
-    "message": "and continue creating your account."
+    "message": "adresine gönderdiğimiz e-postadaki bağlantıya tıklayın."
   },
   "noEmail": {
-    "message": "No email?"
+    "message": "E-posta gelmedi mi?"
   },
   "goBack": {
     "message": "Geri dönüp"
@@ -3252,7 +3333,7 @@
     "message": "Önerileri otomatik doldur"
   },
   "autofillSuggestionsTip": {
-    "message": "Save a login item for this site to auto-fill"
+    "message": "Otomatik doldurma için bu siteye ait bir hesap kaydededin"
   },
   "yourVaultIsEmpty": {
     "message": "Kasanız boş"
@@ -3261,11 +3342,11 @@
     "message": "Aramanızla eşleşen kayıt yok"
   },
   "clearFiltersOrTryAnother": {
-    "message": "Clear filters or try another search term"
+    "message": "Filtreleri temizleyin veya başka bir arama yapmayı deneyin"
   },
-  "copyInfo": {
-    "message": "Copy info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Bilgileri kopyala - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,8 +3354,18 @@
       }
     }
   },
-  "moreOptions": {
-    "message": "More options, $ITEMNAME$",
+  "copyNoteTitle": {
+    "message": "Notu kopyala - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
+    "message": "Diğer seçenekler, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
       "itemname": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Diğer seçenekler - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Kaydı görüntüle - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Otomatik doldur - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Kopyalanacak değer yok"
+  },
+  "assignCollections": {
+    "message": "Koleksiyon ata"
+  },
+  "copyEmail": {
+    "message": "E-postayı kopyala"
+  },
+  "copyPhone": {
+    "message": "Telefonu kopyala"
+  },
+  "copyAddress": {
+    "message": "Adresi kopyala"
   },
   "adminConsole": {
     "message": "Yönetici Konsolu"
@@ -3302,7 +3438,7 @@
     "message": "Hedef klasör atama hatası."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "$NAME$ içindeki kayıtları görüntüle",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -3312,7 +3448,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "$NAME$ klasörüne dön",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -3325,7 +3461,7 @@
     "message": "Yeni"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "$NAME$ klasörünü kaldır",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Klasörü olmayan kayıtlar"
+  },
+  "organizationIsDeactivated": {
+    "message": "Kuruluş pasifleştirilmiş"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Pasif kuruluşlardaki kayıtlara erişilemez. Destek almak için kuruluş sahibinizle iletişime geçin."
   }
 }
