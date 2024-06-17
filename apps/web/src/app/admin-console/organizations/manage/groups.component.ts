@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -72,14 +72,9 @@ type GroupDetailsRow = {
 };
 
 @Component({
-  selector: "app-org-groups",
   templateUrl: "groups.component.html",
 })
 export class GroupsComponent implements OnInit, OnDestroy {
-  @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
-  @ViewChild("usersTemplate", { read: ViewContainerRef, static: true })
-  usersModalRef: ViewContainerRef;
-
   loading = true;
   organizationId: string;
   groups: GroupDetailsRow[];
