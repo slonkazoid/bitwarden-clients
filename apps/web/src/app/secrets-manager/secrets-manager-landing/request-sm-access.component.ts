@@ -20,9 +20,13 @@ import { SmLandingApiService } from "../secrets-manager-landing/SmLandingApiServ
   imports: [SharedModule, SearchModule, NoItemsModule, HeaderModule, OssModule],
 })
 export class RequestSMAccessComponent implements OnInit {
-  requestAccessForm: FormGroup;
+  requestAccessForm = new FormGroup({
+    requestAccessEmailContents: new FormControl(
+      this.i18nService.t("requestAccessSMDefaultEmailContent"),
+    ),
+    selectedOrganization: new FormControl<Organization>(null, [Validators.required]),
+  });
   organizations: Organization[] = [];
-  textAreaValue: string = this.i18nService.t("requestAccessSMDefaultEmailContent");
 
   constructor(
     private router: Router,
