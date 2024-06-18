@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 
-import { RequestSMAccessRequest } from "../models/Requests/request-sm-access.request";
+import { RequestSMAccessRequest } from "../models/requests/request-sm-access.request";
 
 @Injectable({
   providedIn: "root",

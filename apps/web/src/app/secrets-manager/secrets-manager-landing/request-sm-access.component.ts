@@ -11,7 +11,7 @@ import { NoItemsModule, SearchModule, ToastService } from "@bitwarden/components
 import { HeaderModule } from "../../layouts/header/header.module";
 import { OssModule } from "../../oss.module";
 import { SharedModule } from "../../shared/shared.module";
-import { RequestSMAccessRequest } from "../models/Requests/request-sm-access.request";
+import { RequestSMAccessRequest } from "../models/requests/request-sm-access.request";
 
 import { SmLandingApiService } from "./smLandingApiService.service";
 
