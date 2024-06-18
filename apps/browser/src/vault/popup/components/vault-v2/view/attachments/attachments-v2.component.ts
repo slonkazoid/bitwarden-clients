@@ -80,7 +80,6 @@ export class AttachmentsV2Component implements OnDestroy {
     if (this.cipher.reprompt === CipherRepromptType.None || this.passwordReprompted) {
       return true;
     }
-
     return (this.passwordReprompted = await this.passwordRepromptService.showPasswordPrompt());
   }
 
@@ -88,9 +87,9 @@ export class AttachmentsV2Component implements OnDestroy {
     if (!(await this.promptPassword())) {
       return;
     }
-    const a = attachment as any;
+    const file = attachment as any;
 
-    if (a.downloading) {
+    if (file.downloading) {
       return;
     }
 
@@ -120,7 +119,7 @@ export class AttachmentsV2Component implements OnDestroy {
       }
     }
 
-    a.downloading = true;
+    file.downloading = true;
     const response = await fetch(new Request(url, { cache: "no-store" }));
     if (response.status !== 200) {
       this.toastService.showToast({
@@ -128,7 +127,7 @@ export class AttachmentsV2Component implements OnDestroy {
         title: null,
         message: this.i18nService.t("errorOccurred"),
       });
-      a.downloading = false;
+      file.downloading = false;
       return;
     }
 
@@ -148,6 +147,6 @@ export class AttachmentsV2Component implements OnDestroy {
       });
     }
 
-    a.downloading = false;
+    file.downloading = false;
   }
 }

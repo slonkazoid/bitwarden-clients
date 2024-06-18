@@ -11,7 +11,16 @@
         </div>
       </div>
       <div class="tw-flex tw-items-center" (click)="downloadAttachment(attachment)">
-        <i class="bwi bwi-download bwi-lg bwi-fw"></i>
+        <i
+          class="bwi bwi-download bwi-fw row-sub-icon"
+          *ngIf="!$any(attachment).downloading"
+          aria-hidden="true"
+        ></i>
+        <i
+          class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
+          *ngIf="$any(attachment).downloading"
+          aria-hidden="true"
+        ></i>
       </div>
     </div>
   </div>
