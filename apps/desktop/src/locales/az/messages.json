@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Hesab yarat"
   },
+  "setAStrongPassword": {
+    "message": "Güclü bir parol təyin et"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Bir parol təyin edərək hesabınızı yaratmağı başa çatdırın"
+  },
   "logIn": {
     "message": "Giriş et"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Öz-özünə sahiblik edən Bitwarden quraşdırmasının baza URL-sini müəyyənləşdirin."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Şirkət daxili sahiblik edən Bitwarden quraşdırmasının təməl URL-sini qeyd edin. Nümunə: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Qabaqcıl konfiqurasiya üçün hər xidmətin təməl URL-sini müstəqil olaraq qeyd edə bilərsiniz."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Təməl server URL-sini və ya ən azı bir özəl mühiti əlavə etməlisiniz."
+  },
   "customEnvironment": {
     "message": "Özəl mühit"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Çıxış edildi"
+  },
+  "loggedOutDesc": {
+    "message": "Hesabınızdan çıxış etmisiniz."
   },
   "loginExpired": {
     "message": "Seansın müddəti bitdi."
@@ -983,7 +1001,7 @@
     "message": "Menyu çubuğuna kiçildiləndə belə Bitwarden ikonunu Yuvada göstər."
   },
   "confirmTrayTitle": {
-    "message": "Bildiriş sahəsi nişanını ləğv et"
+    "message": "Gizlətmə sahəsini təsdiqlə"
   },
   "confirmTrayDesc": {
     "message": "Bu ayarı söndürsəniz, bütün əlaqəli ayarlar da söndürüləcək."
@@ -1211,6 +1229,12 @@
         "example": "Password"
       }
     }
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Müraciət tokeni təzələmə xətası"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Təzələmə tokeni və ya API açarlar tapılmadı. Lütfən çıxış edib yenidən giriş etməyə çalışın."
   },
   "help": {
     "message": "Kömək"
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolunuz siyasət tələblərini qarşılamır."
+  },
+  "receiveMarketingEmails": {
+    "message": "Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın."
+  },
+  "unsubscribe": {
+    "message": "Abunəlikdən çıx"
+  },
+  "atAnyTime": {
+    "message": "istənilən vaxt."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Davam edərək, bunlarla razılaşırsınız"
+  },
+  "and": {
+    "message": "və"
   },
   "acceptPolicies": {
     "message": "Bu qutunu işarələyərək aşağıdakılarla razılaşırsınız:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Girişi rədd et"
   },
-  "approveLoginRequests": {
-    "message": "Giriş tələblərini təsdiqlə"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$DEVICE$ cihazında $EMAIL$ üçün giriş təsdiqləndi",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Bu tələb artıq yararsızdır."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Digər cihazlardan edilən giriş tələblərini təsdiqləmək üçün bu cihazı istifadə edin."
   },
   "confirmLoginAtemptForMail": {
     "message": "$EMAIL$ üçün giriş cəhdini təsdiqlə",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Vacib:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Müraciət tokeninizin şifrəsi açıla bilmədiyi üçün çıxış etdiniz. Bu problemi həll etmək üçün lütfən yenidən giriş edin."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Təzələmə tokeniniz alına bilmədiyi üçün çıxış etdiniz. Bu problemi həll etmək üçün lütfən yenidən giriş edin."
   },
   "masterPasswordHint": {
     "message": "Unutsanız, ana parolunuz bərpa edilə bilməz!"

@@ -613,7 +613,6 @@ export class ServiceContainer {
       await this.cryptoService.clearStoredUserKey(KeySuffixOptions.Auto);
 
     this.userVerificationService = new UserVerificationService(
-      this.stateService,
       this.cryptoService,
       this.accountService,
       this.masterPasswordService,
@@ -753,6 +752,7 @@ export class ServiceContainer {
 
     await this.stateService.clean();
     await this.accountService.clean(userId);
+    await this.accountService.switchAccount(null);
     process.env.BW_SESSION = null;
   }
 

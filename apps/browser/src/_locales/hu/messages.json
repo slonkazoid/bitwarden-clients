@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Fiók létrehozása"
   },
+  "setAStrongPassword": {
+    "message": "Erős jelszó beállítása"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "A fiók létrehozásának befejezése jelszó beállításával"
+  },
   "login": {
     "message": "Bejelentkezés"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Kedvenc"
   },
+  "unfavorite": {
+    "message": "Nem kedvenc"
+  },
+  "itemAddedToFavorites": {
+    "message": "Az elem bekerült a kedvencekhez."
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Az elem kikerült a kedvencekből."
+  },
   "notes": {
     "message": "Jegyzetek"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Indítás"
+  },
+  "launchWebsite": {
+    "message": "Webhely indítása"
   },
   "website": {
     "message": "Weboldal"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "Kijelentkezett"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Bejelentkezési munkamenete lejárt."
@@ -1107,6 +1128,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "A helyileg működtetett Bitwarden telepítés alap webcímének megadása."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Adjuk meg a helyileg tárolt Bitwarden telepítés alap webcímét. Példa: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Speciális konfigurációhoz külön-külön megadhatjuk az egyes szolgáltatások alap webcímét."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Hozzá kell adni az alapszerver webcímét vagy legalább egy egyedi környezetet."
+  },
   "customEnvironment": {
     "message": "Egyedi környezet"
   },
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Személyazonosság"
   },
+  "newItemHeader": {
+    "message": "Új $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "$TYPE$ szerkesztése",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Jelszó előzmények"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Gyűjtemények"
+  },
+  "nCollections": {
+    "message": "$COUNT$ gyűjtemény",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Kedvencek"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Automatikus kitöltés és mentés"
   },
+  "fillAndSave": {
+    "message": "Kitöltés és mentés"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Automatikusan kitöltött elem és mentett URI"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Az új mesterjelszó nem felel meg a szabály követelményeknek."
   },
+  "receiveMarketingEmails": {
+    "message": "Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről."
+  },
+  "unsubscribe": {
+    "message": "Leiratkozás"
+  },
+  "atAnyTime": {
+    "message": "bármikor."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "A folytatással elfogadjuk"
+  },
+  "and": {
+    "message": "és"
+  },
   "acceptPolicies": {
     "message": "A doboz bejelölésével elfogadjuk a következőket:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "desktopSyncVerificationTitle": {
     "message": "Asztali szinkronizálás ellenőrzés"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Töröljük a szűrőket vagy próbálkozzunk másik keresési kifejezéssel."
   },
-  "copyInfo": {
-    "message": "Adatok másolása, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Infó másolása - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Jegyzet másolása - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "További opciók, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "További opciók - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Elem megtekkintése - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Automatikus kitöltés - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Nincsenek másolandó értékek."
+  },
+  "assignCollections": {
+    "message": "Gyűjtemények hozzárendelése"
+  },
+  "copyEmail": {
+    "message": "Email cím másolása"
+  },
+  "copyPhone": {
+    "message": "Telefonszám másolása"
+  },
+  "copyAddress": {
+    "message": "Cím másolása"
   },
   "adminConsole": {
     "message": "Adminisztrátori konzol"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Items with no folder"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organization is deactivated"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Items in deactivated organizations cannot be accessed. Contact your organization owner for assistance."
   }
 }

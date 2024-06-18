@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import {
   AddAccountCreditDialogComponent,
+  InvoicesComponent,
   ManageTaxInformationComponent,
   SelectPaymentMethodComponent,
   VerifyBankAccountComponent,
@@ -15,8 +16,11 @@ import {
   CheckboxModule,
   DialogModule,
   FormFieldModule,
+  IconButtonModule,
+  MenuModule,
   RadioButtonModule,
   SelectModule,
+  TableModule,
   ToastModule,
   TypographyModule,
 } from "@bitwarden/components";
@@ -67,6 +71,9 @@ import { IconComponent } from "./vault/components/icon.component";
     CheckboxModule,
     DialogModule,
     TypographyModule,
+    TableModule,
+    MenuModule,
+    IconButtonModule,
   ],
   declarations: [
     A11yInvalidDirective,
@@ -97,6 +104,7 @@ import { IconComponent } from "./vault/components/icon.component";
     IfFeatureDirective,
     FingerprintPipe,
     AddAccountCreditDialogComponent,
+    InvoicesComponent,
     ManageTaxInformationComponent,
     SelectPaymentMethodComponent,
     VerifyBankAccountComponent,
@@ -132,6 +140,7 @@ import { IconComponent } from "./vault/components/icon.component";
     IfFeatureDirective,
     FingerprintPipe,
     AddAccountCreditDialogComponent,
+    InvoicesComponent,
     ManageTaxInformationComponent,
     SelectPaymentMethodComponent,
     VerifyBankAccountComponent,

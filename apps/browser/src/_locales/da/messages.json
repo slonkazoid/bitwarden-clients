@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Opret konto"
   },
+  "setAStrongPassword": {
+    "message": "Indstil en stærk adgangskode"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Afslut kontooprettelsen med at indstille en adgangskode"
+  },
   "login": {
     "message": "Log ind"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Favorit"
   },
+  "unfavorite": {
+    "message": "Fjern fra favorit"
+  },
+  "itemAddedToFavorites": {
+    "message": "Emne føjet til favoritter"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Emne fjernet fra favoritter"
+  },
   "notes": {
     "message": "Notater"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Start"
+  },
+  "launchWebsite": {
+    "message": "Åbn websted"
   },
   "website": {
     "message": "Hjemmeside"
@@ -598,6 +616,9 @@
   },
   "loggedOut": {
     "message": "Logget ud"
+  },
+  "loggedOutDesc": {
+    "message": "Der er blevet logget ud af kontoen."
   },
   "loginExpired": {
     "message": "Din login-session er udløbet."
@@ -1107,6 +1128,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Angiv grund-URL'en i din lokal-hostede Bitwarden-installation."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
   "customEnvironment": {
     "message": "Brugerdefineret miljø"
   },
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Identitet"
   },
+  "newItemHeader": {
+    "message": "Ny $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Redigér $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Adgangskodehistorik"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Samlinger"
+  },
+  "nCollections": {
+    "message": "$COUNT$ samlinger",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Favoritter"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Autoudfyld og gem"
   },
+  "fillAndSave": {
+    "message": "Udfyld og gem"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Autoudfyldte element og URI gemt"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Din nye hovedadgangskode opfylder ikke politikkravene."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Afmeld"
+  },
+  "atAnyTime": {
+    "message": "til enhver tid."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ved at fortsætte, accepterer du"
+  },
+  "and": {
+    "message": "og"
+  },
   "acceptPolicies": {
     "message": "Ved at markere dette felt accepterer du følgende:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Adgangstoken genopfriskningsfejl"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Ingen genopfriskningstoken eller API-nøgler fundet. Prøv at logge ud og dernæst ind igen."
   },
   "desktopSyncVerificationTitle": {
     "message": "Verifikation af skrivebordssynkronisering"
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Ryd filtre eller prøv med et andet søgeord"
   },
-  "copyInfo": {
-    "message": "Kopiér info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Kopiér info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Kopiér notat - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Flere valgmuligheder, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Flere valgmuligheder - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Vis emne - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Autoudfyld - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Ingen værdier at kopiere"
+  },
+  "assignCollections": {
+    "message": "Tildel samlinger"
+  },
+  "copyEmail": {
+    "message": "Kopiér e-mail"
+  },
+  "copyPhone": {
+    "message": "Kopiér telefon"
+  },
+  "copyAddress": {
+    "message": "Kopiér addresse"
   },
   "adminConsole": {
     "message": "Admin-konsol"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Emner uden mappe"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organisation er deaktiveret"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Emner i deaktiverede organisationer kan ikke tilgås. Kontakt organisationsejeren for assistance."
   }
 }

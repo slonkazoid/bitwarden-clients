@@ -3,10 +3,17 @@ import { booleanAttribute, Component, Input } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { DialogService, IconButtonModule, ItemModule, MenuModule } from "@bitwarden/components";
+import {
+  DialogService,
+  IconButtonModule,
+  ItemModule,
+  MenuModule,
+  ToastService,
+} from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { BrowserApi } from "../../../../../platform/browser/browser-api";
@@ -26,11 +33,11 @@ export class ItemMoreOptionsComponent {
   cipher: CipherView;
 
   /**
-   * Flag to hide the login specific menu options. Used for login items that are
+   * Flag to hide the autofill menu options. Used for items that are
    * already in the autofill list suggestion.
    */
   @Input({ transform: booleanAttribute })
-  hideLoginOptions: boolean;
+  hideAutofillOptions: boolean;
 
   protected autofillAllowed$ = this.vaultPopupItemsService.autofillAllowed$;
 
@@ -38,16 +45,21 @@ export class ItemMoreOptionsComponent {
     private cipherService: CipherService,
     private vaultPopupItemsService: VaultPopupItemsService,
     private passwordRepromptService: PasswordRepromptService,
+    private toastService: ToastService,
     private dialogService: DialogService,
     private router: Router,
+    private i18nService: I18nService,
   ) {}
 
   get canEdit() {
     return this.cipher.edit;
   }
 
-  get isLogin() {
-    return this.cipher.type === CipherType.Login;
+  /**
+   * Determines if the cipher can be autofilled.
+   */
+  get canAutofill() {
+    return [CipherType.Login, CipherType.Card, CipherType.Identity].includes(this.cipher.type);
   }
 
   get favoriteText() {
@@ -58,7 +70,7 @@ export class ItemMoreOptionsComponent {
    * Determines if the login cipher can be launched in a new browser tab.
    */
   get canLaunch() {
-    return this.isLogin && this.cipher.login.canLaunch;
+    return this.cipher.type === CipherType.Login && this.cipher.login.canLaunch;
   }
 
   /**
@@ -85,6 +97,13 @@ export class ItemMoreOptionsComponent {
     this.cipher.favorite = !this.cipher.favorite;
     const encryptedCipher = await this.cipherService.encrypt(this.cipher);
     await this.cipherService.updateWithServer(encryptedCipher);
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t(
+        this.cipher.favorite ? "itemAddedToFavorites" : "itemRemovedFromFavorites",
+      ),
+    });
   }
 
   /**

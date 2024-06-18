@@ -1,33 +1,30 @@
 <popup-page>
   <popup-header slot="header" [pageTitle]="'vault' | i18n">
     <ng-container slot="end">
-      <!-- TODO PM-6826: add selectedVault query param -->
-      <a bitButton buttonType="primary" type="button" routerLink="/add-cipher">
-        <i class="bwi bwi-plus-f" aria-hidden="true"></i>
-        {{ "new" | i18n }}
-      </a>
+      <app-new-item-dropdown></app-new-item-dropdown>
+
       <app-pop-out></app-pop-out>
       <app-current-account></app-current-account>
     </ng-container>
   </popup-header>
 
-  <div *ngIf="showEmptyState$ | async" class="tw-flex tw-flex-col tw-h-full tw-justify-center">
+  <div
+    *ngIf="vaultState === VaultStateEnum.Empty"
+    class="tw-flex tw-flex-col tw-h-full tw-justify-center"
+  >
     <bit-no-items [icon]="vaultIcon">
       <ng-container slot="title">{{ "yourVaultIsEmpty" | i18n }}</ng-container>
       <ng-container slot="description">{{ "autofillSuggestionsTip" | i18n }}</ng-container>
-      <button slot="button" type="button" bitButton buttonType="primary" (click)="addCipher()">
-        {{ "new" | i18n }}
-      </button>
+      <app-new-item-dropdown slot="button"></app-new-item-dropdown>
     </bit-no-items>
   </div>
 
-  <ng-container *ngIf="!(showEmptyState$ | async)">
+  <ng-container *ngIf="vaultState !== VaultStateEnum.Empty">
     <app-vault-v2-search> </app-vault-v2-search>
 
     <app-vault-list-filters></app-vault-list-filters>
-
     <div
-      *ngIf="(showNoResultsState$ | async) && !(showDeactivatedOrg$ | async)"
+      *ngIf="vaultState === VaultStateEnum.NoResults"
       class="tw-flex tw-flex-col tw-justify-center tw-h-auto tw-pt-12"
     >
       <bit-no-items [icon]="noResultsIcon">
@@ -37,7 +34,7 @@
     </div>
 
     <div
-      *ngIf="showDeactivatedOrg$ | async"
+      *ngIf="vaultState === VaultStateEnum.DeactivatedOrg"
       class="tw-flex tw-flex-col tw-justify-center tw-h-auto tw-pt-12"
     >
       <bit-no-items [icon]="deactivatedIcon">
@@ -46,7 +43,7 @@
       </bit-no-items>
     </div>
 
-    <ng-container *ngIf="!(showNoResultsState$ | async) && !(showDeactivatedOrg$ | async)">
+    <ng-container *ngIf="vaultState === null">
       <app-autofill-vault-list-items></app-autofill-vault-list-items>
       <app-vault-list-items-container
         [title]="'favorites' | i18n"

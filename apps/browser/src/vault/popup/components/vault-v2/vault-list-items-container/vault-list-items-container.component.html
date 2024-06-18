@@ -1,4 +1,4 @@
-<bit-section *ngIf="ciphers?.length > 0">
+<bit-section *ngIf="ciphers?.length > 0 || description">
   <bit-section-header>
     <h2 bitTypography="h6">
       {{ title }}
@@ -13,6 +13,9 @@
     ></button>
     <span bitTypography="body2" slot="end">{{ ciphers.length }}</span>
   </bit-section-header>
+  <div *ngIf="description" class="tw-text-muted tw-px-1 tw-mb-2" bitTypography="body2">
+    {{ description }}
+  </div>
   <bit-item-group>
     <bit-item *ngFor="let cipher of ciphers">
       <a
@@ -22,7 +25,7 @@
         [appA11yTitle]="'viewItemTitle' | i18n: cipher.name"
       >
         <app-vault-icon slot="start" [cipher]="cipher"></app-vault-icon>
-        {{ cipher.name }}
+        <span data-testid="item-name">{{ cipher.name }}</span>
         <i
           class="bwi bwi-sm"
           *ngIf="cipher.organizationId"
@@ -33,12 +36,20 @@
       </a>
       <ng-container slot="end">
         <bit-item-action *ngIf="showAutofillButton">
-          <button type="button" bitBadge variant="primary">{{ "autoFill" | i18n }}</button>
+          <button
+            type="button"
+            bitBadge
+            variant="primary"
+            [title]="'autofillTitle' | i18n: cipher.name"
+            [attr.aria-label]="'autofillTitle' | i18n: cipher.name"
+          >
+            {{ "autoFill" | i18n }}
+          </button>
         </bit-item-action>
         <app-item-copy-actions [cipher]="cipher"></app-item-copy-actions>
         <app-item-more-options
           [cipher]="cipher"
-          [hideLoginOptions]="showAutofillButton"
+          [hideAutofillOptions]="showAutofillButton"
         ></app-item-more-options>
       </ng-container>
     </bit-item>

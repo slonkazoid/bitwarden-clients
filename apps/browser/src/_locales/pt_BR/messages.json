@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Criar Conta"
   },
+  "setAStrongPassword": {
+    "message": "Defina uma senha forte"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Termine de criar a sua conta definindo uma senha"
+  },
   "login": {
     "message": "Iniciar Sessão"
   },
@@ -389,6 +395,15 @@
   "favorite": {
     "message": "Favorito"
   },
+  "unfavorite": {
+    "message": "Desfavoritar"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item adicionado aos favoritos"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removido dos favoritos"
+  },
   "notes": {
     "message": "Notas"
   },
@@ -409,6 +424,9 @@
   },
   "launch": {
     "message": "Abrir"
+  },
+  "launchWebsite": {
+    "message": "Abrir site"
   },
   "website": {
     "message": "Site"
@@ -599,6 +617,9 @@
   "loggedOut": {
     "message": "Sessão encerrada"
   },
+  "loggedOutDesc": {
+    "message": "Você foi desconectado de sua conta."
+  },
   "loginExpired": {
     "message": "A sua sessão expirou."
   },
@@ -763,7 +784,7 @@
     "message": "Desbloquear"
   },
   "additionalOptions": {
-    "message": "Additional options"
+    "message": "Opções adicionais"
   },
   "enableContextMenuItem": {
     "message": "Mostrar opções de menu de contexto"
@@ -803,7 +824,7 @@
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Exportar de"
   },
   "exportVault": {
     "message": "Exportar Cofre"
@@ -812,28 +833,28 @@
     "message": "Formato de arquivo"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Esta arquivo de exportação será protegido por senha e precisará da mesma para ser descriptografado."
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Senha do arquivo"
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Esta senha será usada para exportar e importar este arquivo"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Use sua chave criptográfica da conta, derivada do nome de usuário e Senha Mestra da sua conta, para criptografar a exportação e restringir importação para apenas a conta atual do Bitwarden."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Defina uma senha de arquivo para criptografar a exportação e importá-la para qualquer conta do Bitwarden usando a senha para descriptografia."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Tipo da exportação"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Conta restrita"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "\"Senha do arquivo\" e \"Confirmação de senha\" não correspondem."
   },
   "warning": {
     "message": "AVISO",
@@ -1106,6 +1127,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Especifique a URL de base da sua instalação local do Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Especifique a URL de base da sua instalação local do Bitwarden. Exemplo: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Para usuários avançados. Você pode especificar a URL de base de cada serviço independentemente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Você deve adicionar um URL do servidor de base ou pelo menos um ambiente personalizado."
   },
   "customEnvironment": {
     "message": "Ambiente Personalizado"
@@ -1410,6 +1440,24 @@
   "typeIdentity": {
     "message": "Identidade"
   },
+  "newItemHeader": {
+    "message": "Nova $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Editar $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Histórico de Senha"
   },
@@ -1418,6 +1466,15 @@
   },
   "collections": {
     "message": "Coleções"
+  },
+  "nCollections": {
+    "message": "Coleções $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Favoritos"
@@ -1648,6 +1705,9 @@
   "autoFillAndSave": {
     "message": "Autopreencher e Salvar"
   },
+  "fillAndSave": {
+    "message": "Preencher e salvar"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Item Auto-Preenchido e URI Salvo"
   },
@@ -1726,6 +1786,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "A sua nova senha mestra não cumpre aos requisitos da política."
   },
+  "receiveMarketingEmails": {
+    "message": "Obtenha e-mails do Bitwarden para anúncios, conselhos e oportunidades de pesquisa."
+  },
+  "unsubscribe": {
+    "message": "Cancelar subscrição"
+  },
+  "atAnyTime": {
+    "message": "a qualquer momento."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ao continuar, você concorda com os"
+  },
+  "and": {
+    "message": "e"
+  },
   "acceptPolicies": {
     "message": "Ao marcar esta caixa, você concorda com o seguinte:"
   },
@@ -1743,6 +1818,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Erro ao Atualizar Token"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nenhum token de atualização ou chave de API foi encontrado. Tente sair e entrar novamente."
   },
   "desktopSyncVerificationTitle": {
     "message": "Verificação de sincronização do Desktop"
@@ -2213,10 +2294,10 @@
     }
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Exportando cofre da organização"
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "message": "Apenas o cofre da organização associado com $ORGANIZATION$ será exportado. Itens do cofre pessoal e itens de outras organizações não serão incluídos.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -3263,9 +3344,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Limpar filtros ou tentar outro termo de pesquisa"
   },
-  "copyInfo": {
-    "message": "Copiar informações, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Copiar informação - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3273,7 +3354,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Copiar Nota - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Mais opções, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3282,6 +3373,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Mais opções - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Visualizar item - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Auto-preenchimento - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Não há valores para copiar"
+  },
+  "assignCollections": {
+    "message": "Aplicar coleção"
+  },
+  "copyEmail": {
+    "message": "Copiar e-mail"
+  },
+  "copyPhone": {
+    "message": "Copiar telefone"
+  },
+  "copyAddress": {
+    "message": "Copiar endereço"
   },
   "adminConsole": {
     "message": "Painel de administração"
@@ -3333,5 +3469,14 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Itens sem pasta"
+  },
+  "organizationIsDeactivated": {
+    "message": "A organização está desativada"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Itens em organizações desativadas não podem ser acessados. Entre em contato com o proprietário da sua organização para obter assistência."
   }
 }

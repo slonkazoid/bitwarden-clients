@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Fiók létrehozása"
   },
+  "setAStrongPassword": {
+    "message": "Erős jelszó beállítása"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "A fiók létrehozásának befejezése jelszó beállításával"
+  },
   "logIn": {
     "message": "Bejelentkezés"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "A helyileg üzemeltetett Bitwarden telepítés webcímének megadása."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Adjuk meg a helyileg tárolt Bitwarden telepítés alap webcímét. Példa: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Speciális konfigurációhoz külön-külön megadhatjuk az egyes szolgáltatások alap webcímét."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Hozzá kell adni az alapszerver webcímét vagy legalább egy egyedi környezetet."
+  },
   "customEnvironment": {
     "message": "Egyedi környezet"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Megtörtént a kijelentkezés."
+  },
+  "loggedOutDesc": {
+    "message": "Megtörtént a kijelentkezés a fiókból."
   },
   "loginExpired": {
     "message": "A bejelentkezési munkamenet lejárt."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Hozzáférési vezérjel frissítési hiba"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nem található frissítési vezérjel vagy API kulcs. Próbáljunk meg kijelentkezni, majd újra bejelentkezni."
+  },
   "help": {
     "message": "Súgó"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Az új mesterjelszó nem felel meg a szabály követelményeknek."
+  },
+  "receiveMarketingEmails": {
+    "message": "Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről."
+  },
+  "unsubscribe": {
+    "message": "Leiratkozás"
+  },
+  "atAnyTime": {
+    "message": "bármikor."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "A folytatással elfogadjuk"
+  },
+  "and": {
+    "message": "és"
   },
   "acceptPolicies": {
     "message": "A kapcsoló bekapcsolásával egyetértünk a következőkkel:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Bejelentkezés megtagadása"
   },
-  "approveLoginRequests": {
-    "message": "Bejelentkezési kérelmek jóváhagyása"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "A bejelelentketés $EMAIL$ email címmel megerősítésre került $DEVICE$ eszközön.",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "A kérés a továbbiakban már nem érvényes."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Ezen eszköz használata a más eszközökről történő bejelentkezési kérések jóváhagyására."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bejelentkezési kísérlet megerősítése $EMAIL$ email címmel",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Fontos:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Megtörtént a kijelentkezés, mert a hozzáférési vezérjelet nem sikerült visszafejteni. Jelentkezzünk be újra a probléma megoldásához."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Megtörtént a kijelentkezés, mert a hozzáférési vezérjelet nem sikerült visszafejteni. Jelentkezzünk be újra a probléma megoldásához."
   },
   "masterPasswordHint": {
     "message": "Az elfelejtett mesterjelszó nem állítható helyre, ha elfelejtik!"

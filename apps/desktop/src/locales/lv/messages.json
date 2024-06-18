@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Izveidot kontu"
   },
+  "setAStrongPassword": {
+    "message": "Jāiestata droša parole"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Jāpabeidz sava konta izveida ar paroles iestatīšanu"
+  },
   "logIn": {
     "message": "Pieteikties"
   },
@@ -695,6 +701,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Norādīt pašuzstādīta Bitwarden pamata URL."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Jānorāda sava pašizvietotā Bitward servera pamata URL. Piemērs: https://bitwarden.uznemums.lv"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Papildu konfigurācijā ir iespējams norādīt URL katram pakalpojumam atsevišķi."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Jāpievieno vai no servera pamata URL vai vismaz viena pielāgota vide."
+  },
   "customEnvironment": {
     "message": "Pielāgota vide"
   },
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Atteicies"
+  },
+  "loggedOutDesc": {
+    "message": "Notika izrakstīšanās no Tava konta."
   },
   "loginExpired": {
     "message": "Pieteikšanās sesija ir beigusies."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Piekļuves pilnvaras atsvaizināšanas kļūda"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Netika atrastas atsvaidzināšanas pilnvaras vai API atslēgas. Lūgums mēģināt izrakstīties un atkal pieteikties."
+  },
   "help": {
     "message": "Palīdzība"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Jaunā galvenā parole neatbilst nosacījumu prasībām."
+  },
+  "receiveMarketingEmails": {
+    "message": "Saņemt e-pasta ziņojumus no Bitwarden par paziņojumiem, padomiem un izpētes iespējām."
+  },
+  "unsubscribe": {
+    "message": "Atteikt abonēšanu"
+  },
+  "atAnyTime": {
+    "message": "jebkurā laikā."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Turpinot tiek sniegta piekrišana"
+  },
+  "and": {
+    "message": "un"
   },
   "acceptPolicies": {
     "message": "Ar šīs rūtiņas atzīmēšanu tiek piekrists sekojošajam:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Atteikt pieteikšanos"
   },
-  "approveLoginRequests": {
-    "message": "Apstiprināt pieteikšanās pieprasījumus"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$EMAIL$ pieteikšanās apstiprināta ierīcē $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Šis pieprasījums vairs nav derīgs."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Izmantot šo ierīci, lai apstiprinātu pieteikšanās pieprasījumus no citām ierīcēm."
   },
   "confirmLoginAtemptForMail": {
     "message": "Apstiprināt $EMAIL$ pieteikšanās mēģinājumu",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Svarīgi:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Notika izrakstīšanās, jo Tavu piekļuves pilnvaru nevarēja atšifrēt. Lūgums pieteikties atkārtoti, lai novērstu šo sarežģījumu."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Notika izrakstīšanās, jo Tavu atsvaidzināšanas pilnvaru nevarēja iegūt. Lūgums pieteikties atkārtoti, lai novērstu šo sarežģījumu."
   },
   "masterPasswordHint": {
     "message": "Galvenā parole nevar tikt atgūta, ja tā ir aizmirsta!"

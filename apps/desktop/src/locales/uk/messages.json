@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Створити обліковий запис"
   },
+  "setAStrongPassword": {
+    "message": "Встановіть надійний пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершіть створення облікового запису, встановивши пароль"
+  },
   "logIn": {
     "message": "Увійти"
   },
@@ -693,7 +699,16 @@
     "message": "Середовище власного хостингу"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Вкажіть основну URL-адресу Bitwarden, встановленого на локальному хостингу."
+    "message": "Вкажіть основну URL-адресу локально розміщеного встановлення Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden. Зразок: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для розширеної конфігурації ви можете вказати основну URL-адресу окремо для кожної служби."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Необхідно додати URL-адресу основного сервера, або принаймні одне користувацьке середовище."
   },
   "customEnvironment": {
     "message": "Власне середовище"
@@ -742,6 +757,9 @@
   },
   "loggedOut": {
     "message": "Ви вийшли"
+  },
+  "loggedOutDesc": {
+    "message": "Ви вийшли з облікового запису."
   },
   "loginExpired": {
     "message": "Тривалість вашого сеансу завершилась."
@@ -1212,6 +1230,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Помилка оновлення токена доступу"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не знайдено токен оновлення або ключі API. Спробуйте вийти, а потім увійти знову."
+  },
   "help": {
     "message": "Допомога"
   },
@@ -1640,6 +1664,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новий головний пароль не задовольняє вимоги політики."
+  },
+  "receiveMarketingEmails": {
+    "message": "Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості."
+  },
+  "unsubscribe": {
+    "message": "Відписатися"
+  },
+  "atAnyTime": {
+    "message": "можна будь-коли."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продовжуючи, ви погоджуєтеся з"
+  },
+  "and": {
+    "message": "і"
   },
   "acceptPolicies": {
     "message": "Позначивши цей прапорець, ви погоджуєтеся з:"
@@ -2383,9 +2422,6 @@
   "denyLogIn": {
     "message": "Заборонити вхід"
   },
-  "approveLoginRequests": {
-    "message": "Схвалювати запити на вхід"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Підтверджено вхід для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2419,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Цей запит більше недійсний."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Схвалювати запити на вхід, виконані з інших пристроїв."
   },
   "confirmLoginAtemptForMail": {
     "message": "Підтвердити спробу входу для $EMAIL$",
@@ -2473,6 +2506,12 @@
   },
   "important": {
     "message": "Важливо:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Ви вийшли з системи, оскільки неможливо розшифрувати ваш токен доступу. Увійдіть знову, щоб виправити цю проблему."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Ви вийшли з системи, оскільки неможливо отримати ваш токен оновлення. Увійдіть знову, щоб виправити цю проблему."
   },
   "masterPasswordHint": {
     "message": "Головний пароль неможливо відновити, якщо ви його втратите!"
