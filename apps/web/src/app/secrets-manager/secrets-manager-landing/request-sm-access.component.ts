@@ -12,7 +12,8 @@ import { HeaderModule } from "../../layouts/header/header.module";
 import { OssModule } from "../../oss.module";
 import { SharedModule } from "../../shared/shared.module";
 import { RequestSMAccessRequest } from "../models/Requests/request-sm-access.request";
-import { SmLandingApiService } from "../secrets-manager-landing/SmLandingApiService.service";
+
+import { SmLandingApiService } from "./smLandingApiService.service";
 
 @Component({
   selector: "app-request-sm-access",
