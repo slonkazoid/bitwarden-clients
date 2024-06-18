@@ -13,8 +13,13 @@
   </ng-container>
 
   <!-- ADDITIONAL INFORMATION -->
-  <ng-container *ngIf="!!cipher">
-    <app-additional-information-v2 [cipher]="cipher"> </app-additional-information-v2>
+  <ng-container *ngIf="!!cipher && cipher.notes">
+    <app-additional-information-v2 [notes]="cipher.notes"> </app-additional-information-v2>
+  </ng-container>
+
+  <!-- CUSTOM FIELDS -->
+  <ng-container *ngIf="!!cipher && cipher.fields">
+    <app-custom-fields-v2 [fields]="cipher.fields"> </app-custom-fields-v2>
   </ng-container>
 
   <!-- ATTACHMENTS SECTION -->

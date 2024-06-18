@@ -15,9 +15,13 @@
     </p>
     <!-- We will need to link to the updated password generator history component when it is ready -->
     <div *ngIf="cipher.hasPasswordHistory" (click)="openPasswordHistory()">
-      <p routerLink="/cipher-password-history" [queryParams]="{ cipherId: cipher.id }">
+      <a
+        class="tw-font-bold tw-no-underline"
+        routerLink="/cipher-password-history"
+        [queryParams]="{ cipherId: cipher.id }"
+      >
         {{ "passwordHistory" | i18n }}
-      </p>
+      </a>
     </div>
   </div>
 </div>
