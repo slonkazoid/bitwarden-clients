@@ -58,12 +58,9 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { ServiceUtils } from "@bitwarden/common/vault/service-utils";
 import { DialogService, Icons, ToastService } from "@bitwarden/components";
-import { PasswordRepromptService } from "@bitwarden/vault";
+import { CollectionAssignmentResult, PasswordRepromptService } from "@bitwarden/vault";
 
-import {
-  BulkCollectionAssignmentDialogComponent,
-  BulkCollectionAssignmentDialogResult,
-} from "../components/bulk-collection-assignment-dialog";
+import { AssignCollectionsWebComponent } from "../components/assign-collections";
 import {
   CollectionDialogAction,
   CollectionDialogTabType,
@@ -749,7 +746,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       );
     }
 
-    const dialog = BulkCollectionAssignmentDialogComponent.open(this.dialogService, {
+    const dialog = AssignCollectionsWebComponent.open(this.dialogService, {
       data: {
         ciphers,
         organizationId: orgId as OrganizationId,
@@ -759,7 +756,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     const result = await lastValueFrom(dialog.closed);
-    if (result === BulkCollectionAssignmentDialogResult.Saved) {
+    if (result === CollectionAssignmentResult.Saved) {
       this.refresh();
     }
   }
