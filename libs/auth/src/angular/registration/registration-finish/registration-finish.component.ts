@@ -7,9 +7,10 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { ToastService } from "@bitwarden/components";
 
-import { RegistrationFinishService } from "../../../common/abstractions";
-import { PasswordInputResult } from "../../../common/models/password-input-result";
 import { InputPasswordComponent } from "../../input-password/input-password.component";
+import { PasswordInputResult } from "../../input-password/password-input-result";
+
+import { RegistrationFinishService } from "./registration-finish.service";
 
 @Component({
   standalone: true,

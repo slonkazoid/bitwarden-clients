@@ -4,7 +4,7 @@ import {
   DefaultRegistrationFinishService,
   PasswordInputResult,
   RegistrationFinishService,
-} from "@bitwarden/auth/common";
+} from "@bitwarden/auth/angular";
 import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { RegisterFinishRequest } from "@bitwarden/common/auth/models/request/registration/register-finish.request";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";

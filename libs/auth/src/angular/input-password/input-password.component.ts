@@ -23,8 +23,9 @@ import {
 
 import { InputsFieldMatch } from "../../../../angular/src/auth/validators/inputs-field-match.validator";
 import { SharedModule } from "../../../../components/src/shared";
-import { PasswordInputResult } from "../../common/models/password-input-result";
 import { PasswordCalloutComponent } from "../password-callout/password-callout.component";
+
+import { PasswordInputResult } from "./password-input-result";
 
 @Component({
   standalone: true,

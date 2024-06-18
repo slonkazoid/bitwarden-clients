@@ -1,4 +1,4 @@
-import { PasswordInputResult } from "../models/password-input-result";
+import { PasswordInputResult } from "../../input-password/password-input-result";
 
 export abstract class RegistrationFinishService {
   /**
