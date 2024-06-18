@@ -120,8 +120,11 @@ export class AssignCollectionsComponent implements OnInit {
       ),
       tap((orgs) => {
         if (orgs.length > 0 && this.showOrgSelector) {
-          this.formGroup.patchValue({ selectedOrg: orgs[0].id });
-          this.setFormValidators();
+          // Using setTimeout to defer the patchValue call until the next event loop cycle
+          setTimeout(() => {
+            this.formGroup.patchValue({ selectedOrg: orgs[0].id });
+            this.setFormValidators();
+          });
         }
       }),
     );
