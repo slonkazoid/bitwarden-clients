@@ -26,9 +26,9 @@ export class SetPasswordV2Component implements OnInit {
     if (qParams.identifier != null && qParams.orgId != null) {
       this.orgName = qParams.identifier; // from SsoComponent handleChangePasswordRequired()
       this.orgId = qParams.orgId;
+    } else {
+      await this.router.navigate(["/"]);
     }
-
-    await this.router.navigate(["/"]);
   }
 
   getPasswordInputResult(passwordInputResult: PasswordInputResult) {
