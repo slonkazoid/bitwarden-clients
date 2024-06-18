@@ -36,7 +36,7 @@
     <a bitButton type="button" buttonType="primary" (click)="editCipher()">
       {{ "edit" | i18n }}
     </a>
-    <ng-container slot="end">
+    <ng-container slot="end" *ngIf="cipher.edit">
       <button
         type="button"
         class="box-content-row"
