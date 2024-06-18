@@ -3511,5 +3511,8 @@
   },
   "linked": {
     "message": "Linked"
+  },
+  "copySuccessful": {
+    "message": "Copy Successful"
   }
 }

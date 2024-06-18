@@ -7,7 +7,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { FieldType } from "@bitwarden/common/vault/enums";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
-import { SearchModule, ButtonModule } from "@bitwarden/components";
+import { SearchModule, ButtonModule, ToastService } from "@bitwarden/components";
 
 @Component({
   selector: "app-custom-fields-v2",
@@ -22,6 +22,7 @@ export class CustomFieldV2Component implements OnInit {
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
+    private toastService: ToastService,
     private i18nService: I18nService,
   ) {}
 
@@ -29,6 +30,7 @@ export class CustomFieldV2Component implements OnInit {
     this.saveHiddenFieldsVisibility();
   }
 
+  // keeping a log of hidden fields so we can toggle show/hide only on values selected
   saveHiddenFieldsVisibility() {
     if (this.fields.length > 0) {
       this.fields.forEach((field) => {
@@ -51,7 +53,11 @@ export class CustomFieldV2Component implements OnInit {
 
   copy(textData: string) {
     this.platformUtilsService.copyToClipboard(textData, null);
-    this.platformUtilsService.showToast("info", null, "Copy Successful");
+    this.toastService.showToast({
+      variant: "info",
+      title: null,
+      message: this.i18nService.t("copySuccessful"),
+    });
   }
 
   togglePassword(name: string) {
