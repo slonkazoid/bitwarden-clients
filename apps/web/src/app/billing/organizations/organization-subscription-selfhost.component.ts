@@ -9,9 +9,9 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { OrganizationConnectionType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { OrganizationConnectionResponse } from "@bitwarden/common/admin-console/models/response/organization-connection.response";
+import { ProductTierType } from "@bitwarden/common/billing/enums";
 import { BillingSyncConfigApi } from "@bitwarden/common/billing/models/api/billing-sync-config.api";
 import { SelfHostedOrganizationSubscriptionView } from "@bitwarden/common/billing/models/view/self-hosted-organization-subscription.view";
-import { ProductType } from "@bitwarden/common/enums";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -114,7 +114,7 @@ export class OrganizationSubscriptionSelfhostComponent implements OnInit, OnDest
     this.loading = true;
     this.userOrg = await this.organizationService.get(this.organizationId);
     this.showAutomaticSyncAndManualUpload =
-      this.userOrg.planProductType == ProductType.Families ? false : true;
+      this.userOrg.productTierType == ProductTierType.Families ? false : true;
     if (this.userOrg.canViewSubscription) {
       const subscriptionResponse = await this.organizationApiService.getSubscription(
         this.organizationId,
