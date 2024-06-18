@@ -221,6 +221,13 @@ const routes: Routes = [
         ],
       },
       {
+        path: "set-password-v2",
+        component: SetPasswordV2Component,
+        data: {
+          pageTitle: "setMasterPassword",
+        } satisfies AnonLayoutWrapperData,
+      },
+      {
         path: "sso",
         canActivate: [unauthGuardFn()],
         data: {
