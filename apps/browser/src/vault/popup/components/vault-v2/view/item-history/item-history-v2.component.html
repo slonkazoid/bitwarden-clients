@@ -13,7 +13,7 @@
       <span class="tw-font-bold">{{ "datePasswordUpdated" | i18n }}:</span>
       {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
     </p>
-    <!-- will need to create new password history view -->
+    <!-- We will need to link to the updated password generator history component when it is ready -->
     <div *ngIf="cipher.hasPasswordHistory" (click)="openPasswordHistory()">
       <p routerLink="/cipher-password-history" [queryParams]="{ cipherId: cipher.id }">
         {{ "passwordHistory" | i18n }}
