@@ -1,43 +1,56 @@
 <div class="tw-mb-6">
   <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "additionalInformation" | i18n }}</h5>
   <div class="box-content-row">
-    <div
-      *ngIf="cipher.notes"
-      class="tw-flex tw-justify-between"
-      [ngClass]="{ 'row-border-bottom': cipher.fields }"
-    >
-      <div class="tw-grow">
-        <label class="row-label">
-          {{ "note" | i18n }}
-        </label>
+    <div *ngIf="cipher.notes" [ngClass]="{ 'row-border-bottom': cipher.fields }">
+      <label class="row-label">
+        {{ "note" | i18n }}
+      </label>
+      <div class="tw-flex tw-justify-between">
         <input type="text" [value]="cipher.notes" readonly aria-readonly="true" />
-      </div>
-      <div class="tw-flex tw-justify-end tw-items-center">
-        <i (click)="copy(cipher.notes)" class="bwi bwi-clone bwi-lg bwi-fw"></i>
+        <i (click)="copy(cipher.notes)" class="bwi bwi-clone bwi-fw"></i>
       </div>
     </div>
-    <!-- will have to rethink this layout so we can apply show/hide if the user has multiple hidden fields -->
     <ng-container *ngIf="cipher.fields">
-      <div class="row-border-bottom tw-flex tw-justify-between" *ngFor="let field of cipher.fields">
+      <div class="row-border-bottom" *ngFor="let field of cipher.fields">
         <ng-container *ngIf="field.type === fieldType.Text">
-          <div class="tw-grow">
-            <label class="row-label">
-              {{ field.name }}
-            </label>
+          <label class="row-label">
+            {{ field.name }}
+          </label>
+          <div class="tw-flex tw-justify-between">
             <input type="text" [value]="field.value" readonly aria-readonly="true" />
+            <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
           </div>
         </ng-container>
         <ng-container *ngIf="field.type === fieldType.Hidden">
-          <div class="tw-grow">
-            <label class="row-label">
-              {{ field.name }}
-            </label>
+          <label class="row-label">
+            {{ field.name }}
+          </label>
+          <div class="tw-flex tw-justify-between">
             <input
               type="{{ hiddenFields[field.name] ? 'text' : 'password' }}"
               [value]="field.value"
               readonly
               aria-readonly="true"
             />
+            <div class="tw-flex tw-justify-end tw-items-center">
+              <button
+                type="button"
+                class="row-btn tw-mr-1"
+                appStopClick
+                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                (click)="togglePassword(field.name)"
+              >
+                <i
+                  class="bwi"
+                  [ngClass]="{
+                    'bwi-eye': !hiddenFields[field.name],
+                    'bwi-eye-slash': hiddenFields[field.name]
+                  }"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
+            </div>
           </div>
         </ng-container>
         <ng-container *ngIf="field.type === fieldType.Boolean">
@@ -49,35 +62,17 @@
           </div>
         </ng-container>
         <ng-container *ngIf="field.type === fieldType.Linked">
-          <div class="tw-grow">
-            <label class="row-label"> {{ "linked" | i18n }}: {{ field.name }} </label>
-            <input type="text" [value]="field.value" readonly aria-readonly="true" />
+          <label class="row-label"> {{ "linked" | i18n }}: {{ field.name }} </label>
+          <div class="tw-flex tw-justify-between">
+            <input
+              type="text"
+              [value]="getLinkedType(field.linkedId)"
+              readonly
+              aria-readonly="true"
+            />
+            <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
           </div>
         </ng-container>
-        <div class="tw-flex tw-justify-end tw-items-center">
-          <button
-            *ngIf="field.type === fieldType.Hidden"
-            type="button"
-            class="row-btn tw-mr-1"
-            appStopClick
-            appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-            (click)="togglePassword(field.name)"
-          >
-            <i
-              class="bwi bwi-lg"
-              [ngClass]="{
-                'bwi-eye': !hiddenFields[field.name],
-                'bwi-eye-slash': hiddenFields[field.name]
-              }"
-              aria-hidden="true"
-            ></i>
-          </button>
-          <i
-            *ngIf="field.type !== fieldType.Boolean"
-            (click)="copy(field.value)"
-            class="bwi bwi-clone bwi-lg bwi-fw"
-          ></i>
-        </div>
       </div>
     </ng-container>
   </div>

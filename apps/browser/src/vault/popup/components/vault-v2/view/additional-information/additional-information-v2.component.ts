@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { FieldType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -19,7 +20,10 @@ export class AdditionalInformationV2Component implements OnInit {
   hiddenFields: any = {};
   fieldType = FieldType;
 
-  constructor(private platformUtilsService: PlatformUtilsService) {}
+  constructor(
+    private platformUtilsService: PlatformUtilsService,
+    private i18nService: I18nService,
+  ) {}
 
   ngOnInit() {
     this.saveHiddenFieldsVisibility();
@@ -32,6 +36,16 @@ export class AdditionalInformationV2Component implements OnInit {
           this.hiddenFields[field.name] = false;
         }
       });
+    }
+  }
+
+  getLinkedType(linkedId: any) {
+    if (linkedId === 100) {
+      return this.i18nService.t("username");
+    }
+
+    if (linkedId === 101) {
+      return this.i18nService.t("password");
     }
   }
 

@@ -68,6 +68,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 import { AddEditV2Component } from "../vault/popup/components/vault-v2/add-edit/add-edit-v2.component";
+import { ViewV2Component } from "../vault/popup/components/vault-v2/view/view-v2.component";
 import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
 import { FoldersComponent } from "../vault/popup/settings/folders.component";
@@ -79,7 +80,6 @@ import { extensionRefreshRedirect, extensionRefreshSwap } from "./extension-refr
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
-import { ViewV2Component } from "../vault/popup/components/vault-v2/view/view-v2.component";
 
 const unauthRouteOverrides = {
   homepage: () => {
