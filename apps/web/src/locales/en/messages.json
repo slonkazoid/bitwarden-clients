@@ -7827,7 +7827,7 @@
     "message": "Assign to these collections"
   },
   "bulkCollectionAssignmentDialogDescription": {
-    "message": "Select the collections that the items will be associated with. Only organization members with access to these collections will be able to see the items."
+    "message": "Only organization members with access to these collections will be able to see the items."
   },
   "selectCollectionsToAssign": {
     "message": "Select collections to assign"
