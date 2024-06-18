@@ -5,11 +5,8 @@ import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
-import { RegisterFinishRequest } from "@bitwarden/common/auth/models/request/registration/register-finish.request";
-import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { EncString, EncryptedString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { ToastService } from "@bitwarden/components";
 
 import {
@@ -71,20 +68,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
 
   async handlePasswordFormSubmit(passwordInputResult: PasswordInputResult) {
     // TODO: Should this be in a register service or something?
-    const [newUserKey, newEncUserKey] = await this.cryptoService.makeUserKey(
-      passwordInputResult.masterKey,
-    );
-    if (!newUserKey || !newEncUserKey) {
-      throw new Error("User key could not be created");
-    }
-    const userAsymmetricKeys = await this.cryptoService.makeKeyPair(newUserKey);
-
-    const registerRequest = await this.buildRegisterRequest(
-      this.email,
-      passwordInputResult,
-      newEncUserKey.encryptedString,
-      userAsymmetricKeys,
-    );
+    // Yes
 
     // TODO: create registration-finish.service.ts
     // override on web to add org invite logic
@@ -106,30 +90,6 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
     // so that the server can differentiate between the two
 
     await this.accountApiService.registerFinish(registerRequest);
-  }
-
-  private async buildRegisterRequest(
-    email: string,
-    passwordInputResult: PasswordInputResult,
-    encryptedUserKey: EncryptedString,
-    userAsymmetricKeys: [string, EncString],
-  ): Promise<RegisterFinishRequest> {
-    // create keysRequest
-    const userAsymmetricKeysRequest = new KeysRequest(
-      userAsymmetricKeys[0],
-      userAsymmetricKeys[1].encryptedString,
-    );
-
-    return new RegisterFinishRequest(
-      this.email,
-      this.emailVerificationToken,
-      passwordInputResult.masterKeyHash,
-      passwordInputResult.hint,
-      encryptedUserKey,
-      userAsymmetricKeysRequest,
-      passwordInputResult.kdfConfig.kdfType,
-      passwordInputResult.kdfConfig.iterations,
-    );
   }
 
   ngOnDestroy(): void {
