@@ -1,4 +1,4 @@
-import { PasswordInputResult } from "../../angular/input-password/input-password.component";
+import { PasswordInputResult } from "../models/password-input-result";
 
 export abstract class RegistrationFinishService {
   /**

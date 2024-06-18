@@ -8,10 +8,8 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { ToastService } from "@bitwarden/components";
 
 import { RegistrationFinishService } from "../../../common/abstractions";
-import {
-  InputPasswordComponent,
-  PasswordInputResult,
-} from "../../input-password/input-password.component";
+import { PasswordInputResult } from "../../../common/models/password-input-result";
+import { InputPasswordComponent } from "../../input-password/input-password.component";
 
 @Component({
   standalone: true,

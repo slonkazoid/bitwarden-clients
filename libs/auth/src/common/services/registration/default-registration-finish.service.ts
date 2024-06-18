@@ -4,9 +4,10 @@ import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptedString, EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 
-import { PasswordInputResult } from "../../../angular";
 import { RegistrationFinishService } from "../../abstractions/registration-finish.service";
+import { PasswordInputResult } from "../../models/password-input-result";
 
+// TODO: consider moving this to libs/auth/angular
 export class DefaultRegistrationFinishService implements RegistrationFinishService {
   constructor(
     protected cryptoService: CryptoService,
