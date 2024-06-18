@@ -13,7 +13,7 @@ import { InputPasswordComponent, PasswordInputResult } from "@bitwarden/auth/ang
 })
 export class SetPasswordV2Component implements OnInit {
   orgName: string;
-  orgId: string;
+  // orgId: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,9 +23,9 @@ export class SetPasswordV2Component implements OnInit {
   async ngOnInit() {
     const qParams = await firstValueFrom(this.route.queryParams);
 
-    if (qParams.identifier != null && qParams.orgId != null) {
+    if (qParams.identifier != null) {
       this.orgName = qParams.identifier; // from SsoComponent handleChangePasswordRequired()
-      this.orgId = qParams.orgId;
+      // this.orgId = qParams.orgId;
     } else {
       await this.router.navigate(["/"]);
     }

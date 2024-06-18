@@ -222,6 +222,7 @@ const routes: Routes = [
       },
       {
         path: "set-password-v2",
+        canActivate: [canAccessFeature(FeatureFlag.EmailVerification)],
         component: SetPasswordV2Component,
         data: {
           pageTitle: "setMasterPassword",
