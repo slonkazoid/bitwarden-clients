@@ -39,6 +39,7 @@ import { AcceptOrganizationComponent } from "./auth/organization-invite/accept-o
 import { RecoverDeleteComponent } from "./auth/recover-delete.component";
 import { RecoverTwoFactorComponent } from "./auth/recover-two-factor.component";
 import { RemovePasswordComponent } from "./auth/remove-password.component";
+import { SetPasswordV2Component } from "./auth/set-password-v2.component";
 import { SetPasswordComponent } from "./auth/set-password.component";
 import { AccountComponent } from "./auth/settings/account/account.component";
 import { EmergencyAccessComponent } from "./auth/settings/emergency-access/emergency-access.component";
