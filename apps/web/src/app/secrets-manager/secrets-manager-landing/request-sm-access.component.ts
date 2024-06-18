@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { Guid } from "@bitwarden/common/types/guid";
 import { NoItemsModule, SearchModule, ToastService } from "@bitwarden/components";
 
 import { HeaderModule } from "../../layouts/header/header.module";
@@ -37,14 +38,9 @@ export class RequestSMAccessComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.requestAccessForm = new FormGroup({
-      requestAccessEmailContents: new FormControl(this.textAreaValue),
-      selectedOrganization: new FormControl("", [Validators.required]),
-    });
-
     this.organizations = (await this.organizationService.getAll()).filter((e) => e.enabled);
 
-    if (this.organizations == null || this.organizations.length < 1) {
+    if (this.organizations === null || this.organizations.length < 1) {
       await this.navigateToCreateOrganizationPage();
     }
   }
@@ -57,7 +53,7 @@ export class RequestSMAccessComponent implements OnInit {
 
     const formValue = this.requestAccessForm.value;
     const request = new RequestSMAccessRequest();
-    request.OrganizationId = formValue.selectedOrganization.id;
+    request.OrganizationId = formValue.selectedOrganization.id as Guid;
     request.EmailContent = formValue.requestAccessEmailContents;
 
     await this.smLandingApiService.requestSMAccessFromAdmins(request);
