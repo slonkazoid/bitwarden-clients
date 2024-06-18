@@ -24,6 +24,7 @@ export class RequestSMAccessComponent implements OnInit {
   requestAccessForm = new FormGroup({
     requestAccessEmailContents: new FormControl(
       this.i18nService.t("requestAccessSMDefaultEmailContent"),
+      [Validators.required],
     ),
     selectedOrganization: new FormControl<Organization>(null, [Validators.required]),
   });
