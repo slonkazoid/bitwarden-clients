@@ -1,6 +1,6 @@
 import { PasswordInputResult } from "../../angular/input-password/input-password.component";
 
-export abstract class RegistrationFinishServiceAbstraction {
+export abstract class RegistrationFinishService {
   /**
    * Finishes the registration process by creating a new user account.
    *

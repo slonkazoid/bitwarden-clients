@@ -5,9 +5,9 @@ import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.se
 import { EncryptedString, EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 
 import { PasswordInputResult } from "../../../angular";
-import { RegistrationFinishServiceAbstraction } from "../../abstractions/registration-finish.service";
+import { RegistrationFinishService } from "../../abstractions/registration-finish.service";
 
-export class DefaultRegistrationFinishService implements RegistrationFinishServiceAbstraction {
+export class DefaultRegistrationFinishService implements RegistrationFinishService {
   constructor(
     protected cryptoService: CryptoService,
     protected accountApiService: AccountApiService,

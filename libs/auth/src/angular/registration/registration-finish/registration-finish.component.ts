@@ -1,14 +1,13 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Params, RouterModule } from "@angular/router";
+import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { ToastService } from "@bitwarden/components";
 
+import { RegistrationFinishService } from "../../../common/abstractions";
 import {
   InputPasswordComponent,
   PasswordInputResult,
@@ -32,12 +31,10 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private toastService: ToastService,
     private i18nService: I18nService,
-    private cryptoService: CryptoService,
-    private accountApiService: AccountApiService,
-    // private platformUtilsService: PlatformUtilsService,
-    // private acceptOrgInviteService: AcceptOrganizationInviteService,
+    private registrationFinishService: RegistrationFinishService,
   ) {}
 
   async ngOnInit() {
@@ -50,8 +47,6 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
         this.email = qParams.email;
       }
 
-      // TODO: query param name of token must be specific to the email verification token
-      // or the org invite token
       if (qParams.token != null) {
         this.emailVerificationToken = qParams.token;
       }
@@ -67,29 +62,21 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
   }
 
   async handlePasswordFormSubmit(passwordInputResult: PasswordInputResult) {
-    // TODO: Should this be in a register service or something?
-    // Yes
+    await this.registrationFinishService.finishRegistration(
+      this.email,
+      passwordInputResult,
+      this.emailVerificationToken,
+    );
 
-    // TODO: create registration-finish.service.ts
-    // override on web to add org invite logic
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("newAccountCreated"),
+    });
 
-    // TODO: handle org invite. Discuss existing modifyRegisterRequest approach.
-    // // if (this.platformUtilsService.getClientType() === ClientType.Web) {
-    // Org invites are deep linked. Non-existent accounts are redirected to the register page.
-    // Org user id and token are included here only for validation and two factor purposes.
-    // const orgInvite = await acceptOrgInviteService.getOrganizationInvite();
-    // if (orgInvite != null) {
-    //   request.organizationUserId = orgInvite.organizationUserId;
-    //   request.token = orgInvite.token;
-    // }
-    // Invite is accepted after login (on deep link redirect).
-    // // }
-
-    // TODO: either send email verification token or org invite token but not both
-    // but must have separate props on the register request object
-    // so that the server can differentiate between the two
-
-    await this.accountApiService.registerFinish(registerRequest);
+    // // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    // await this.router.navigate([this.successRoute], { queryParams: { email: email } });
   }
 
   ngOnDestroy(): void {
