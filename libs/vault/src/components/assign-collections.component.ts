@@ -1,5 +1,13 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   Observable,
@@ -124,6 +132,8 @@ export class AssignCollectionsComponent implements OnInit {
           setTimeout(() => {
             this.formGroup.patchValue({ selectedOrg: orgs[0].id });
             this.setFormValidators();
+
+            this.changeDetectorRef.markForCheck();
           });
         }
       }),
@@ -149,6 +159,7 @@ export class AssignCollectionsComponent implements OnInit {
     private collectionService: CollectionService,
     private formBuilder: FormBuilder,
     private pluralizePipe: PluralizePipe,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   async ngOnInit() {
