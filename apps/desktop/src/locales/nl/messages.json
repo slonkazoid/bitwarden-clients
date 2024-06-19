@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Account aanmaken"
   },
+  "setAStrongPassword": {
+    "message": "Sterk wachtwoord instellen"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Rond het aanmaken van je account af met het instellen van een wachtwoord"
+  },
   "logIn": {
     "message": "Inloggen"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Je nieuwe hoofdwachtwoord voldoet niet aan de beleidseisen."
   },
+  "receiveMarketingEmails": {
+    "message": "Ontvang e-mailberichten van Bitwarden voor aankondigingen, advies en onderzoeksmogelijkheden."
+  },
+  "unsubscribe": {
+    "message": "Afmelden"
+  },
+  "atAnyTime": {
+    "message": "op ieder moment."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Door verder te gaan, ga je akkoord met de"
+  },
+  "and": {
+    "message": "en"
+  },
   "acceptPolicies": {
     "message": "Door dit vakje aan te vinken, ga je akkoord met het volgende:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Inloggen afwijzen"
   },
-  "approveLoginRequests": {
-    "message": "Inlogverzoeken goedkeuren"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Inloggen voor $EMAIL$ bevestigd op $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Dit verzoek is niet langer geldig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Gebruik dit apparaat voor het goedkeuren van inlogverzoeken van andere apparaten."
   },
   "confirmLoginAtemptForMail": {
     "message": "Inlogpoging voor $EMAIL$ bevestigen",

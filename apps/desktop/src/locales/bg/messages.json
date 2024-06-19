@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Създаване на абонамент"
   },
+  "setAStrongPassword": {
+    "message": "Използвайте сложна парола"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завършете регистрацията си като зададете парола"
+  },
   "logIn": {
     "message": "Вписване"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Паролата ви не отговаря на политиките."
   },
+  "receiveMarketingEmails": {
+    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  },
+  "unsubscribe": {
+    "message": "Отписване"
+  },
+  "atAnyTime": {
+    "message": "по всяко време."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако продължите, Вие се съгласявате с"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следното:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Отказване на вписването"
   },
-  "approveLoginRequests": {
-    "message": "Одобряване на заявки за вписване"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Вписването за $EMAIL$ на $DEVICE$ е одобрено",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Тази заявка вече не е активна."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Използвайте това устройство за одобряване на заявки за вписване направени от други устройства."
   },
   "confirmLoginAtemptForMail": {
     "message": "Потвърждаване на заявката за вписване за $EMAIL$",

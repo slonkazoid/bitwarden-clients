@@ -713,6 +713,12 @@
   "createAccount": {
     "message": "Créez un compte"
   },
+  "setAStrongPassword": {
+    "message": "Définir un mot de passe fort"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Terminer la création de votre compte en définissant un mot de passe"
+  },
   "newAroundHere": {
     "message": "Vous êtes nouveau ici ?"
   },
@@ -721,6 +727,9 @@
   },
   "logIn": {
     "message": "Se connecter"
+  },
+  "verifyIdentity": {
+    "message": "Vérifiez votre Identité"
   },
   "logInInitiated": {
     "message": "Connexion initiée"
@@ -2794,12 +2803,6 @@
   "userDesc": {
     "message": "Un utilisateur normal avec accès aux collections de votre organisation."
   },
-  "manager": {
-    "message": "Gestionnaire"
-  },
-  "managerDesc": {
-    "message": "Les gestionnaires peuvent voir et gérer les collections de votre organisation qui leur ont été assignées."
-  },
   "all": {
     "message": "Tous"
   },
@@ -3727,6 +3730,21 @@
   "nothingSelected": {
     "message": "Vous n'avez rien sélectionné."
   },
+  "receiveMarketingEmails": {
+    "message": "Recevez des courriels de Bitwarden pour des annonces, des conseils et des opportunités de recherche."
+  },
+  "unsubscribe": {
+    "message": "Désabonnez-vous"
+  },
+  "atAnyTime": {
+    "message": "à tout moment."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "En continuant, vous acceptez les"
+  },
+  "and": {
+    "message": "et"
+  },
   "acceptPolicies": {
     "message": "En cochant cette case vous acceptez ce qui suit :"
   },
@@ -4576,12 +4594,6 @@
   "permission": {
     "message": "Permission"
   },
-  "managerPermissions": {
-    "message": "Permissions du Gestionnaire"
-  },
-  "adminPermissions": {
-    "message": "Permissions de l'Administrateur"
-  },
   "accessEventLogs": {
     "message": "Accéder aux journaux d'événements"
   },
@@ -4605,9 +4617,6 @@
   },
   "deleteAnyCollection": {
     "message": "Supprimer n'importe quelle collection"
-  },
-  "manageAssignedCollections": {
-    "message": "Gérer les collections assignées"
   },
   "editAssignedCollections": {
     "message": "Modifier les collection assignées"
@@ -6669,12 +6678,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Vous pouvez seulement assigner les collections que vous gérez."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Accorder l'accès à toutes les collections actuelles et futures."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Si coché, cela remplacera toutes les autres autorisations de collection."
-  },
   "selectMembers": {
     "message": "Sélectionner les membres"
   },
@@ -6716,12 +6719,6 @@
   },
   "group": {
     "message": "Groupe"
-  },
-  "groupAccessAll": {
-    "message": "Ce groupe peut accéder et modifier tous les éléments."
-  },
-  "memberAccessAll": {
-    "message": "Ce groupe peut voir et modifier tous les éléments."
   },
   "domainVerification": {
     "message": "Vérification du domaine"
@@ -8183,11 +8180,17 @@
   "setUpGithubActions": {
     "message": "Configurer Github Actions"
   },
+  "setUpKubernetes": {
+    "message": "Configurer Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Configurer GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Configurer Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "Afficher le dépôt Rust"
   },
   "cSharpSDKRepo": {
     "message": "Afficher le dépôt C#"
@@ -8354,5 +8357,25 @@
   },
   "verified": {
     "message": "Vérifié"
+  },
+  "viewSecret": {
+    "message": "Afficher le secret"
+  },
+  "noClients": {
+    "message": "Il n'y a aucun client à afficher"
+  },
+  "providerBillingEmailHint": {
+    "message": "Cette adresse courriel recevra toutes les factures relatives à ce fournisseur",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "date": {
+    "message": "Date"
+  },
+  "exportClientReport": {
+    "message": "Exporter le rapport client"
+  },
+  "invoiceNumberHeader": {
+    "message": "Numéro de facture",
+    "description": "A table header for an invoice's number"
   }
 }

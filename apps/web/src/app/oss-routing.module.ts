@@ -9,7 +9,16 @@ import {
   UnauthGuard,
   unauthGuardFn,
 } from "@bitwarden/angular/auth/guards";
-import { AnonLayoutWrapperComponent, AnonLayoutWrapperData } from "@bitwarden/auth/angular";
+import { canAccessFeature } from "@bitwarden/angular/platform/guard/feature-flag.guard";
+import {
+  AnonLayoutWrapperComponent,
+  AnonLayoutWrapperData,
+  RegistrationFinishComponent,
+  RegistrationStartComponent,
+  RegistrationStartSecondaryComponent,
+  RegistrationStartSecondaryComponentData,
+} from "@bitwarden/auth/angular";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
 import { flagEnabled, Flags } from "../utils/flags";
 
@@ -66,7 +75,6 @@ const routes: Routes = [
         children: [], // Children lets us have an empty component.
         canActivate: [redirectGuard()], // Redirects either to vault, login, or lock page.
       },
-      { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
       {
         path: "login-with-device",
         component: LoginViaAuthRequestComponent,
@@ -82,7 +90,6 @@ const routes: Routes = [
         component: LoginViaAuthRequestComponent,
         data: { titleId: "adminApprovalRequested" } satisfies DataProperties,
       },
-      { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
       {
         path: "login-initiated",
         component: LoginDecryptionOptionsComponent,
@@ -98,12 +105,6 @@ const routes: Routes = [
         path: "trial",
         redirectTo: "register",
         pathMatch: "full",
-      },
-      {
-        path: "sso",
-        component: SsoComponent,
-        canActivate: [UnauthGuard],
-        data: { titleId: "enterpriseSingleSignOn" } satisfies DataProperties,
       },
       {
         path: "set-password",
@@ -135,12 +136,6 @@ const routes: Routes = [
         data: { titleId: "acceptFamilySponsorship", doNotSaveUrl: false } satisfies DataProperties,
       },
       { path: "recover", pathMatch: "full", redirectTo: "recover-2fa" },
-      {
-        path: "recover-delete",
-        component: RecoverDeleteComponent,
-        canActivate: [UnauthGuard],
-        data: { titleId: "deleteAccount" } satisfies DataProperties,
-      },
       {
         path: "verify-recover-delete",
         component: VerifyRecoverDeleteComponent,
@@ -177,12 +172,6 @@ const routes: Routes = [
         data: { titleId: "updatePassword" } satisfies DataProperties,
       },
       {
-        path: "remove-password",
-        component: RemovePasswordComponent,
-        canActivate: [AuthGuard],
-        data: { titleId: "removeMasterPassword" } satisfies DataProperties,
-      },
-      {
         path: "migrate-legacy-encryption",
         loadComponent: () =>
           import("./auth/migrate-encryption/migrate-legacy-encryption.component").then(
@@ -195,6 +184,96 @@ const routes: Routes = [
     path: "",
     component: AnonLayoutWrapperComponent,
     children: [
+      {
+        path: "signup",
+        canActivate: [canAccessFeature(FeatureFlag.EmailVerification), unauthGuardFn()],
+        data: { pageTitle: "createAccount", titleId: "createAccount" } satisfies DataProperties &
+          AnonLayoutWrapperData,
+        children: [
+          {
+            path: "",
+            component: RegistrationStartComponent,
+          },
+          {
+            path: "",
+            component: RegistrationStartSecondaryComponent,
+            outlet: "secondary",
+            data: {
+              loginRoute: "/login",
+            } satisfies RegistrationStartSecondaryComponentData,
+          },
+        ],
+      },
+      {
+        path: "finish-signup",
+        canActivate: [canAccessFeature(FeatureFlag.EmailVerification), unauthGuardFn()],
+        data: {
+          pageTitle: "setAStrongPassword",
+          pageSubtitle: "finishCreatingYourAccountBySettingAPassword",
+          titleId: "setAStrongPassword",
+        } satisfies DataProperties & AnonLayoutWrapperData,
+        children: [
+          {
+            path: "",
+            component: RegistrationFinishComponent,
+          },
+        ],
+      },
+      {
+        path: "sso",
+        canActivate: [unauthGuardFn()],
+        data: {
+          pageTitle: "enterpriseSingleSignOn",
+          titleId: "enterpriseSingleSignOn",
+        } satisfies DataProperties & AnonLayoutWrapperData,
+        children: [
+          {
+            path: "",
+            component: SsoComponent,
+          },
+          {
+            path: "",
+            component: EnvironmentSelectorComponent,
+            outlet: "environment-selector",
+          },
+        ],
+      },
+      {
+        path: "login",
+        canActivate: [unauthGuardFn()],
+        children: [
+          {
+            path: "",
+            component: LoginComponent,
+          },
+          {
+            path: "",
+            component: EnvironmentSelectorComponent,
+            outlet: "environment-selector",
+          },
+        ],
+        data: {
+          pageTitle: "logIn",
+        },
+      },
+      {
+        path: "2fa",
+        canActivate: [unauthGuardFn()],
+        children: [
+          {
+            path: "",
+            component: TwoFactorComponent,
+          },
+          {
+            path: "",
+            component: EnvironmentSelectorComponent,
+            outlet: "environment-selector",
+          },
+        ],
+        data: {
+          pageTitle: "verifyIdentity",
+        } satisfies DataProperties & AnonLayoutWrapperData,
+      },
       {
         path: "recover-2fa",
         canActivate: [unauthGuardFn()],
@@ -217,18 +296,32 @@ const routes: Routes = [
       {
         path: "accept-emergency",
         canActivate: [deepLinkGuard()],
+        data: {
+          pageTitle: "emergencyAccess",
+          titleId: "acceptEmergency",
+          doNotSaveUrl: false,
+        } satisfies DataProperties & AnonLayoutWrapperData,
         children: [
           {
             path: "",
-            data: {
-              pageTitle: "emergencyAccess",
-              titleId: "acceptEmergency",
-              doNotSaveUrl: false,
-            } satisfies DataProperties & AnonLayoutWrapperData,
             loadComponent: () =>
               import("./auth/emergency-access/accept/accept-emergency.component").then(
                 (mod) => mod.AcceptEmergencyComponent,
               ),
+          },
+        ],
+      },
+      {
+        path: "recover-delete",
+        canActivate: [unauthGuardFn()],
+        data: {
+          pageTitle: "deleteAccount",
+          titleId: "deleteAccount",
+        } satisfies DataProperties & AnonLayoutWrapperData,
+        children: [
+          {
+            path: "",
+            component: RecoverDeleteComponent,
           },
           {
             path: "",
@@ -236,6 +329,15 @@ const routes: Routes = [
             outlet: "environment-selector",
           },
         ],
+      },
+      {
+        path: "remove-password",
+        component: RemovePasswordComponent,
+        canActivate: [AuthGuard],
+        data: {
+          pageTitle: "removeMasterPassword",
+          titleId: "removeMasterPassword",
+        } satisfies DataProperties & AnonLayoutWrapperData,
       },
     ],
   },

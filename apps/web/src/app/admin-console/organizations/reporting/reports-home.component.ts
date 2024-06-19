@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { filter, map, Observable, startWith, concatMap, firstValueFrom } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { ProductType } from "@bitwarden/common/enums";
+import { ProductTierType } from "@bitwarden/common/billing/enums";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 
@@ -27,6 +27,7 @@ export class ReportsHomeComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    // TODO: Remove on "MemberAccessReport" feature flag cleanup
     this.isMemberAccessReportEnabled = await firstValueFrom(
       this.configService.getFeatureFlag$(FeatureFlag.MemberAccessReport),
     );
@@ -39,13 +40,13 @@ export class ReportsHomeComponent implements OnInit {
 
     this.reports$ = this.route.params.pipe(
       concatMap((params) => this.organizationService.get$(params.organizationId)),
-      map((org) => this.buildReports(org.planProductType)),
+      map((org) => this.buildReports(org.productTierType)),
     );
   }
 
-  private buildReports(productType: ProductType): ReportEntry[] {
+  private buildReports(productType: ProductTierType): ReportEntry[] {
     const reportRequiresUpgrade =
-      productType == ProductType.Free ? ReportVariant.RequiresUpgrade : ReportVariant.Enabled;
+      productType == ProductTierType.Free ? ReportVariant.RequiresUpgrade : ReportVariant.Enabled;
 
     const reportsArray = [
       {
@@ -74,7 +75,7 @@ export class ReportsHomeComponent implements OnInit {
       reportsArray.push({
         ...reports[ReportType.MemberAccessReport],
         variant:
-          productType == ProductType.Enterprise
+          productType == ProductTierType.Enterprise
             ? ReportVariant.Enabled
             : ReportVariant.RequiresEnterprise,
       });

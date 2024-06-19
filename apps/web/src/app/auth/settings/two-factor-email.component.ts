@@ -27,11 +27,10 @@ export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
   @Output() onChangeStatus: EventEmitter<boolean> = new EventEmitter();
   type = TwoFactorProviderType.Email;
   sentEmail: string;
-  formPromise: Promise<TwoFactorEmailResponse>;
   emailPromise: Promise<unknown>;
   override componentName = "app-two-factor-email";
   formGroup = this.formBuilder.group({
-    token: [null],
+    token: ["", [Validators.required]],
     email: ["", [Validators.email, Validators.required]],
   });
 
@@ -83,13 +82,18 @@ export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
       await this.disableEmail();
       this.onChangeStatus.emit(false);
     } else {
+      this.formGroup.markAllAsTouched();
+      if (this.formGroup.invalid) {
+        return;
+      }
+
       await this.enable();
       this.onChangeStatus.emit(true);
     }
   };
 
   private disableEmail() {
-    return super.disable(this.formPromise);
+    return super.disableMethod();
   }
 
   sendEmail = async () => {
@@ -105,11 +109,9 @@ export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
     request.email = this.email;
     request.token = this.token;
 
-    return super.enable(async () => {
-      this.formPromise = this.apiService.putTwoFactorEmail(request);
-      const response = await this.formPromise;
-      await this.processResponse(response);
-    });
+    const response = await this.apiService.putTwoFactorEmail(request);
+    await this.processResponse(response);
+    this.onUpdated.emit(true);
   }
 
   onClose = () => {

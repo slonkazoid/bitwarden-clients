@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Створити обліковий запис"
   },
+  "setAStrongPassword": {
+    "message": "Встановіть надійний пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершіть створення облікового запису, встановивши пароль"
+  },
   "logIn": {
     "message": "Увійти"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новий головний пароль не задовольняє вимоги політики."
   },
+  "receiveMarketingEmails": {
+    "message": "Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості."
+  },
+  "unsubscribe": {
+    "message": "Відписатися"
+  },
+  "atAnyTime": {
+    "message": "можна будь-коли."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продовжуючи, ви погоджуєтеся з"
+  },
+  "and": {
+    "message": "і"
+  },
   "acceptPolicies": {
     "message": "Позначивши цей прапорець, ви погоджуєтеся з:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Заборонити вхід"
   },
-  "approveLoginRequests": {
-    "message": "Схвалювати запити на вхід"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Підтверджено вхід для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Цей запит більше недійсний."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Схвалювати запити на вхід, виконані з інших пристроїв."
   },
   "confirmLoginAtemptForMail": {
     "message": "Підтвердити спробу входу для $EMAIL$",
