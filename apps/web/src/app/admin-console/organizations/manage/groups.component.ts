@@ -54,21 +54,21 @@ type GroupDetailsRow = {
 };
 
 /**
- * A custom TableDataSource class that only searches by group name and id.
- * This is because the default implementation searches by all properties, which can unintentionally match with members'
- * names (who are assigned to the group) or collection names (which the group has access to).
+ * Custom filter predicate that filters the groups table by id and name only.
+ * This is required because the default implementation searches by all properties, which can unintentionally match
+ * with members' names (who are assigned to the group) or collection names (which the group has access to).
  */
-class GroupTableDataSource extends TableDataSource<GroupDetailsRow> {
-  protected override filterPredicate(data: GroupDetailsRow, filter: string): boolean {
-    const transformedFilter = filter.trim().toLowerCase();
+const groupsFilter = (filter: string) => {
+  const transformedFilter = filter.trim().toLowerCase();
+  return (data: GroupDetailsRow) => {
     const group = data.details;
 
     return (
       group.id.toLowerCase().indexOf(transformedFilter) != -1 ||
       group.name.toLowerCase().indexOf(transformedFilter) != -1
     );
-  }
-}
+  };
+};
 
 @Component({
   templateUrl: "groups.component.html",
@@ -77,7 +77,7 @@ export class GroupsComponent {
   loading = true;
   organizationId: string;
 
-  protected dataSource = new GroupTableDataSource();
+  protected dataSource = new TableDataSource<GroupDetailsRow>();
   protected searchControl = new FormControl("");
 
   // Fixed sizes used for cdkVirtualScroll
@@ -133,7 +133,7 @@ export class GroupsComponent {
     // Connect the search input to the table dataSource filter input
     this.searchControl.valueChanges
       .pipe(debounceTime(200), takeUntilDestroyed())
-      .subscribe((v) => (this.dataSource.filter = v));
+      .subscribe((v) => (this.dataSource.filter = groupsFilter(v)));
 
     this.route.queryParams.pipe(first(), takeUntilDestroyed()).subscribe((qParams) => {
       this.searchControl.setValue(qParams.search);
