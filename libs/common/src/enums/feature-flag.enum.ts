@@ -19,6 +19,7 @@ export enum FeatureFlag {
   BulkDeviceApproval = "bulk-device-approval",
   EmailVerification = "email-verification",
   InlineMenuFieldQualification = "inline-menu-field-qualification",
+  MemberAccessReport = "ac-2059-member-access-report",
   VaultBulkManagementAction = "vault-bulk-management-action",
 }
 
@@ -49,6 +50,7 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.BulkDeviceApproval]: FALSE,
   [FeatureFlag.EmailVerification]: FALSE,
   [FeatureFlag.InlineMenuFieldQualification]: FALSE,
+  [FeatureFlag.MemberAccessReport]: FALSE,
   [FeatureFlag.VaultBulkManagementAction]: FALSE,
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
 
