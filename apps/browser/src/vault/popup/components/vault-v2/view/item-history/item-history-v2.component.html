@@ -13,15 +13,13 @@
       <span class="tw-font-bold">{{ "datePasswordUpdated" | i18n }}:</span>
       {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
     </p>
-    <!-- We will need to link to the updated password generator history component when it is ready -->
-    <div *ngIf="cipher.hasPasswordHistory">
-      <a
-        class="tw-font-bold tw-no-underline"
-        routerLink="/cipher-password-history"
-        [queryParams]="{ cipherId: cipher.id }"
-      >
-        {{ "passwordHistory" | i18n }}
-      </a>
-    </div>
+    <a
+      *ngIf="cipher.hasPasswordHistory"
+      class="tw-font-bold tw-no-underline"
+      routerLink="/cipher-password-history"
+      [queryParams]="{ cipherId: cipher.id }"
+    >
+      {{ "passwordHistory" | i18n }}
+    </a>
   </bit-card>
 </div>

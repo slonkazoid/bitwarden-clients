@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnDestroy } from "@angular/core";
+import { Component, Input } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
-import { NEVER, Subject, switchMap, takeUntil } from "rxjs";
+import { NEVER, switchMap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -18,8 +19,7 @@ import { OrgKey } from "@bitwarden/common/types/key";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { SearchModule, ButtonModule, ToastService, ItemModule } from "@bitwarden/components";
-
-import { PasswordRepromptService } from "../../../../../../../../../libs/vault/src/services/password-reprompt.service";
+import { PasswordRepromptService } from "@bitwarden/vault";
 
 @Component({
   selector: "app-attachments-v2",
@@ -27,12 +27,11 @@ import { PasswordRepromptService } from "../../../../../../../../../libs/vault/s
   standalone: true,
   imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, ItemModule],
 })
-export class AttachmentsV2Component implements OnDestroy {
+export class AttachmentsV2Component {
   @Input() cipher: CipherView;
 
   canAccessPremium: boolean;
   orgKey: OrgKey;
-  private destroyed$: Subject<void> = new Subject();
   private passwordReprompted = false;
 
   constructor(
@@ -50,14 +49,9 @@ export class AttachmentsV2Component implements OnDestroy {
     this.subscribeToOrgKey();
   }
 
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-  }
-
   subscribeToHasPremiumCheck() {
     this.billingAccountProfileStateService.hasPremiumFromAnySource$
-      .pipe(takeUntil(this.destroyed$))
+      .pipe(takeUntilDestroyed())
       .subscribe((data) => {
         this.canAccessPremium = data;
       });
@@ -67,7 +61,7 @@ export class AttachmentsV2Component implements OnDestroy {
     this.stateProvider.activeUserId$
       .pipe(
         switchMap((userId) => (userId != null ? this.cryptoService.orgKeys$(userId) : NEVER)),
-        takeUntil(this.destroyed$),
+        takeUntilDestroyed(),
       )
       .subscribe((data: Record<OrganizationId, OrgKey> | null) => {
         if (data) {

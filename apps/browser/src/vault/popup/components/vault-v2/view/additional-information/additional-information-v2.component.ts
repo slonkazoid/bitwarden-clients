@@ -3,8 +3,9 @@ import { Component, Input } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { SearchModule, ButtonModule, CardComponent } from "@bitwarden/components";
+import { SearchModule, ButtonModule, CardComponent, ToastService } from "@bitwarden/components";
 
 @Component({
   selector: "app-additional-information-v2",
@@ -15,10 +16,18 @@ import { SearchModule, ButtonModule, CardComponent } from "@bitwarden/components
 export class AdditionalInformationV2Component {
   @Input() notes: string;
 
-  constructor(private platformUtilsService: PlatformUtilsService) {}
+  constructor(
+    private platformUtilsService: PlatformUtilsService,
+    private toastService: ToastService,
+    private i18nService: I18nService,
+  ) {}
 
   copy(textData: string) {
     this.platformUtilsService.copyToClipboard(textData, null);
-    this.platformUtilsService.showToast("info", null, "Copy Successful");
+    this.toastService.showToast({
+      variant: "info",
+      title: null,
+      message: this.i18nService.t("copySuccessful"),
+    });
   }
 }
