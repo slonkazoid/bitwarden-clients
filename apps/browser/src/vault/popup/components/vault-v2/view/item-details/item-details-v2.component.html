@@ -1,11 +1,22 @@
 <div class="tw-mb-6">
   <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemDetails" | i18n }}</h5>
-  <div class="box-content-row" *ngIf="cipher.login.username">
-    <div class="row-border-bottom">
-      <label class="row-label">
+  <div
+    class="tw-relative tw-px-2 tw-py-1 tw-mx-1 tw-mx-0.5 tw-rounded-md tw-z-1 tw-bg-background"
+    *ngIf="cipher.login.username"
+  >
+    <div
+      class="tw-pb-2 tw-mb-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-bg-background"
+    >
+      <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
         {{ "itemName" | i18n }}
       </label>
-      <input type="text" [value]="cipher.login.username" readonly aria-readonly="true" />
+      <input
+        class="tw-w-full tw-bg-transparent tw-border-none"
+        type="text"
+        [value]="cipher.login.username"
+        readonly
+        aria-readonly="true"
+      />
     </div>
 
     <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">

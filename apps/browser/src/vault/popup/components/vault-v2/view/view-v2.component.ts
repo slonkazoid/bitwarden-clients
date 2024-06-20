@@ -77,10 +77,7 @@ export class ViewV2Component implements OnDestroy {
   subscribeToParams(): void {
     // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(async (params) => {
-      const cipherType = parseInt(params.type);
       this.cipherId = params.cipherId;
-
-      this.headerText = this.setHeader(cipherType);
       await this.loadCipherData();
     });
   }
@@ -103,6 +100,8 @@ export class ViewV2Component implements OnDestroy {
     this.cipher = await cipher.decrypt(
       await this.cipherService.getKeyForCipherKeyDecryption(cipher),
     );
+
+    this.headerText = this.setHeader(this.cipher.type);
 
     if (this.cipher.collectionIds.length > 0) {
       this.collections$ = this.collectionService

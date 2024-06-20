@@ -1,11 +1,19 @@
 <div class="tw-mb-6">
   <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "additionalInformation" | i18n }}</h5>
-  <div class="box-content-row">
-    <label class="row-label">
+  <div
+    class="tw-pb-2 tw-relative tw-px-2 tw-py-1 tw-mx-1 tw-mx-0.5 tw-rounded-md tw-z-1 tw-bg-background"
+  >
+    <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
       {{ "note" | i18n }}
     </label>
     <div class="tw-flex tw-justify-between">
-      <input type="text" [value]="notes" readonly aria-readonly="true" />
+      <input
+        class="tw-w-full tw-bg-transparent tw-border-none"
+        type="text"
+        [value]="notes"
+        readonly
+        aria-readonly="true"
+      />
       <i (click)="copy(notes)" class="bwi bwi-clone bwi-fw"></i>
     </div>
   </div>
