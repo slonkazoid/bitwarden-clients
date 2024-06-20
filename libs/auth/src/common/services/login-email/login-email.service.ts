@@ -70,7 +70,7 @@ export class LoginEmailService implements LoginEmailServiceAbstraction {
   }
 
   setRememberEmail(value: boolean) {
-    this.rememberEmail = value;
+    this.rememberEmail = value ?? false;
   }
 
   clearValues() {
