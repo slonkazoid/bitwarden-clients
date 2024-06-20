@@ -1,36 +1,37 @@
 <div class="tw-mb-6">
-  <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemDetails" | i18n }}</h5>
-  <bit-section>
-    <div class="tw-px-2 tw-py-2.5 tw-my-1 tw-mx-0.5 tw-bg-background">
-      <div class="tw-pb-2 tw-mb-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300">
-        <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
-          {{ "itemName" | i18n }}
-        </label>
-        <input
-          class="tw-w-full tw-bg-transparent tw-border-none"
-          type="text"
-          [value]="cipher.login.username"
-          readonly
-          aria-readonly="true"
-        />
-      </div>
+  <h5 class="tw-pl-2 tw-font-bold tw-text-headers tw-mb-2">{{ "itemDetails" | i18n }}</h5>
+  <bit-card>
+    <div class="tw-pb-2 tw-mb-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300">
+      <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+        {{ "itemName" | i18n }}
+      </label>
+      <input
+        class="tw-w-full tw-bg-transparent tw-border-none"
+        type="text"
+        [value]="cipher.login.username"
+        readonly
+        aria-readonly="true"
+      />
+    </div>
 
-      <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
-        <div *ngIf="!cipher.organizationId" class="tw-mb-3">
-          <i class="bwi bwi-user bwi-lg bwi-fw"></i> {{ "ownerYou" | i18n }}
-        </div>
-        <div *ngIf="cipher.organizationId && organization" class="tw-mb-3">
-          <i class="bwi bwi-business bwi-lg bwi-fw"></i> {{ organization.name }}
-        </div>
-        <div *ngIf="cipher.collectionIds && collections" class="tw-mb-3">
-          <h3 *ngFor="let collection of collections">
-            <i class="bwi bwi-collection bwi-lg bwi-fw"></i> {{ collection.name }}
-          </h3>
-        </div>
-        <div *ngIf="cipher.folderId && folder" class="tw-mb-3">
-          <i class="bwi bwi-folder bwi-lg bwi-fw"></i> {{ folder.name }}
-        </div>
+    <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
+      <div *ngIf="!cipher.organizationId" [ngClass]="{ 'tw-mb-3': cipher.collectionIds }">
+        <i class="bwi bwi-user bwi-lg bwi-fw"></i> {{ "ownerYou" | i18n }}
+      </div>
+      <div
+        *ngIf="cipher.organizationId && organization"
+        [ngClass]="{ 'tw-mb-3': cipher.collectionIds }"
+      >
+        <i class="bwi bwi-business bwi-lg bwi-fw"></i> {{ organization.name }}
+      </div>
+      <div *ngIf="cipher.collectionIds && collections" [ngClass]="{ 'tw-mb-3': cipher.folderId }">
+        <h3 *ngFor="let collection of collections">
+          <i class="bwi bwi-collection bwi-lg bwi-fw"></i> {{ collection.name }}
+        </h3>
+      </div>
+      <div *ngIf="cipher.folderId && folder">
+        <i class="bwi bwi-folder bwi-lg bwi-fw"></i> {{ folder.name }}
       </div>
     </div>
-  </bit-section>
+  </bit-card>
 </div>

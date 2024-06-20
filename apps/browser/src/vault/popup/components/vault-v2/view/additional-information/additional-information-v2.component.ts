@@ -4,13 +4,13 @@ import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { SearchModule, ButtonModule, SectionComponent } from "@bitwarden/components";
+import { SearchModule, ButtonModule, CardComponent } from "@bitwarden/components";
 
 @Component({
   selector: "app-additional-information-v2",
   templateUrl: "additional-information-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, SectionComponent],
+  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, CardComponent],
 })
 export class AdditionalInformationV2Component {
   @Input() notes: string;

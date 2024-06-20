@@ -7,13 +7,13 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-import { SearchModule, ButtonModule, SectionComponent } from "@bitwarden/components";
+import { SearchModule, ButtonModule, CardComponent } from "@bitwarden/components";
 
 @Component({
   selector: "app-item-details-v2",
   templateUrl: "item-details-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, SectionComponent],
+  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, CardComponent],
 })
 export class ItemDetailsV2Component {
   @Input() cipher: CipherView;

@@ -1,32 +1,27 @@
 <div class="tw-mb-6">
-  <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "attachments" | i18n }}</h5>
-  <bit-section>
-    <div
-      class="tw-px-2 tw-py-2.5 tw-my-1 tw-mx-0.5 tw-bg-background"
-      *ngFor="let attachment of cipher.attachments"
-    >
-      <div class="tw-flex tw-justify-between">
-        <div>
-          <h3 class="tw-grow">
-            {{ attachment.fileName }}
-          </h3>
-          <div class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
-            {{ attachment.sizeName }}
-          </div>
-        </div>
-        <div class="tw-flex tw-items-center" (click)="downloadAttachment(attachment)">
-          <i
-            class="bwi bwi-download bwi-fw row-sub-icon"
-            *ngIf="!$any(attachment).downloading"
-            aria-hidden="true"
-          ></i>
-          <i
-            class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
-            *ngIf="$any(attachment).downloading"
-            aria-hidden="true"
-          ></i>
+  <h5 class="tw-pl-2 tw-font-bold tw-text-headers tw-mb-2">{{ "attachments" | i18n }}</h5>
+  <bit-item-group>
+    <bit-item *ngFor="let attachment of cipher.attachments">
+      <div slot="start" class="tw-py-4 tw-px-3">
+        <h3>
+          {{ attachment.fileName }}
+        </h3>
+        <div class="tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+          {{ attachment.sizeName }}
         </div>
       </div>
-    </div>
-  </bit-section>
+      <div class="tw-flex tw-items-center" (click)="downloadAttachment(attachment)" slot="end">
+        <i
+          class="bwi bwi-download bwi-fw row-sub-icon"
+          *ngIf="!$any(attachment).downloading"
+          aria-hidden="true"
+        ></i>
+        <i
+          class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
+          *ngIf="$any(attachment).downloading"
+          aria-hidden="true"
+        ></i>
+      </div>
+    </bit-item>
+  </bit-item-group>
 </div>

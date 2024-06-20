@@ -5,7 +5,7 @@ import { RouterModule } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { SearchModule, ButtonModule, SectionComponent } from "@bitwarden/components";
+import { SearchModule, ButtonModule, CardComponent } from "@bitwarden/components";
 
 @Component({
   selector: "app-item-history-v2",
@@ -18,13 +18,11 @@ import { SearchModule, ButtonModule, SectionComponent } from "@bitwarden/compone
     FormsModule,
     ButtonModule,
     RouterModule,
-    SectionComponent,
+    CardComponent,
   ],
 })
 export class ItemHistoryV2Component {
   @Input() cipher: CipherView;
 
   constructor() {}
-
-  openPasswordHistory() {}
 }

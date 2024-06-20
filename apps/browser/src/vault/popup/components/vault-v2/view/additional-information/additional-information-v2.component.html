@@ -1,14 +1,12 @@
 <div class="tw-mb-6">
-  <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "additionalInformation" | i18n }}</h5>
-  <bit-section>
-    <div class="tw-px-2 tw-py-2.5 tw-my-1 tw-mx-0.5 tw-bg-background">
-      <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
-        {{ "note" | i18n }}
-      </label>
-      <div class="tw-flex tw-justify-between">
-        <p>{{ notes }}</p>
-        <i (click)="copy(notes)" class="bwi bwi-clone bwi-fw"></i>
-      </div>
+  <h5 class="tw-pl-2 tw-font-bold tw-text-headers tw-mb-2">{{ "additionalInformation" | i18n }}</h5>
+  <bit-card>
+    <label class="tw-text-xs tw-text-muted tw-select-none">
+      {{ "note" | i18n }}
+    </label>
+    <div class="tw-flex tw-justify-between">
+      <p class="!tw-mb-0">{{ notes }}</p>
+      <i (click)="copy(notes)" class="bwi bwi-clone bwi-fw"></i>
     </div>
-  </bit-section>
+  </bit-card>
 </div>

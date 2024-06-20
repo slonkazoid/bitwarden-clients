@@ -17,7 +17,7 @@ import { OrganizationId } from "@bitwarden/common/types/guid";
 import { OrgKey } from "@bitwarden/common/types/key";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { SearchModule, ButtonModule, ToastService, SectionComponent } from "@bitwarden/components";
+import { SearchModule, ButtonModule, ToastService, ItemModule } from "@bitwarden/components";
 
 import { PasswordRepromptService } from "../../../../../../../../../libs/vault/src/services/password-reprompt.service";
 
@@ -25,7 +25,7 @@ import { PasswordRepromptService } from "../../../../../../../../../libs/vault/s
   selector: "app-attachments-v2",
   templateUrl: "attachments-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, SectionComponent],
+  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, ItemModule],
 })
 export class AttachmentsV2Component implements OnDestroy {
   @Input() cipher: CipherView;
