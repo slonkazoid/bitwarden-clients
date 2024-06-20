@@ -4,7 +4,6 @@ import { firstValueFrom, Subscription } from "rxjs";
 
 import { LogoutReason } from "@bitwarden/auth/common";
 
-import { AuthRequestServiceAbstraction } from "../../../auth/src/common/abstractions";
 import { ApiService } from "../abstractions/api.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "../abstractions/notifications.service";
 import { AuthService } from "../auth/abstractions/auth.service";
@@ -23,8 +22,7 @@ import { MessagingService } from "../platform/abstractions/messaging.service";
 import { StateService } from "../platform/abstractions/state.service";
 import { ScheduledTaskNames } from "../platform/scheduling/scheduled-task-name.enum";
 import { TaskSchedulerService } from "../platform/scheduling/task-scheduler.service";
-import { SyncService } from "../platform/sync/sync.service";
-import { UserId } from "../types/guid";
+import { SyncService } from "../vault/abstractions/sync/sync.service.abstraction";
 
 export class NotificationsService implements NotificationsServiceAbstraction {
   private signalrConnection: signalR.HubConnection;
@@ -44,7 +42,6 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     private logoutCallback: (logoutReason: LogoutReason) => Promise<void>,
     private stateService: StateService,
     private authService: AuthService,
-    private authRequestService: AuthRequestServiceAbstraction,
     private messagingService: MessagingService,
     private taskSchedulerService: TaskSchedulerService,
   ) {
@@ -213,12 +210,9 @@ export class NotificationsService implements NotificationsServiceAbstraction {
         break;
       case NotificationType.AuthRequest:
         {
-          const userId = await this.stateService.getUserId();
-          if (await this.authRequestService.getAcceptAuthRequests(userId as UserId)) {
-            this.messagingService.send("openLoginApproval", {
-              notificationId: notification.payload.id,
-            });
-          }
+          this.messagingService.send("openLoginApproval", {
+            notificationId: notification.payload.id,
+          });
         }
         break;
       default:

@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Utwórz konto"
   },
+  "setAStrongPassword": {
+    "message": "Ustaw silne hasło"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Ukończ tworzenie konta poprzez ustawienie hasła"
+  },
   "logIn": {
     "message": "Zaloguj się"
   },
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Nowe hasło główne nie spełnia wymaganych zasad."
   },
+  "receiveMarketingEmails": {
+    "message": "Otrzymuj e-maile od Bitwarden z ogłoszeniami, poradami i badaniami."
+  },
+  "unsubscribe": {
+    "message": "Anuluj subskrypcję"
+  },
+  "atAnyTime": {
+    "message": "w każdej chwili."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Kontynuując, zgadzasz się na"
+  },
+  "and": {
+    "message": "i"
+  },
   "acceptPolicies": {
     "message": "Zaznaczając tę opcję, akceptujesz:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Odrzuć logowanie"
   },
-  "approveLoginRequests": {
-    "message": "Zatwierdź prośby logowania"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Logowanie potwierdzone dla $EMAIL$ dnia $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Ta prośba nie jest już ważna."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Użyj tego urządzenia, aby zatwierdzić prośby logowania z innych urządzeń."
   },
   "confirmLoginAtemptForMail": {
     "message": "Potwierdź próbę logowania dla $EMAIL$",

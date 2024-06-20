@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Opret konto"
   },
+  "setAStrongPassword": {
+    "message": "Indstil en stærk adgangskode"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Afslut kontooprettelsen med at indstille en adgangskode"
+  },
   "login": {
     "message": "Log ind"
   },
@@ -1434,6 +1440,24 @@
   "typeIdentity": {
     "message": "Identitet"
   },
+  "newItemHeader": {
+    "message": "Ny $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Redigér $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Adgangskodehistorik"
   },
@@ -1761,6 +1785,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Din nye hovedadgangskode opfylder ikke politikkravene."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Afmeld"
+  },
+  "atAnyTime": {
+    "message": "til enhver tid."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ved at fortsætte, accepterer du"
+  },
+  "and": {
+    "message": "og"
   },
   "acceptPolicies": {
     "message": "Ved at markere dette felt accepterer du følgende:"
@@ -3305,16 +3344,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Ryd filtre eller prøv med et andet søgeord"
   },
-  "copyInfoLabel": {
-    "message": "Kopiér info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Kopiér info - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3351,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Kopiér notat, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3393,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Autoudfyld - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Ingen værdier at kopiere"
   },
   "assignCollections": {
     "message": "Tildel samlinger"

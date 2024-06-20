@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Δημιουργία Λογαριασμού"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Είσοδος"
   },
@@ -696,10 +702,10 @@
     "message": "Καθορίστε τη βασική διεύθυνση URL, της εγκατάστασης του Bitwarden που φιλοξενείται στο χώρο σας."
   },
   "selfHostedBaseUrlHint": {
-    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+    "message": "Καθορίστε τη βασική διεύθυνση URL της εγκατάστασης Bitwarden στον τομέα σας. Παράδειγμα: https://bitwarden.company.com"
   },
   "selfHostedCustomEnvHeader": {
-    "message": "For advanced configuration, you can specify the base URL of each service independently."
+    "message": "Για προχωρημένη ρύθμιση, μπορείτε να ορίσετε ανεξάρτητα τη βασική διεύθυνση URL κάθε υπηρεσίας."
   },
   "selfHostedEnvFormInvalid": {
     "message": "You must add either the base Server URL or at least one custom environment."
@@ -1659,6 +1665,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ο νέος κύριος κωδικός δεν πληροί τις απαιτήσεις πολιτικής."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Επιλέγοντας αυτό το πλαίσιο, συμφωνείτε με τα εξής:"
   },
@@ -2401,9 +2422,6 @@
   "denyLogIn": {
     "message": "Άρνηση σύνδεσης"
   },
-  "approveLoginRequests": {
-    "message": "Έγκριση αιτημάτων σύνδεσης"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Επιβεβαιώθηκε η σύνδεση του $EMAIL$ στη συσκευή $DEVICE$",
     "placeholders": {
@@ -2437,9 +2455,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Αυτό το αίτημα δεν είναι πλέον έγκυρο."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Χρησιμοποιήστε αυτήν τη συσκευή για να εγκρίνετε αιτήματα σύνδεσης από άλλες συσκευές."
   },
   "confirmLoginAtemptForMail": {
     "message": "Επιβεβαίωση προσπάθειας σύνδεσης για $EMAIL$",

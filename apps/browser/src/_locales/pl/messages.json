@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Utwórz konto"
   },
+  "setAStrongPassword": {
+    "message": "Ustaw silne hasło"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Ukończ tworzenie konta poprzez ustawienie hasła"
+  },
   "login": {
     "message": "Zaloguj się"
   },
@@ -1434,6 +1440,24 @@
   "typeIdentity": {
     "message": "Tożsamość"
   },
+  "newItemHeader": {
+    "message": "Nowy $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Edytuj $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Historia hasła"
   },
@@ -1444,7 +1468,7 @@
     "message": "Kolekcje"
   },
   "nCollections": {
-    "message": "$COUNT$ collections",
+    "message": "Kolekcje: $COUNT$",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1761,6 +1785,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Nowe hasło główne nie spełnia wymaganych zasad."
+  },
+  "receiveMarketingEmails": {
+    "message": "Otrzymuj e-maile od Bitwarden z ogłoszeniami, poradami i badaniami."
+  },
+  "unsubscribe": {
+    "message": "Anuluj subskrypcję"
+  },
+  "atAnyTime": {
+    "message": "w każdej chwili."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Kontynuując, zgadzasz się na"
+  },
+  "and": {
+    "message": "i"
   },
   "acceptPolicies": {
     "message": "Zaznaczając tę opcję, akceptujesz:"
@@ -3305,16 +3344,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Wyczyść filtry lub użyj innej frazy"
   },
-  "copyInfoLabel": {
-    "message": "Skopiuj informacje, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Skopiuj informacje - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3351,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Skopiuj notatkę, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3393,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Autouzupełnij - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Brak wartości do skopiowania"
   },
   "assignCollections": {
     "message": "Przypisz kolekcje"
