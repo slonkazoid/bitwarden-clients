@@ -2,11 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
@@ -16,7 +17,7 @@ import { SendAccessResponse } from "@bitwarden/common/tools/send/models/response
 import { SendAccessView } from "@bitwarden/common/tools/send/models/view/send-access.view";
 import { SEND_KDF_ITERATIONS } from "@bitwarden/common/tools/send/send-kdf";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
-import { NoItemsModule } from "@bitwarden/components";
+import { NoItemsModule, ToastService } from "@bitwarden/components";
 
 import { SharedModule } from "../../shared";
 
@@ -54,6 +55,9 @@ export class AccessComponent implements OnInit {
 
   protected formGroup = this.formBuilder.group({});
 
+  // TODO: remove when email verification flag is removed
+  registerRoute = "/register";
+
   private id: string;
   private key: string;
 
@@ -62,8 +66,9 @@ export class AccessComponent implements OnInit {
     private route: ActivatedRoute,
     private cryptoService: CryptoService,
     private sendApiService: SendApiService,
-    private platformUtilsService: PlatformUtilsService,
+    private toastService: ToastService,
     private i18nService: I18nService,
+    private configService: ConfigService,
     protected formBuilder: FormBuilder,
   ) {}
 
@@ -81,7 +86,16 @@ export class AccessComponent implements OnInit {
     return this.send.creatorIdentifier;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // TODO: remove when email verification flag is removed
+    const emailVerification = await this.configService.getFeatureFlag(
+      FeatureFlag.EmailVerification,
+    );
+
+    if (emailVerification) {
+      this.registerRoute = "/signup";
+    }
+
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.params.subscribe(async (params) => {
       this.id = params.sendId;
@@ -127,11 +141,11 @@ export class AccessComponent implements OnInit {
         } else if (e.statusCode === 404) {
           this.unavailable = true;
         } else if (e.statusCode === 400) {
-          this.platformUtilsService.showToast(
-            "error",
-            this.i18nService.t("errorOccurred"),
-            e.message,
-          );
+          this.toastService.showToast({
+            variant: "error",
+            title: this.i18nService.t("errorOccurred"),
+            message: e.message,
+          });
         } else {
           this.error = true;
         }

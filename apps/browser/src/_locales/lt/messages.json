@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Sukurti paskyrą"
   },
+  "setAStrongPassword": {
+    "message": "Nustatyti stiprų slaptažodį"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Baigkite kurti paskyrą nustatydami slaptažodį"
+  },
   "login": {
     "message": "Prisijungti"
   },
@@ -1434,6 +1440,24 @@
   "typeIdentity": {
     "message": "Tapatybė"
   },
+  "newItemHeader": {
+    "message": "Naujas $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Redaguoti $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Slaptažodžio istorija"
   },
@@ -1761,6 +1785,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Tavo naujasis pagrindinis slaptažodis neatitinka politikos reikalavimų."
+  },
+  "receiveMarketingEmails": {
+    "message": "Gaukite „Bitwarden“ el. laiškus su skelbimais, patarimais ir tyrimų galimybėmis."
+  },
+  "unsubscribe": {
+    "message": "Atsisakyti prenumeratos"
+  },
+  "atAnyTime": {
+    "message": "bet kuriuo metu."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Tęsiant sutinkate su"
+  },
+  "and": {
+    "message": "ir"
   },
   "acceptPolicies": {
     "message": "Pažymėdami šį laukelį, sutinkate su šiais dalykais:"
@@ -3305,16 +3344,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Clear filters or try another search term"
   },
-  "copyInfoLabel": {
-    "message": "Copy info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Copy info - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3351,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Copy Note, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3393,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Auto-fill - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "No values to copy"
   },
   "assignCollections": {
     "message": "Assign collections"

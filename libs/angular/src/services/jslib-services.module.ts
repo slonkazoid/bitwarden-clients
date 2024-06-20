@@ -486,6 +486,7 @@ const safeProviders: SafeProvider[] = [
       UserVerificationServiceAbstraction,
       LogService,
       InternalAccountService,
+      EnvironmentService,
     ],
   }),
   safeProvider({
@@ -874,7 +875,6 @@ const safeProviders: SafeProvider[] = [
     provide: UserVerificationServiceAbstraction,
     useClass: UserVerificationService,
     deps: [
-      StateServiceAbstraction,
       CryptoServiceAbstraction,
       AccountServiceAbstraction,
       InternalMasterPasswordServiceAbstraction,
