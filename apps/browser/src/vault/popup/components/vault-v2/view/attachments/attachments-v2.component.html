@@ -1,12 +1,15 @@
 <div class="tw-mb-6">
   <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "attachments" | i18n }}</h5>
-  <div class="box-content-row tw-p-2" *ngFor="let attachment of cipher.attachments">
+  <div
+    class="tw-relative tw-py-1 tw-my-1 tw-mx-0.5 tw-rounded-md tw-z-10 tw-bg-background tw-p-2"
+    *ngFor="let attachment of cipher.attachments"
+  >
     <div class="tw-flex tw-justify-between">
       <div>
         <h3 class="tw-grow">
           {{ attachment.fileName }}
         </h3>
-        <div class="box-footer row-label">
+        <div class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
           {{ attachment.sizeName }}
         </div>
       </div>

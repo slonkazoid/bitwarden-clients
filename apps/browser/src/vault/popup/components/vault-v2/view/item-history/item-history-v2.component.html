@@ -1,15 +1,15 @@
 <div class="tw-mb-6">
   <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "itemHistory" | i18n }}</h5>
-  <div class="box-content-row">
-    <p class="row-label">
+  <div class="tw-relative tw-px-2 tw-py-1 tw-my-1 tw-mx-0.5 tw-rounded-md tw-z-10 tw-bg-background">
+    <p class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
       <span class="tw-font-bold">{{ "lastEdited" | i18n }}:</span>
       {{ cipher.revisionDate | date: "medium" }}
     </p>
-    <p class="row-label">
+    <p class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
       <span class="tw-font-bold">{{ "dateCreated" | i18n }}:</span>
       {{ cipher.creationDate | date: "medium" }}
     </p>
-    <p class="row-label">
+    <p class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
       <span class="tw-font-bold">{{ "datePasswordUpdated" | i18n }}:</span>
       {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
     </p>
