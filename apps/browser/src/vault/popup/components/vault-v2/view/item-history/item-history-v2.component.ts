@@ -5,13 +5,21 @@ import { RouterModule } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { SearchModule, ButtonModule } from "@bitwarden/components";
+import { SearchModule, ButtonModule, SectionComponent } from "@bitwarden/components";
 
 @Component({
   selector: "app-item-history-v2",
   templateUrl: "item-history-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    SearchModule,
+    JslibModule,
+    FormsModule,
+    ButtonModule,
+    RouterModule,
+    SectionComponent,
+  ],
 })
 export class ItemHistoryV2Component {
   @Input() cipher: CipherView;

@@ -1,87 +1,89 @@
 <div class="tw-mb-6">
   <h5 class="tw-pl-2 tw-font-bold tw-text-headers">{{ "customFields" | i18n }}</h5>
-  <div class="tw-relative tw-px-2 tw-py-1 tw-my-1 tw-mx-0.5 tw-rounded-md tw-z-10 tw-bg-background">
-    <div
-      class="tw-pb-2 tw-mb-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-bg-background"
-      *ngFor="let field of fields"
-    >
-      <ng-container *ngIf="field.type === fieldType.Text">
-        <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
-          {{ field.name }}
-        </label>
-        <div class="tw-flex tw-justify-between">
-          <input
-            class="tw-w-full tw-bg-transparent tw-border-none"
-            type="text"
-            [value]="field.value"
-            readonly
-            aria-readonly="true"
-          />
-          <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="field.type === fieldType.Hidden">
-        <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
-          {{ field.name }}
-        </label>
-        <div class="tw-flex tw-justify-between">
-          <input
-            class="tw-w-full tw-bg-transparent tw-border-none"
-            type="{{ hiddenFields[field.name] ? 'text' : 'password' }}"
-            [value]="field.value"
-            readonly
-            aria-readonly="true"
-          />
-          <div class="tw-flex tw-justify-end tw-items-center">
-            <button
-              type="button"
-              class="row-btn tw-mr-1"
-              appStopClick
-              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-              (click)="togglePassword(field.name)"
-            >
-              <i
-                class="bwi"
-                [ngClass]="{
-                  'bwi-eye': !hiddenFields[field.name],
-                  'bwi-eye-slash': hiddenFields[field.name]
-                }"
-                aria-hidden="true"
-              ></i>
-            </button>
+  <bit-section>
+    <div class="tw-px-2 tw-py-2.5 tw-my-1 tw-mx-0.5 tw-bg-background">
+      <div
+        class="tw-pb-2 tw-mb-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300 tw-bg-background"
+        *ngFor="let field of fields"
+      >
+        <ng-container *ngIf="field.type === fieldType.Text">
+          <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+            {{ field.name }}
+          </label>
+          <div class="tw-flex tw-justify-between">
+            <input
+              class="tw-w-full tw-bg-transparent tw-border-none"
+              type="text"
+              [value]="field.value"
+              readonly
+              aria-readonly="true"
+            />
             <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
           </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="field.type === fieldType.Boolean">
-        <div class="tw-flex tw-my-2">
-          <input
-            class="tw-bg-transparent tw-border-none"
-            type="checkbox"
-            [value]="field.value"
-            readonly
-            aria-readonly="true"
-          />
-          <h5 class="tw-ml-3">
+        </ng-container>
+        <ng-container *ngIf="field.type === fieldType.Hidden">
+          <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
             {{ field.name }}
-          </h5>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="field.type === fieldType.Linked">
-        <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
-          {{ "linked" | i18n }}: {{ field.name }}
-        </label>
-        <div class="tw-flex tw-justify-between">
-          <input
-            class="tw-w-full tw-bg-transparent tw-border-none"
-            type="text"
-            [value]="getLinkedType(field.linkedId)"
-            readonly
-            aria-readonly="true"
-          />
-          <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
-        </div>
-      </ng-container>
+          </label>
+          <div class="tw-flex tw-justify-between">
+            <input
+              class="tw-w-full tw-bg-transparent tw-border-none"
+              type="{{ hiddenFields[field.name] ? 'text' : 'password' }}"
+              [value]="field.value"
+              readonly
+              aria-readonly="true"
+            />
+            <div class="tw-flex tw-justify-end tw-items-center">
+              <button
+                type="button"
+                class="row-btn tw-mr-1"
+                appStopClick
+                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                (click)="togglePassword(field.name)"
+              >
+                <i
+                  class="bwi"
+                  [ngClass]="{
+                    'bwi-eye': !hiddenFields[field.name],
+                    'bwi-eye-slash': hiddenFields[field.name]
+                  }"
+                  aria-hidden="true"
+                ></i>
+              </button>
+              <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="field.type === fieldType.Boolean">
+          <div class="tw-flex tw-my-2">
+            <input
+              class="tw-bg-transparent tw-border-none"
+              type="checkbox"
+              [value]="field.value"
+              readonly
+              aria-readonly="true"
+            />
+            <h5 class="tw-ml-3">
+              {{ field.name }}
+            </h5>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="field.type === fieldType.Linked">
+          <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+            {{ "linked" | i18n }}: {{ field.name }}
+          </label>
+          <div class="tw-flex tw-justify-between">
+            <input
+              class="tw-w-full tw-bg-transparent tw-border-none"
+              type="text"
+              [value]="getLinkedType(field.linkedId)"
+              readonly
+              aria-readonly="true"
+            />
+            <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
+          </div>
+        </ng-container>
+      </div>
     </div>
-  </div>
+  </bit-section>
 </div>

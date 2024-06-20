@@ -7,13 +7,13 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { FieldType } from "@bitwarden/common/vault/enums";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
-import { SearchModule, ButtonModule, ToastService } from "@bitwarden/components";
+import { SearchModule, ButtonModule, ToastService, SectionComponent } from "@bitwarden/components";
 
 @Component({
   selector: "app-custom-fields-v2",
   templateUrl: "custom-fields-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule],
+  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, SectionComponent],
 })
 export class CustomFieldV2Component implements OnInit {
   @Input() fields: FieldView[];
