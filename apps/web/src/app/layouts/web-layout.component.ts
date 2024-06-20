@@ -3,7 +3,7 @@ import { Component, Input } from "@angular/core";
 
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
-import { LayoutComponent, LayoutVariant } from "@bitwarden/components";
+import { LayoutComponent } from "@bitwarden/components";
 
 import { PaymentMethodWarningsModule } from "../billing/shared";
 
@@ -23,7 +23,7 @@ import { ToggleWidthComponent } from "./toggle-width.component";
   ],
 })
 export class WebLayoutComponent {
-  @Input() variant: LayoutVariant = "primary";
+  @Input() variant: string = "primary";
 
   protected showPaymentMethodWarningBanners$ = this.configService.getFeatureFlag$(
     FeatureFlag.ShowPaymentMethodWarningBanners,

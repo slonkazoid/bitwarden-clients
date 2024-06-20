@@ -1,8 +1,6 @@
 <app-layout>
-  <ng-container slot="sidebar">
-    <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'passwordManager' | i18n">
-      <bit-icon [icon]="logo"></bit-icon>
-    </a>
+  <app-side-nav>
+    <bit-nav-logo [openIcon]="logo" route="." [label]="'passwordManager' | i18n"></bit-nav-logo>
 
     <bit-nav-item icon="bwi-collection" [text]="'vaults' | i18n" route="vault"></bit-nav-item>
     <bit-nav-item icon="bwi-send" [text]="'send' | i18n" route="sends"></bit-nav-item>
@@ -32,7 +30,7 @@
         *ngIf="hasFamilySponsorshipAvailable$ | async"
       ></bit-nav-item>
     </bit-nav-group>
-  </ng-container>
+  </app-side-nav>
 
   <router-outlet></router-outlet>
 </app-layout>

@@ -9,22 +9,15 @@ import { ProviderService } from "@bitwarden/common/admin-console/abstractions/pr
 import { Provider } from "@bitwarden/common/admin-console/models/domain/provider";
 import { canAccessBilling } from "@bitwarden/common/billing/abstractions/provider-billing.service.abstraction";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
-import { IconModule, NavigationModule } from "@bitwarden/components";
+import { IconModule } from "@bitwarden/components";
 import { ProviderPortalLogo } from "@bitwarden/web-vault/app/admin-console/icons/provider-portal-logo";
-import { WebLayoutComponent } from "@bitwarden/web-vault/app/layouts/web-layout.component";
+import { WebLayoutModule } from "@bitwarden/web-vault/app/layouts/web-layout.module";
 
 @Component({
   selector: "providers-layout",
   templateUrl: "providers-layout.component.html",
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    JslibModule,
-    WebLayoutComponent,
-    IconModule,
-    NavigationModule,
-  ],
+  imports: [CommonModule, RouterModule, JslibModule, WebLayoutModule, IconModule],
 })
 export class ProvidersLayoutComponent implements OnInit, OnDestroy {
   protected readonly logo = ProviderPortalLogo;

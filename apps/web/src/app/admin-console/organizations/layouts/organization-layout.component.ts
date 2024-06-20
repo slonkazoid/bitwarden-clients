@@ -22,10 +22,10 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { BannerModule, IconModule, NavigationModule } from "@bitwarden/components";
+import { BannerModule, IconModule } from "@bitwarden/components";
 
 import { OrgSwitcherComponent } from "../../../layouts/org-switcher/org-switcher.component";
-import { WebLayoutComponent } from "../../../layouts/web-layout.component";
+import { WebLayoutModule } from "../../../layouts/web-layout.module";
 import { AdminConsoleLogo } from "../../icons/admin-console-logo";
 
 @Component({
@@ -36,9 +36,8 @@ import { AdminConsoleLogo } from "../../icons/admin-console-logo";
     CommonModule,
     RouterModule,
     JslibModule,
-    WebLayoutComponent,
+    WebLayoutModule,
     IconModule,
-    NavigationModule,
     OrgSwitcherComponent,
     BannerModule,
   ],
