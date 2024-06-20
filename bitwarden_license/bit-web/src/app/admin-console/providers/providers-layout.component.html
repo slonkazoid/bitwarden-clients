@@ -1,5 +1,5 @@
-<app-layout variant="secondary">
-  <app-side-nav *ngIf="provider$ | async as provider">
+<app-layout>
+  <app-side-nav variant="secondary" *ngIf="provider$ | async as provider">
     <bit-nav-logo [openIcon]="logo" route="." [label]="'providerPortal' | i18n"></bit-nav-logo>
 
     <bit-nav-item
