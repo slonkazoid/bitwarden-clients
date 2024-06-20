@@ -492,4 +492,4 @@ export class NoRouteReuseStrategy implements RouteReuseStrategy {
   exports: [RouterModule],
   providers: [{ provide: RouteReuseStrategy, useClass: NoRouteReuseStrategy }],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
