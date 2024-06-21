@@ -55,6 +55,7 @@ import { FormFieldModule } from "../../../../../libs/components/src/form-field";
     TwoFactorAuthEmailComponent,
     TwoFactorAuthAuthenticatorComponent,
     TwoFactorAuthYubikeyComponent,
+    TwoFactorAuthDuoComponent,
     TwoFactorAuthWebAuthnComponent,
   ],
   providers: [I18nPipe],
