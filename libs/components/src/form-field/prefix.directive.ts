@@ -9,7 +9,7 @@ export class BitPrefixDirective {
   constructor(@Optional() private buttonComponent: ButtonLikeAbstraction) {}
 
   @HostBinding("class") @Input() get classList() {
-    return ["last:tw-mr-1"];
+    return ["last:tw-mr-1", "tw-text-muted"];
   }
 
   isDisabled(): boolean {
