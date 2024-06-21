@@ -157,7 +157,7 @@ export class GroupsComponent {
     if (result == GroupAddEditDialogResultType.Saved) {
       this.refreshGroups$.next();
     } else if (result == GroupAddEditDialogResultType.Deleted) {
-      this.removeGroup(group.details.id);
+      this.removeGroup(group);
     }
   }
 
@@ -182,7 +182,7 @@ export class GroupsComponent {
         title: null,
         message: this.i18nService.t("deletedGroupId", groupRow.details.name),
       });
-      this.removeGroup(groupRow.details.id);
+      this.removeGroup(groupRow);
     } catch (e) {
       this.logService.error(e);
     }
@@ -219,7 +219,7 @@ export class GroupsComponent {
         message: this.i18nService.t("deletedManyGroups", groupsToDelete.length.toString()),
       });
 
-      groupsToDelete.forEach((g) => this.removeGroup(g.details.id));
+      groupsToDelete.forEach((g) => this.removeGroup(g));
     } catch (e) {
       this.logService.error(e);
     }
@@ -235,14 +235,9 @@ export class GroupsComponent {
     );
   }
 
-  private removeGroup(id: string) {
-    const index = this.dataSource.data.findIndex((g) => g.details.id === id);
-    if (index > -1) {
-      // Clone the array so that the setter for dataSource.data is triggered to update the table rendering
-      const updatedData = [...this.dataSource.data];
-      updatedData.splice(index, 1);
-      this.dataSource.data = updatedData;
-    }
+  private removeGroup(groupRow: GroupDetailsRow) {
+    // Assign a new array to dataSource.data to trigger the setters and update the table
+    this.dataSource.data = this.dataSource.data.filter((g) => g !== groupRow);
   }
 
   private async toCollectionMap(response: ListResponse<CollectionResponse>) {
