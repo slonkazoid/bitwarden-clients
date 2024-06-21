@@ -5,9 +5,11 @@ import {
   ContentChild,
   ContentChildren,
   HostBinding,
+  HostListener,
   Input,
   QueryList,
   ViewChild,
+  signal,
 } from "@angular/core";
 
 import { BitHintComponent } from "../form-control/hint.component";
@@ -46,18 +48,18 @@ export class BitFormFieldComponent implements AfterContentChecked {
   }
 
   get inputBorderClasses(): string {
+    const shouldFocusBorderAppear = !this.buttonIsFocused();
+
     const groupClasses = [
       this.input.hasError
         ? "group-hover/input:tw-border-danger-700"
         : "group-hover/input:tw-border-primary-500",
       "group-focus-within/input:tw-outline-none",
-      "group-focus-within/input:tw-border-2",
-      "group-focus-within/input:tw-border-primary-500",
-      "group-focus-within/input:group-hover/input:tw-border-primary-500",
-      // "group-focus-within/input:tw-ring-1",
-      // "group-focus-within/input:tw-ring-inset",
-      // "group-focus-within/input:tw-ring-primary-400",
-      // "group-focus-within/input:tw-z-10",
+      shouldFocusBorderAppear ? "group-focus-within/input:tw-border-2" : "",
+      shouldFocusBorderAppear ? "group-focus-within/input:tw-border-primary-500" : "",
+      shouldFocusBorderAppear
+        ? "group-focus-within/input:group-hover/input:tw-border-primary-500"
+        : "",
     ];
 
     const baseInputBorderClasses = inputBorderClasses(this.input.hasError);
@@ -72,6 +74,23 @@ export class BitFormFieldComponent implements AfterContentChecked {
     return ["tw-block"].concat(this.disableMargin ? [] : ["tw-mb-6"]);
   }
 
+  /**
+   * If the currently focused element is a button, then we don't want to show focus on the
+   * input field itself.
+   *
+   * This is necessary because the `tw-group/input` wraps the input and any prefix/suffix
+   * buttons
+   */
+  protected buttonIsFocused = signal(false);
+  @HostListener("focusin", ["$event.target"])
+  onFocusIn(target: HTMLElement) {
+    this.buttonIsFocused.set(target.matches("button"));
+  }
+  @HostListener("focusout")
+  onFocusOut() {
+    this.buttonIsFocused.set(false);
+  }
+
   ngAfterContentChecked(): void {
     if (this.error) {
       this.input.ariaDescribedBy = this.error.id;
@@ -82,6 +101,10 @@ export class BitFormFieldComponent implements AfterContentChecked {
     }
   }
 
+  /**
+   * Determine if all the prefix and suffix buttons are disabled sot hat we can properly show either
+   * a partiailly or fully disabled state for the form field
+   */
   allButtonsDisabled() {
     const prefixEnabled = this.prefixChildren.filter((prefix) => prefix.isDisabled() === false);
     const suffixEnabled = this.suffixChildren.filter((suffix) => suffix.isDisabled() === false);
