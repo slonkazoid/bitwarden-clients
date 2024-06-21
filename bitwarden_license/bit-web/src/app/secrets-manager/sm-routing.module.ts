@@ -22,7 +22,7 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        canActivate: [canActivateSM],
+        canActivate: [authGuard, canActivateSM],
         pathMatch: "full",
         children: [],
       },
