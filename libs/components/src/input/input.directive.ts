@@ -1,3 +1,4 @@
+import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import {
   Directive,
   ElementRef,
@@ -23,14 +24,8 @@ export function inputBorderClasses(error: boolean) {
     "!tw-border-solid",
     error ? "tw-border-danger-600" : "tw-border-secondary-500",
     "focus:tw-outline-none",
-    // Rounded
-    // "tw-rounded-none",
-    // "first:tw-rounded-l-lg",
-    // "last:tw-rounded-r-lg",
   ];
 }
-
-// export const InputDisabledClasses = [];
 
 function standaloneInputClasses(error: boolean) {
   return [
@@ -43,10 +38,6 @@ function standaloneInputClasses(error: boolean) {
     "focus:tw-border-primary-500",
     "focus:tw-border-2",
     "focus:hover:tw-border-primary-500",
-    // "focus:tw-ring-1",
-    // "focus:tw-ring-inset",
-    // "focus:tw-ring-primary-400",
-    // "focus:tw-z-10",
     "disabled:tw-bg-secondary-100",
     "disabled:hover:tw-border-secondary-500",
   ];
@@ -86,6 +77,13 @@ export class BitInputDirective implements BitFormFieldControl {
   }
 
   @HostBinding("attr.type") @Input() type?: InputTypes;
+
+  @HostBinding("attr.disabled")
+  get disabledAttr() {
+    return this.disabled || null; // native disabled attr must be null when false
+  }
+
+  @Input({ transform: coerceBooleanProperty }) disabled?: boolean = false;
 
   @HostBinding("attr.spellcheck") @Input() spellcheck?: boolean;
 

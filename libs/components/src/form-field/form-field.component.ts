@@ -81,4 +81,11 @@ export class BitFormFieldComponent implements AfterContentChecked {
       this.input.ariaDescribedBy = undefined;
     }
   }
+
+  allButtonsDisabled() {
+    const prefixEnabled = this.prefixChildren.filter((prefix) => prefix.isDisabled() === false);
+    const suffixEnabled = this.suffixChildren.filter((suffix) => suffix.isDisabled() === false);
+
+    return prefixEnabled.length === 0 && suffixEnabled.length === 0;
+  }
 }

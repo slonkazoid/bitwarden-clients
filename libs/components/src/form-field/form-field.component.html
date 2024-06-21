@@ -35,14 +35,29 @@
       ></div>
     </div>
   </div>
-  <div class="tw-flex tw-px-3 tw-py-1.5">
-    <div *ngIf="prefixChildren.length" class="tw-flex tw-items-center">
+  <div class="tw-flex tw-border tw-border-transparent tw-border-solid">
+    <div
+      *ngIf="prefixChildren.length"
+      class="tw-flex tw-items-center tw-gap-0.5 tw-pl-3 tw-py-2 tw-rounded-l-lg"
+      [ngClass]="input.disabled && allButtonsDisabled() ? 'tw-bg-secondary-100' : ''"
+    >
       <ng-content select="[bitPrefix]"></ng-content>
     </div>
-    <div class="tw-w-full tw-relative">
+    <div
+      class="tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0"
+      [ngClass]="[
+        input.disabled ? 'tw-bg-secondary-100' : '',
+        prefixChildren.length === 0 ? 'tw-rounded-l-lg tw-pl-3' : '',
+        suffixChildren.length === 0 ? 'tw-rounded-r-lg tw-pr-3' : ''
+      ]"
+    >
       <ng-content></ng-content>
     </div>
-    <div *ngIf="suffixChildren.length" class="tw-flex tw-items-center">
+    <div
+      *ngIf="suffixChildren.length"
+      class="tw-flex tw-items-center tw-gap-0.5 tw-pr-3 tw-py-2 tw-rounded-r-lg"
+      [ngClass]="input.disabled && allButtonsDisabled() ? 'tw-bg-secondary-100' : ''"
+    >
       <ng-content select="[bitSuffix]"></ng-content>
     </div>
   </div>
