@@ -15,6 +15,7 @@ import {
 import { BulkOperationStatus } from "../shared/dialogs/bulk-status-dialog.component";
 
 import { ServiceAccountRequest } from "./models/requests/service-account.request";
+import { ServiceAccountCountsResponse } from "./models/responses/counts.response";
 import {
   ServiceAccountResponse,
   ServiceAccountSecretsDetailsResponse,
@@ -68,6 +69,20 @@ export class ServiceAccountService {
     );
 
     return await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r));
+  }
+
+  async getCounts(
+    organizationId: string,
+    serviceAccountId: string,
+  ): Promise<ServiceAccountCountsResponse> {
+    const r = await this.apiService.send(
+      "GET",
+      "/organizations/" + organizationId + "/service-accounts/" + serviceAccountId + "/sm-counts",
+      null,
+      true,
+      true,
+    );
+    return new ServiceAccountCountsResponse(r);
   }
 
   async update(

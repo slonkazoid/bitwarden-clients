@@ -9,6 +9,7 @@ import { DialogService } from "@bitwarden/components";
 import { ServiceAccountView } from "../models/view/service-account.view";
 
 import { AccessTokenCreateDialogComponent } from "./access/dialogs/access-token-create-dialog.component";
+import { ServiceAccountCounts } from "./models/view/counts.view";
 import { ServiceAccountService } from "./service-account.service";
 
 @Component({
@@ -34,6 +35,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       ),
     ),
   );
+  protected serviceAccountCounts: ServiceAccountCounts;
 
   constructor(
     private route: ActivatedRoute,
@@ -45,9 +47,22 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.serviceAccount$.pipe(takeUntil(this.destroy$)).subscribe((serviceAccountView) => {
-      this.serviceAccountView = serviceAccountView;
-    });
+    const serviceAccountCounts$ = combineLatest([this.route.params, this.onChange$]).pipe(
+      switchMap(([params, _]) =>
+        this.serviceAccountService.getCounts(params.organizationId, params.serviceAccountId),
+      ),
+    );
+
+    combineLatest([this.serviceAccount$, serviceAccountCounts$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([serviceAccountView, serviceAccountCounts]) => {
+        this.serviceAccountView = serviceAccountView;
+        this.serviceAccountCounts = {
+          projects: serviceAccountCounts.projects,
+          people: serviceAccountCounts.people,
+          accessTokens: serviceAccountCounts.accessTokens,
+        };
+      });
   }
 
   ngOnDestroy(): void {

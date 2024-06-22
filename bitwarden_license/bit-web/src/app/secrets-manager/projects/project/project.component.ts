@@ -23,6 +23,7 @@ import {
   ProjectDialogComponent,
   ProjectOperation,
 } from "../dialog/project-dialog.component";
+import { ProjectCounts } from "../models/view/counts.view";
 import { ProjectService } from "../project.service";
 
 @Component({
@@ -31,6 +32,7 @@ import { ProjectService } from "../project.service";
 })
 export class ProjectComponent implements OnInit, OnDestroy {
   protected project$: Observable<ProjectView>;
+  protected projectCounts: ProjectCounts;
 
   private organizationId: string;
   private projectId: string;
@@ -62,13 +64,23 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const organization$ = this.route.params.pipe(
       concatMap((params) => this.organizationService.get$(params.organizationId)),
     );
+    const projectCounts$ = this.route.params.pipe(
+      switchMap((params) =>
+        this.projectService.getProjectCounts(params.organizationId, params.projectId),
+      ),
+    );
 
-    combineLatest([projectId$, organization$])
+    combineLatest([projectId$, organization$, projectCounts$])
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([projectId, organization]) => {
+      .subscribe(([projectId, organization, projectCounts]) => {
         this.organizationId = organization.id;
         this.projectId = projectId;
         this.organizationEnabled = organization.enabled;
+        this.projectCounts = {
+          secrets: projectCounts.secrets,
+          people: projectCounts.people,
+          serviceAccounts: projectCounts.serviceAccounts,
+        };
       });
   }
 
