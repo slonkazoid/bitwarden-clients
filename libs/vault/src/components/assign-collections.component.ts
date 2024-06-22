@@ -16,7 +16,6 @@ import {
   map,
   scan,
   shareReplay,
-  startWith,
   switchMap,
   takeUntil,
   tap,
@@ -386,7 +385,6 @@ export class AssignCollectionsComponent implements OnInit {
 
     this.formGroup.controls.collections.valueChanges
       .pipe(
-        startWith(this.selectedCollections),
         scan(
           ([prevOrgId, prevSelectedItems], currentSelectedItems: SelectItemView[]) => {
             // If the organization has changed, reset previous selected items
