@@ -1,13 +1,26 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, distinctUntilChanged, map, Observable, Subject, takeUntil } from "rxjs";
+import {
+  combineLatest,
+  concatMap,
+  distinctUntilChanged,
+  map,
+  Observable,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+} from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { SecretsManagerLogo } from "@bitwarden/web-vault/app/layouts/secrets-manager-logo";
 
 import { OrganizationCounts } from "../models/view/counts.view";
+import { ProjectService } from "../projects/project.service";
+import { SecretService } from "../secrets/secret.service";
 import { SecretsManagerService } from "../secrets-manager.service";
+import { ServiceAccountService } from "../service-accounts/service-account.service";
 
 @Component({
   selector: "sm-navigation",
@@ -24,6 +37,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     private organizationService: OrganizationService,
     private secretsManagerService: SecretsManagerService,
+    private projectService: ProjectService,
+    private secretService: SecretService,
+    private serviceAccountService: ServiceAccountService,
   ) {}
 
   ngOnInit() {
@@ -39,9 +55,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
     );
 
-    orgId$
+    combineLatest([
+      orgId$,
+      this.projectService.project$.pipe(startWith(null)),
+      this.secretService.secret$.pipe(startWith(null)),
+      this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
+    ])
       .pipe(
-        concatMap((orgId) => this.secretsManagerService.getCounts(orgId)),
+        switchMap(([orgId]) => this.secretsManagerService.getCounts(orgId)),
         takeUntil(this.destroy$),
       )
       .subscribe((organizationCounts) => {

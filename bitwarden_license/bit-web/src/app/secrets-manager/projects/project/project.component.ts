@@ -18,6 +18,9 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectView } from "../../models/view/project.view";
+import { SecretService } from "../../secrets/secret.service";
+import { ServiceAccountService } from "../../service-accounts/service-account.service";
+import { AccessPolicyService } from "../../shared/access-policies/access-policy.service";
 import {
   OperationType,
   ProjectDialogComponent,
@@ -42,6 +45,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private projectService: ProjectService,
+    private secretService: SecretService,
+    private accessPolicyService: AccessPolicyService,
+    private serviceAccountService: ServiceAccountService,
     private router: Router,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
@@ -64,8 +70,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const organization$ = this.route.params.pipe(
       concatMap((params) => this.organizationService.get$(params.organizationId)),
     );
-    const projectCounts$ = this.route.params.pipe(
-      switchMap((params) =>
+    const projectCounts$ = combineLatest([
+      this.route.params,
+      this.secretService.secret$.pipe(startWith(null)),
+      this.accessPolicyService.accessPolicy$.pipe(startWith(null)),
+      this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
+    ]).pipe(
+      switchMap(([params]) =>
         this.projectService.getProjectCounts(params.organizationId, params.projectId),
       ),
     );
