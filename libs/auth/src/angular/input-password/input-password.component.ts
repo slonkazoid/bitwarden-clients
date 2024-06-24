@@ -9,7 +9,7 @@ import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/mod
 import { PBKDF2KdfConfig } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { DEFAULT_KDF_CONFIG } from "@bitwarden/common/platform/enums";
+import { DEFAULT_KDF_CONFIG, HashPurpose } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { MasterKey } from "@bitwarden/common/types/key";
 import {
@@ -30,6 +30,7 @@ import { PasswordCalloutComponent } from "../password-callout/password-callout.c
 export interface PasswordInputResult {
   masterKey: MasterKey;
   masterKeyHash: string;
+  localMasterKeyHash: string;
   kdfConfig: PBKDF2KdfConfig;
   hint: string;
 }
@@ -182,9 +183,16 @@ export class InputPasswordComponent implements OnInit {
 
     const masterKeyHash = await this.cryptoService.hashMasterKey(password, masterKey);
 
+    const localMasterKeyHash = await this.cryptoService.hashMasterKey(
+      password,
+      masterKey,
+      HashPurpose.LocalAuthorization,
+    );
+
     this.onPasswordFormSubmit.emit({
       masterKey,
       masterKeyHash,
+      localMasterKeyHash,
       kdfConfig,
       hint: this.formGroup.controls.hint.value,
     });
