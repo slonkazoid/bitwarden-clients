@@ -24,7 +24,7 @@ export class TabLinkComponent implements FocusableOption, AfterViewInit, OnDestr
 
   @ViewChild(TabListItemDirective) tabItem: TabListItemDirective;
   @ViewChild("rla") routerLinkActive: RouterLinkActive;
-  @ViewChild("slotEnd") slotEnd: ElementRef<HTMLElement>;
+  @ViewChild("endSlot") endSlot: ElementRef<HTMLElement>;
 
   readonly routerLinkMatchOptions: IsActiveMatchOptions = {
     queryParams: "ignored",
@@ -46,8 +46,8 @@ export class TabLinkComponent implements FocusableOption, AfterViewInit, OnDestr
     return this.routerLinkActive?.isActive ?? false;
   }
 
-  get haveSlotEnd() {
-    return this.slotEnd?.nativeElement?.innerHTML !== "" ?? false;
+  get haveEndSlot() {
+    return this.endSlot?.nativeElement?.childElementCount !== 0;
   }
 
   constructor(private _tabNavBar: TabNavBarComponent) {}
