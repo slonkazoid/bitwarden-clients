@@ -143,16 +143,13 @@ export class Fido2Component implements OnInit, OnDestroy {
             this.ciphers = (await this.cipherService.getAllDecrypted()).filter(
               (cipher) => cipher.type === CipherType.Login && !cipher.isDeleted,
             );
-            this.displayedCiphers = this.ciphers.filter((cipher) =>
-              cipher.login.matchesUri(this.url, equivalentDomains),
+            this.displayedCiphers = this.ciphers.filter(
+              (cipher) =>
+                cipher.login.matchesUri(this.url, equivalentDomains) &&
+                cipher.login.fido2Credentials.some((passkey) => {
+                  passkey.userHandle === message.userHandle;
+                }),
             );
-
-            // Test
-            this.displayedCiphers.filter((cipher) => {
-              return cipher.login.fido2Credentials.some((passkey) => {
-                passkey.userHandle === message.userHandle;
-              });
-            });
 
             if (this.displayedCiphers.length > 0) {
               this.selectedPasskey(this.displayedCiphers[0]);
