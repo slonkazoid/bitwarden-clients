@@ -147,6 +147,13 @@ export class Fido2Component implements OnInit, OnDestroy {
               cipher.login.matchesUri(this.url, equivalentDomains),
             );
 
+            // Test
+            this.displayedCiphers.filter((cipher) => {
+              return cipher.login.fido2Credentials.some((passkey) => {
+                passkey.userHandle === message.userHandle;
+              });
+            });
+
             if (this.displayedCiphers.length > 0) {
               this.selectedPasskey(this.displayedCiphers[0]);
             }
