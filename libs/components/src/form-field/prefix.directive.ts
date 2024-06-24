@@ -12,6 +12,15 @@ export class BitPrefixDirective {
     return ["last:tw-mr-1", "tw-text-muted"];
   }
 
+  @HostBinding("attr.aria-describedby")
+  get ariaDescribedBy() {
+    return this._ariaDescribedBy;
+  }
+  set ariaDescribedBy(value: string) {
+    this._ariaDescribedBy = value;
+  }
+  private _ariaDescribedBy: string;
+
   isDisabled(): boolean {
     return this.buttonComponent?.disabled;
   }

@@ -28,12 +28,12 @@ import { BitSuffixDirective } from "./suffix.directive";
 export class BitFormFieldComponent implements AfterContentChecked {
   @ContentChild(BitFormFieldControl) input: BitFormFieldControl;
   @ContentChild(BitHintComponent) hint: BitHintComponent;
+  @ContentChild(BitLabel) label: BitLabel;
 
   @ViewChild(BitErrorComponent) error: BitErrorComponent;
 
   @ContentChildren(BitPrefixDirective) prefixChildren: QueryList<BitPrefixDirective>;
   @ContentChildren(BitSuffixDirective) suffixChildren: QueryList<BitSuffixDirective>;
-  @ContentChildren(BitLabel) labelChildren: QueryList<BitLabel>;
 
   private _disableMargin = false;
   @Input() set disableMargin(value: boolean | "") {
@@ -44,7 +44,7 @@ export class BitFormFieldComponent implements AfterContentChecked {
   }
 
   get labelText() {
-    return this.labelChildren?.first?.labelText;
+    return this.label?.labelText;
   }
 
   get inputBorderClasses(): string {
@@ -99,6 +99,14 @@ export class BitFormFieldComponent implements AfterContentChecked {
     } else {
       this.input.ariaDescribedBy = undefined;
     }
+
+    this.prefixChildren.forEach((prefix) => {
+      prefix.ariaDescribedBy = this.label.id;
+    });
+
+    this.suffixChildren.forEach((suffix) => {
+      suffix.ariaDescribedBy = this.label.id;
+    });
   }
 
   /**
