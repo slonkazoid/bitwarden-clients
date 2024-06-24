@@ -4144,12 +4144,15 @@
   },
   "ssoHandOff": {
     "message": "You may now close this tab and continue in the extension."
-  },
+  },  
   "youSuccessfullyLoggedIn": {
     "message": "You successfully logged in"
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "This window will automatically close in 5 seconds"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
   },
   "includeAllTeamsFeatures": {
     "message": "All Teams features, plus:"
@@ -7889,7 +7892,7 @@
     "message": "Adjustments to seats will be reflected in the next billing cycle."
   },
   "unassignedSeatsDescription": {
-    "message": "Unassigned subscription seats"
+    "message": "Unassigned seats"
   },
   "purchaseSeatDescription": {
     "message": "Additional seats purchased"
@@ -8396,10 +8399,6 @@
   "exportClientReport": {
     "message": "Export client report"
   },
-  "invoiceNumberHeader": {
-    "message": "Invoice number",
-    "description": "A table header for an invoice's number"
-  },
   "memberAccessReport": {
     "message": "Member access"
   },
@@ -8447,5 +8446,29 @@
   },
   "smAccessRemovalSecretMessage": {
     "message": "This action will remove your access to this secret."
+  },
+  "invoice": {
+    "message": "Invoice"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "You have $SEATS$ unassigned seats available.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Contact your provider admin to purchase additional seats."
+  },
+  "open": {
+    "message": "Open",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uncollectible",
+    "description": "The status of an invoice."  
   }
 }
