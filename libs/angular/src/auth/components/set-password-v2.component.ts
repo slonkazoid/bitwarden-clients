@@ -93,34 +93,15 @@ export class SetPasswordV2Component implements OnInit {
           this.orgId = orgAutoEnrollStatusResponse.id;
           this.resetPasswordAutoEnroll = orgAutoEnrollStatusResponse.resetPasswordEnabled;
         }),
-        // switchMap((orgAutoEnrollStatusResponse: OrganizationAutoEnrollStatusResponse) =>
-        //   // Must get org id from response to get master password policy options
-        //   this.policyApiService.getMasterPasswordPolicyOptsForOrgUser(
-        //     orgAutoEnrollStatusResponse.id,
-        //   ),
-        // ),
-        // tap((masterPasswordPolicyOptions: MasterPasswordPolicyOptions) => {
-        //   this.enforcedPolicyOptions = masterPasswordPolicyOptions;
-        // }),
       )
-      // eslint-disable-next-line rxjs-angular/prefer-takeuntil
       .subscribe({
         error: () => {
           this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
         },
       });
-
-    // const qParams = await firstValueFrom(this.route.queryParams);
-
-    // if (qParams.identifier != null) {
-    //   this.orgIdentifier = qParams.identifier; // from SsoComponent handleChangePasswordRequired()
-    // } else {
-    //   await this.router.navigate(["/"]);
-    // }
   }
 
   async getPasswordInputResult(passwordInputResult: PasswordInputResult) {
-    console.log(passwordInputResult);
     this.passwordInputResult = passwordInputResult;
     await this.submit();
   }
