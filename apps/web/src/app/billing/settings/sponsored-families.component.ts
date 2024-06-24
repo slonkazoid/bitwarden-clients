@@ -19,8 +19,6 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { trimEmailValidator } from "./validators/trim-email.validator";
-
 interface RequestSponsorshipForm {
   selectedSponsorshipOrgId: FormControl<string>;
   sponsorshipEmail: FormControl<string>;
@@ -59,7 +57,7 @@ export class SponsoredFamiliesComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
       }),
       sponsorshipEmail: new FormControl("", {
-        validators: [Validators.email, Validators.required, trimEmailValidator()],
+        validators: [Validators.email, Validators.required],
         asyncValidators: [
           this.notAllowedValueAsync(
             () => firstValueFrom(this.accountService.activeAccount$.pipe(map((a) => a?.email))),
