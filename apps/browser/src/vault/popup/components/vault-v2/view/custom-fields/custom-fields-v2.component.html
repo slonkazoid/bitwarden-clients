@@ -22,7 +22,13 @@
             readonly
             aria-readonly="true"
           />
-          <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
+          <i
+            [appCopyClick]="field.value"
+            [appCopyToastMessage]="'copySuccessful' | i18n"
+            [appCopyToastVariant]="'info'"
+            class="bwi bwi-clone bwi-fw"
+            [appA11yTitle]="'copyValue' | i18n"
+          ></i>
         </div>
       </ng-container>
       <ng-container *ngIf="field.type === fieldType.Hidden">
@@ -48,7 +54,13 @@
               }"
               aria-hidden="true"
             ></i>
-            <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
+            <i
+              [appCopyClick]="field.value"
+              [appCopyToastMessage]="'copySuccessful' | i18n"
+              [appCopyToastVariant]="'info'"
+              class="bwi bwi-clone bwi-fw"
+              [appA11yTitle]="'copyValue' | i18n"
+            ></i>
           </div>
         </div>
       </ng-container>
@@ -78,7 +90,13 @@
             readonly
             aria-readonly="true"
           />
-          <i (click)="copy(field.value)" class="bwi bwi-clone bwi-fw"></i>
+          <i
+            [appCopyClick]="field.name"
+            [appCopyToastMessage]="'copySuccessful' | i18n"
+            [appCopyToastVariant]="'info'"
+            class="bwi bwi-clone bwi-fw"
+            [appA11yTitle]="'copyValue' | i18n"
+          ></i>
         </div>
       </ng-container>
     </div>

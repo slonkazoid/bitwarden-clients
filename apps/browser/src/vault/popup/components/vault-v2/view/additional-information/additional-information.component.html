@@ -6,7 +6,13 @@
     </label>
     <div class="tw-flex tw-justify-between">
       <p class="!tw-mb-0">{{ notes }}</p>
-      <i (click)="copy(notes)" class="bwi bwi-clone bwi-fw"></i>
+      <i
+        [appCopyClick]="notes"
+        [appCopyToastMessage]="'copySuccessful' | i18n"
+        [appCopyToastVariant]="'info'"
+        class="bwi bwi-clone bwi-fw"
+        [appA11yTitle]="'copyValue' | i18n"
+      ></i>
     </div>
   </bit-card>
 </div>

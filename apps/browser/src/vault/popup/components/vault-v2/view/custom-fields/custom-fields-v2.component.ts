@@ -4,10 +4,9 @@ import { FormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { FieldType, LinkedIdType, LoginLinkedId } from "@bitwarden/common/vault/enums";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
-import { SearchModule, ButtonModule, ToastService, CardComponent } from "@bitwarden/components";
+import { SearchModule, ButtonModule, CardComponent } from "@bitwarden/components";
 
 type HiddenFieldMap = {
   [key: string]: boolean;
@@ -24,11 +23,7 @@ export class CustomFieldV2Component implements OnInit {
   hiddenFields: HiddenFieldMap;
   fieldType = FieldType;
 
-  constructor(
-    private platformUtilsService: PlatformUtilsService,
-    private toastService: ToastService,
-    private i18nService: I18nService,
-  ) {}
+  constructor(private i18nService: I18nService) {}
 
   ngOnInit() {
     this.saveHiddenFieldsVisibility();
@@ -53,15 +48,6 @@ export class CustomFieldV2Component implements OnInit {
     if (linkedId === LoginLinkedId.Password) {
       return this.i18nService.t("password");
     }
-  }
-
-  copy(textData: string) {
-    this.platformUtilsService.copyToClipboard(textData, null);
-    this.toastService.showToast({
-      variant: "info",
-      title: null,
-      message: this.i18nService.t("copySuccessful"),
-    });
   }
 
   togglePassword(name: string) {
