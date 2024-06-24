@@ -5,9 +5,13 @@ import { FormsModule } from "@angular/forms";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { FieldType } from "@bitwarden/common/vault/enums";
+import { FieldType, LinkedIdType, LoginLinkedId } from "@bitwarden/common/vault/enums";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 import { SearchModule, ButtonModule, ToastService, CardComponent } from "@bitwarden/components";
+
+type HiddenFieldMap = {
+  [key: string]: boolean;
+};
 
 @Component({
   selector: "app-custom-fields-v2",
@@ -17,7 +21,7 @@ import { SearchModule, ButtonModule, ToastService, CardComponent } from "@bitwar
 })
 export class CustomFieldV2Component implements OnInit {
   @Input() fields: FieldView[];
-  hiddenFields: any = {};
+  hiddenFields: HiddenFieldMap;
   fieldType = FieldType;
 
   constructor(
@@ -30,23 +34,23 @@ export class CustomFieldV2Component implements OnInit {
     this.saveHiddenFieldsVisibility();
   }
 
-  // keeping a log of hidden fields so we can toggle show/hide only on values selected
   saveHiddenFieldsVisibility() {
     if (this.fields.length > 0) {
-      this.fields.forEach((field) => {
-        if (field.type === 1) {
+      this.hiddenFields = {};
+      this.fields.forEach((field: FieldView) => {
+        if (field.type === this.fieldType.Hidden) {
           this.hiddenFields[field.name] = false;
         }
       });
     }
   }
 
-  getLinkedType(linkedId: any) {
-    if (linkedId === 100) {
+  getLinkedType(linkedId: LinkedIdType) {
+    if (linkedId === LoginLinkedId.Username) {
       return this.i18nService.t("username");
     }
 
-    if (linkedId === 101) {
+    if (linkedId === LoginLinkedId.Password) {
       return this.i18nService.t("password");
     }
   }

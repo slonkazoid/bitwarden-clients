@@ -14,7 +14,7 @@
 
   <!-- ADDITIONAL INFORMATION -->
   <ng-container *ngIf="!!cipher && cipher.notes">
-    <app-additional-information-v2 [notes]="cipher.notes"> </app-additional-information-v2>
+    <app-additional-information [notes]="cipher.notes"> </app-additional-information>
   </ng-container>
 
   <!-- CUSTOM FIELDS -->
@@ -36,7 +36,7 @@
     <a bitButton type="button" buttonType="primary" (click)="editCipher()">
       {{ "edit" | i18n }}
     </a>
-    <ng-container slot="end" *ngIf="cipher.edit">
+    <ng-container slot="end" *ngIf="cipher && cipher.edit">
       <button
         type="button"
         class="tw-block tw-text-left tw-relative tw-px-2 tw-py-1 tw-my-1 tw-mx-0.5 tw-rounded-md tw-z-10"

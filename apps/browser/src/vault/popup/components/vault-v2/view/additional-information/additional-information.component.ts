@@ -8,12 +8,12 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { SearchModule, ButtonModule, CardComponent, ToastService } from "@bitwarden/components";
 
 @Component({
-  selector: "app-additional-information-v2",
-  templateUrl: "additional-information-v2.component.html",
+  selector: "app-additional-information",
+  templateUrl: "additional-information.component.html",
   standalone: true,
   imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, CardComponent],
 })
-export class AdditionalInformationV2Component {
+export class AdditionalInformationComponent {
   @Input() notes: string;
 
   constructor(

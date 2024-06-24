@@ -35,15 +35,15 @@ export class AttachmentsV2Component {
   private passwordReprompted = false;
 
   constructor(
-    protected passwordRepromptService: PasswordRepromptService,
-    protected i18nService: I18nService,
-    protected apiService: ApiService,
-    protected fileDownloadService: FileDownloadService,
-    protected cryptoService: CryptoService,
+    private passwordRepromptService: PasswordRepromptService,
+    private i18nService: I18nService,
+    private apiService: ApiService,
+    private fileDownloadService: FileDownloadService,
+    private cryptoService: CryptoService,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
     private toastService: ToastService,
-    protected stateProvider: StateProvider,
-    protected encryptService: EncryptService,
+    private stateProvider: StateProvider,
+    private encryptService: EncryptService,
   ) {
     this.subscribeToHasPremiumCheck();
     this.subscribeToOrgKey();
