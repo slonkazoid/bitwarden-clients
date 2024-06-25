@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { ToastService } from "@bitwarden/components";
 
@@ -61,11 +62,16 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
   }
 
   async handlePasswordFormSubmit(passwordInputResult: PasswordInputResult) {
-    await this.registrationFinishService.finishRegistration(
-      this.email,
-      passwordInputResult,
-      this.emailVerificationToken,
-    );
+    try {
+      await this.registrationFinishService.finishRegistration(
+        this.email,
+        passwordInputResult,
+        this.emailVerificationToken,
+      );
+    } catch (e) {
+      this.handleRegistrationError(e);
+      return;
+    }
 
     this.toastService.showToast({
       variant: "success",
@@ -73,9 +79,17 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
       message: this.i18nService.t("newAccountCreated"),
     });
 
-    // // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    // await this.router.navigate([this.successRoute], { queryParams: { email: email } });
+    await this.router.navigate(["/login"], { queryParams: { email: this.email } });
+  }
+
+  private handleRegistrationError(error: unknown) {
+    if (error instanceof ErrorResponse) {
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("unexpectedError"),
+        message: error.message,
+      });
+    }
   }
 
   ngOnDestroy(): void {
