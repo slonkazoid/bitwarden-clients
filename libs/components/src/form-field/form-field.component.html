@@ -5,7 +5,7 @@
       [attr.for]="input.labelForId"
     >
       <ng-content select="bit-label"></ng-content>
-      <span *ngIf="input.required" class="tw-text-xs tw-font-normal">
+      <span *ngIf="input.required" class="tw-text-[0.625rem] tw-font-normal">
         ({{ "required" | i18n }})</span
       >
     </label>
@@ -23,7 +23,7 @@
       >
         <div class="tw-opacity-0" aria-hidden="true">
           <span>{{ labelText }}</span>
-          <span *ngIf="input.required" class="tw-text-xs tw-font-normal">
+          <span *ngIf="input.required" class="tw-text-[0.625rem] tw-font-normal">
             ({{ "required" | i18n }})</span
           >
         </div>
@@ -38,7 +38,7 @@
   <div class="tw-flex tw-border tw-border-transparent tw-border-solid">
     <div
       *ngIf="prefixChildren.length"
-      class="tw-flex tw-items-center tw-gap-0.5 tw-pl-3 tw-py-2 tw-rounded-l-lg"
+      class="tw-flex tw-items-center tw-gap-1 tw-pl-3 tw-py-2 tw-rounded-l-lg"
       [ngClass]="input.disabled && allButtonsDisabled() ? 'tw-bg-secondary-100' : ''"
     >
       <ng-content select="[bitPrefix]"></ng-content>
@@ -55,7 +55,7 @@
     </div>
     <div
       *ngIf="suffixChildren.length"
-      class="tw-flex tw-items-center tw-gap-0.5 tw-pr-3 tw-py-2 tw-rounded-r-lg"
+      class="tw-flex tw-items-center tw-gap-1 tw-pr-3 tw-py-2 tw-rounded-r-lg"
       [ngClass]="input.disabled && allButtonsDisabled() ? 'tw-bg-secondary-100' : ''"
     >
       <ng-content select="[bitSuffix]"></ng-content>
