@@ -78,8 +78,6 @@ export class SsoComponent {
       FeatureFlag.EmailVerification,
     );
 
-    console.log("🔥🔥🔥 EMAIL VERIFICATION 🔥🔥🔥 ->", emailVerification);
-
     if (emailVerification) {
       this.changePasswordRoute = "set-password-v2";
     }
