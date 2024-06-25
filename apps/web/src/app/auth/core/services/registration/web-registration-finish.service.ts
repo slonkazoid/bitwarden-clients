@@ -1,5 +1,3 @@
-import { Injectable } from "@angular/core";
-
 import {
   DefaultRegistrationFinishService,
   PasswordInputResult,
@@ -13,7 +11,6 @@ import { EncryptedString, EncString } from "@bitwarden/common/platform/models/do
 
 import { AcceptOrganizationInviteService } from "../../../organization-invite/accept-organization.service";
 
-@Injectable({ providedIn: "root" })
 export class WebRegistrationFinishService
   extends DefaultRegistrationFinishService
   implements RegistrationFinishService

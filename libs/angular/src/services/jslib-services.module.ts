@@ -2,6 +2,10 @@ import { ErrorHandler, LOCALE_ID, NgModule } from "@angular/core";
 import { Subject } from "rxjs";
 
 import {
+  RegistrationFinishService as RegistrationFinishServiceAbstraction,
+  DefaultRegistrationFinishService,
+} from "@bitwarden/auth/angular";
+import {
   AuthRequestServiceAbstraction,
   AuthRequestService,
   PinServiceAbstraction,
@@ -1219,6 +1223,11 @@ const safeProviders: SafeProvider[] = [
     provide: StripeServiceAbstraction,
     useClass: StripeService,
     deps: [LogService],
+  }),
+  safeProvider({
+    provide: RegistrationFinishServiceAbstraction,
+    useClass: DefaultRegistrationFinishService,
+    deps: [CryptoServiceAbstraction, AccountApiServiceAbstraction],
   }),
 ];
 
