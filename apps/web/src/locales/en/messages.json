@@ -4144,12 +4144,15 @@
   },
   "ssoHandOff": {
     "message": "You may now close this tab and continue in the extension."
-  },
+  },  
   "youSuccessfullyLoggedIn": {
     "message": "You successfully logged in"
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "This window will automatically close in 5 seconds"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
   },
   "includeAllTeamsFeatures": {
     "message": "All Teams features, plus:"
@@ -7943,7 +7946,7 @@
     "message": "Adjustments to seats will be reflected in the next billing cycle."
   },
   "unassignedSeatsDescription": {
-    "message": "Unassigned subscription seats"
+    "message": "Unassigned seats"
   },
   "purchaseSeatDescription": {
     "message": "Additional seats purchased"
@@ -8450,10 +8453,6 @@
   "exportClientReport": {
     "message": "Export client report"
   },
-  "invoiceNumberHeader": {
-    "message": "Invoice number",
-    "description": "A table header for an invoice's number"
-  },
   "memberAccessReport": {
     "message": "Member access"
   },
@@ -8480,5 +8479,50 @@
         "example":"increments of 100,000"
       }
     }
+  },
+  "providerReinstate":{
+    "message": " Contact Customer Support to reinstate your subscription."
+  },
+  "secretPeopleDescription": {
+    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Add people or groups to share access to this secret"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this secret."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Add machine accounts to grant access to this secret"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Remove access to this secret"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "This action will remove your access to this secret."
+  },
+  "invoice": {
+    "message": "Invoice"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "You have $SEATS$ unassigned seats available.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Contact your provider admin to purchase additional seats."
+  },
+  "open": {
+    "message": "Open",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uncollectible",
+    "description": "The status of an invoice."  
   }
 }
