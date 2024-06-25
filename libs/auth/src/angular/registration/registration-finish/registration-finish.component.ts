@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { ToastService } from "@bitwarden/components";
@@ -22,12 +23,15 @@ import { RegistrationFinishService } from "./registration-finish.service";
 export class RegistrationFinishComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  loading = true;
   email: string;
 
   // Note: this token is the email verification token. It is always supplied as a query param, but
   // it either comes from the email verification email or, if email verification is disabled server side
   // via global settings, it comes directly from the registration-start component directly.
   emailVerificationToken: string;
+
+  masterPasswordPolicyOptions: MasterPasswordPolicyOptions | null = null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -39,6 +43,9 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.listenForQueryParamChanges();
+    this.masterPasswordPolicyOptions =
+      await this.registrationFinishService.getMasterPasswordPolicyOptsFromOrgInvite();
+    this.loading = false;
   }
 
   private listenForQueryParamChanges() {

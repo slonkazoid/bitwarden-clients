@@ -1,3 +1,4 @@
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { RegisterFinishRequest } from "@bitwarden/common/auth/models/request/registration/register-finish.request";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
@@ -13,6 +14,10 @@ export class DefaultRegistrationFinishService implements RegistrationFinishServi
     protected cryptoService: CryptoService,
     protected accountApiService: AccountApiService,
   ) {}
+
+  getMasterPasswordPolicyOptsFromOrgInvite(): Promise<MasterPasswordPolicyOptions | null> {
+    return null;
+  }
 
   async finishRegistration(
     email: string,

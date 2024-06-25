@@ -19,6 +19,8 @@ import {
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ModalService as ModalServiceAbstraction } from "@bitwarden/angular/services/modal.service";
 import { RegistrationFinishService as RegistrationFinishServiceAbstraction } from "@bitwarden/auth/angular";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { ClientType } from "@bitwarden/common/enums";
@@ -179,7 +181,14 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: RegistrationFinishServiceAbstraction,
     useClass: WebRegistrationFinishService,
-    deps: [CryptoServiceAbstraction, AccountApiServiceAbstraction, AcceptOrganizationInviteService],
+    deps: [
+      CryptoServiceAbstraction,
+      AccountApiServiceAbstraction,
+      AcceptOrganizationInviteService,
+      PolicyApiServiceAbstraction,
+      LogService,
+      PolicyService,
+    ],
   }),
 ];
 
