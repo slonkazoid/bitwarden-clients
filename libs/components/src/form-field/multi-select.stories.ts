@@ -66,9 +66,9 @@ export const actionsData = {
 };
 
 const fb = new FormBuilder();
-const formObjFactory = () =>
+const formObjFactory = (isDisabled = false) =>
   fb.group({
-    select: [[], [Validators.required]],
+    select: fb.control({ value: [], disabled: isDisabled }, { validators: [Validators.required] }),
   });
 
 function submit(formObj: FormGroup) {
@@ -121,23 +121,27 @@ export const InFormGroup: Story = {
 export const Loading: Story = {
   render: (args) => ({
     props: {
+      formObj: formObjFactory(),
+      submit: submit,
       ...args,
       onItemsConfirmed: actionsData.onItemsConfirmed,
     },
     template: /*html*/ `
-      <bit-form-field>
-        <bit-label>{{ name }}</bit-label>
-        <bit-multi-select
-          class="tw-w-full"
-          formControlName="select"
-          [baseItems]="baseItems"
-          [removeSelectedItems]="removeSelectedItems"
-          [loading]="loading"
-          [disabled]="disabled"
-          (onItemsConfirmed)="onItemsConfirmed($event)">
-        </bit-multi-select>
-        <bit-hint>{{ hint }}</bit-hint>
-      </bit-form-field>
+      <form [formGroup]="formObj" (ngSubmit)="submit(formObj)">
+        <bit-form-field>
+          <bit-label>{{ name }}</bit-label>
+          <bit-multi-select
+            class="tw-w-full"
+            formControlName="select"
+            [baseItems]="baseItems"
+            [removeSelectedItems]="removeSelectedItems"
+            [loading]="loading"
+            [disabled]="disabled"
+            (onItemsConfirmed)="onItemsConfirmed($event)">
+          </bit-multi-select>
+          <bit-hint>{{ hint }}</bit-hint>
+        </bit-form-field>
+      </form>
     `,
   }),
   args: {
@@ -149,7 +153,31 @@ export const Loading: Story = {
 };
 
 export const Disabled: Story = {
-  ...Loading,
+  render: (args) => ({
+    props: {
+      formObj: formObjFactory(true),
+      submit: submit,
+      ...args,
+      onItemsConfirmed: actionsData.onItemsConfirmed,
+    },
+    template: /*html*/ `
+      <form [formGroup]="formObj" (ngSubmit)="submit(formObj)">
+        <bit-form-field>
+          <bit-label>{{ name }}</bit-label>
+          <bit-multi-select
+            class="tw-w-full"
+            formControlName="select"
+            [baseItems]="baseItems"
+            [removeSelectedItems]="removeSelectedItems"
+            [loading]="loading"
+            [disabled]="disabled"
+            (onItemsConfirmed)="onItemsConfirmed($event)">
+          </bit-multi-select>
+          <bit-hint>{{ hint }}</bit-hint>
+        </bit-form-field>
+      </form>
+    `,
+  }),
   args: {
     baseItems: [] as any,
     name: "Disabled",
