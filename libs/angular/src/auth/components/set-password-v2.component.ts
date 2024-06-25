@@ -8,6 +8,8 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/admin-console/abstractions/organization-user/requests";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { OrganizationAutoEnrollStatusResponse } from "@bitwarden/common/admin-console/models/response/organization-auto-enroll-status.response";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
@@ -31,6 +33,7 @@ export class SetPasswordV2Component implements OnInit {
   forceSetPasswordReason: ForceSetPasswordReason = ForceSetPasswordReason.None;
   ForceSetPasswordReason = ForceSetPasswordReason;
   formPromise: Promise<any>;
+  masterPasswordPolicyOptions: MasterPasswordPolicyOptions | null = null;
   orgId: string;
   orgSsoIdentifier: string;
   passwordInputResult: PasswordInputResult;
@@ -50,6 +53,7 @@ export class SetPasswordV2Component implements OnInit {
     private masterPasswordService: InternalMasterPasswordServiceAbstraction,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
+    private policyApiService: PolicyApiServiceAbstraction,
     private route: ActivatedRoute,
     private router: Router,
     private ssoLoginService: SsoLoginServiceAbstraction,
@@ -92,6 +96,15 @@ export class SetPasswordV2Component implements OnInit {
         tap((orgAutoEnrollStatusResponse: OrganizationAutoEnrollStatusResponse) => {
           this.orgId = orgAutoEnrollStatusResponse.id;
           this.resetPasswordAutoEnroll = orgAutoEnrollStatusResponse.resetPasswordEnabled;
+        }),
+        switchMap((orgAutoEnrollStatusResponse: OrganizationAutoEnrollStatusResponse) =>
+          // Must get org id from response to get master password policy options
+          this.policyApiService.getMasterPasswordPolicyOptsForOrgUser(
+            orgAutoEnrollStatusResponse.id,
+          ),
+        ),
+        tap((masterPasswordPolicyOptions: MasterPasswordPolicyOptions) => {
+          this.masterPasswordPolicyOptions = masterPasswordPolicyOptions;
         }),
       )
       .subscribe({

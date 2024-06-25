@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 
 import { SetPasswordV2Component as BaseSetPasswordV2Component } from "@bitwarden/angular/auth/components/set-password-v2.component";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -17,7 +17,7 @@ import { AcceptOrganizationInviteService } from "./organization-invite/accept-or
   templateUrl: "./set-password-v2.component.html",
   imports: [CommonModule, InputPasswordComponent, JslibModule],
 })
-export class SetPasswordV2Component extends BaseSetPasswordV2Component {
+export class SetPasswordV2Component extends BaseSetPasswordV2Component implements OnInit {
   routerService = inject(RouterService);
   acceptOrganizationInviteService = inject(AcceptOrganizationInviteService);
 
