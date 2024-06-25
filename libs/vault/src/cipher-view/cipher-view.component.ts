@@ -18,9 +18,9 @@ import { CollectionView } from "@bitwarden/common/vault/models/view/collection.v
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { SearchModule, ButtonModule, IconButtonModule } from "@bitwarden/components";
 
-import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup-footer.component";
-import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup-header.component";
-import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-page.component";
+import { PopupFooterComponent } from "../../../../apps/browser/src/platform/popup/layout/popup-footer.component";
+import { PopupHeaderComponent } from "../../../../apps/browser/src/platform/popup/layout/popup-header.component";
+import { PopupPageComponent } from "../../../../apps/browser/src/platform/popup/layout/popup-page.component";
 
 import { AdditionalInformationComponent } from "./additional-information/additional-information.component";
 import { AttachmentsV2Component } from "./attachments/attachments-v2.component";
@@ -29,8 +29,8 @@ import { ItemDetailsV2Component } from "./item-details/item-details-v2.component
 import { ItemHistoryV2Component } from "./item-history/item-history-v2.component";
 
 @Component({
-  selector: "app-view-v2",
-  templateUrl: "view-v2.component.html",
+  selector: "app-cipher-view",
+  templateUrl: "cipher-view.component.html",
   standalone: true,
   imports: [
     CommonModule,
@@ -49,7 +49,7 @@ import { ItemHistoryV2Component } from "./item-history/item-history-v2.component
     IconButtonModule,
   ],
 })
-export class ViewV2Component implements OnDestroy {
+export class CipherViewComponent implements OnDestroy {
   headerText: string;
   cipherId: string;
   cipher: CipherView;
