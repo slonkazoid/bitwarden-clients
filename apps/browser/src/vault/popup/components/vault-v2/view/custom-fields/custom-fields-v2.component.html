@@ -15,10 +15,11 @@
           {{ field.name }}
         </label>
         <div class="tw-flex tw-justify-between">
-          <p class="!tw-mb-0">{{ field.value }}</p>
+          <input readonly bitInput type="text" [value]="field.value" aria-readonly="true" />
           <button
             bitIconButton="bwi-clone"
             bitSuffix
+            size="small"
             type="button"
             [appCopyClick]="field.value"
             [appCopyToastMessage]="'copySuccessful' | i18n"
@@ -31,52 +32,24 @@
         <label class="tw-text-xs tw-text-muted tw-select-none">
           {{ field.name }}
         </label>
-        <div class="tw-flex tw-justify-between">
-          <input
-            class="tw-bg-transparent tw-border-none"
-            type="{{ hiddenFields[field.name] ? 'text' : 'password' }}"
-            [value]="field.value"
-            readonly
-            aria-readonly="true"
-          />
-          <div>
-            <button
-              *ngIf="!hiddenFields[field.name]"
-              bitIconButton="bwi-eye"
-              bitSuffix
-              type="button"
-              (click)="togglePassword(field.name)"
-              [appA11yTitle]="'toggleVisibility' | i18n"
-            ></button>
-            <button
-              *ngIf="hiddenFields[field.name]"
-              bitIconButton="bwi-eye-slash"
-              bitSuffix
-              type="button"
-              (click)="togglePassword(field.name)"
-              [appA11yTitle]="'toggleVisibility' | i18n"
-            ></button>
-            <button
-              bitIconButton="bwi-clone"
-              bitSuffix
-              type="button"
-              [appCopyClick]="field.value"
-              [appCopyToastMessage]="'copySuccessful' | i18n"
-              [appCopyToastVariant]="'info'"
-              [appA11yTitle]="'copyValue' | i18n"
-            ></button>
-          </div>
-        </div>
+        <bit-form-field>
+          <input readonly bitInput type="password" [value]="field.value" aria-readonly="true" />
+          <button type="button" bitIconButton bitSuffix bitPasswordInputToggle></button>
+          <button
+            bitIconButton="bwi-clone"
+            bitSuffix
+            size="small"
+            type="button"
+            [appCopyClick]="field.value"
+            [appCopyToastMessage]="'copySuccessful' | i18n"
+            [appCopyToastVariant]="'info'"
+            [appA11yTitle]="'copyValue' | i18n"
+          ></button>
+        </bit-form-field>
       </ng-container>
       <ng-container *ngIf="field.type === fieldType.Boolean">
         <div class="tw-flex tw-my-2">
-          <input
-            class="tw-bg-transparent tw-border-none"
-            type="checkbox"
-            [value]="field.value"
-            readonly
-            aria-readonly="true"
-          />
+          <input type="checkbox" [value]="field.value" readonly aria-readonly="true" />
           <h5 class="tw-ml-3">
             {{ field.name }}
           </h5>
@@ -87,10 +60,17 @@
           {{ "linked" | i18n }}: {{ field.name }}
         </label>
         <div class="tw-flex tw-justify-between">
-          <p class="!tw-mb-0">{{ getLinkedType(field.linkedId) }}</p>
+          <input
+            readonly
+            bitInput
+            type="text"
+            [value]="getLinkedType(field.linkedId)"
+            aria-readonly="true"
+          />
           <button
             bitIconButton="bwi-clone"
             bitSuffix
+            size="small"
             type="button"
             [appCopyClick]="field.name"
             [appCopyToastMessage]="'copySuccessful' | i18n"

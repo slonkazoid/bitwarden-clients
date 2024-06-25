@@ -5,14 +5,17 @@
       {{ "note" | i18n }}
     </label>
     <div class="tw-flex tw-justify-between">
-      <p class="!tw-mb-0">{{ notes }}</p>
-      <i
+      <textarea readonly bitInput aria-readonly="true">{{ notes }}</textarea>
+      <button
+        bitIconButton="bwi-clone"
+        bitSuffix
+        size="small"
+        type="button"
         [appCopyClick]="notes"
         [appCopyToastMessage]="'copySuccessful' | i18n"
         [appCopyToastVariant]="'info'"
-        class="bwi bwi-clone bwi-fw"
         [appA11yTitle]="'copyValue' | i18n"
-      ></i>
+      ></button>
     </div>
   </bit-card>
 </div>

@@ -5,7 +5,7 @@
       <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
         {{ "itemName" | i18n }}
       </label>
-      <p class="!tw-mb-0">{{ cipher.login.username }}</p>
+      <input readonly bitInput type="text" [value]="cipher.login.username" aria-readonly="true" />
     </div>
 
     <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
