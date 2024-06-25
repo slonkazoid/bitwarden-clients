@@ -212,11 +212,9 @@ export class AppComponent implements OnInit, OnDestroy {
             this.loading = message.userId == null || message.userId === this.activeUserId;
             await this.logOut(message.logoutReason, message.userId);
             this.loading = false;
-            this.messagingService.send("loggedOut");
             break;
           case "lockVault":
             await this.vaultTimeoutService.lock(message.userId);
-            this.messagingService.send("locked", { userId: message.userId });
             break;
           case "lockAllVaults": {
             const currentUser = await firstValueFrom(
@@ -231,7 +229,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
               await this.vaultTimeoutService.lock(account);
             }
-            this.messagingService.send("locked");
             break;
           }
           case "locked":
