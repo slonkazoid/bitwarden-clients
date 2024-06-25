@@ -124,7 +124,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     params.rp.id = params.rp.id ?? parsedOrigin.hostname;
-    if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
+    if (
+      parsedOrigin.hostname == undefined ||
+      (!params.origin.startsWith("https://") && parsedOrigin.hostname !== "localhost")
+    ) {
       this.logService?.warning(`[Fido2Client] Invalid https origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
@@ -260,7 +263,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
     params.rpId = params.rpId ?? parsedOrigin.hostname;
 
-    if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
+    if (
+      parsedOrigin.hostname == undefined ||
+      (!params.origin.startsWith("https://") && parsedOrigin.hostname !== "localhost")
+    ) {
       this.logService?.warning(`[Fido2Client] Invalid https origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
