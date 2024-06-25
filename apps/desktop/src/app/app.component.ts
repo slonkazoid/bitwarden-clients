@@ -686,9 +686,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // This must come last otherwise the logout will prematurely trigger
     // a process reload before all the state service user data can be cleaned up
-    if (userBeingLoggedOut === activeUserId) {
-      this.authService.logOut(async () => {});
-    }
+    this.authService.logOut(async () => {});
   }
 
   private async recordActivity() {
