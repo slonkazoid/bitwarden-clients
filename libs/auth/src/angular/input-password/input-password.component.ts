@@ -3,7 +3,6 @@ import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { DEFAULT_KDF_CONFIG } from "@bitwarden/common/auth/models/domain/kdf-config";
@@ -49,14 +48,13 @@ export class InputPasswordComponent implements OnInit {
 
   @Input({ required: true }) email: string;
   @Input() protected buttonText: string;
-  @Input() private orgId: string;
+  @Input() masterPasswordPolicyOptions: MasterPasswordPolicyOptions | null = null;
 
   private minHintLength = 0;
   protected maxHintLength = 50;
 
   protected minPasswordLength = Utils.minimumPasswordLength;
   protected minPasswordMsg = "";
-  protected masterPasswordPolicy: MasterPasswordPolicyOptions;
   protected passwordStrengthResult: any;
   protected showErrorSummary = false;
   protected showPassword = false;
@@ -97,18 +95,16 @@ export class InputPasswordComponent implements OnInit {
     private i18nService: I18nService,
     private policyService: PolicyService,
     private toastService: ToastService,
-    private policyApiService: PolicyApiServiceAbstraction,
   ) {}
 
   async ngOnInit() {
-    this.masterPasswordPolicy = await this.policyApiService.getMasterPasswordPolicyOptsForOrgUser(
-      this.orgId,
-    );
-
-    if (this.masterPasswordPolicy != null && this.masterPasswordPolicy.minLength > 0) {
+    if (
+      this.masterPasswordPolicyOptions != null &&
+      this.masterPasswordPolicyOptions.minLength > 0
+    ) {
       this.minPasswordMsg = this.i18nService.t(
         "characterMinimum",
-        this.masterPasswordPolicy.minLength,
+        this.masterPasswordPolicyOptions.minLength,
       );
     } else {
       this.minPasswordMsg = this.i18nService.t("characterMinimum", this.minPasswordLength);
@@ -148,11 +144,11 @@ export class InputPasswordComponent implements OnInit {
 
     // Check if password meets org policy requirements
     if (
-      this.masterPasswordPolicy != null &&
+      this.masterPasswordPolicyOptions != null &&
       !this.policyService.evaluateMasterPassword(
         this.passwordStrengthResult.score,
         password,
-        this.masterPasswordPolicy,
+        this.masterPasswordPolicyOptions,
       )
     ) {
       this.toastService.showToast({
