@@ -5,7 +5,7 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { FieldType, LinkedIdType, LoginLinkedId } from "@bitwarden/common/vault/enums";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
-import { CardComponent } from "@bitwarden/components";
+import { CardComponent, IconButtonModule } from "@bitwarden/components";
 
 type HiddenFieldMap = {
   [key: string]: boolean;
@@ -15,7 +15,7 @@ type HiddenFieldMap = {
   selector: "app-custom-fields-v2",
   templateUrl: "custom-fields-v2.component.html",
   standalone: true,
-  imports: [CommonModule, JslibModule, CardComponent],
+  imports: [CommonModule, JslibModule, CardComponent, IconButtonModule],
 })
 export class CustomFieldV2Component implements OnInit {
   @Input() fields: FieldView[];

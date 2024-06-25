@@ -3530,5 +3530,14 @@
   },
   "filters": {
     "message": "Filters"
+  },
+  "downloadAttachment": {
+    "message": "Download - $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
   }
 }

@@ -1,7 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormsModule } from "@angular/forms";
 import { NEVER, switchMap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -18,14 +17,14 @@ import { OrganizationId } from "@bitwarden/common/types/guid";
 import { OrgKey } from "@bitwarden/common/types/key";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { SearchModule, ButtonModule, ToastService, ItemModule } from "@bitwarden/components";
+import { ToastService, ItemModule, IconButtonModule } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 @Component({
   selector: "app-attachments-v2",
   templateUrl: "attachments-v2.component.html",
   standalone: true,
-  imports: [CommonModule, SearchModule, JslibModule, FormsModule, ButtonModule, ItemModule],
+  imports: [CommonModule, JslibModule, ItemModule, IconButtonModule],
 })
 export class AttachmentsV2Component {
   @Input() cipher: CipherView;

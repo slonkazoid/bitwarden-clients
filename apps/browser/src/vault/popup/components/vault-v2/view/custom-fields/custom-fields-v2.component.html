@@ -16,13 +16,15 @@
         </label>
         <div class="tw-flex tw-justify-between">
           <p class="!tw-mb-0">{{ field.value }}</p>
-          <i
+          <button
+            bitIconButton="bwi-clone"
+            bitSuffix
+            type="button"
             [appCopyClick]="field.value"
             [appCopyToastMessage]="'copySuccessful' | i18n"
             [appCopyToastVariant]="'info'"
-            class="bwi bwi-clone bwi-fw"
             [appA11yTitle]="'copyValue' | i18n"
-          ></i>
+          ></button>
         </div>
       </ng-container>
       <ng-container *ngIf="field.type === fieldType.Hidden">
@@ -38,23 +40,31 @@
             aria-readonly="true"
           />
           <div>
-            <i
-              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+            <button
+              *ngIf="!hiddenFields[field.name]"
+              bitIconButton="bwi-eye"
+              bitSuffix
+              type="button"
               (click)="togglePassword(field.name)"
-              class="bwi tw-mr-1"
-              [ngClass]="{
-                'bwi-eye': !hiddenFields[field.name],
-                'bwi-eye-slash': hiddenFields[field.name]
-              }"
-              aria-hidden="true"
-            ></i>
-            <i
+              [appA11yTitle]="'toggleVisibility' | i18n"
+            ></button>
+            <button
+              *ngIf="hiddenFields[field.name]"
+              bitIconButton="bwi-eye-slash"
+              bitSuffix
+              type="button"
+              (click)="togglePassword(field.name)"
+              [appA11yTitle]="'toggleVisibility' | i18n"
+            ></button>
+            <button
+              bitIconButton="bwi-clone"
+              bitSuffix
+              type="button"
               [appCopyClick]="field.value"
               [appCopyToastMessage]="'copySuccessful' | i18n"
               [appCopyToastVariant]="'info'"
-              class="bwi bwi-clone bwi-fw"
               [appA11yTitle]="'copyValue' | i18n"
-            ></i>
+            ></button>
           </div>
         </div>
       </ng-container>
@@ -78,13 +88,15 @@
         </label>
         <div class="tw-flex tw-justify-between">
           <p class="!tw-mb-0">{{ getLinkedType(field.linkedId) }}</p>
-          <i
+          <button
+            bitIconButton="bwi-clone"
+            bitSuffix
+            type="button"
             [appCopyClick]="field.name"
             [appCopyToastMessage]="'copySuccessful' | i18n"
             [appCopyToastVariant]="'info'"
-            class="bwi bwi-clone bwi-fw"
             [appA11yTitle]="'copyValue' | i18n"
-          ></i>
+          ></button>
         </div>
       </ng-container>
     </div>

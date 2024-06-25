@@ -38,8 +38,9 @@
     </a>
     <ng-container slot="end" *ngIf="cipher && cipher.edit">
       <button
+        bitButton
+        class="tw-border-none"
         type="button"
-        class="tw-block tw-text-left tw-relative tw-px-2 tw-py-1 tw-my-1 tw-mx-0.5 tw-rounded-md tw-z-10"
         (click)="deleteCipher()"
         appStopClick
         #deleteBtn

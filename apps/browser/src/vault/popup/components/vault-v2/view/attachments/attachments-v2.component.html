@@ -11,16 +11,19 @@
         </div>
       </div>
       <div class="tw-flex tw-items-center" (click)="downloadAttachment(attachment)" slot="end">
-        <i
-          class="bwi bwi-download bwi-fw row-sub-icon"
+        <button
+          type="button"
+          bitIconButton="bwi-download"
+          size="small"
+          [appA11yTitle]="'downloadAttachment' | i18n: attachment.fileName"
           *ngIf="!$any(attachment).downloading"
-          aria-hidden="true"
-        ></i>
-        <i
-          class="bwi bwi-spinner bwi-fw bwi-spin row-sub-icon"
+        ></button>
+        <button
+          type="button"
+          bitIconButton="bwi-spinner bwi-spin"
+          size="small"
           *ngIf="$any(attachment).downloading"
-          aria-hidden="true"
-        ></i>
+        ></button>
       </div>
     </bit-item>
   </bit-item-group>
