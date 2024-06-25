@@ -1,7 +1,7 @@
 <div class="tw-w-full tw-relative tw-group/input">
   <div class="tw-absolute tw-w-full tw-h-full">
     <label
-      class="tw-text-muted tw-absolute tw-translate-x-3 -tw-translate-y-3 tw-px-1 tw-mb-0 tw-z-10"
+      class="tw-text-sm tw-text-muted tw-absolute tw-translate-x-3 -tw-translate-y-2 tw-px-1 tw-mb-0 tw-z-10 tw-flex tw-gap-1"
       [attr.for]="input.labelForId"
     >
       <ng-content select="bit-label"></ng-content>
@@ -21,8 +21,8 @@
         }} tw-border-x-0 tw-border-t-0 group-focus-within/input:tw-border-x-0 group-focus-within/input:tw-border-t-0"
         *ngIf="labelText"
       >
-        <div class="tw-opacity-0" aria-hidden="true">
-          <span>{{ labelText }}</span>
+        <div class="tw-opacity-0 tw-flex tw-gap-1" aria-hidden="true">
+          <span class="tw-text-sm">{{ labelText }}</span>
           <span *ngIf="input.required" class="tw-text-[0.625rem] tw-font-normal">
             ({{ "required" | i18n }})</span
           >
