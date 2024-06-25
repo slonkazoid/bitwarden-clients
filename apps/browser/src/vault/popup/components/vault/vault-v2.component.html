@@ -19,10 +19,13 @@
     </bit-no-items>
   </div>
 
-  <ng-container *ngIf="vaultState !== VaultStateEnum.Empty">
+  <!-- Show search & filters outside of the scroll area of the page -->
+  <div slot="above-scroll-area" class="tw-p-3" *ngIf="vaultState !== VaultStateEnum.Empty">
     <app-vault-v2-search> </app-vault-v2-search>
-
     <app-vault-list-filters></app-vault-list-filters>
+  </div>
+
+  <ng-container *ngIf="vaultState !== VaultStateEnum.Empty">
     <div
       *ngIf="vaultState === VaultStateEnum.NoResults"
       class="tw-flex tw-flex-col tw-justify-center tw-h-auto tw-pt-12"
@@ -49,6 +52,15 @@
     </div>
 
     <ng-container *ngIf="vaultState === null">
+      <!-- Sticky div that will create a bottom border effect when in the stuck position -->
+      <div
+        class="tw-sticky tw-h-[1px] tw-bg-secondary-300 -tw-top-[0.7857rem] -tw-mx-3 tw-px-3"
+      ></div>
+      <!-- Div that covers the sticky div until it is scrolled out of view -->
+      <div
+        class="tw-relative tw-z-10 tw-h-[2px] tw-bg-background-alt -tw-mt-[2px] -tw-mx-3 tw-px-3"
+      ></div>
+
       <app-autofill-vault-list-items></app-autofill-vault-list-items>
       <app-vault-list-items-container
         [title]="'favorites' | i18n"
