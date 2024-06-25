@@ -16,7 +16,7 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-import { SearchModule, ButtonModule } from "@bitwarden/components";
+import { SearchModule, ButtonModule, IconButtonModule } from "@bitwarden/components";
 
 import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup-footer.component";
 import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup-header.component";
@@ -46,6 +46,7 @@ import { ItemHistoryV2Component } from "./item-history/item-history-v2.component
     AttachmentsV2Component,
     ItemHistoryV2Component,
     CustomFieldV2Component,
+    IconButtonModule,
   ],
 })
 export class ViewV2Component implements OnDestroy {

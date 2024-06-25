@@ -36,14 +36,14 @@
     <a bitButton type="button" buttonType="primary" (click)="editCipher()">
       {{ "edit" | i18n }}
     </a>
-    <ng-container slot="end" *ngIf="cipher && cipher.edit">
-      <button bitButton type="button" (click)="deleteCipher()" appStopClick #deleteBtn>
-        <div class="row-main text-danger">
-          <div class="icon text-danger" aria-hidden="true">
-            <i class="bwi bwi-trash bwi-lg bwi-fw"></i>
-          </div>
-        </div>
-      </button>
-    </ng-container>
+    <button
+      slot="end"
+      *ngIf="cipher && cipher.edit"
+      (click)="deleteCipher()"
+      type="button"
+      buttonType="danger"
+      bitIconButton="bwi-trash"
+      [appA11yTitle]="'delete' | i18n"
+    ></button>
   </popup-footer>
 </popup-page>
