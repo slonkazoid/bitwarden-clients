@@ -30,7 +30,7 @@ export function inputBorderClasses(error: boolean) {
 function standaloneInputClasses(error: boolean) {
   return [
     "tw-px-3",
-    "tw-py-1",
+    "tw-py-2",
     "tw-rounded-lg",
     // Hover
     error ? "hover:tw-border-danger-700" : "hover:tw-border-primary-500",
