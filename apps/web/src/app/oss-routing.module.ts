@@ -113,12 +113,6 @@ const routes: Routes = [
         data: { titleId: "setMasterPassword" } satisfies DataProperties,
       },
       {
-        path: "hint",
-        component: HintComponent,
-        canActivate: [UnauthGuard],
-        data: { titleId: "passwordHint" } satisfies DataProperties,
-      },
-      {
         path: "lock",
         component: LockComponent,
         canActivate: [deepLinkGuard(), lockGuard()],
@@ -137,12 +131,6 @@ const routes: Routes = [
         data: { titleId: "acceptFamilySponsorship", doNotSaveUrl: false } satisfies DataProperties,
       },
       { path: "recover", pathMatch: "full", redirectTo: "recover-2fa" },
-      {
-        path: "verify-recover-delete",
-        component: VerifyRecoverDeleteComponent,
-        canActivate: [UnauthGuard],
-        data: { titleId: "deleteAccount" } satisfies DataProperties,
-      },
       {
         path: "verify-recover-delete-org",
         component: VerifyRecoverDeleteOrgComponent,
@@ -340,6 +328,39 @@ const routes: Routes = [
         ],
       },
       {
+        path: "verify-recover-delete",
+        canActivate: [unauthGuardFn()],
+        children: [
+          {
+            path: "",
+            component: VerifyRecoverDeleteComponent,
+            data: {
+              pageTitle: "deleteAccount",
+              titleId: "deleteAccount",
+            } satisfies DataProperties & AnonLayoutWrapperData,
+          },
+        ],
+      },
+      {
+        path: "hint",
+        canActivate: [unauthGuardFn()],
+        children: [
+          {
+            path: "",
+            component: HintComponent,
+            data: {
+              pageTitle: "passwordHint",
+              titleId: "passwordHint",
+            } satisfies DataProperties & AnonLayoutWrapperData,
+          },
+          {
+            path: "",
+            component: EnvironmentSelectorComponent,
+            outlet: "environment-selector",
+          },
+        ],
+      },
+      {
         path: "remove-password",
         component: RemovePasswordComponent,
         canActivate: [AuthGuard],
@@ -436,8 +457,13 @@ const routes: Routes = [
           },
           {
             path: "export",
-            loadChildren: () =>
-              import("./tools/vault-export/export.module").then((m) => m.ExportModule),
+            loadComponent: () =>
+              import("./tools/vault-export/export-web.component").then(
+                (mod) => mod.ExportWebComponent,
+              ),
+            data: {
+              titleId: "exportVault",
+            } satisfies DataProperties,
           },
           {
             path: "generator",
