@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -44,7 +44,7 @@ import { PasswordInputResult } from "./password-input-result";
     JslibModule,
   ],
 })
-export class InputPasswordComponent implements OnInit {
+export class InputPasswordComponent {
   @Output() onPasswordFormSubmit = new EventEmitter<PasswordInputResult>();
 
   @Input({ required: true }) email: string;
@@ -53,9 +53,7 @@ export class InputPasswordComponent implements OnInit {
 
   private minHintLength = 0;
   protected maxHintLength = 50;
-
   protected minPasswordLength = Utils.minimumPasswordLength;
-  protected minPasswordMsg = "";
   protected passwordStrengthResult: any;
   protected showErrorSummary = false;
   protected showPassword = false;
@@ -98,17 +96,14 @@ export class InputPasswordComponent implements OnInit {
     private toastService: ToastService,
   ) {}
 
-  async ngOnInit() {
+  get minPasswordLengthMsg() {
     if (
       this.masterPasswordPolicyOptions != null &&
       this.masterPasswordPolicyOptions.minLength > 0
     ) {
-      this.minPasswordMsg = this.i18nService.t(
-        "characterMinimum",
-        this.masterPasswordPolicyOptions.minLength,
-      );
+      return this.i18nService.t("characterMinimum", this.masterPasswordPolicyOptions.minLength);
     } else {
-      this.minPasswordMsg = this.i18nService.t("characterMinimum", this.minPasswordLength);
+      return this.i18nService.t("characterMinimum", this.minPasswordLength);
     }
   }
 
