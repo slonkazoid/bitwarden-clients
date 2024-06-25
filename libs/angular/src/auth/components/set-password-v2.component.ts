@@ -112,7 +112,7 @@ export class SetPasswordV2Component implements OnInit {
 
   async submit() {
     let protectedUserKey: [UserKey, EncString] = null;
-    const userKey = await this.cryptoService.getUserKey();
+    const userKey = await firstValueFrom(this.cryptoService.userKey$(this.userId));
 
     if (userKey == null) {
       protectedUserKey = await this.cryptoService.makeUserKey(this.passwordInputResult.masterKey);
@@ -154,7 +154,7 @@ export class SetPasswordV2Component implements OnInit {
       this.passwordInputResult.hint,
       this.orgSsoIdentifier,
       keysRequest,
-      this.passwordInputResult.kdfConfig.kdfType, // always PBKDF2 --> see this.setupSubmitActions
+      this.passwordInputResult.kdfConfig.kdfType,
       this.passwordInputResult.kdfConfig.iterations,
     );
 
@@ -173,7 +173,7 @@ export class SetPasswordV2Component implements OnInit {
             const publicKey = Utils.fromB64ToArray(response.publicKey);
 
             // RSA Encrypt user key with organization public key
-            const userKey = await this.cryptoService.getUserKey();
+            const userKey = await firstValueFrom(this.cryptoService.userKey$(this.userId));
             const encryptedUserKey = await this.cryptoService.rsaEncrypt(userKey.key, publicKey);
 
             const resetRequest = new OrganizationUserResetPasswordEnrollmentRequest();
@@ -195,13 +195,9 @@ export class SetPasswordV2Component implements OnInit {
       await this.formPromise;
 
       if (this.onSuccessfulChangePassword != null) {
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.onSuccessfulChangePassword();
+        return this.onSuccessfulChangePassword();
       } else {
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.router.navigate([this.successRoute]);
+        return this.router.navigate([this.successRoute]);
       }
     } catch {
       this.toastService.showToast({
