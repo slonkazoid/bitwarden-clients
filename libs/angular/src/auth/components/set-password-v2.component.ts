@@ -18,12 +18,12 @@ import { SetPasswordRequest } from "@bitwarden/common/auth/models/request/set-pa
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SyncService } from "@bitwarden/common/platform/sync";
 import { UserId } from "@bitwarden/common/types/guid";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
+import { ToastService } from "@bitwarden/components";
 
 @Directive()
 export class SetPasswordV2Component implements OnInit {
@@ -50,11 +50,11 @@ export class SetPasswordV2Component implements OnInit {
     private masterPasswordService: InternalMasterPasswordServiceAbstraction,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private organizationUserService: OrganizationUserService,
-    private platformUtilsService: PlatformUtilsService,
     private route: ActivatedRoute,
     private router: Router,
     private ssoLoginService: SsoLoginServiceAbstraction,
     private syncService: SyncService,
+    private toastService: ToastService,
     private userDecryptionOptionsService: InternalUserDecryptionOptionsServiceAbstraction,
   ) {}
 
@@ -96,7 +96,11 @@ export class SetPasswordV2Component implements OnInit {
       )
       .subscribe({
         error: () => {
-          this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+          this.toastService.showToast({
+            variant: "error",
+            title: null,
+            message: this.i18nService.t("errorOccurred"),
+          });
         },
       });
   }
@@ -200,7 +204,11 @@ export class SetPasswordV2Component implements OnInit {
         this.router.navigate([this.successRoute]);
       }
     } catch {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+      this.toastService.showToast({
+        variant: "error",
+        title: null,
+        message: this.i18nService.t("errorOccurred"),
+      });
     }
   }
 
