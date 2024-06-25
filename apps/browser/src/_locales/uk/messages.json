@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Створити обліковий запис"
   },
+  "setAStrongPassword": {
+    "message": "Встановіть надійний пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершіть створення облікового запису, встановивши пароль"
+  },
   "login": {
     "message": "Увійти"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Якщо ви забудете головний пароль, підказка може допомогти вам згадати його."
+  },
+  "masterPassHintText": {
+    "message": "У разі втрати пароля, можна отримати підказку на вашу електронну пошту. Максимум $CURRENT$/$MAXIMUM$ символів.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Введіть головний пароль ще раз"
@@ -393,10 +412,10 @@
     "message": "Вилучити з обраного"
   },
   "itemAddedToFavorites": {
-    "message": "Item added to favorites"
+    "message": "Запис додано до обраного"
   },
   "itemRemovedFromFavorites": {
-    "message": "Item removed from favorites"
+    "message": "Запис вилучено з обраного"
   },
   "notes": {
     "message": "Нотатки"
@@ -1434,6 +1453,24 @@
   "typeIdentity": {
     "message": "Особисті дані"
   },
+  "newItemHeader": {
+    "message": "Новий $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Редагувати $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Історія паролів"
   },
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новий головний пароль не задовольняє вимоги політики."
+  },
+  "receiveMarketingEmails": {
+    "message": "Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості."
+  },
+  "unsubscribe": {
+    "message": "Відписатися"
+  },
+  "atAnyTime": {
+    "message": "можна будь-коли."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продовжуючи, ви погоджуєтеся з"
+  },
+  "and": {
+    "message": "і"
   },
   "acceptPolicies": {
     "message": "Позначивши цей прапорець, ви погоджуєтеся з:"
@@ -2837,6 +2889,9 @@
     "message": "Вимкніть повторний запит головного пароля, щоб редагувати це поле",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Перемкнути бічну навігацію"
+  },
   "skipToContent": {
     "message": "Перейти до вмісту"
   },
@@ -3305,16 +3360,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Скиньте фільтри або спробуйте іншу умову пошуку"
   },
-  "copyInfoLabel": {
-    "message": "Копіювати інформацію, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Копіювати інформацію – $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3367,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Копіювати нотатку, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3409,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Автозаповнення – $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Немає значень для копіювання"
   },
   "assignCollections": {
     "message": "Призначити збірки"
@@ -3446,5 +3494,8 @@
   },
   "contactYourOrgAdmin": {
     "message": "Елементи в деактивованих організаціях недоступні. Зверніться до власника вашої організації для отримання допомоги."
+  },
+  "filters": {
+    "message": "Filters"
   }
 }

@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Hesap oluştur"
   },
+  "setAStrongPassword": {
+    "message": "Güçlü bir parola belirleyin"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Parolanızı belirleyerek hesabınızı oluşturmayı tamamlayın"
+  },
   "logIn": {
     "message": "Giriş yap"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Ana parola ipucu (isteğe bağlı)"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Ayarlar"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolanız ilke gereksinimlerini karşılamıyor."
   },
+  "receiveMarketingEmails": {
+    "message": "Bitwarden'dan duyurular, öneriler ve araştırmalarla ilgili e-postalar alın."
+  },
+  "unsubscribe": {
+    "message": "İstediğiniz zaman"
+  },
+  "atAnyTime": {
+    "message": "aboneliğinizi iptal edebilirsiniz."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Devam ederek şunları kabul etmiş olursunuz:"
+  },
+  "and": {
+    "message": "ve"
+  },
   "acceptPolicies": {
     "message": "Bu kutuyu işaretleyerek aşağıdakileri kabul etmiş olursunuz:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Girişi reddet"
   },
-  "approveLoginRequests": {
-    "message": "Giriş isteklerini onayla"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$DEVICE$ cihazında $EMAIL$ girişi onaylandı",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Bu istek artık geçerli değil."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Diğer cihazlardan yapılan giriş isteklerini onaylamak için bu cihazı kullan."
   },
   "confirmLoginAtemptForMail": {
     "message": "$EMAIL$ giriş isteğini onayla",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Alt menü"
+  },
+  "toggleSideNavigation": {
+    "message": "Kenar menüsünü aç/kapat"
   },
   "skipToContent": {
     "message": "İçeriğe geç"

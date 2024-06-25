@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Создать аккаунт"
   },
+  "setAStrongPassword": {
+    "message": "Задайте надежный пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершите создание аккаунта, задав пароль"
+  },
   "logIn": {
     "message": "Войти"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Подсказка к мастер-паролю (необяз.)"
+  },
+  "masterPassHintText": {
+    "message": "Если вы забудете свой пароль, на ваш email может быть отправлена подсказка для пароля. Максимальное количество символов $CURRENT$/$MAXIMUM$.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Настройки"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новый мастер-пароль не соответствует требованиям политики."
   },
+  "receiveMarketingEmails": {
+    "message": "Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований."
+  },
+  "unsubscribe": {
+    "message": "Отписаться"
+  },
+  "atAnyTime": {
+    "message": "в любое время."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продолжая, вы соглашаетесь с"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Запретить вход"
   },
-  "approveLoginRequests": {
-    "message": "Одобрение запросов на вход"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Вход подтвержден для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Этот запрос больше не действителен."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Использовать это устройство для подтверждения запросов на вход, сделанных с других устройств."
   },
   "confirmLoginAtemptForMail": {
     "message": "Подтвердите попытку входа для $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Подменю"
+  },
+  "toggleSideNavigation": {
+    "message": "Переключить боковую навигацию"
   },
   "skipToContent": {
     "message": "Перейти к содержимому"

@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Създаване на акаунт"
   },
+  "setAStrongPassword": {
+    "message": "Използвайте сложна парола"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завършете регистрацията си като зададете парола"
+  },
   "login": {
     "message": "Вписване"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Ако сте забравили главната парола, то подсказването може да ви помогне да си я припомните."
+  },
+  "masterPassHintText": {
+    "message": "Ако забравите паролата си, подсказката може да бъде изпратена на е-пощата Ви. $CURRENT$/$MAXIMUM$ максимален брой знаци.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Въведете пак главната парола"
@@ -393,10 +412,10 @@
     "message": "Изваждане от любими"
   },
   "itemAddedToFavorites": {
-    "message": "Item added to favorites"
+    "message": "Елементът е добавен към любимите"
   },
   "itemRemovedFromFavorites": {
-    "message": "Item removed from favorites"
+    "message": "Елементът е премахнат от любимите"
   },
   "notes": {
     "message": "Бележки"
@@ -1434,6 +1453,24 @@
   "typeIdentity": {
     "message": "Самоличност"
   },
+  "newItemHeader": {
+    "message": "New $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Редактиране на $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Хронология на паролата"
   },
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Паролата ви не отговаря на политиките."
+  },
+  "receiveMarketingEmails": {
+    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  },
+  "unsubscribe": {
+    "message": "Отписване"
+  },
+  "atAnyTime": {
+    "message": "по всяко време."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако продължите, Вие се съгласявате с"
+  },
+  "and": {
+    "message": "и"
   },
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следното:"
@@ -2837,6 +2889,9 @@
     "message": "Изключете повторното въвеждане на главната парола, за да редактирате това поле",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Превключване на страничната навигация"
+  },
   "skipToContent": {
     "message": "Прескачане към съдържанието"
   },
@@ -3305,16 +3360,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Изчистете филтрите или опитайте да търсите нещо друго"
   },
-  "copyInfoLabel": {
-    "message": "Копиране на информацията, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Копиране на информацията – $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3367,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Копиране на бележката, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3409,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Авт. попълване – $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Няма стойности за копиране"
   },
   "assignCollections": {
     "message": "Свързване на колекции"
@@ -3446,5 +3494,8 @@
   },
   "contactYourOrgAdmin": {
     "message": "Записите в деактивирани организации не са достъпни. Свържете се със собственика на организацията си за помощ."
+  },
+  "filters": {
+    "message": "Filters"
   }
 }

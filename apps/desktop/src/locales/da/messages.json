@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Opret konto"
   },
+  "setAStrongPassword": {
+    "message": "Indstil en stærk adgangskode"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Afslut kontooprettelsen med at indstille en adgangskode"
+  },
   "logIn": {
     "message": "Log ind"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Hovedadgangskodetip (valgfrit)"
+  },
+  "masterPassHintText": {
+    "message": "Glemmer du din adgangskode, kan adgangskodetippet sendes til din e-mail. $CURRENT$/$MAXIMUM$ tegns maksimum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Indstillinger"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Din nye hovedadgangskode opfylder ikke politikkravene."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Afmeld"
+  },
+  "atAnyTime": {
+    "message": "til enhver tid."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ved at fortsætte, accepterer du"
+  },
+  "and": {
+    "message": "og"
+  },
   "acceptPolicies": {
     "message": "Ved at afkrydse dette felt accepterer du flg.:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Afvis login"
   },
-  "approveLoginRequests": {
-    "message": "Godkend loginanmodninger"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Login bekræftet for $EMAIL$ på $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Anmodningen er ikke længere gyldig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Brug denne enhed til at godkende loginanmodninger fra andre enheder."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bekræft loginforsøg for $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Undermenu"
+  },
+  "toggleSideNavigation": {
+    "message": "Slå sidenavigering til/fra"
   },
   "skipToContent": {
     "message": "Spring til indhold"

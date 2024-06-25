@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Hesap oluştur"
   },
+  "setAStrongPassword": {
+    "message": "Güçlü bir parola belirleyin"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Parolanızı belirleyerek hesabınızı oluşturmayı tamamlayın"
+  },
   "login": {
     "message": "Giriş yap"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Ana parolanızı unutursanız bu ipucuna bakınca size ana parolanızı hatırlatacak bir şey yazabilirsiniz."
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Ana parolayı tekrar yazın"
@@ -1434,6 +1453,24 @@
   "typeIdentity": {
     "message": "Kimlik"
   },
+  "newItemHeader": {
+    "message": "Yeni $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "$TYPE$ düzenle",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Parola geçmişi"
   },
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolanız ilke gereksinimlerini karşılamıyor."
+  },
+  "receiveMarketingEmails": {
+    "message": "Bitwarden'dan duyurular, öneriler ve araştırmalarla ilgili e-postalar alın."
+  },
+  "unsubscribe": {
+    "message": "İstediğiniz zaman"
+  },
+  "atAnyTime": {
+    "message": "aboneliğinizi iptal edebilirsiniz."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Devam ederek şunları kabul etmiş olursunuz:"
+  },
+  "and": {
+    "message": "ve"
   },
   "acceptPolicies": {
     "message": "Bu kutuyu işaretleyerek aşağıdakileri kabul etmiş olursunuz:"
@@ -2837,6 +2889,9 @@
     "message": "Bu alanı düzenlemek için ana parolayı yeniden istemeyi kapatın",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Kenar menüsünü aç/kapat"
+  },
   "skipToContent": {
     "message": "İçeriğe geç"
   },
@@ -3305,16 +3360,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Filtreleri temizleyin veya başka bir arama yapmayı deneyin"
   },
-  "copyInfoLabel": {
-    "message": "Bilgileri kopyala, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Bilgileri kopyala - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3367,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Notu kopyala, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3409,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Otomatik doldur - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Kopyalanacak değer yok"
   },
   "assignCollections": {
     "message": "Koleksiyon ata"
@@ -3446,5 +3494,8 @@
   },
   "contactYourOrgAdmin": {
     "message": "Pasif kuruluşlardaki kayıtlara erişilemez. Destek almak için kuruluş sahibinizle iletişime geçin."
+  },
+  "filters": {
+    "message": "Filtreler"
   }
 }

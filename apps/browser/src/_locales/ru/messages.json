@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Создать аккаунт"
   },
+  "setAStrongPassword": {
+    "message": "Задайте надежный пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершите создание аккаунта, задав пароль"
+  },
   "login": {
     "message": "Войти"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Подсказка к мастер-паролю может помочь вам его вспомнить."
+  },
+  "masterPassHintText": {
+    "message": "Если вы забудете свой пароль, на ваш email может быть отправлена подсказка для пароля. Максимальное количество символов $CURRENT$/$MAXIMUM$.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Введите мастер-пароль повторно"
@@ -393,10 +412,10 @@
     "message": "Удалить из избранного"
   },
   "itemAddedToFavorites": {
-    "message": "Item added to favorites"
+    "message": "Элемент добавлен в избранное"
   },
   "itemRemovedFromFavorites": {
-    "message": "Item removed from favorites"
+    "message": "Элемент удален из избранного"
   },
   "notes": {
     "message": "Заметки"
@@ -1434,6 +1453,24 @@
   "typeIdentity": {
     "message": "Личная информация"
   },
+  "newItemHeader": {
+    "message": "Новый $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Изменить $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "История паролей"
   },
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новый мастер-пароль не соответствует требованиям политики."
+  },
+  "receiveMarketingEmails": {
+    "message": "Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований."
+  },
+  "unsubscribe": {
+    "message": "Отписаться"
+  },
+  "atAnyTime": {
+    "message": "в любое время."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продолжая, вы соглашаетесь с"
+  },
+  "and": {
+    "message": "и"
   },
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
@@ -2837,6 +2889,9 @@
     "message": "Для редактирования этого поля отключите повторный запрос мастер-пароля",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Переключить боковую навигацию"
+  },
   "skipToContent": {
     "message": "Перейти к содержимому"
   },
@@ -3305,16 +3360,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Очистите фильтры или попробуйте другой поисковый запрос"
   },
-  "copyInfoLabel": {
-    "message": "Скопировать информацию, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Скопировать информацию - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3367,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Скопировать заметку, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3409,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Автозаполнение - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Нет значений для копирования"
   },
   "assignCollections": {
     "message": "Назначить коллекции"
@@ -3446,5 +3494,8 @@
   },
   "contactYourOrgAdmin": {
     "message": "Доступ к элементам в деактивированных организациях невозможен. Обратитесь за помощью к владельцу организации."
+  },
+  "filters": {
+    "message": "Filters"
   }
 }

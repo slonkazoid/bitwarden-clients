@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "إنشاء حساب"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "تسجيل الدخول"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "تلميح كلمة المرور الرئيسية (اختياري)"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "الإعدادات"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "كلمة المرور الرئيسية الجديدة لا تفي بمتطلبات السياسة العامة."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "من خلال تحديد هذا المربع فإنك توافق على ما يلي:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "رفض تسجيل الدخول"
   },
-  "approveLoginRequests": {
-    "message": "الموافقة على طلبات تسجيل الدخول"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "تم تأكيد تسجيل الدخول لـ $EMAIL$ في $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "هذا الطلب لم يعد صالحًا."
-  },
-  "approveLoginRequestDesc": {
-    "message": "استخدم هذا الجهاز للموافقة على طلبات تسجيل الدخول من الأجهزة الأخرى."
   },
   "confirmLoginAtemptForMail": {
     "message": "تأكيد محاولة تسجيل الدخول لـ $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "قائمة فرعية"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "تخطي إلى المحتوى"

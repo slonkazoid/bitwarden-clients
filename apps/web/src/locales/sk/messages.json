@@ -713,6 +713,12 @@
   "createAccount": {
     "message": "Vytvoriť účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavte silné heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Zdadajte heslo na vytvorenie účtu"
+  },
   "newAroundHere": {
     "message": "Ste tu nový?"
   },
@@ -721,6 +727,9 @@
   },
   "logIn": {
     "message": "Prihlásiť sa"
+  },
+  "verifyIdentity": {
+    "message": "Overte svoju totožnosť"
   },
   "logInInitiated": {
     "message": "Iniciované prihlásenie"
@@ -757,6 +766,19 @@
   },
   "masterPassHintLabel": {
     "message": "Nápoveď pre hlavné heslo"
+  },
+  "masterPassHintText": {
+    "message": "Ak zabudnete heslo, na váš e-mail vám môže zaslať pomôcku k heslu. Zadaných $CURRENT$ znakov, limit je $MAXIMUM$.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Nastavenia"
@@ -2794,12 +2816,6 @@
   "userDesc": {
     "message": "Obyčajný používateľ s prístupom k zbierkam organizácie."
   },
-  "manager": {
-    "message": "Manažér"
-  },
-  "managerDesc": {
-    "message": "Manažéri môžu pristupovať k a spravovať pridelené zbierky v organizácii."
-  },
   "all": {
     "message": "Všetky"
   },
@@ -3727,6 +3743,21 @@
   "nothingSelected": {
     "message": "Nič ste nevybrali."
   },
+  "receiveMarketingEmails": {
+    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  },
+  "unsubscribe": {
+    "message": "Odhlásiť sa z odberu"
+  },
+  "atAnyTime": {
+    "message": "môžete kedykoľvek."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračovaním súhlasíte s"
+  },
+  "and": {
+    "message": "a"
+  },
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
@@ -4576,12 +4607,6 @@
   "permission": {
     "message": "Oprávnenie"
   },
-  "managerPermissions": {
-    "message": "Oprávnenia manažéra"
-  },
-  "adminPermissions": {
-    "message": "Oprávnenia správcu"
-  },
   "accessEventLogs": {
     "message": "Prístup k protokolom udalostí"
   },
@@ -4605,9 +4630,6 @@
   },
   "deleteAnyCollection": {
     "message": "Odstrániť ľubovoľnú zbierku"
-  },
-  "manageAssignedCollections": {
-    "message": "Spravovať priradené zbierky"
   },
   "editAssignedCollections": {
     "message": "Upraviť priradené zbierky"
@@ -6669,12 +6691,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Prideliť môžete iba zbierky ktoré spravujete."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Povoliť prístup k všetkým súčasným a budúcim zbierkam."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Zaškrtnutím nahradíte všetky ostatné povolenia ku zbierke."
-  },
   "selectMembers": {
     "message": "Vybrať členov"
   },
@@ -6716,12 +6732,6 @@
   },
   "group": {
     "message": "Skupina"
-  },
-  "groupAccessAll": {
-    "message": "Táto skupina môže upravovať a pristupovať k všetkým položkám."
-  },
-  "memberAccessAll": {
-    "message": "Tento člen môže upravovať a pristupovať k všetkým položkám."
   },
   "domainVerification": {
     "message": "Overenie domény"
@@ -7658,6 +7668,9 @@
   "alreadyHaveAccount": {
     "message": "Už máte účet?"
   },
+  "toggleSideNavigation": {
+    "message": "Prepnúť bočnú navigáciu"
+  },
   "skipToContent": {
     "message": "Preskočiť na obsah"
   },
@@ -8183,11 +8196,17 @@
   "setUpGithubActions": {
     "message": "Nastaviť Github Actions"
   },
+  "setUpKubernetes": {
+    "message": "Nastaviť Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Nastaviť GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Nastaviť Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "Zobraziť Rust repozitár"
   },
   "cSharpSDKRepo": {
     "message": "Zobraziť C# repozitár"
@@ -8354,5 +8373,79 @@
   },
   "verified": {
     "message": "Overený"
+  },
+  "viewSecret": {
+    "message": "View secret"
+  },
+  "noClients": {
+    "message": "Neexistujú žiadni klienti na zobrazenie"
+  },
+  "providerBillingEmailHint": {
+    "message": "Na túto e-mailovú adresu budú zasielané všetky faktúry týkajúce sa tohto poskytovateľa",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Odhaľte bezpečnostné rizika prostredníctvom auditu prístupu členov"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Rýchly prehľad o prístupe členov v rámci organizácie získate prechodom na predplatné Enterprise."
+  },
+  "date": {
+    "message": "Dátum"
+  },
+  "exportClientReport": {
+    "message": "Exportovať klientský report"
+  },
+  "invoiceNumberHeader": {
+    "message": "Číslo faktúry",
+    "description": "A table header for an invoice's number"
+  },
+  "memberAccessReport": {
+    "message": "Prístup člena"
+  },
+  "memberAccessReportDesc": {
+    "message": "Uistite sa, že členovia majú prístup k správnym prístupovým údajom a ich kontá sú bezpečné. Prostredníctvom tohto reportu získajte CSV o prístupe a konfigurácii členov."
+  },
+  "higherKDFIterations": {
+    "message": "Zvýšenie počtu KDF iterácií môže pomôcť chrániť vaše hlavné heslo pri brute force útoku."
+  },
+  "incrementsOf100,000": {
+    "message": "prírastok po 100 000"
+  },
+  "smallIncrements": {
+    "message": "malý prírastok"
+  },
+  "kdfIterationRecommends": {
+    "message": "Odporúčame aspoň 600 000"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "Nastavenie príliš vysokého počtu KDF iterácii môže viesť k problémom vo výkone na starších zariadeniach. Zvýšte hodnotu $VALUE$ a otestujte na vašich zariadeniach.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Ak chcete obnoviť vaše predplatné, kontaktujte zákaznícku podporu."
+  },
+  "secretPeopleDescription": {
+    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Add people or groups to share access to this secret"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this secret."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Add machine accounts to grant access to this secret"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Remove access to this secret"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "This action will remove your access to this secret."
   }
 }

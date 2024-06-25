@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Gumawa ng Account"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Mag-log in"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Mungkahi sa Master Password (opsyonal)"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Mga Preperensya"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ang iyong bagong master password ay hindi nakakatugon sa mga kinakailangan sa patakaran."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Sa pamamagitan ng pagsuri sa kahong ito sumasang ayon ka sa mga sumusunod:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Tanggihan ang pag login"
   },
-  "approveLoginRequests": {
-    "message": "Aprubahan ang mga kahilingan sa pag login"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Nakumpirma ang pag-login para sa $EMAIL$ sa $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Hindi na valid ang request na ito."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Gamitin ang device na ito para aprubahan ang mga kahilingan sa pag-login na ginawa mula sa iba pang mga device."
   },
   "confirmLoginAtemptForMail": {
     "message": "Kumpirmahin ang pagtatangka sa pag-login para sa $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Submenu"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "Skip to content"

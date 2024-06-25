@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Skapa konto"
   },
+  "setAStrongPassword": {
+    "message": "Ställ in ett starkt lösenord"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Logga in"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Huvudlösenordsledtråd (valfri)"
+  },
+  "masterPassHintText": {
+    "message": "Om du glömmer ditt lösenord kan lösenordsledtråden skickas till din e-postadress. $CURRENT$/$MAXIMUM$ tecken max.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Inställningar"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ditt nya huvudlösenord uppfyller inte kraven i policyn."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "och"
+  },
   "acceptPolicies": {
     "message": "Genom att markera denna ruta godkänner du följande:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Neka inloggning"
   },
-  "approveLoginRequests": {
-    "message": "Godkänn inloggningsförfrågningar"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Inloggning bekräftad för $EMAIL$ på $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Denna begäran är inte längre giltig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Använd denna enhet för att godkänna inloggningsförfrågningar från andra enheter."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bekräfta inloggningsförsök för $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Undermeny"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "Hoppa till innehåll"

@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Sukurti paskyrą"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Prisijungti"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Pagrindinio slaptažodžio užuomina (neprivaloma)"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Nustatymai"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Jūsų naujasis pagrindinis slaptažodis neatitinka politikos reikalavimų."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Pažymėdami šį laukelį, sutinkate su šiais dalykais:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Neleisti prisijungti"
   },
-  "approveLoginRequests": {
-    "message": "Patvirtinti prisijungimo užklausas"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$EMAIL$ prisijungimas patvirtinas $DEVICE$ įrenginyje",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Ši užklausa nebegalioja."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Naudokite šį įrenginį, kad patvirtintumėte prisijungimo užklausas, pateiktas iš kitų įrenginių."
   },
   "confirmLoginAtemptForMail": {
     "message": "Patvirtinti bandymą prisijungti iš $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Submeniu"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "Pereiti prie turinio"

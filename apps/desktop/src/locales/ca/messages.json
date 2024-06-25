@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Crea un compte"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Inicia sessió"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Pista de la contrasenya mestra (opcional)"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Configuració"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "La nova contrasenya principal no compleix els requisits de la política."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Si activeu aquesta casella, indiqueu que esteu d’acord amb el següent:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Denega l'inici de sessió"
   },
-  "approveLoginRequests": {
-    "message": "Aprova les sol·licituds d'inici de sessió"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "S'ha confirmat l'inici de sessió per a $EMAIL$ a $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Aquesta sol·licitud ja no és vàlida."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Utilitzeu aquest dispositiu per aprovar les sol·licituds d'inici de sessió fetes des d'altres dispositius."
   },
   "confirmLoginAtemptForMail": {
     "message": "Confirmeu l'intent d'inici de sessió per a $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Submenú"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "Vés al contingut"

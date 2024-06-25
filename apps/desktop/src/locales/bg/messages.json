@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Създаване на абонамент"
   },
+  "setAStrongPassword": {
+    "message": "Използвайте сложна парола"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завършете регистрацията си като зададете парола"
+  },
   "logIn": {
     "message": "Вписване"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Подсказване за главната парола (по избор)"
+  },
+  "masterPassHintText": {
+    "message": "Ако забравите паролата си, подсказката може да бъде изпратена на е-пощата Ви. $CURRENT$/$MAXIMUM$ максимален брой знаци.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Настройки"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Паролата ви не отговаря на политиките."
   },
+  "receiveMarketingEmails": {
+    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  },
+  "unsubscribe": {
+    "message": "Отписване"
+  },
+  "atAnyTime": {
+    "message": "по всяко време."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако продължите, Вие се съгласявате с"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следното:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Отказване на вписването"
   },
-  "approveLoginRequests": {
-    "message": "Одобряване на заявки за вписване"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Вписването за $EMAIL$ на $DEVICE$ е одобрено",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Тази заявка вече не е активна."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Използвайте това устройство за одобряване на заявки за вписване направени от други устройства."
   },
   "confirmLoginAtemptForMail": {
     "message": "Потвърждаване на заявката за вписване за $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Подменю"
+  },
+  "toggleSideNavigation": {
+    "message": "Превключване на страничната навигация"
   },
   "skipToContent": {
     "message": "Прескачане към съдържанието"

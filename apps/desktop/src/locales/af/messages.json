@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Skep Rekening"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "logIn": {
     "message": "Teken Aan"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Hoofwagwoordwenk (opsioneel)"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Instellings"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "U nuwe hoofwagwoord voldoen nie aan die beleidsvereistes nie."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Deur hierdie kassie af te merk stem u in tot die volgende:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Weier aantekening"
   },
-  "approveLoginRequests": {
-    "message": "Bevestig aantekenings versoeke"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Aantekening gebevestig vir $EMAIL$ op $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Hierdie versoek is nie meer geldig nie."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Gebruik hierdie toestel om aantekenings versoeke, van ander toetstelle, goed te keer."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bevestig aantekenings poging vir $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Submenu"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "Skip to content"

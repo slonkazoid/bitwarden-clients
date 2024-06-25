@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Fiók létrehozása"
   },
+  "setAStrongPassword": {
+    "message": "Erős jelszó beállítása"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "A fiók létrehozásának befejezése jelszó beállításával"
+  },
   "logIn": {
     "message": "Bejelentkezés"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Mesterjelszó emlékeztető (nem kötelező)"
+  },
+  "masterPassHintText": {
+    "message": "Ha elfelejtettük a jelszót, a jelszóra vonatkozó tippet elküldhetjük a saját email címre. $CURRENT$/$MAXIMUM$ maximum karakter.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Beállítások"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Az új mesterjelszó nem felel meg a szabály követelményeknek."
   },
+  "receiveMarketingEmails": {
+    "message": "Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről."
+  },
+  "unsubscribe": {
+    "message": "Leiratkozás"
+  },
+  "atAnyTime": {
+    "message": "bármikor."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "A folytatással elfogadjuk"
+  },
+  "and": {
+    "message": "és"
+  },
   "acceptPolicies": {
     "message": "A kapcsoló bekapcsolásával egyetértünk a következőkkel:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Bejelentkezés megtagadása"
   },
-  "approveLoginRequests": {
-    "message": "Bejelentkezési kérelmek jóváhagyása"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "A bejelelentketés $EMAIL$ email címmel megerősítésre került $DEVICE$ eszközön.",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "A kérés a továbbiakban már nem érvényes."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Ezen eszköz használata a más eszközökről történő bejelentkezési kérések jóváhagyására."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bejelentkezési kísérlet megerősítése $EMAIL$ email címmel",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Almenü"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
   },
   "skipToContent": {
     "message": "Ugrás a tartalomra"

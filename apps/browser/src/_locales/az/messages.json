@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Hesab yarat"
   },
+  "setAStrongPassword": {
+    "message": "Güclü bir parol təyin et"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Bir parol təyin edərək hesabınızı yaratmağı başa çatdırın"
+  },
   "login": {
     "message": "Giriş et"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Ana parol məsləhəti, unutduğunuz parolunuzu xatırlamağınıza kömək edir."
+  },
+  "masterPassHintText": {
+    "message": "Parolunuzu unutsanız, parol ipucu e-poçtunuza göndərilə bilər. Maksimum $CURRENT$/$MAXIMUM$ simvol.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Ana parolu yenidən yaz"
@@ -393,10 +412,10 @@
     "message": "Sevimlilərdən sil"
   },
   "itemAddedToFavorites": {
-    "message": "Item added to favorites"
+    "message": "Element sevimlilərə əlavə edildi"
   },
   "itemRemovedFromFavorites": {
-    "message": "Item removed from favorites"
+    "message": "Element sevimlilərdən çıxarıldı"
   },
   "notes": {
     "message": "Notlar"
@@ -1434,6 +1453,24 @@
   "typeIdentity": {
     "message": "Kimlik"
   },
+  "newItemHeader": {
+    "message": "Yeni $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "$TYPE$ - düzəliş et",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Parol tarixçəsi"
   },
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolunuz siyasət tələblərini qarşılamır."
+  },
+  "receiveMarketingEmails": {
+    "message": "Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın."
+  },
+  "unsubscribe": {
+    "message": "Abunəlikdən çıx"
+  },
+  "atAnyTime": {
+    "message": "istənilən vaxt."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Davam edərək, bunlarla razılaşırsınız"
+  },
+  "and": {
+    "message": "və"
   },
   "acceptPolicies": {
     "message": "Bu qutunu işarələyərək aşağıdakılarla razılaşırsınız:"
@@ -2837,6 +2889,9 @@
     "message": "Bu sahəyə düzəliş etmək üçün \"Ana parolu təkrar soruş\"u söndürün",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Yan naviqasiyanı aç/bağla"
+  },
   "skipToContent": {
     "message": "Məzmunu ötür"
   },
@@ -3305,16 +3360,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Filtrləri təmizləyin və ya başqa bir axtarış terminini sınayın"
   },
-  "copyInfoLabel": {
-    "message": "$ITEMNAME$ elementlərini kopyala",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Məlumatları kopyala - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3367,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "$ITEMNAME$ notunu kopyala",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3409,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Avto-doldur - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Kopyalanacaq dəyər yoxdur"
   },
   "assignCollections": {
     "message": "Kolleksiyaları təyin et"
@@ -3446,5 +3494,8 @@
   },
   "contactYourOrgAdmin": {
     "message": "Deaktiv edilmiş təşkilatlardakı elementlərə müraciət edilə bilməz. Kömək üçün təşkilatınızın sahibi ilə əlaqə saxlayın."
+  },
+  "filters": {
+    "message": "Filters"
   }
 }

@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Vytvoriť účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavte silné heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Zdajte heslo na vytvorenie účtu"
+  },
   "logIn": {
     "message": "Prihlásiť sa"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Nápoveď k hlavnému heslo (voliteľné)"
+  },
+  "masterPassHintText": {
+    "message": "Ak zabudnete heslo, na váš e-mail môžete dostať pomôcku k heslu. Zadaných $CURRENT$ znakov, limit je $MAXIMUM$.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Nastavenia"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavné heslo nespĺňa pravidlá."
   },
+  "receiveMarketingEmails": {
+    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  },
+  "unsubscribe": {
+    "message": "Odhlásiť sa z odberu"
+  },
+  "atAnyTime": {
+    "message": "môžete kedykoľvek."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračovaním súhlasíte s"
+  },
+  "and": {
+    "message": "a"
+  },
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "Odmietnuť prihlásenie"
   },
-  "approveLoginRequests": {
-    "message": "Schvaľovanie žiadostí o prihlásenie"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Potvrdené prihlásenie pomocou $EMAIL$ na $DEVICE$",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Táto žiadosť už nie je platná."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Použiť toto zariadenie na schvaľovanie požiadaviek na prihlásenie z iných zariadení."
   },
   "confirmLoginAtemptForMail": {
     "message": "Potvrdiť pokus o prihlásenie pomocou $EMAIL$",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "Podponuka"
+  },
+  "toggleSideNavigation": {
+    "message": "Prepnúť bočnú navigáciu"
   },
   "skipToContent": {
     "message": "Preskočiť na obsah"

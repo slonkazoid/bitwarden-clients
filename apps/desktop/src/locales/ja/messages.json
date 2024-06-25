@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "アカウントの作成"
   },
+  "setAStrongPassword": {
+    "message": "強力なパスワードを設定する"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "パスワードを設定してアカウントの作成を完了してください"
+  },
   "logIn": {
     "message": "ログイン"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "マスターパスワードのヒント (省略可能)"
+  },
+  "masterPassHintText": {
+    "message": "パスワードを忘れた場合、パスワードのヒントをメールに送信できます。 最大文字数：$CURRENT$/$MAXIMUM$",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "設定"
@@ -1659,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "新しいマスターパスワードは最低要件を満たしていません。"
   },
+  "receiveMarketingEmails": {
+    "message": "Bitwarden からのお知らせ、アドバイス、アンケート調査等のメールを受信します。"
+  },
+  "unsubscribe": {
+    "message": "配信停止"
+  },
+  "atAnyTime": {
+    "message": "はいつでもできます。"
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "続行すると以下に同意したものとみなします："
+  },
+  "and": {
+    "message": "と"
+  },
   "acceptPolicies": {
     "message": "以下に同意しチェックします:"
   },
@@ -2401,9 +2435,6 @@
   "denyLogIn": {
     "message": "ログインを拒否"
   },
-  "approveLoginRequests": {
-    "message": "ログインリクエストを承認する"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "$EMAIL$ に $DEVICE$ でのログインを承認しました",
     "placeholders": {
@@ -2437,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "このリクエストは無効になりました。"
-  },
-  "approveLoginRequestDesc": {
-    "message": "このデバイスを使用して、他のデバイスからのログインリクエストを承認します。"
   },
   "confirmLoginAtemptForMail": {
     "message": "$EMAIL$ のログイン試行を確認",
@@ -2676,6 +2704,9 @@
   },
   "submenu": {
     "message": "サブメニュー"
+  },
+  "toggleSideNavigation": {
+    "message": "サイドナビゲーションの切り替え"
   },
   "skipToContent": {
     "message": "コンテンツへ移動"

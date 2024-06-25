@@ -35,8 +35,7 @@ export class MenuItemDirective implements FocusableOption {
   ];
   @HostBinding("attr.role") role = "menuitem";
   @HostBinding("tabIndex") tabIndex = "-1";
-  @HostBinding("attr.disabled")
-  get disabledAttr() {
+  @HostBinding("attr.disabled") get disabledAttr() {
     return this.disabled || null; // native disabled attr must be null when false
   }
 
