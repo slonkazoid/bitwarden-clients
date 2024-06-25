@@ -8,4 +8,10 @@ import { Component } from "@angular/core";
     class: "tw-h-full tw-flex tw-flex-col tw-flex-1 tw-overflow-y-auto",
   },
 })
-export class PopupPageComponent {}
+export class PopupPageComponent {
+  static ScrollableContainerId = "scrollable-popup-page";
+
+  get id(): string {
+    return PopupPageComponent.ScrollableContainerId;
+  }
+}

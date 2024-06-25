@@ -20,9 +20,12 @@
   </div>
 
   <ng-container *ngIf="vaultState !== VaultStateEnum.Empty">
-    <app-vault-v2-search> </app-vault-v2-search>
+    <!-- Stick the search/filters to the top of the extension -->
+    <app-sticky-container>
+      <app-vault-v2-search></app-vault-v2-search>
 
-    <app-vault-list-filters></app-vault-list-filters>
+      <app-vault-list-filters></app-vault-list-filters>
+    </app-sticky-container>
     <div
       *ngIf="vaultState === VaultStateEnum.NoResults"
       class="tw-flex tw-flex-col tw-justify-center tw-h-auto tw-pt-12"
@@ -48,7 +51,7 @@
       </div>
     </div>
 
-    <ng-container *ngIf="vaultState === null">
+    <div *ngIf="vaultState === null" class="tw-pt-3">
       <app-autofill-vault-list-items></app-autofill-vault-list-items>
       <app-vault-list-items-container
         [title]="'favorites' | i18n"
@@ -60,6 +63,6 @@
         [ciphers]="remainingCiphers$ | async"
         id="allItems"
       ></app-vault-list-items-container>
-    </ng-container>
+    </div>
   </ng-container>
 </popup-page>

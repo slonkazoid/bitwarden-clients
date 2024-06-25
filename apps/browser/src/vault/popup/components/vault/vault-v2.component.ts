@@ -15,6 +15,7 @@ import { PopupPageComponent } from "../../../../platform/popup/layout/popup-page
 import { VaultPopupItemsService } from "../../services/vault-popup-items.service";
 import { AutofillVaultListItemsComponent, VaultListItemsContainerComponent } from "../vault-v2";
 import { NewItemDropdownV2Component } from "../vault-v2/new-item-dropdown/new-item-dropdown-v2.component";
+import { StickyContainerComponent } from "../vault-v2/sticky-container/sticky-container.component";
 import { VaultListFiltersComponent } from "../vault-v2/vault-list-filters/vault-list-filters.component";
 import { VaultV2SearchComponent } from "../vault-v2/vault-search/vault-v2-search.component";
 
@@ -43,6 +44,7 @@ enum VaultState {
     RouterLink,
     VaultV2SearchComponent,
     NewItemDropdownV2Component,
+    StickyContainerComponent,
   ],
 })
 export class VaultV2Component implements OnInit, OnDestroy {
