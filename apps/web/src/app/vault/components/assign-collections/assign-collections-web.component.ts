@@ -1,6 +1,7 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 
+import { PluralizePipe } from "@bitwarden/angular/pipes/pluralize.pipe";
 import { DialogService } from "@bitwarden/components";
 import {
   AssignCollectionsComponent,
@@ -11,7 +12,7 @@ import {
 import { SharedModule } from "../../../shared";
 
 @Component({
-  imports: [SharedModule, AssignCollectionsComponent],
+  imports: [SharedModule, AssignCollectionsComponent, PluralizePipe],
   templateUrl: "./assign-collections-web.component.html",
   standalone: true,
 })

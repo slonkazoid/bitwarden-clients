@@ -1,13 +1,5 @@
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   Observable,
@@ -29,7 +21,6 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherId, CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -44,6 +35,7 @@ import {
   MultiSelectModule,
   SelectItemView,
   SelectModule,
+  ToastService,
 } from "@bitwarden/components";
 
 export interface CollectionAssignmentParams {
@@ -131,8 +123,6 @@ export class AssignCollectionsComponent implements OnInit {
           setTimeout(() => {
             this.formGroup.patchValue({ selectedOrg: orgs[0].id });
             this.setFormValidators();
-
-            this.changeDetectorRef.markForCheck();
           });
         }
       }),
@@ -152,13 +142,12 @@ export class AssignCollectionsComponent implements OnInit {
   constructor(
     private cipherService: CipherService,
     private i18nService: I18nService,
-    private platformUtilsService: PlatformUtilsService,
     private configService: ConfigService,
     private organizationService: OrganizationService,
     private collectionService: CollectionService,
     private formBuilder: FormBuilder,
     private pluralizePipe: PluralizePipe,
-    private changeDetectorRef: ChangeDetectorRef,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -210,15 +199,7 @@ export class AssignCollectionsComponent implements OnInit {
     this.updateAvailableCollections(items);
   }
 
-  get isValid() {
-    return this.params.activeCollection != null || this.selectedCollections.length > 0;
-  }
-
   submit = async () => {
-    if (!this.isValid) {
-      return;
-    }
-
     this.formGroup.markAllAsTouched();
 
     if (this.formGroup.invalid) {
@@ -245,11 +226,11 @@ export class AssignCollectionsComponent implements OnInit {
         : this.bulkUpdateCollections(cipherIds));
     }
 
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("successfullyAssignedCollections"),
-    );
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("successfullyAssignedCollections"),
+    });
 
     this.onCollectionAssign.emit(CollectionAssignmentResult.Saved);
   };
@@ -260,11 +241,11 @@ export class AssignCollectionsComponent implements OnInit {
   private async handleOrganizationCiphers() {
     // If no ciphers are editable, close the dialog
     if (this.editableItemCount == 0) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("nothingSelected"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccurred"),
+        message: this.i18nService.t("nothingSelected"),
+      });
       this.onCollectionAssign.emit(CollectionAssignmentResult.Canceled);
 
       return;
@@ -457,11 +438,14 @@ export class AssignCollectionsComponent implements OnInit {
       selectedCollectionIds,
     );
 
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("movedItemsToOrg", this.orgName ?? this.i18nService.t("organization")),
-    );
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t(
+        "movedItemsToOrg",
+        this.orgName ?? this.i18nService.t("organization"),
+      ),
+    });
   }
 
   private async bulkUpdateCollections(cipherIds: CipherId[]) {

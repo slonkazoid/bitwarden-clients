@@ -108,7 +108,6 @@ import { IconComponent } from "./vault/components/icon.component";
     ManageTaxInformationComponent,
     SelectPaymentMethodComponent,
     VerifyBankAccountComponent,
-    PluralizePipe,
   ],
   exports: [
     A11yInvalidDirective,
@@ -144,7 +143,6 @@ import { IconComponent } from "./vault/components/icon.component";
     ManageTaxInformationComponent,
     SelectPaymentMethodComponent,
     VerifyBankAccountComponent,
-    PluralizePipe,
   ],
   providers: [
     CreditCardNumberPipe,
