@@ -35,11 +35,14 @@ function standaloneInputClasses(error: boolean) {
     // Hover
     error ? "hover:tw-border-danger-700" : "hover:tw-border-primary-500",
     // Focus
-    "focus:tw-border-primary-500",
-    "focus:tw-border-2",
     "focus:hover:tw-border-primary-500",
     "disabled:tw-bg-secondary-100",
     "disabled:hover:tw-border-secondary-500",
+    "focus:tw-border-primary-500",
+    "focus:tw-ring-1",
+    "focus:tw-ring-inset",
+    "focus:tw-ring-primary-500",
+    "focus:tw-z-10",
   ];
 }
 
