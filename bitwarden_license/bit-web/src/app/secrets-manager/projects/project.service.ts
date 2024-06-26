@@ -48,13 +48,10 @@ export class ProjectService {
     return await this.createProjectsListView(organizationId, results.data);
   }
 
-  async getProjectCounts(
-    organizationId: string,
-    projectId: string,
-  ): Promise<ProjectCountsResponse> {
+  async getProjectCounts(projectId: string): Promise<ProjectCountsResponse> {
     const r = await this.apiService.send(
       "GET",
-      "/organizations/" + organizationId + "/projects/" + projectId + "/sm-counts",
+      "/projects/" + projectId + "/sm-counts",
       null,
       true,
       true,

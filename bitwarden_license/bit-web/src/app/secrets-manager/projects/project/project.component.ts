@@ -75,11 +75,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.secretService.secret$.pipe(startWith(null)),
       this.accessPolicyService.accessPolicy$.pipe(startWith(null)),
       this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
-    ]).pipe(
-      switchMap(([params]) =>
-        this.projectService.getProjectCounts(params.organizationId, params.projectId),
-      ),
-    );
+    ]).pipe(switchMap(([params]) => this.projectService.getProjectCounts(params.projectId)));
 
     combineLatest([projectId$, organization$, projectCounts$])
       .pipe(takeUntil(this.destroy$))

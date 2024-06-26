@@ -57,9 +57,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       this.accessService.accessToken$.pipe(startWith(null)),
       this.onChange$,
     ]).pipe(
-      switchMap(([params, _]) =>
-        this.serviceAccountService.getCounts(params.organizationId, params.serviceAccountId),
-      ),
+      switchMap(([params, _]) => this.serviceAccountService.getCounts(params.serviceAccountId)),
     );
 
     combineLatest([this.serviceAccount$, serviceAccountCounts$])

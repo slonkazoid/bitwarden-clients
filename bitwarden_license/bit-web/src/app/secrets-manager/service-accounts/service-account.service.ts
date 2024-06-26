@@ -71,13 +71,10 @@ export class ServiceAccountService {
     return await this.createServiceAccountView(orgKey, new ServiceAccountResponse(r));
   }
 
-  async getCounts(
-    organizationId: string,
-    serviceAccountId: string,
-  ): Promise<ServiceAccountCountsResponse> {
+  async getCounts(serviceAccountId: string): Promise<ServiceAccountCountsResponse> {
     const r = await this.apiService.send(
       "GET",
-      "/organizations/" + organizationId + "/service-accounts/" + serviceAccountId + "/sm-counts",
+      "/service-accounts/" + serviceAccountId + "/sm-counts",
       null,
       true,
       true,
