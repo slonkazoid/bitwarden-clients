@@ -1040,14 +1040,14 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   private async canEditAttachments(cipher: CipherView) {
-    if (cipher.organizationId == null) {
+    if (cipher.organizationId == null || cipher.edit) {
       return true;
     }
 
     const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
 
     const organization = this.allOrganizations.find((o) => o.id === cipher.organizationId);
-    return organization.canEditAllCiphers(flexibleCollectionsV1Enabled, false) || cipher.edit;
+    return organization.canEditAllCiphers(flexibleCollectionsV1Enabled, false);
   }
 
   private go(queryParams: any = null) {

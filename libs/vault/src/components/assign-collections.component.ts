@@ -6,7 +6,6 @@ import {
   Subject,
   combineLatest,
   map,
-  scan,
   shareReplay,
   switchMap,
   takeUntil,
@@ -106,7 +105,6 @@ export class AssignCollectionsComponent implements OnInit {
   protected readonlyItemCount: number;
   protected personalItemsCount: number;
   protected availableCollections: SelectItemView[] = [];
-  protected selectedCollections: SelectItemView[] = [];
   protected orgName: string;
   protected showOrgSelector: boolean = false;
 
@@ -136,7 +134,9 @@ export class AssignCollectionsComponent implements OnInit {
   };
 
   private editableItems: CipherView[] = [];
-  private selectedOrgId: OrganizationId;
+  private get selectedOrgId(): OrganizationId {
+    return this.formGroup.value.selectedOrg;
+  }
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -156,23 +156,16 @@ export class AssignCollectionsComponent implements OnInit {
       FeatureFlag.RestrictProviderAccess,
     );
 
-    this.selectedOrgId = this.params.organizationId;
-
     const onlyPersonalItems = this.params.ciphers.every((c) => c.organizationId == null);
 
-    if (this.selectedOrgId === "MyVault" || onlyPersonalItems) {
+    if (this.params.organizationId === "MyVault" || onlyPersonalItems) {
       this.showOrgSelector = true;
     }
 
-    await this.initializeItems(this.selectedOrgId, v1FCEnabled, restrictProviderAccess);
+    await this.initializeItems(this.params.organizationId, v1FCEnabled, restrictProviderAccess);
 
-    if (this.selectedOrgId && this.selectedOrgId !== "MyVault") {
+    if (this.params.organizationId && this.params.organizationId !== "MyVault") {
       await this.handleOrganizationCiphers();
-    }
-
-    // If cipher already has assigned collections, select them by default
-    if (this.selectedCollections.length > 0) {
-      this.formGroup.controls.collections.setValue(this.selectedCollections);
     }
 
     this.setupFormSubscriptions(v1FCEnabled, restrictProviderAccess);
@@ -194,9 +187,9 @@ export class AssignCollectionsComponent implements OnInit {
   }
 
   selectCollections(items: SelectItemView[]) {
-    this.selectedCollections = [...this.selectedCollections, ...items].sort(this.sortItems);
-
-    this.updateAvailableCollections(items);
+    const currentCollections = this.formGroup.controls.collections.value as SelectItemView[];
+    const updatedCollections = [...currentCollections, ...items].sort(this.sortItems);
+    this.formGroup.patchValue({ collections: updatedCollections });
   }
 
   submit = async () => {
@@ -216,7 +209,7 @@ export class AssignCollectionsComponent implements OnInit {
       await this.moveToOrganization(
         this.selectedOrgId,
         this.params.ciphers.filter((c) => c.organizationId == null),
-        this.selectedCollections.map((i) => i.id as CollectionId),
+        this.formGroup.controls.collections.value.map((i) => i.id as CollectionId),
       );
     }
 
@@ -239,7 +232,7 @@ export class AssignCollectionsComponent implements OnInit {
     this.i18nService.collator.compare(a.labelName, b.labelName);
 
   private async handleOrganizationCiphers() {
-    // If no ciphers are editable, close the dialog
+    // If no ciphers are editable, cancel the operation
     if (this.editableItemCount == 0) {
       this.toastService.showToast({
         variant: "error",
@@ -340,7 +333,7 @@ export class AssignCollectionsComponent implements OnInit {
   }
 
   /**
-   * Sets up form subscriptions for selected organization and collections.
+   * Sets up form subscriptions for selected organizations.
    *
    * @param v1FCEnabled - Indicates if flexible collection flag is enabled.
    * @param restrictProviderAccess - Indicates if provider access flag is enabled.
@@ -350,14 +343,11 @@ export class AssignCollectionsComponent implements OnInit {
     this.formGroup.controls.selectedOrg.valueChanges
       .pipe(
         tap(() => {
-          this.selectedCollections = [];
-          this.availableCollections = [];
           this.formGroup.controls.collections.setValue([], { emitEvent: false });
         }),
         switchMap((orgId) => {
-          this.selectedOrgId = orgId as OrganizationId;
           return this.getCollectionsForOrganization(
-            this.selectedOrgId,
+            orgId as OrganizationId,
             v1FCEnabled,
             restrictProviderAccess,
           );
@@ -372,38 +362,6 @@ export class AssignCollectionsComponent implements OnInit {
           listName: c.name,
         }));
       });
-
-    this.formGroup.controls.collections.valueChanges
-      .pipe(
-        scan(
-          ([prevOrgId, prevSelectedItems], currentSelectedItems: SelectItemView[]) => {
-            // If the organization has changed, reset previous selected items
-            if (prevOrgId !== this.selectedOrgId) {
-              prevSelectedItems = [];
-            }
-
-            const removedItems = prevSelectedItems.filter(
-              (item) => !currentSelectedItems.includes(item),
-            );
-
-            // Update available collections by adding back removed items
-            if (removedItems.length > 0) {
-              this.availableCollections = [...this.availableCollections, ...removedItems].sort(
-                this.sortItems,
-              );
-            }
-
-            if (currentSelectedItems.length > 0) {
-              this.updateAvailableCollections(currentSelectedItems);
-            }
-
-            return [this.selectedOrgId, currentSelectedItems] as [OrganizationId, SelectItemView[]];
-          },
-          [this.selectedOrgId, this.selectedCollections] as [OrganizationId, SelectItemView[]],
-        ),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
   }
 
   /**
@@ -458,18 +416,20 @@ export class AssignCollectionsComponent implements OnInit {
   }
 
   private async bulkUpdateCollections(cipherIds: CipherId[]) {
-    if (this.selectedCollections.length > 0) {
+    if (this.formGroup.controls.collections.value.length > 0) {
       await this.cipherService.bulkUpdateCollectionsWithServer(
         this.selectedOrgId,
         cipherIds,
-        this.selectedCollections.map((i) => i.id as CollectionId),
+        this.formGroup.controls.collections.value.map((i) => i.id as CollectionId),
         false,
       );
     }
 
     if (
       this.params.activeCollection != null &&
-      this.selectedCollections.find((c) => c.id === this.params.activeCollection.id) == null
+      this.formGroup.controls.collections.value.find(
+        (c) => c.id === this.params.activeCollection.id,
+      ) == null
     ) {
       await this.cipherService.bulkUpdateCollectionsWithServer(
         this.selectedOrgId,
@@ -485,11 +445,5 @@ export class AssignCollectionsComponent implements OnInit {
     cipherView.collectionIds = collections.map((i) => i.id as CollectionId);
     const cipher = await this.cipherService.encrypt(cipherView);
     await this.cipherService.saveCollectionsWithServer(cipher);
-  }
-
-  private updateAvailableCollections(items: SelectItemView[]) {
-    this.availableCollections = this.availableCollections.filter(
-      (item) => !items.find((i) => i.id === item.id),
-    );
   }
 }
