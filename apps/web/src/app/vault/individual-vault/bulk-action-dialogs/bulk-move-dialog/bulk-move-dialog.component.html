@@ -7,7 +7,7 @@
       <p>{{ "moveSelectedItemsDesc" | i18n: cipherIds.length }}</p>
       <bit-form-field>
         <bit-label for="folder">{{ "selectFolder" | i18n }}</bit-label>
-        <bit-select bitInput formControlName="folderId">
+        <bit-select formControlName="folderId">
           <bit-option *ngFor="let f of folders$ | async" [value]="f.id" [label]="f.name">
           </bit-option>
         </bit-select>
