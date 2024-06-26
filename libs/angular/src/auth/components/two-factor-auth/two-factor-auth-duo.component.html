@@ -1,15 +1,6 @@
-<ng-container *ngIf="duoFrameless">
+<ng-container>
   <p bitTypography="body1" class="tw-mb-0">
     {{ "duoRequiredByOrgForAccount" | i18n }}
   </p>
   <p bitTypography="body1">{{ "launchDuoAndFollowStepsToFinishLoggingIn" | i18n }}</p>
-</ng-container>
-
-<ng-container *ngIf="!duoFrameless">
-  <div id="duo-frame" class="tw-mb-3">
-    <iframe
-      id="duo_iframe"
-      sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-    ></iframe>
-  </div>
 </ng-container>
