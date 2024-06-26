@@ -19,8 +19,7 @@
             size="small"
             type="button"
             [appCopyClick]="field.value"
-            [appCopyToastMessage]="'copySuccessful' | i18n"
-            [appCopyToastVariant]="'info'"
+            [appCopyShowSuccessToast]="true"
             [appA11yTitle]="'copyValue' | i18n"
           ></button>
         </div>
@@ -37,8 +36,7 @@
             size="small"
             type="button"
             [appCopyClick]="field.value"
-            [appCopyToastMessage]="'copySuccessful' | i18n"
-            [appCopyToastVariant]="'info'"
+            [appCopyShowSuccessToast]="true"
             [appA11yTitle]="'copyValue' | i18n"
           ></button>
         </bit-form-field>
@@ -68,8 +66,7 @@
             size="small"
             type="button"
             [appCopyClick]="field.name"
-            [appCopyToastMessage]="'copySuccessful' | i18n"
-            [appCopyToastVariant]="'info'"
+            [appCopyShowSuccessToast]="true"
             [appA11yTitle]="'copyValue' | i18n"
           ></button>
         </div>

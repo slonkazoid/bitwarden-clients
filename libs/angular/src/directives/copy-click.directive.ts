@@ -1,8 +1,8 @@
 import { Directive, HostListener, Input } from "@angular/core";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ToastService } from "@bitwarden/components";
-import { ToastVariant } from "@bitwarden/components/src/toast/toast.component";
 
 @Directive({
   selector: "[appCopyClick]",
@@ -11,19 +11,20 @@ export class CopyClickDirective {
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private toastService: ToastService,
+    private i18nService: I18nService,
   ) {}
 
   @Input("appCopyClick") valueToCopy = "";
-  @Input("appCopyToastMessage") toastMessage?: string;
-  @Input("appCopyToastVariant") toastVariant?: ToastVariant;
+  @Input("appCopyShowSuccessToast") showToast?: boolean;
 
   @HostListener("click") onClick() {
     this.platformUtilsService.copyToClipboard(this.valueToCopy);
-    if (this.toastMessage && this.toastVariant) {
+
+    if (this.showToast) {
       this.toastService.showToast({
-        variant: this.toastVariant,
+        variant: "info",
         title: null,
-        message: this.toastMessage,
+        message: this.i18nService.t("copySuccessful"),
       });
     }
   }
