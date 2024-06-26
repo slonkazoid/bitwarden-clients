@@ -1,3 +1,4 @@
+import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import { Directive, HostListener, Input } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -15,7 +16,7 @@ export class CopyClickDirective {
   ) {}
 
   @Input("appCopyClick") valueToCopy = "";
-  @Input("appCopyShowSuccessToast") showToast?: boolean;
+  @Input({ transform: coerceBooleanProperty }) showToast?: boolean;
 
   @HostListener("click") onClick() {
     this.platformUtilsService.copyToClipboard(this.valueToCopy);

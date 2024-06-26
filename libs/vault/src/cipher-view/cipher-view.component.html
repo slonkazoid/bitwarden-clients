@@ -1,14 +1,12 @@
 <ng-container *ngIf="!!cipher">
   <!-- ITEM DETAILS -->
-  <ng-container>
-    <app-item-details-v2
-      [cipher]="cipher"
-      [organization]="organization$ | async"
-      [collections]="collections$ | async"
-      [folder]="folder$ | async"
-    >
-    </app-item-details-v2>
-  </ng-container>
+  <app-item-details-v2
+    [cipher]="cipher"
+    [organization]="organization$ | async"
+    [collections]="collections$ | async"
+    [folder]="folder$ | async"
+  >
+  </app-item-details-v2>
 
   <!-- ADDITIONAL INFORMATION -->
   <ng-container *ngIf="cipher.notes">
@@ -26,7 +24,5 @@
   </ng-container>
 
   <!-- ITEM HISTORY SECTION -->
-  <ng-container>
-    <app-item-history-v2 [cipher]="cipher"> </app-item-history-v2>
-  </ng-container>
+  <app-item-history-v2 [cipher]="cipher"> </app-item-history-v2>
 </ng-container>

@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, switchMap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
@@ -56,11 +56,17 @@ export class ViewV2Component {
   }
 
   subscribeToParams(): void {
-    // eslint-disable-next-line rxjs/no-async-subscribe
-    this.route.queryParams.pipe(takeUntilDestroyed()).subscribe(async (params) => {
-      this.cipherId = params.cipherId;
-      await this.getCipherData();
-    });
+    this.route.queryParams
+      .pipe(
+        switchMap((param) => {
+          return this.getCipherData(param.cipherId);
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe((data) => {
+        this.cipher = data;
+        this.headerText = this.setHeader(data.type);
+      });
   }
 
   setHeader(type: CipherType) {
@@ -76,22 +82,16 @@ export class ViewV2Component {
     }
   }
 
-  async getCipherData() {
-    const cipher = await this.cipherService.get(this.cipherId);
-    this.cipher = await cipher.decrypt(
-      await this.cipherService.getKeyForCipherKeyDecryption(cipher),
-    );
-
-    this.headerText = this.setHeader(this.cipher.type);
+  async getCipherData(id: string) {
+    const cipher = await this.cipherService.get(id);
+    return await cipher.decrypt(await this.cipherService.getKeyForCipherKeyDecryption(cipher));
   }
 
   editCipher() {
     if (this.cipher.isDeleted) {
       return false;
     }
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.router.navigate(["/edit-cipher"], {
+    void this.router.navigate(["/edit-cipher"], {
       queryParams: { cipherId: this.cipher.id, type: this.cipher.type, isNew: false },
     });
     return true;
