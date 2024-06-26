@@ -79,13 +79,6 @@ const routes: Routes = [
             },
             canActivate: [IsPaidOrgGuard],
           },
-          {
-            path: "",
-            loadChildren: () =>
-              import(
-                "../../../../../../../bitwarden_license/bit-web/src/app/tools/reports/reports.module"
-              ).then((m) => m.ReportsModule),
-          },
         ],
       },
       {
