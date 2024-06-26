@@ -18,7 +18,6 @@ import {
   RegistrationStartSecondaryComponentData,
 } from "@bitwarden/auth/angular";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { CipherViewComponent } from "@bitwarden/vault";
 
 import { fido2AuthGuard } from "../auth/guards/fido2-auth.guard";
 import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
@@ -69,6 +68,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 import { AddEditV2Component } from "../vault/popup/components/vault-v2/add-edit/add-edit-v2.component";
+import { ViewV2Component } from "../vault/popup/components/vault-v2/view-v2/view-v2.component";
 import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
 import { FoldersComponent } from "../vault/popup/settings/folders.component";
@@ -195,7 +195,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "ciphers" },
   },
-  ...extensionRefreshSwap(ViewComponent, CipherViewComponent, {
+  ...extensionRefreshSwap(ViewComponent, ViewV2Component, {
     path: "view-cipher",
     canActivate: [AuthGuard],
     data: { state: "view-cipher" },
