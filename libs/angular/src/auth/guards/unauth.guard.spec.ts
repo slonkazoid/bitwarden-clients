@@ -28,6 +28,15 @@ describe("UnauthGuard", () => {
           },
           { path: "vault", component: EmptyComponent },
           { path: "lock", component: EmptyComponent },
+          { path: "testhomepage", component: EmptyComponent },
+          { path: "testlocked", component: EmptyComponent },
+          {
+            path: "testOverrides",
+            component: EmptyComponent,
+            canActivate: [
+              unauthGuardFn({ homepage: () => "/testhomepage", locked: "/testlocked" }),
+            ],
+          },
         ]),
       ],
       providers: [{ provide: AuthService, useValue: authService }],
@@ -62,5 +71,19 @@ describe("UnauthGuard", () => {
 
     await router.navigateByUrl("unauth-guarded-route");
     expect(router.url).toBe("/lock");
+  });
+
+  it("should redirect to /testhomepage for guarded routes when testOverrides are provided and the account is unlocked", async () => {
+    const { router } = setup(AuthenticationStatus.Unlocked);
+
+    await router.navigateByUrl("testOverrides");
+    expect(router.url).toBe("/testhomepage");
+  });
+
+  it("should redirect to /testlocked for guarded routes when testOverrides are provided and the account is locked", async () => {
+    const { router } = setup(AuthenticationStatus.Locked);
+
+    await router.navigateByUrl("testOverrides");
+    expect(router.url).toBe("/testlocked");
   });
 });
