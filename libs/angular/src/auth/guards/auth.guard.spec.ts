@@ -137,4 +137,41 @@ describe("AuthGuard", () => {
     await router.navigate(["guarded-route"]);
     expect(router.url).toContain("/update-temp-password");
   });
+
+  it("should allow navigation to set-password when the user is unlocked, is a TDE user without password, and has password reset permission", async () => {
+    const { router } = setup(
+      AuthenticationStatus.Unlocked,
+      ForceSetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission,
+    );
+
+    await router.navigate(["/set-password"]);
+    expect(router.url).toContain("/set-password");
+  });
+
+  it("should allow navigation to update-temp-password when the user is unlocked and has admin force password reset permission", async () => {
+    const { router } = setup(
+      AuthenticationStatus.Unlocked,
+      ForceSetPasswordReason.AdminForcePasswordReset,
+    );
+
+    await router.navigate(["/update-temp-password"]);
+    expect(router.url).toContain("/update-temp-password");
+  });
+
+  it("should allow navigation to update-temp-password when the user is unlocked and has weak password", async () => {
+    const { router } = setup(
+      AuthenticationStatus.Unlocked,
+      ForceSetPasswordReason.WeakMasterPassword,
+    );
+
+    await router.navigate(["/update-temp-password"]);
+    expect(router.url).toContain("/update-temp-password");
+  });
+
+  it("should allow navigation to remove-password when the user is unlocked and has 'none' password reset permission", async () => {
+    const { router } = setup(AuthenticationStatus.Unlocked, ForceSetPasswordReason.None);
+
+    await router.navigate(["/remove-password"]);
+    expect(router.url).toContain("/remove-password");
+  });
 });
