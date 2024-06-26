@@ -19,7 +19,7 @@ $ng-select-marked-text: $ng-select-primary-text !default;
 
 $ng-select-box-shadow: none !default;
 $ng-select-placeholder: rgb(var(--color-text-muted)) !default;
-$ng-select-height: 35px !default;
+$ng-select-height: 100%;
 $ng-select-value-padding-left: 1rem !default;
 $ng-select-value-font-size: 0.9em !default;
 $ng-select-value-text: $ng-select-primary-text !default;
@@ -40,6 +40,7 @@ $ng-clear-icon-hover: rgb(var(--color-text-main)) !default;
 $ng-dropdown-shadow: rgb(var(--color-secondary-100)) !default;
 
 .ng-select {
+  height: $ng-select-height;
   &.ng-select-opened {
     > .ng-select-container {
       background: transparent;
@@ -99,7 +100,7 @@ $ng-dropdown-shadow: rgb(var(--color-secondary-100)) !default;
     background-color: $ng-select-bg;
     border-radius: $ng-select-border-radius;
     border: none;
-    min-height: $ng-select-height;
+    height: $ng-select-height;
     align-items: center;
     &:hover {
       box-shadow: $ng-select-box-shadow;
