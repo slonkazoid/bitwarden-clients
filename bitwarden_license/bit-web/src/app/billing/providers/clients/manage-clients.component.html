@@ -47,18 +47,18 @@
           </div>
         </td>
         <td bitCell class="tw-whitespace-nowrap">
-          <span>{{ client.seats }}</span>
+          <span class="tw-text-muted">{{ client.seats }}</span>
         </td>
         <td bitCell class="tw-whitespace-nowrap">
-          <span>{{ client.userCount }}</span>
+          <span class="tw-text-muted">{{ client.userCount }}</span>
         </td>
         <td bitCell class="tw-whitespace-nowrap">
-          <span>{{ client.seats - client.userCount }}</span>
+          <span class="tw-text-muted">{{ client.seats - client.userCount }}</span>
         </td>
-        <td>
-          <span>{{ client.plan }}</span>
+        <td bitCell class="tw-whitespace-nowrap">
+          <span class="tw-text-muted">{{ removeMonthly(client.plan) }}</span>
         </td>
-        <td bitCell>
+        <td bitCell class="tw-text-right">
           <button
             [bitMenuTriggerFor]="rowMenu"
             type="button"
