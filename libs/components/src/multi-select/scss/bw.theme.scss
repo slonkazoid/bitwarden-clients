@@ -202,6 +202,9 @@ $ng-dropdown-shadow: rgb(var(--color-secondary-100)) !default;
             }
           }
         }
+        .ng-placeholder {
+          padding-bottom: 0.25rem;
+        }
       }
     }
   }
