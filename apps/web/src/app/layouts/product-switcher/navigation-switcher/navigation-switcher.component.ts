@@ -21,8 +21,4 @@ export class NavigationProductSwitcherComponent {
       // from product & design
       map((products) => products.sort((product) => (product.name === "Organizations" ? -1 : 1))),
     );
-
-  isInternalMarketingRoute(marketingRoute: any) {
-    return marketingRoute.startsWith("/");
-  }
 }

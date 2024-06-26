@@ -16,9 +16,10 @@
     >
       <span class="tw-text-xs !tw-text-alt2 tw-p-2 tw-pb-0">{{ "moreFromBitwarden" | i18n }}</span>
       <ng-container *ngFor="let more of moreProducts">
+        <!-- <a> for when the marketing route is external -->
         <a
-          *ngIf="!isInternalMarketingRoute(more.marketingRoute)"
-          [href]="more.marketingRoute"
+          *ngIf="more.marketingRoute.external"
+          [href]="more.marketingRoute.route"
           target="_blank"
           rel="noreferrer"
           class="tw-flex tw-py-2 tw-px-4 tw-font-semibold !tw-text-alt2 !tw-no-underline hover:tw-bg-primary-300/60 [&>:not(.bwi)]:hover:tw-underline"
@@ -34,9 +35,10 @@
             </div>
           </div>
         </a>
+        <!-- <a> for when the marketing route is internal, it needs to use [routerLink] instead of [href] like the external <a> uses. -->
         <a
-          *ngIf="isInternalMarketingRoute(more.marketingRoute)"
-          [routerLink]="more.marketingRoute"
+          *ngIf="!more.marketingRoute.external"
+          [routerLink]="more.marketingRoute.route"
           rel="noreferrer"
           class="tw-flex tw-py-2 tw-px-4 tw-font-semibold !tw-text-alt2 !tw-no-underline hover:tw-bg-primary-300/60 [&>:not(.bwi)]:hover:tw-underline"
         >

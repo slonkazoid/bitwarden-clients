@@ -2,26 +2,26 @@
 
 <div class="tw-grid tw-grid-cols-12 tw-gap-4">
   <div class="tw-col-span-6">
-    <img src="../images/sm.webp" class="tw-max-w-full" alt="Bitwarden" />
+    <img src="../images/sm.webp" class="tw-max-w-full" alt="Bitwarden" aria-hidden="true" />
   </div>
   <div class="tw-col-span-6">
-    <h1>{{ "bitwardenSecretsManager" | i18n }}</h1>
-    <p>
+    <h1 bitTypography="h1">{{ "bitwardenSecretsManager" | i18n }}</h1>
+    <p bitTypography="body1">
       {{ "developmentDevOpsAndITTeamsChooseBWSecret" | i18n }}
     </p>
-    <ul class="inset-list">
-      <li>
+    <ul class="tw-list-outside">
+      <li bitTypography="body1">
         <b>{{ "centralizeSecretsManagement" | i18n }}</b>
         {{ "centralizeSecretsManagementDescription" | i18n }}
       </li>
-      <li>
+      <li bitTypography="body1">
         <b>{{ "preventSecretLeaks" | i18n }}</b> {{ "preventSecretLeaksDescription" | i18n }}
       </li>
-      <li>
+      <li bitTypography="body1">
         <b>{{ "enhanceDeveloperProductivity" | i18n }}</b>
         {{ "enhanceDeveloperProductivityDescription" | i18n }}
       </li>
-      <li>
+      <li bitTypography="body1">
         <b>{{ "strengthenBusinessSecurity" | i18n }}</b>
         {{ "strengthenBusinessSecurityDescription" | i18n }}
       </li>
