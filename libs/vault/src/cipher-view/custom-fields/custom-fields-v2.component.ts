@@ -10,6 +10,8 @@ import {
   IconButtonModule,
   FormFieldModule,
   InputModule,
+  SectionComponent,
+  SectionHeaderComponent,
 } from "@bitwarden/components";
 
 @Component({
@@ -23,6 +25,8 @@ import {
     IconButtonModule,
     FormFieldModule,
     InputModule,
+    SectionComponent,
+    SectionHeaderComponent,
   ],
 })
 export class CustomFieldV2Component {

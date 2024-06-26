@@ -17,14 +17,27 @@ import { OrganizationId } from "@bitwarden/common/types/guid";
 import { OrgKey } from "@bitwarden/common/types/key";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { ToastService, ItemModule, IconButtonModule } from "@bitwarden/components";
+import {
+  ToastService,
+  ItemModule,
+  IconButtonModule,
+  SectionComponent,
+  SectionHeaderComponent,
+} from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 @Component({
   selector: "app-attachments-v2",
   templateUrl: "attachments-v2.component.html",
   standalone: true,
-  imports: [CommonModule, JslibModule, ItemModule, IconButtonModule],
+  imports: [
+    CommonModule,
+    JslibModule,
+    ItemModule,
+    IconButtonModule,
+    SectionComponent,
+    SectionHeaderComponent,
+  ],
 })
 export class AttachmentsV2Component {
   @Input() cipher: CipherView;

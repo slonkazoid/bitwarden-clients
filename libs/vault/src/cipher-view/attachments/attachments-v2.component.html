@@ -1,5 +1,7 @@
-<div class="tw-mb-6">
-  <h5 class="tw-pl-2 tw-font-bold tw-text-headers tw-mb-2">{{ "attachments" | i18n }}</h5>
+<bit-section>
+  <bit-section-header>
+    <h5 class="tw-pl-2 tw-font-bold tw-text-headers tw-mb-2">{{ "attachments" | i18n }}</h5>
+  </bit-section-header>
   <bit-item-group>
     <bit-item *ngFor="let attachment of cipher.attachments">
       <div slot="start" class="tw-py-4 tw-px-3">
@@ -27,4 +29,4 @@
       </div>
     </bit-item>
   </bit-item-group>
-</div>
+</bit-section>
