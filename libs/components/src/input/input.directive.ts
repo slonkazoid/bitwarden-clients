@@ -12,8 +12,8 @@ import {
 } from "@angular/core";
 import { NgControl, Validators } from "@angular/forms";
 
-import { BitFormFieldComponent } from "../form-field";
 import { BitFormFieldControl, InputTypes } from "../form-field/form-field-control";
+import { BitFormFieldComponent } from "../form-field/form-field.component";
 
 // Increments for each instance of this component
 let nextId = 0;
