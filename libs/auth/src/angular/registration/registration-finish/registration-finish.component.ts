@@ -24,6 +24,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   loading = true;
+  submitting = false;
   email: string;
 
   // Note: this token is the email verification token. It is always supplied as a query param, but
@@ -69,6 +70,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
   }
 
   async handlePasswordFormSubmit(passwordInputResult: PasswordInputResult) {
+    this.submitting = true;
     try {
       await this.registrationFinishService.finishRegistration(
         this.email,
@@ -77,6 +79,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
       );
     } catch (e) {
       this.handleRegistrationError(e);
+      this.submitting = false;
       return;
     }
 
@@ -86,6 +89,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
       message: this.i18nService.t("newAccountCreated"),
     });
 
+    this.submitting = false;
     await this.router.navigate(["/login"], { queryParams: { email: this.email } });
   }
 

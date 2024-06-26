@@ -6,5 +6,6 @@
   *ngIf="!loading"
   [email]="email"
   [masterPasswordPolicyOptions]="masterPasswordPolicyOptions"
+  [loading]="submitting"
   (onPasswordFormSubmit)="handlePasswordFormSubmit($event)"
 ></auth-input-password>
