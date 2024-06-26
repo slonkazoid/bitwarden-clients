@@ -17,6 +17,7 @@
             *ngFor="let planCard of planCards"
             [ngClass]="getPlanCardContainerClasses(planCard.selected)"
             (click)="selectPlan(planCard.name)"
+            tabindex="0"
           >
             <div class="tw-relative">
               <div
