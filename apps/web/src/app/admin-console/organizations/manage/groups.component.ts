@@ -1,6 +1,4 @@
-import { Component } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormControl } from "@angular/forms";
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import {
   BehaviorSubject,
@@ -9,15 +7,21 @@ import {
   from,
   lastValueFrom,
   map,
+  Subject,
   switchMap,
+  takeUntil,
   tap,
 } from "rxjs";
-import { debounceTime, first } from "rxjs/operators";
+import { first } from "rxjs/operators";
 
+import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CollectionData } from "@bitwarden/common/vault/models/data/collection.data";
 import { Collection } from "@bitwarden/common/vault/models/domain/collection";
@@ -26,7 +30,7 @@ import {
   CollectionResponse,
 } from "@bitwarden/common/vault/models/response/collection.response";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
-import { DialogService, TableDataSource, ToastService } from "@bitwarden/components";
+import { DialogService } from "@bitwarden/components";
 
 import { InternalGroupService as GroupService, GroupView } from "../core";
 
@@ -36,7 +40,21 @@ import {
   openGroupAddEditDialog,
 } from "./group-add-edit.component";
 
+type CollectionViewMap = {
+  [id: string]: CollectionView;
+};
+
 type GroupDetailsRow = {
+  /**
+   * Group Id (used for searching)
+   */
+  id: string;
+
+  /**
+   * Group name (used for searching)
+   */
+  name: string;
+
   /**
    * Details used for displaying group information
    */
@@ -53,39 +71,55 @@ type GroupDetailsRow = {
   collectionNames?: string[];
 };
 
-/**
- * Custom filter predicate that filters the groups table by id and name only.
- * This is required because the default implementation searches by all properties, which can unintentionally match
- * with members' names (who are assigned to the group) or collection names (which the group has access to).
- */
-const groupsFilter = (filter: string) => {
-  const transformedFilter = filter.trim().toLowerCase();
-  return (data: GroupDetailsRow) => {
-    const group = data.details;
-
-    return (
-      group.id.toLowerCase().indexOf(transformedFilter) != -1 ||
-      group.name.toLowerCase().indexOf(transformedFilter) != -1
-    );
-  };
-};
-
 @Component({
+  selector: "app-org-groups",
   templateUrl: "groups.component.html",
 })
-export class GroupsComponent {
+export class GroupsComponent implements OnInit, OnDestroy {
+  @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
+  @ViewChild("usersTemplate", { read: ViewContainerRef, static: true })
+  usersModalRef: ViewContainerRef;
+
   loading = true;
   organizationId: string;
+  groups: GroupDetailsRow[];
 
-  protected dataSource = new TableDataSource<GroupDetailsRow>();
-  protected searchControl = new FormControl("");
-
-  // Fixed sizes used for cdkVirtualScroll
-  protected rowHeight = 46;
-  protected rowHeightClass = `tw-h-[46px]`;
-
+  protected didScroll = false;
+  protected pageSize = 100;
   protected ModalTabType = GroupAddEditTabType;
+
+  private pagedGroupsCount = 0;
+  private pagedGroups: GroupDetailsRow[];
+  private searchedGroups: GroupDetailsRow[];
+  private _searchText$ = new BehaviorSubject<string>("");
+  private destroy$ = new Subject<void>();
   private refreshGroups$ = new BehaviorSubject<void>(null);
+  private isSearching: boolean = false;
+
+  get searchText() {
+    return this._searchText$.value;
+  }
+  set searchText(value: string) {
+    this._searchText$.next(value);
+    // Manually update as we are not using the search pipe in the template
+    this.updateSearchedGroups();
+  }
+
+  /**
+   * The list of groups that should be visible in the table.
+   * This is needed as there are two modes (paging/searching) and
+   * we need a reference to the currently visible groups for
+   * the Select All checkbox
+   */
+  get visibleGroups(): GroupDetailsRow[] {
+    if (this.isPaging()) {
+      return this.pagedGroups;
+    }
+    if (this.isSearching) {
+      return this.searchedGroups;
+    }
+    return this.groups;
+  }
 
   constructor(
     private apiService: ApiService,
@@ -93,10 +127,14 @@ export class GroupsComponent {
     private route: ActivatedRoute,
     private i18nService: I18nService,
     private dialogService: DialogService,
+    private platformUtilsService: PlatformUtilsService,
+    private searchService: SearchService,
     private logService: LogService,
     private collectionService: CollectionService,
-    private toastService: ToastService,
-  ) {
+    private searchPipe: SearchPipe,
+  ) {}
+
+  async ngOnInit() {
     this.route.params
       .pipe(
         tap((params) => (this.organizationId = params.organizationId)),
@@ -113,31 +151,68 @@ export class GroupsComponent {
           ]),
         ),
         map(([collectionMap, groups]) => {
-          return groups.map<GroupDetailsRow>((g) => ({
-            id: g.id,
-            name: g.name,
-            details: g,
-            checked: false,
-            collectionNames: g.collections
-              .map((c) => collectionMap[c.id]?.name)
-              .sort(this.i18nService.collator?.compare),
-          }));
+          return groups
+            .sort(Utils.getSortFunction(this.i18nService, "name"))
+            .map<GroupDetailsRow>((g) => ({
+              id: g.id,
+              name: g.name,
+              details: g,
+              checked: false,
+              collectionNames: g.collections
+                .map((c) => collectionMap[c.id]?.name)
+                .sort(this.i18nService.collator?.compare),
+            }));
         }),
-        takeUntilDestroyed(),
+        takeUntil(this.destroy$),
       )
       .subscribe((groups) => {
-        this.dataSource.data = groups;
+        this.groups = groups;
+        this.resetPaging();
+        this.updateSearchedGroups();
         this.loading = false;
       });
 
-    // Connect the search input to the table dataSource filter input
-    this.searchControl.valueChanges
-      .pipe(debounceTime(200), takeUntilDestroyed())
-      .subscribe((v) => (this.dataSource.filter = groupsFilter(v)));
+    this.route.queryParams
+      .pipe(
+        first(),
+        concatMap(async (qParams) => {
+          this.searchText = qParams.search;
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
 
-    this.route.queryParams.pipe(first(), takeUntilDestroyed()).subscribe((qParams) => {
-      this.searchControl.setValue(qParams.search);
-    });
+    this._searchText$
+      .pipe(
+        switchMap((searchText) => this.searchService.isSearchable(searchText)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((isSearchable) => {
+        this.isSearching = isSearchable;
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadMore() {
+    if (!this.groups || this.groups.length <= this.pageSize) {
+      return;
+    }
+    const pagedLength = this.pagedGroups.length;
+    let pagedSize = this.pageSize;
+    if (pagedLength === 0 && this.pagedGroupsCount > this.pageSize) {
+      pagedSize = this.pagedGroupsCount;
+    }
+    if (this.groups.length > pagedLength) {
+      this.pagedGroups = this.pagedGroups.concat(
+        this.groups.slice(pagedLength, pagedLength + pagedSize),
+      );
+    }
+    this.pagedGroupsCount = this.pagedGroups.length;
+    this.didScroll = this.pagedGroups.length > this.pageSize;
   }
 
   async edit(
@@ -157,12 +232,14 @@ export class GroupsComponent {
     if (result == GroupAddEditDialogResultType.Saved) {
       this.refreshGroups$.next();
     } else if (result == GroupAddEditDialogResultType.Deleted) {
-      this.removeGroup(group);
+      this.removeGroup(group.details.id);
     }
   }
 
-  async add() {
-    await this.edit(null);
+  add() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.edit(null);
   }
 
   async delete(groupRow: GroupDetailsRow) {
@@ -177,19 +254,19 @@ export class GroupsComponent {
 
     try {
       await this.groupService.delete(this.organizationId, groupRow.details.id);
-      this.toastService.showToast({
-        variant: "success",
-        title: null,
-        message: this.i18nService.t("deletedGroupId", groupRow.details.name),
-      });
-      this.removeGroup(groupRow);
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("deletedGroupId", groupRow.details.name),
+      );
+      this.removeGroup(groupRow.details.id);
     } catch (e) {
       this.logService.error(e);
     }
   }
 
   async deleteAllSelected() {
-    const groupsToDelete = this.dataSource.data.filter((g) => g.checked);
+    const groupsToDelete = this.groups.filter((g) => g.checked);
 
     if (groupsToDelete.length == 0) {
       return;
@@ -213,16 +290,21 @@ export class GroupsComponent {
         this.organizationId,
         groupsToDelete.map((g) => g.details.id),
       );
-      this.toastService.showToast({
-        variant: "success",
-        title: null,
-        message: this.i18nService.t("deletedManyGroups", groupsToDelete.length.toString()),
-      });
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("deletedManyGroups", groupsToDelete.length.toString()),
+      );
 
-      groupsToDelete.forEach((g) => this.removeGroup(g));
+      groupsToDelete.forEach((g) => this.removeGroup(g.details.id));
     } catch (e) {
       this.logService.error(e);
     }
+  }
+
+  resetPaging() {
+    this.pagedGroups = [];
+    this.loadMore();
   }
 
   check(groupRow: GroupDetailsRow) {
@@ -230,14 +312,24 @@ export class GroupsComponent {
   }
 
   toggleAllVisible(event: Event) {
-    this.dataSource.filteredData.forEach(
-      (g) => (g.checked = (event.target as HTMLInputElement).checked),
-    );
+    this.visibleGroups.forEach((g) => (g.checked = (event.target as HTMLInputElement).checked));
   }
 
-  private removeGroup(groupRow: GroupDetailsRow) {
-    // Assign a new array to dataSource.data to trigger the setters and update the table
-    this.dataSource.data = this.dataSource.data.filter((g) => g !== groupRow);
+  isPaging() {
+    const searching = this.isSearching;
+    if (searching && this.didScroll) {
+      this.resetPaging();
+    }
+    return !searching && this.groups && this.groups.length > this.pageSize;
+  }
+
+  private removeGroup(id: string) {
+    const index = this.groups.findIndex((g) => g.details.id === id);
+    if (index > -1) {
+      this.groups.splice(index, 1);
+      this.resetPaging();
+      this.updateSearchedGroups();
+    }
   }
 
   private async toCollectionMap(response: ListResponse<CollectionResponse>) {
@@ -247,9 +339,21 @@ export class GroupsComponent {
     const decryptedCollections = await this.collectionService.decryptMany(collections);
 
     // Convert to an object using collection Ids as keys for faster name lookups
-    const collectionMap: Record<string, CollectionView> = {};
+    const collectionMap: CollectionViewMap = {};
     decryptedCollections.forEach((c) => (collectionMap[c.id] = c));
 
     return collectionMap;
+  }
+
+  private updateSearchedGroups() {
+    if (this.isSearching) {
+      // Making use of the pipe in the component as we need know which groups where filtered
+      this.searchedGroups = this.searchPipe.transform(
+        this.groups,
+        this.searchText,
+        (group) => group.details.name,
+        (group) => group.details.id,
+      );
+    }
   }
 }
