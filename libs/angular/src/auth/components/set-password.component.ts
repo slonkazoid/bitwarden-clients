@@ -173,7 +173,6 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       this.kdfConfig.kdfType, //always PBKDF2 --> see this.setupSubmitActions
       this.kdfConfig.iterations,
     );
-
     try {
       if (this.resetPasswordAutoEnroll) {
         this.formPromise = this.apiService
