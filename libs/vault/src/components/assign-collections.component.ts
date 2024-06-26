@@ -321,6 +321,8 @@ export class AssignCollectionsComponent implements OnInit {
       : this.params.ciphers.filter((c) => c.edit);
 
     this.editableItemCount = this.editableItems.length;
+    // TODO: https://bitwarden.atlassian.net/browse/PM-9307,
+    // clean up editableItemCountChange when the org vault is updated to filter editable ciphers
     this.editableItemCountChange.emit(this.editableItemCount);
     this.personalItemsCount = this.params.ciphers.filter((c) => c.organizationId == null).length;
     this.readonlyItemCount = this.totalItemCount - this.editableItemCount;
