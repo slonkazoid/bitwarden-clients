@@ -2,11 +2,9 @@ import { importProvidersFrom } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { action } from "@storybook/addon-actions";
 import { Meta, StoryObj, applicationConfig } from "@storybook/angular";
-import { of } from "rxjs";
 import { ZXCVBNResult } from "zxcvbn";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -16,15 +14,6 @@ import { DialogService, ToastService } from "@bitwarden/components";
 import { PreloadedEnglishI18nModule } from "../../../../../apps/web/src/app/core/tests";
 
 import { InputPasswordComponent } from "./input-password.component";
-
-const mockMasterPasswordPolicyOptions = {
-  minComplexity: 4,
-  minLength: 14,
-  requireUpper: true,
-  requireLower: true,
-  requireNumbers: true,
-  requireSpecial: true,
-} as MasterPasswordPolicyOptions;
 
 export default {
   title: "Auth/Input Password",
@@ -54,15 +43,8 @@ export default {
           } as Partial<DialogService>,
         },
         {
-          provide: PolicyApiServiceAbstraction,
-          useValue: {
-            getMasterPasswordPolicyOptsForOrgUser: () => mockMasterPasswordPolicyOptions,
-          } as Partial<PolicyService>,
-        },
-        {
           provide: PolicyService,
           useValue: {
-            masterPasswordPolicyOptions$: () => of(mockMasterPasswordPolicyOptions),
             evaluateMasterPassword: (score) => {
               if (score < 4) {
                 return false;
@@ -76,7 +58,6 @@ export default {
           useValue: {
             getPasswordStrength: (password) => {
               let score = 0;
-
               if (password.length === 0) {
                 score = null;
               } else if (password.length <= 4) {
@@ -88,7 +69,6 @@ export default {
               } else {
                 score = 4;
               }
-
               return { score } as ZXCVBNResult;
             },
           } as Partial<PasswordStrengthServiceAbstraction>,
@@ -102,6 +82,16 @@ export default {
       ],
     }),
   ],
+  args: {
+    masterPasswordPolicyOptions: {
+      minComplexity: 4,
+      minLength: 14,
+      requireUpper: true,
+      requireLower: true,
+      requireNumbers: true,
+      requireSpecial: true,
+    } as MasterPasswordPolicyOptions,
+  },
 } as Meta;
 
 type Story = StoryObj<InputPasswordComponent>;
@@ -111,6 +101,15 @@ export const Default: Story = {
     props: args,
     template: `
       <auth-input-password></auth-input-password>
+    `,
+  }),
+};
+
+export const WithPolicy: Story = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <auth-input-password [masterPasswordPolicyOptions]="masterPasswordPolicyOptions"></auth-input-password>
     `,
   }),
 };
