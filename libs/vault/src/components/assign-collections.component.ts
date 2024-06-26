@@ -258,29 +258,8 @@ export class AssignCollectionsComponent implements OnInit {
       listName: c.name,
     }));
 
-    // Retrieve the shared collection IDs between ciphers.
-    // If only one cipher exists, it retrieves the collection IDs of that cipher.
-    const sharedCollectionIds = this.params.ciphers
-      .map((c) => c.collectionIds)
-      .reduce((sharedIds, collectionIds) => sharedIds.filter((id) => collectionIds.includes(id)));
-
-    // Filter the shared collections to select only those that are associated with the ciphers, excluding the active collection
-    const assignedCollections = this.availableCollections
-      .filter(
-        (collection) =>
-          sharedCollectionIds.includes(collection.id) &&
-          collection.id !== this.params.activeCollection?.id,
-      )
-      .map((collection) => ({
-        icon: "bwi-collection",
-        id: collection.id,
-        labelName: collection.labelName,
-        listName: collection.listName,
-      }));
-
-    if (assignedCollections.length > 0) {
-      this.selectCollections(assignedCollections);
-    }
+    // Select assigned collections for a single cipher.
+    this.selectCollectionsAssignedToSingleCipher();
 
     // If the active collection is set, select it by default
     if (this.params.activeCollection) {
@@ -292,6 +271,36 @@ export class AssignCollectionsComponent implements OnInit {
           listName: this.params.activeCollection.name,
         },
       ]);
+    }
+  }
+
+  /**
+   * Selects the collections that are assigned to a single cipher,
+   * excluding the active collection.
+   */
+  private selectCollectionsAssignedToSingleCipher() {
+    if (this.params.ciphers.length !== 1) {
+      return;
+    }
+
+    const assignedCollectionIds = this.params.ciphers[0].collectionIds;
+
+    // Filter the available collections to select only those that are associated with the ciphers, excluding the active collection
+    const assignedCollections = this.availableCollections
+      .filter(
+        (collection) =>
+          assignedCollectionIds.includes(collection.id) &&
+          collection.id !== this.params.activeCollection?.id,
+      )
+      .map((collection) => ({
+        icon: "bwi-collection",
+        id: collection.id,
+        labelName: collection.labelName,
+        listName: collection.listName,
+      }));
+
+    if (assignedCollections.length > 0) {
+      this.selectCollections(assignedCollections);
     }
   }
 
