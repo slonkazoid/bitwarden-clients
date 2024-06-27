@@ -10,7 +10,7 @@ import { RequestSMAccessRequest } from "../models/requests/request-sm-access.req
 export class SmLandingApiService {
   constructor(private apiService: ApiService) {}
 
-  async requestSMAccessFromAdmins(request: RequestSMAccessRequest): Promise<any> {
-    return this.apiService.send("POST", "/request-access/request-sm-access", request, true, false);
+  async requestSMAccessFromAdmins(request: RequestSMAccessRequest): Promise<void> {
+    await this.apiService.send("POST", "/request-access/request-sm-access", request, true, false);
   }
 }
