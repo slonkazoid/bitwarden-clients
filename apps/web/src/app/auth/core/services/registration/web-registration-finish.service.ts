@@ -64,6 +64,7 @@ export class WebRegistrationFinishService
     return masterPasswordPolicyOpts;
   }
 
+  // Note: the org invite token and email verification are mutually exclusive. Only one will be present.
   override async buildRegisterRequest(
     email: string,
     emailVerificationToken: string,
