@@ -3107,6 +3107,9 @@
   "confirmFilePassword": {
     "message": "Confirm file password"
   },
+  "exportSuccess": {
+    "message": "Vault data exported"
+  },
   "typePasskey": {
     "message": "Passkey"
   },
@@ -3559,5 +3562,8 @@
         "example": "Company Name"
       }
     }
+  },
+  "filters": {
+    "message": "Filters"
   }
 }
