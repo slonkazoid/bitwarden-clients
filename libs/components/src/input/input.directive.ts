@@ -1,4 +1,3 @@
-import { coerceBooleanProperty } from "@angular/cdk/coercion";
 import {
   Directive,
   ElementRef,
@@ -75,25 +74,11 @@ export class BitInputDirective implements BitFormFieldControl {
 
   @HostBinding("attr.aria-describedby") ariaDescribedBy: string;
 
-  @HostBinding("attr.readonly")
-  get readonlyAttr() {
-    return this.readonly || null;
-  }
-
-  @Input({ transform: coerceBooleanProperty }) readonly?: boolean = false;
-
   @HostBinding("attr.aria-invalid") get ariaInvalid() {
     return this.hasError ? true : undefined;
   }
 
   @HostBinding("attr.type") @Input() type?: InputTypes;
-
-  @HostBinding("attr.disabled")
-  get disabledAttr() {
-    return this.disabled || null; // native disabled attr must be null when false
-  }
-
-  @Input({ transform: coerceBooleanProperty }) disabled?: boolean = false;
 
   @HostBinding("attr.spellcheck") @Input() spellcheck?: boolean;
 

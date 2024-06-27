@@ -11,14 +11,12 @@
     </label>
     <div class="tw-w-full tw-h-full tw-flex">
       <div
-        class="{{
-          inputBorderClasses
-        }} tw-w-3 tw-border-r-0 group-focus-within/input:tw-border-r-0 !tw-rounded-l-lg tw-bg-background"
+        class="tw-w-3 tw-border-r-0 group-focus-within/input:tw-border-r-0 !tw-rounded-l-lg tw-bg-background"
+        [ngClass]="inputBorderClasses"
       ></div>
       <div
-        class="tw-px-1 tw-mt-px tw-bg-background {{
-          inputBorderClasses
-        }} tw-border-x-0 tw-border-t-0 group-focus-within/input:tw-border-x-0 group-focus-within/input:tw-border-t-0"
+        class="tw-px-1 tw-mt-px tw-bg-background tw-border-x-0 tw-border-t-0 group-focus-within/input:tw-border-x-0 group-focus-within/input:tw-border-t-0"
+        [ngClass]="inputBorderClasses"
         *ngIf="label"
       >
         <div class="tw-opacity-0 tw-flex tw-gap-1" aria-hidden="true">
@@ -29,26 +27,23 @@
         </div>
       </div>
       <div
-        class="tw-grow tw-bg-background {{
-          inputBorderClasses
-        }} tw-border-l-0 group-focus-within/input:tw-border-l-0 !tw-rounded-r-lg"
+        class="tw-grow tw-bg-background tw-border-l-0 group-focus-within/input:tw-border-l-0 !tw-rounded-r-lg"
+        [ngClass]="inputBorderClasses"
       ></div>
     </div>
   </div>
-  <div class="tw-flex tw-border tw-border-transparent tw-border-solid tw-min-h-11">
+  <div
+    class="tw-flex tw-border tw-border-transparent tw-border-solid tw-min-h-11 [&:not(:has(button:enabled)):has(input:read-only)>*]:tw-bg-secondary-100 [&:not(:has(button:enabled)):has(textarea:read-only)>*]:tw-bg-secondary-100"
+  >
     <div
       *ngIf="prefixChildren.length"
       class="tw-z-10 tw-flex tw-items-center tw-gap-1 tw-pl-3 tw-py-2 tw-rounded-l-lg"
-      [ngClass]="
-        (input.disabled && allButtonsDisabled()) || input.readonly ? 'tw-bg-secondary-100' : ''
-      "
     >
       <ng-content select="[bitPrefix]"></ng-content>
     </div>
     <div
-      class="tw-z-10 tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0 has-[bit-multi-select]:tw-p-0"
+      class="tw-z-10 tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0 has-[bit-multi-select]:tw-p-0 has-[input:read-only]:tw-bg-secondary-100 has-[textarea:read-only]:tw-bg-secondary-100"
       [ngClass]="[
-        input.disabled || input.readonly ? 'tw-bg-secondary-100' : '',
         prefixChildren.length === 0 ? 'tw-rounded-l-lg tw-pl-3' : '',
         suffixChildren.length === 0 ? 'tw-rounded-r-lg tw-pr-3' : ''
       ]"
@@ -58,9 +53,6 @@
     <div
       *ngIf="suffixChildren.length"
       class="tw-z-10 tw-flex tw-items-center tw-gap-1 tw-pr-3 tw-py-2 tw-rounded-r-lg"
-      [ngClass]="
-        (input.disabled && allButtonsDisabled()) || input.readonly ? 'tw-bg-secondary-100' : ''
-      "
     >
       <ng-content select="[bitSuffix]"></ng-content>
     </div>
