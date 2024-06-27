@@ -39,14 +39,16 @@
     <div
       *ngIf="prefixChildren.length"
       class="tw-z-10 tw-flex tw-items-center tw-gap-1 tw-pl-3 tw-py-2 tw-rounded-l-lg"
-      [ngClass]="input.disabled && allButtonsDisabled() ? 'tw-bg-secondary-100' : ''"
+      [ngClass]="
+        (input.disabled && allButtonsDisabled()) || input.readonly ? 'tw-bg-secondary-100' : ''
+      "
     >
       <ng-content select="[bitPrefix]"></ng-content>
     </div>
     <div
       class="tw-z-10 tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0 has-[bit-multi-select]:tw-p-0"
       [ngClass]="[
-        input.disabled ? 'tw-bg-secondary-100' : '',
+        input.disabled || input.readonly ? 'tw-bg-secondary-100' : '',
         prefixChildren.length === 0 ? 'tw-rounded-l-lg tw-pl-3' : '',
         suffixChildren.length === 0 ? 'tw-rounded-r-lg tw-pr-3' : ''
       ]"
@@ -56,7 +58,9 @@
     <div
       *ngIf="suffixChildren.length"
       class="tw-z-10 tw-flex tw-items-center tw-gap-1 tw-pr-3 tw-py-2 tw-rounded-r-lg"
-      [ngClass]="input.disabled && allButtonsDisabled() ? 'tw-bg-secondary-100' : ''"
+      [ngClass]="
+        (input.disabled && allButtonsDisabled()) || input.readonly ? 'tw-bg-secondary-100' : ''
+      "
     >
       <ng-content select="[bitSuffix]"></ng-content>
     </div>

@@ -75,6 +75,13 @@ export class BitInputDirective implements BitFormFieldControl {
 
   @HostBinding("attr.aria-describedby") ariaDescribedBy: string;
 
+  @HostBinding("attr.readonly")
+  get readonlyAttr() {
+    return this.readonly || null;
+  }
+
+  @Input({ transform: coerceBooleanProperty }) readonly?: boolean = false;
+
   @HostBinding("attr.aria-invalid") get ariaInvalid() {
     return this.hasError ? true : undefined;
   }

@@ -20,5 +20,6 @@ export abstract class BitFormFieldControl {
   type?: InputTypes;
   spellcheck?: boolean;
   disabled?: boolean;
+  readonly?: boolean;
   focus?: () => void;
 }
