@@ -1,6 +1,6 @@
 <app-header>
   <bit-search
-    [(ngModel)]="searchText"
+    [formControl]="searchControl"
     [placeholder]="'searchMembers' | i18n"
     class="tw-grow"
   ></bit-search>
