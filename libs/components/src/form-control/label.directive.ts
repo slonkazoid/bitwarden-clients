@@ -9,8 +9,8 @@ let nextId = 0;
 export class BitLabel {
   constructor(private elementRef: ElementRef<HTMLInputElement>) {}
 
-  get labelText() {
-    return this.elementRef.nativeElement.textContent;
+  get width() {
+    return this.elementRef.nativeElement.getBoundingClientRect().width;
   }
 
   @HostBinding() @Input() id = `bit-label-${nextId++}`;

@@ -19,10 +19,10 @@
         class="tw-px-1 tw-mt-px tw-bg-background {{
           inputBorderClasses
         }} tw-border-x-0 tw-border-t-0 group-focus-within/input:tw-border-x-0 group-focus-within/input:tw-border-t-0"
-        *ngIf="labelText"
+        *ngIf="label"
       >
         <div class="tw-opacity-0 tw-flex tw-gap-1" aria-hidden="true">
-          <span class="tw-text-sm">{{ labelText }}</span>
+          <span class="tw-text-sm" [ngStyle]="labelSpacerDynamicStyle"></span>
           <span *ngIf="input.required" class="tw-text-[0.625rem] tw-font-normal">
             ({{ "required" | i18n }})</span
           >

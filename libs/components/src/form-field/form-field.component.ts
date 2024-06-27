@@ -43,8 +43,12 @@ export class BitFormFieldComponent implements AfterContentChecked {
     return this._disableMargin;
   }
 
-  get labelText() {
-    return this.label?.labelText;
+  get labelSpacerDynamicStyle() {
+    if (this.label?.width) {
+      return { width: `${Math.round(this.label.width)}px` };
+    }
+
+    return {};
   }
 
   get inputBorderClasses(): string {

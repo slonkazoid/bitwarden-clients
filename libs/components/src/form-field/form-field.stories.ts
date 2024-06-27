@@ -110,6 +110,28 @@ export const Default: Story = {
   }),
 };
 
+export const LabelWithIcon: Story = {
+  render: (args) => ({
+    props: {
+      formObj: defaultFormObj,
+      submit: submit,
+      ...args,
+    },
+    template: /*html*/ `
+      <form [formGroup]="formObj">
+        <bit-form-field>
+          <bit-label>
+            <i class="bwi bwi-fw bwi-bank" aria-hidden="true"></i>
+            Label
+          </bit-label>
+          <input bitInput formControlName="name" />
+          <bit-hint>Optional Hint</bit-hint>
+        </bit-form-field>
+      </form>
+    `,
+  }),
+};
+
 export const Required: Story = {
   render: (args) => ({
     props: {
