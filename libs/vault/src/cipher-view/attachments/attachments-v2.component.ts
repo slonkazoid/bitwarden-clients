@@ -15,7 +15,6 @@ import { EncArrayBuffer } from "@bitwarden/common/platform/models/domain/enc-arr
 import { StateProvider } from "@bitwarden/common/platform/state";
 import { OrganizationId } from "@bitwarden/common/types/guid";
 import { OrgKey } from "@bitwarden/common/types/key";
-import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
   ToastService,
@@ -82,15 +81,12 @@ export class AttachmentsV2Component {
       });
   }
 
-  protected async promptPassword() {
-    if (this.cipher.reprompt === CipherRepromptType.None || this.passwordReprompted) {
-      return true;
-    }
-    return (this.passwordReprompted = await this.passwordRepromptService.showPasswordPrompt());
-  }
-
   async downloadAttachment(attachment: any) {
-    if (!(await this.promptPassword())) {
+    this.passwordReprompted = await this.passwordRepromptService.promptPasswordCheck(
+      this.cipher,
+      this.passwordReprompted,
+    );
+    if (!this.passwordReprompted) {
       return;
     }
     const file = attachment as any;

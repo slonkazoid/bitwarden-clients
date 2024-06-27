@@ -10,7 +10,7 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
@@ -111,16 +111,12 @@ export class ViewV2Component {
     return true;
   }
 
-  protected async promptPassword() {
-    if (this.cipher.reprompt === CipherRepromptType.None || this.passwordReprompted) {
-      return true;
-    }
-
-    return (this.passwordReprompted = await this.passwordRepromptService.showPasswordPrompt());
-  }
-
   async delete(): Promise<boolean> {
-    if (!(await this.promptPassword())) {
+    this.passwordReprompted = await this.passwordRepromptService.promptPasswordCheck(
+      this.cipher,
+      this.passwordReprompted,
+    );
+    if (!this.passwordReprompted) {
       return;
     }
 
