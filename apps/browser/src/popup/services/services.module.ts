@@ -303,6 +303,16 @@ const safeProviders: SafeProvider[] = [
           }
           return response.result;
         },
+        async () => {
+          const response = await BrowserApi.sendMessageWithResponse<{
+            result: boolean;
+            error: string;
+          }>("biometricUnlockAvailable");
+          if (!response.result) {
+            throw response.error;
+          }
+          return response.result;
+        },
         window,
         offscreenDocumentService,
       );

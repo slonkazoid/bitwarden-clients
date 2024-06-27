@@ -137,6 +137,13 @@ export class NativeMessagingService {
 
     switch (message.command) {
       case "biometricUnlock": {
+        const isTemporarilyDisabled =
+          (await this.biometricStateService.getBiometricUnlockEnabled(message.userId as UserId)) &&
+          !(await this.platformUtilService.supportsBiometric());
+        if (isTemporarilyDisabled) {
+          return this.send({ command: "biometricUnlock", response: "not available" }, appId);
+        }
+
         if (!(await this.platformUtilService.supportsBiometric())) {
           return this.send({ command: "biometricUnlock", response: "not supported" }, appId);
         }
@@ -203,8 +210,11 @@ export class NativeMessagingService {
 
         break;
       }
+      case "biometricUnlockAvailable": {
+        return this.send({ command: "biometricUnlockAvailable", response: "available" }, appId);
+      }
       default:
-        this.logService.error("NativeMessage, got unknown command.");
+        this.logService.error("NativeMessage, got unknown command: " + message.command);
         break;
     }
   }
