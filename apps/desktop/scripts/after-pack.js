@@ -2,8 +2,6 @@
 require("dotenv").config();
 const path = require("path");
 
-const { notarize } = require("@electron/notarize");
-const { deepAssign } = require("builder-util");
 const fse = require("fs-extra");
 
 exports.default = run;
@@ -22,7 +20,6 @@ async function run(context) {
     const wrapperScript = path.join(__dirname, "../resources/memory-dump-wrapper.sh");
     const wrapperBin = path.join(appOutDir, context.packager.executableName);
     fse.copyFileSync(wrapperScript, wrapperBin);
-    // chmod
     fse.chmodSync(wrapperBin, "755");
     console.log("Copied memory-protection wrapper script");
   }
