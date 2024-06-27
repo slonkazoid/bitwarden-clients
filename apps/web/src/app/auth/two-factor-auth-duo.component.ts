@@ -50,17 +50,6 @@ export class TwoFactorAuthDuoComponent extends TwoFactorAuthDuoBaseComponent {
     this.token.emit(msg.data.code + "|" + msg.data.state);
   };
 
-  override async launchDuoFrameless() {
-    const duoHandOffMessage = {
-      title: this.i18nService.t("youSuccessfullyLoggedIn"),
-      message: this.i18nService.t("thisWindowWillCloseIn5Seconds"),
-      buttonText: this.i18nService.t("close"),
-      isCountdown: true,
-    };
-    document.cookie = `duoHandOffMessage=${JSON.stringify(duoHandOffMessage)}; SameSite=strict;`;
-    this.platformUtilsService.launchUri(this.duoFramelessUrl);
-  }
-
   async ngOnDestroy() {
     if (this.duoResultChannel) {
       // clean up duo listener if it was initialized.

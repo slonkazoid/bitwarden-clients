@@ -63,5 +63,7 @@ export class TwoFactorAuthDuoComponent {
 
   // Each client will have own implementation
   protected setupDuoResultListener(): void {}
-  async launchDuoFrameless(): Promise<void> {}
+  async launchDuoFrameless(): Promise<void> {
+    this.platformUtilsService.launchUri(this.duoFramelessUrl);
+  }
 }
