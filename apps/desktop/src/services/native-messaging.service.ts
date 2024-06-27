@@ -211,7 +211,14 @@ export class NativeMessagingService {
         break;
       }
       case "biometricUnlockAvailable": {
-        return this.send({ command: "biometricUnlockAvailable", response: "available" }, appId);
+        const isAvailable = await this.platformUtilService.supportsBiometric();
+        return this.send(
+          {
+            command: "biometricUnlockAvailable",
+            response: isAvailable ? "available" : "not available",
+          },
+          appId,
+        );
       }
       default:
         this.logService.error("NativeMessage, got unknown command: " + message.command);
