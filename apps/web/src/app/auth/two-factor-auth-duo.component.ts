@@ -39,7 +39,7 @@ export class TwoFactorAuthDuoComponent extends TwoFactorAuthDuoBaseComponent {
 
   private duoResultChannel: BroadcastChannel;
 
-  protected setupDuoResultListener() {
+  protected override setupDuoResultListener() {
     if (!this.duoResultChannel) {
       this.duoResultChannel = new BroadcastChannel("duoResult");
       this.duoResultChannel.addEventListener("message", this.handleDuoResultMessage);
@@ -50,7 +50,7 @@ export class TwoFactorAuthDuoComponent extends TwoFactorAuthDuoBaseComponent {
     this.token.emit(msg.data.code + "|" + msg.data.state);
   };
 
-  async launchDuoFrameless() {
+  override async launchDuoFrameless() {
     const duoHandOffMessage = {
       title: this.i18nService.t("youSuccessfullyLoggedIn"),
       message: this.i18nService.t("thisWindowWillCloseIn5Seconds"),

@@ -58,7 +58,7 @@ export class TwoFactorAuthDuoComponent extends TwoFactorAuthDuoBaseComponent {
 
   duoCallbackSubscriptionEnabled: boolean = false;
 
-  protected setupDuoResultListener() {
+  protected override setupDuoResultListener() {
     if (!this.duoCallbackSubscriptionEnabled) {
       this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
         await this.ngZone.run(async () => {
@@ -71,7 +71,7 @@ export class TwoFactorAuthDuoComponent extends TwoFactorAuthDuoBaseComponent {
     }
   }
 
-  async launchDuoFrameless() {
+  override async launchDuoFrameless() {
     const duoHandOffMessage = {
       title: this.i18nService.t("youSuccessfullyLoggedIn"),
       message: this.i18nService.t("youMayCloseThisWindow"),
