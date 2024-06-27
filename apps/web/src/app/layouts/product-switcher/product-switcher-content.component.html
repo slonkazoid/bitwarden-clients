@@ -35,7 +35,7 @@
     >
       <span class="tw-mb-1 tw-text-xs tw-text-muted">{{ "moreFromBitwarden" | i18n }}</span>
       <span *ngFor="let product of products.other">
-        <!-- <a> for when the marketing route is external -->
+        <!-- <a> for when the marketing route is internal, it needs to use [routerLink] instead of [href] like the external <a> uses. -->
         <a
           *ngIf="!product.marketingRoute.external"
           bitLink
@@ -45,7 +45,7 @@
             <i class="bwi bwi-fw {{ product.icon }} tw-m-0 !tw-mr-3"></i>{{ product.name }}
           </span>
         </a>
-        <!-- <a> for when the marketing route is internal, it needs to use [routerLink] instead of [href] like the external <a> uses. -->
+        <!-- <a> for when the marketing route is external -->
         <a
           *ngIf="product.marketingRoute.external"
           bitLink

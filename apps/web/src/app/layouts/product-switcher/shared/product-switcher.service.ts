@@ -170,7 +170,7 @@ export class ProductSwitcherService {
           appRoute: ["/organizations", acOrg?.id],
           marketingRoute: {
             route: "https://bitwarden.com/products/business/",
-            external: false,
+            external: true,
           },
           isActive: this.router.url.includes("/organizations/"),
         },
