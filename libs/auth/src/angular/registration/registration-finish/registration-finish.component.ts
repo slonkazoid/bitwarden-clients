@@ -5,8 +5,8 @@ import { Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
-import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { ToastService } from "@bitwarden/components";
 
 import { InputPasswordComponent } from "../../input-password/input-password.component";
@@ -40,6 +40,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private i18nService: I18nService,
     private registrationFinishService: RegistrationFinishService,
+    private validationService: ValidationService,
   ) {}
 
   async ngOnInit() {
@@ -78,7 +79,7 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
         this.emailVerificationToken,
       );
     } catch (e) {
-      this.handleRegistrationError(e);
+      this.validationService.showError(e);
       this.submitting = false;
       return;
     }
@@ -91,16 +92,6 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
 
     this.submitting = false;
     await this.router.navigate(["/login"], { queryParams: { email: this.email } });
-  }
-
-  private handleRegistrationError(error: unknown) {
-    if (error instanceof ErrorResponse) {
-      this.toastService.showToast({
-        variant: "error",
-        title: this.i18nService.t("unexpectedError"),
-        message: error.message,
-      });
-    }
   }
 
   ngOnDestroy(): void {
