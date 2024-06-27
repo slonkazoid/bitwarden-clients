@@ -308,10 +308,7 @@ const safeProviders: SafeProvider[] = [
             result: boolean;
             error: string;
           }>("biometricUnlockAvailable");
-          if (!response.result) {
-            throw response.error;
-          }
-          return response.result;
+          return response.result && response.result === true;
         },
         window,
         offscreenDocumentService,
