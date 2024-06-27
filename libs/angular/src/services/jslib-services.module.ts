@@ -18,6 +18,7 @@ import {
   UserDecryptionOptionsService,
   UserDecryptionOptionsServiceAbstraction,
   LogoutReason,
+  RegisterRouteService,
 } from "@bitwarden/auth/common";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -1223,6 +1224,11 @@ const safeProviders: SafeProvider[] = [
     provide: StripeServiceAbstraction,
     useClass: StripeService,
     deps: [LogService],
+  }),
+  safeProvider({
+    provide: RegisterRouteService,
+    useClass: RegisterRouteService,
+    deps: [ConfigService],
   }),
   safeProvider({
     provide: RegistrationFinishServiceAbstraction,
