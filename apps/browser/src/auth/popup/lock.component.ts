@@ -144,7 +144,7 @@ export class LockComponent extends BaseLockComponent {
 
     let success;
     try {
-      const available = await this.platformUtilsService.isBiometricUnlockAvailable();
+      const available = await super.isBiometricUnlockAvailable();
       if (!available) {
         if (!automaticPrompt) {
           await this.dialogService.openSimpleDialog({

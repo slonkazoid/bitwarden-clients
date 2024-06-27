@@ -149,13 +149,7 @@ export class LockComponent implements OnInit, OnDestroy {
     if (!(await this.platformUtilsService.supportsBiometric())) {
       return false;
     }
-
-    const authStatus = await this.authService.getAuthStatus(this.activeUserId);
-    if (authStatus !== AuthenticationStatus.Unlocked) {
-      return false;
-    }
-
-    return await this.biometricStateService.getBiometricUnlockEnabled(this.activeUserId);
+    return this.platformUtilsService.isBiometricUnlockAvailable();
   }
 
   togglePassword() {
