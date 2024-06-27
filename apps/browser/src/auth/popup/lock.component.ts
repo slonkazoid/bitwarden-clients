@@ -139,7 +139,6 @@ export class LockComponent extends BaseLockComponent {
       return;
     }
 
-    this.pendingBiometric = true;
     this.biometricError = null;
 
     let success;
@@ -160,6 +159,7 @@ export class LockComponent extends BaseLockComponent {
           });
         }
       } else {
+        this.pendingBiometric = true;
         success = await super.unlockBiometric();
       }
     } catch (e) {
