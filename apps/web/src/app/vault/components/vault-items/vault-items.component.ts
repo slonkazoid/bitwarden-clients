@@ -104,7 +104,7 @@ export class VaultItemsComponent {
   }
 
   get bulkAssignToCollectionsAllowed() {
-    return this.showBulkAddToCollections && this.showBulkMove && this.ciphers.length > 0;
+    return this.showBulkAddToCollections && this.ciphers.length > 0;
   }
 
   // Use new bulk management delete if vaultBulkManagementActionEnabled feature flag is enabled
@@ -266,6 +266,10 @@ export class VaultItemsComponent {
   }
 
   protected showAssignToCollections(): boolean {
+    if (!this.showBulkMove) {
+      return false;
+    }
+
     if (this.selection.selected.length === 0) {
       return true;
     }
