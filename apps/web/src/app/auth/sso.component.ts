@@ -24,7 +24,7 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 @Component({
   selector: "app-sso",
@@ -141,6 +141,10 @@ export class SsoComponent extends BaseSsoComponent {
   }
 
   submit = async () => {
+    if (this.formGroup.invalid) {
+      return;
+    }
+
     this.identifier = this.identifierFormControl.value;
     await this.ssoLoginService.setOrganizationSsoIdentifier(this.identifier);
     if (this.clientId === "browser") {

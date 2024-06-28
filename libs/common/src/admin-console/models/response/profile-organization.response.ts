@@ -1,4 +1,4 @@
-import { ProductType } from "../../../enums";
+import { ProductTierType } from "../../../billing/enums";
 import { BaseResponse } from "../../../models/response/base.response";
 import { OrganizationUserStatusType, OrganizationUserType, ProviderType } from "../../enums";
 import { PermissionsApi } from "../api/permissions.api";
@@ -42,7 +42,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
   providerType?: ProviderType;
   familySponsorshipFriendlyName: string;
   familySponsorshipAvailable: boolean;
-  planProductType: ProductType;
+  productTierType: ProductTierType;
   keyConnectorEnabled: boolean;
   keyConnectorUrl: string;
   familySponsorshipLastSyncDate?: Date;
@@ -93,7 +93,7 @@ export class ProfileOrganizationResponse extends BaseResponse {
     this.providerType = this.getResponseProperty("ProviderType");
     this.familySponsorshipFriendlyName = this.getResponseProperty("FamilySponsorshipFriendlyName");
     this.familySponsorshipAvailable = this.getResponseProperty("FamilySponsorshipAvailable");
-    this.planProductType = this.getResponseProperty("PlanProductType");
+    this.productTierType = this.getResponseProperty("ProductTierType");
     this.keyConnectorEnabled = this.getResponseProperty("KeyConnectorEnabled") ?? false;
     this.keyConnectorUrl = this.getResponseProperty("KeyConnectorUrl");
     const familySponsorshipLastSyncDateString = this.getResponseProperty(

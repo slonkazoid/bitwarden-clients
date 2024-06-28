@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Crear cuenta"
   },
+  "setAStrongPassword": {
+    "message": "Establece una contraseña fuerte"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Termina de crear tu cuenta estableciendo una contraseña"
+  },
   "login": {
     "message": "Iniciar sesión"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Una pista de tu contraseña maestra puede ayudarte a recordarla en caso de que la olvides."
+  },
+  "masterPassHintText": {
+    "message": "Si olvidas tu contraseña, puedes enviar la pista de contraseña a tu correo electrónico. $CURRENT$/$MAXIMUM$ máximo de caracteres.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Vuelve a escribir tu contraseña maestra"
@@ -393,10 +412,10 @@
     "message": "Eliminar favorito"
   },
   "itemAddedToFavorites": {
-    "message": "Item added to favorites"
+    "message": "Elemento añadido a favoritos"
   },
   "itemRemovedFromFavorites": {
-    "message": "Item removed from favorites"
+    "message": "Elemento eliminado de favoritos"
   },
   "notes": {
     "message": "Notas"
@@ -1434,6 +1453,24 @@
   "typeIdentity": {
     "message": "Identidad"
   },
+  "newItemHeader": {
+    "message": "Nuevo $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Editar $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Historial de contraseñas"
   },
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Su nueva contraseña maestra no cumple con los requisitos de la política."
+  },
+  "receiveMarketingEmails": {
+    "message": "Obtén correos electrónicos de Bitwarden para anuncios, consejos y oportunidades de investigación."
+  },
+  "unsubscribe": {
+    "message": "Cancelar suscripción"
+  },
+  "atAnyTime": {
+    "message": "en cualquier momento."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Continuando, aceptas los"
+  },
+  "and": {
+    "message": "y"
   },
   "acceptPolicies": {
     "message": "Al seleccionar esta casilla, acepta lo siguiente:"
@@ -2837,6 +2889,9 @@
     "message": "Desactiva la solicitud de contraseña maestra para editar este campo",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Activar/desactivar navegación lateral"
+  },
   "skipToContent": {
     "message": "Ir al contenido"
   },
@@ -3305,16 +3360,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Limpia los filtros o prueba otro término de búsqueda"
   },
-  "copyInfoLabel": {
-    "message": "Copiar información, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Copiar información - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3367,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Copiar nota, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3409,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Autocompletar - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "No hay valores para copiar"
   },
   "assignCollections": {
     "message": "Asignar colecciones"
@@ -3446,5 +3494,8 @@
   },
   "contactYourOrgAdmin": {
     "message": "No se puede acceder a los elementos de las organizaciones desactivadas. Ponte en contacto con el propietario de tu organización para obtener ayuda."
+  },
+  "filters": {
+    "message": "Filters"
   }
 }
