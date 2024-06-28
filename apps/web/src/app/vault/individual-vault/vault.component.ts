@@ -737,7 +737,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       this.activeFilter.organizationId ||
       ciphers.find((c) => c.organizationId !== null)?.organizationId;
 
-    if (orgId) {
+    if (orgId && orgId !== "MyVault") {
       const organization = this.allOrganizations.find((o) => o.id === orgId);
       const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
       availableCollections = this.allCollections.filter(

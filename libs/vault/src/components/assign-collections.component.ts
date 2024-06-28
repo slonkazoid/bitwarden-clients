@@ -62,6 +62,8 @@ export enum CollectionAssignmentResult {
   Canceled = "canceled",
 }
 
+const MY_VAULT_ID = "MyVault";
+
 @Component({
   selector: "assign-collections",
   templateUrl: "assign-collections.component.html",
@@ -158,13 +160,13 @@ export class AssignCollectionsComponent implements OnInit {
 
     const onlyPersonalItems = this.params.ciphers.every((c) => c.organizationId == null);
 
-    if (this.params.organizationId === "MyVault" || onlyPersonalItems) {
+    if (this.params.organizationId === MY_VAULT_ID || onlyPersonalItems) {
       this.showOrgSelector = true;
     }
 
     await this.initializeItems(this.params.organizationId, v1FCEnabled, restrictProviderAccess);
 
-    if (this.params.organizationId && this.params.organizationId !== "MyVault") {
+    if (this.params.organizationId && this.params.organizationId !== MY_VAULT_ID) {
       await this.handleOrganizationCiphers();
     }
 
@@ -304,8 +306,8 @@ export class AssignCollectionsComponent implements OnInit {
   ) {
     this.totalItemCount = this.params.ciphers.length;
 
-    // If organizationId is not present, then all ciphers are considered personal items
-    if (!organizationId) {
+    // If organizationId is not present or organizationId is MyVault, then all ciphers are considered personal items
+    if (!organizationId || organizationId === MY_VAULT_ID) {
       this.editableItems = this.params.ciphers;
       this.editableItemCount = this.params.ciphers.length;
       this.personalItemsCount = this.params.ciphers.length;
