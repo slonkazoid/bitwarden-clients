@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
@@ -12,6 +13,7 @@ import {
   CardComponent,
   FormFieldModule,
   IconButtonModule,
+  SelectModule,
 } from "@bitwarden/components";
 
 @Component({
@@ -28,14 +30,16 @@ import {
     CardComponent,
     FormFieldModule,
     IconButtonModule,
+    SelectModule,
   ],
 })
 export class IdentityComponent implements OnInit {
   @Input() cipherId: string;
   cipher: CipherView;
+  identityTitleOptions: any[];
 
   protected identityForm = this.formBuilder.group({
-    title: [],
+    title: [null],
     firstName: [""],
     lastName: [""],
     username: [""],
@@ -57,7 +61,17 @@ export class IdentityComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private cipherService: CipherService,
-  ) {}
+    private i18nService: I18nService,
+  ) {
+    this.identityTitleOptions = [
+      { name: "-- " + i18nService.t("select") + " --", value: null },
+      { name: i18nService.t("mr"), value: i18nService.t("mr") },
+      { name: i18nService.t("mrs"), value: i18nService.t("mrs") },
+      { name: i18nService.t("ms"), value: i18nService.t("ms") },
+      { name: i18nService.t("mx"), value: i18nService.t("mx") },
+      { name: i18nService.t("dr"), value: i18nService.t("dr") },
+    ];
+  }
 
   async ngOnInit() {
     if (this.cipherId) {

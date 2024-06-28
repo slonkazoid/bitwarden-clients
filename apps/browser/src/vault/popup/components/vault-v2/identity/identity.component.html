@@ -8,7 +8,14 @@
         <bit-label>
           {{ "title" | i18n }}
         </bit-label>
-        <input bitInput formControlName="title" />
+        <bit-select formControlName="title">
+          <bit-option
+            *ngFor="let title of identityTitleOptions"
+            [value]="title.value"
+            [label]="title.name"
+          >
+          </bit-option>
+        </bit-select>
       </bit-form-field>
       <bit-form-field>
         <bit-label>
