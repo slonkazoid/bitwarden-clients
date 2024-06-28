@@ -5,17 +5,11 @@ import { Subject, takeUntil } from "rxjs";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import {
   Argon2KdfConfig,
+  DEFAULT_KDF_CONFIG,
   KdfConfig,
   PBKDF2KdfConfig,
 } from "@bitwarden/common/auth/models/domain/kdf-config";
-import {
-  DEFAULT_KDF_CONFIG,
-  PBKDF2_ITERATIONS,
-  ARGON2_ITERATIONS,
-  ARGON2_MEMORY,
-  ARGON2_PARALLELISM,
-  KdfType,
-} from "@bitwarden/common/platform/enums";
+import { KdfType } from "@bitwarden/common/platform/enums";
 import { DialogService } from "@bitwarden/components";
 
 import { ChangeKdfConfirmationComponent } from "./change-kdf-confirmation.component";
@@ -36,30 +30,34 @@ export class ChangeKdfComponent implements OnInit {
         this.kdfConfig.iterations,
         [
           Validators.required,
-          Validators.min(PBKDF2_ITERATIONS.min),
-          Validators.max(PBKDF2_ITERATIONS.max),
+          Validators.min(PBKDF2KdfConfig.ITERATIONS.min),
+          Validators.max(PBKDF2KdfConfig.ITERATIONS.max),
         ],
       ],
       memory: [
         null as number,
-        [Validators.required, Validators.min(ARGON2_MEMORY.min), Validators.max(ARGON2_MEMORY.max)],
+        [
+          Validators.required,
+          Validators.min(Argon2KdfConfig.MEMORY.min),
+          Validators.max(Argon2KdfConfig.MEMORY.max),
+        ],
       ],
       parallelism: [
         null as number,
         [
           Validators.required,
-          Validators.min(ARGON2_PARALLELISM.min),
-          Validators.max(ARGON2_PARALLELISM.max),
+          Validators.min(Argon2KdfConfig.PARALLELISM.min),
+          Validators.max(Argon2KdfConfig.PARALLELISM.max),
         ],
       ],
     }),
   });
 
   // Default values for template
-  protected PBKDF2_ITERATIONS = PBKDF2_ITERATIONS;
-  protected ARGON2_ITERATIONS = ARGON2_ITERATIONS;
-  protected ARGON2_MEMORY = ARGON2_MEMORY;
-  protected ARGON2_PARALLELISM = ARGON2_PARALLELISM;
+  protected PBKDF2_ITERATIONS = PBKDF2KdfConfig.ITERATIONS;
+  protected ARGON2_ITERATIONS = Argon2KdfConfig.ITERATIONS;
+  protected ARGON2_MEMORY = Argon2KdfConfig.MEMORY;
+  protected ARGON2_PARALLELISM = Argon2KdfConfig.PARALLELISM;
 
   constructor(
     private dialogService: DialogService,
@@ -97,26 +95,26 @@ export class ChangeKdfComponent implements OnInit {
         config = new PBKDF2KdfConfig();
         validators.iterations = [
           Validators.required,
-          Validators.min(PBKDF2_ITERATIONS.min),
-          Validators.max(PBKDF2_ITERATIONS.max),
+          Validators.min(PBKDF2KdfConfig.ITERATIONS.min),
+          Validators.max(PBKDF2KdfConfig.ITERATIONS.max),
         ];
         break;
       case KdfType.Argon2id:
         config = new Argon2KdfConfig();
         validators.iterations = [
           Validators.required,
-          Validators.min(ARGON2_ITERATIONS.min),
-          Validators.max(ARGON2_ITERATIONS.max),
+          Validators.min(Argon2KdfConfig.ITERATIONS.min),
+          Validators.max(Argon2KdfConfig.ITERATIONS.max),
         ];
         validators.memory = [
           Validators.required,
-          Validators.min(ARGON2_MEMORY.min),
-          Validators.max(ARGON2_MEMORY.max),
+          Validators.min(Argon2KdfConfig.MEMORY.min),
+          Validators.max(Argon2KdfConfig.MEMORY.max),
         ];
         validators.parallelism = [
           Validators.required,
-          Validators.min(ARGON2_PARALLELISM.min),
-          Validators.max(ARGON2_PARALLELISM.max),
+          Validators.min(Argon2KdfConfig.PARALLELISM.min),
+          Validators.max(Argon2KdfConfig.PARALLELISM.max),
         ];
         break;
       default:
