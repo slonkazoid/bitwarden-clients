@@ -1,6 +1,12 @@
 <popup-page>
   <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
 
+  <app-identity
+    *ngIf="cipherType === allTypes.Identity"
+    [isEdit]="isEdit"
+    formId="cipherForm"
+  ></app-identity>
+
   <app-open-attachments *ngIf="isEdit" [cipherId]="cipherId"></app-open-attachments>
 
   <popup-footer slot="footer">

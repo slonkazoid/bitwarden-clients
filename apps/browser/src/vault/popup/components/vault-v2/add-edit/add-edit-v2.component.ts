@@ -14,6 +14,7 @@ import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup
 import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-page.component";
 import { OpenAttachmentsComponent } from "../attachments/open-attachments/open-attachments.component";
+import { IdentityComponent } from "../identity/identity.component";
 
 @Component({
   selector: "app-add-edit-v2",
@@ -29,12 +30,15 @@ import { OpenAttachmentsComponent } from "../attachments/open-attachments/open-a
     PopupPageComponent,
     PopupHeaderComponent,
     PopupFooterComponent,
+    IdentityComponent,
   ],
 })
 export class AddEditV2Component {
   headerText: string;
   cipherId: CipherId;
   isEdit: boolean = false;
+  allTypes = CipherType;
+  cipherType: CipherType;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,11 +50,11 @@ export class AddEditV2Component {
   subscribeToParams(): void {
     this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((params) => {
       const isNew = params.isNew?.toLowerCase() === "true";
-      const cipherType = parseInt(params.type);
+      this.cipherType = parseInt(params.type);
 
       this.isEdit = !isNew;
       this.cipherId = params.cipherId;
-      this.headerText = this.setHeader(isNew, cipherType);
+      this.headerText = this.setHeader(isNew, this.cipherType);
     });
   }
 
