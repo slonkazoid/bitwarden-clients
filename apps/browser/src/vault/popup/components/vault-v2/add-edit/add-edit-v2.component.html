@@ -3,8 +3,8 @@
 
   <app-identity
     *ngIf="cipherType === allTypes.Identity"
-    [isEdit]="isEdit"
     formId="cipherForm"
+    [cipherId]="cipherId"
   ></app-identity>
 
   <app-open-attachments *ngIf="isEdit" [cipherId]="cipherId"></app-open-attachments>
