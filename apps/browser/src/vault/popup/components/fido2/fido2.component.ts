@@ -410,7 +410,7 @@ export class Fido2Component implements OnInit, OnDestroy {
    * @param userHandle
    */
   private hasNoOtherPasskeys(cipher: CipherView, userHandle: string): boolean {
-    if (cipher.login.fido2Credentials === null || cipher.login.fido2Credentials.length === 0) {
+    if (cipher.login.fido2Credentials == null || cipher.login.fido2Credentials.length === 0) {
       return true;
     }
 
