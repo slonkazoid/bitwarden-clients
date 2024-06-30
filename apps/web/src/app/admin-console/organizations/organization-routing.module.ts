@@ -58,7 +58,7 @@ const routes: Routes = [
       ...featureFlaggedRoute({
         defaultComponent: GroupsComponent,
         flaggedComponent: NewGroupsComponent,
-        featureFlag: FeatureFlag.RefactorGroupsComponent,
+        featureFlag: FeatureFlag.GroupsComponentRefactor,
         routeOptions: {
           path: "groups",
           canActivate: [OrganizationPermissionsGuard],
