@@ -76,6 +76,7 @@ const defaultFormObj = fb.group({
   email: ["", [Validators.required, Validators.email, forbiddenNameValidator(/bit/i)]],
   terms: [false, [Validators.requiredTrue]],
   updates: ["yes"],
+  file: [""],
 });
 
 // Custom error message, `message` is shown as the error message
@@ -121,8 +122,10 @@ export const LabelWithIcon: Story = {
       <form [formGroup]="formObj">
         <bit-form-field>
           <bit-label>
-            <i class="bwi bwi-fw bwi-bank" aria-hidden="true"></i>
             Label
+            <a href="#">
+              <i class="bwi bwi-question-circle" aria-hidden="true"></i>
+            </a>
           </bit-label>
           <input bitInput formControlName="name" />
           <bit-hint>Optional Hint</bit-hint>
@@ -318,6 +321,36 @@ export const AdvancedSelect: Story = {
           <bit-option label="Other"></bit-option>
         </bit-select>
       </bit-form-field>
+    `,
+  }),
+};
+
+export const FileInput: Story = {
+  render: (args) => ({
+    props: {
+      formObj: defaultFormObj,
+      submit: submit,
+      ...args,
+    },
+    template: /*html*/ `
+      <form [formGroup]="formObj">
+        <bit-form-field>
+          <bit-label>File</bit-label>
+          <div>
+            <button bitButton type="button" buttonType="secondary">
+              Choose File
+            </button>
+            No file chosen
+          </div>
+          <input
+            bitInput
+            #fileSelector
+            type="file"
+            formControlName="file"
+            hidden
+          />
+        </bit-form-field>
+      </form>
     `,
   }),
 };

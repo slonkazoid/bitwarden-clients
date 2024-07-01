@@ -43,7 +43,7 @@
       <ng-content select="[bitPrefix]"></ng-content>
     </div>
     <div
-      class="tw-z-10 tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0 has-[bit-multi-select]:tw-p-0 has-[input:read-only]:tw-bg-secondary-100 has-[textarea:read-only]:tw-bg-secondary-100"
+      class="tw-z-10 tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0 has-[bit-multi-select]:tw-p-0 has-[input:read-only:not([hidden])]:tw-bg-secondary-100 has-[textarea:read-only:not([hidden])]:tw-bg-secondary-100"
       [ngClass]="[
         prefixSlot.childElementCount === 0 ? 'tw-rounded-l-lg tw-pl-3' : '',
         suffixSlot.childElementCount === 0 ? 'tw-rounded-r-lg tw-pr-3' : ''
