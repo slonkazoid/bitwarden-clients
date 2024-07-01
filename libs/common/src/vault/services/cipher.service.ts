@@ -1,4 +1,4 @@
-import { firstValueFrom, map, Observable, share, skipWhile, switchMap } from "rxjs";
+import { firstValueFrom, map, Observable, skipWhile, switchMap } from "rxjs";
 import { SemVer } from "semver";
 
 import { ApiService } from "../../abstractions/api.service";
@@ -56,6 +56,7 @@ import { CipherCollectionsRequest } from "../models/request/cipher-collections.r
 import { CipherCreateRequest } from "../models/request/cipher-create.request";
 import { CipherPartialRequest } from "../models/request/cipher-partial.request";
 import { CipherShareRequest } from "../models/request/cipher-share.request";
+import { CipherWithIdRequest } from "../models/request/cipher-with-id.request";
 import { CipherRequest } from "../models/request/cipher.request";
 import { CipherResponse } from "../models/response/cipher.response";
 import { AttachmentView } from "../models/view/attachment.view";
@@ -125,18 +126,11 @@ export class CipherService implements CipherServiceAbstraction {
       switchMap(() => this.encryptedCiphersState.state$),
       map((ciphers) => ciphers ?? {}),
     );
-    this.cipherViews$ = this.decryptedCiphersState.state$.pipe(
-      map((views) => views ?? {}),
-
-      share({
-        resetOnRefCountZero: true,
-      }),
-    );
+    this.cipherViews$ = this.decryptedCiphersState.state$.pipe(map((views) => views ?? {}));
     this.addEditCipherInfo$ = this.addEditCipherInfoState.state$;
   }
 
-  async setDecryptedCipherCache(value: CipherView[]) {
-    const userId = await firstValueFrom(this.stateProvider.activeUserId$);
+  async setDecryptedCipherCache(value: CipherView[], userId: UserId) {
     // Sometimes we might prematurely decrypt the vault and that will result in no ciphers
     // if we cache it then we may accidentally return it when it's not right, we'd rather try decryption again.
     // We still want to set null though, that is the indicator that the cache isn't valid and we should do decryption.
@@ -367,9 +361,15 @@ export class CipherService implements CipherServiceAbstraction {
       return await this.getDecryptedCiphers();
     }
 
-    decCiphers = await this.decryptCiphers(await this.getAll());
+    const activeUserId = await firstValueFrom(this.stateProvider.activeUserId$);
 
-    await this.setDecryptedCipherCache(decCiphers);
+    if (activeUserId == null) {
+      return [];
+    }
+
+    decCiphers = await this.decryptCiphers(await this.getAll(), activeUserId);
+
+    await this.setDecryptedCipherCache(decCiphers, activeUserId);
     return decCiphers;
   }
 
@@ -377,10 +377,10 @@ export class CipherService implements CipherServiceAbstraction {
     return Object.values(await firstValueFrom(this.cipherViews$));
   }
 
-  private async decryptCiphers(ciphers: Cipher[]) {
-    const orgKeys = await this.cryptoService.getOrgKeys();
-    const userKey = await this.cryptoService.getUserKeyWithLegacySupport();
-    if (Object.keys(orgKeys).length === 0 && userKey == null) {
+  private async decryptCiphers(ciphers: Cipher[], userId: UserId) {
+    const keys = await firstValueFrom(this.cryptoService.cipherDecryptionKeys$(userId, true));
+
+    if (keys == null || (keys.userKey == null && Object.keys(keys.orgKeys).length === 0)) {
       // return early if there are no keys to decrypt with
       return;
     }
@@ -398,7 +398,10 @@ export class CipherService implements CipherServiceAbstraction {
     const decCiphers = (
       await Promise.all(
         Object.entries(grouped).map(([orgId, groupedCiphers]) =>
-          this.encryptService.decryptItems(groupedCiphers, orgKeys[orgId] ?? userKey),
+          this.encryptService.decryptItems(
+            groupedCiphers,
+            keys.orgKeys[orgId as OrganizationId] ?? keys.userKey,
+          ),
         ),
       )
     )
@@ -1164,6 +1167,34 @@ export class CipherService implements CipherServiceAbstraction {
     await this.addEditCipherInfoState.update(() => value, {
       shouldUpdate: (current) => !(current == null && value == null),
     });
+  }
+
+  async getRotatedData(
+    originalUserKey: UserKey,
+    newUserKey: UserKey,
+    userId: UserId,
+  ): Promise<CipherWithIdRequest[]> {
+    if (originalUserKey == null) {
+      throw new Error("Original user key is required to rotate ciphers");
+    }
+    if (newUserKey == null) {
+      throw new Error("New user key is required to rotate ciphers");
+    }
+
+    let encryptedCiphers: CipherWithIdRequest[] = [];
+
+    const ciphers = await this.getAllDecrypted();
+    if (!ciphers || ciphers.length === 0) {
+      return encryptedCiphers;
+    }
+    encryptedCiphers = await Promise.all(
+      ciphers.map(async (cipher) => {
+        const encryptedCipher = await this.encrypt(cipher, newUserKey, originalUserKey);
+        return new CipherWithIdRequest(encryptedCipher);
+      }),
+    );
+
+    return encryptedCiphers;
   }
 
   // Helpers

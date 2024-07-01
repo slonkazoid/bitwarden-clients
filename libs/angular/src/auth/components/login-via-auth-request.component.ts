@@ -31,8 +31,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UserId } from "@bitwarden/common/types/guid";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
 
@@ -246,7 +246,10 @@ export class LoginViaAuthRequestComponent
 
     const deviceIdentifier = await this.appIdService.getAppId();
     const publicKey = Utils.fromBufferToB64(this.authRequestKeyPair.publicKey);
-    const accessCode = await this.passwordGenerationService.generatePassword({ length: 25 });
+    const accessCode = await this.passwordGenerationService.generatePassword({
+      type: "password",
+      length: 25,
+    });
 
     this.fingerprintPhrase = (
       await this.cryptoService.getFingerprint(this.email, this.authRequestKeyPair.publicKey)

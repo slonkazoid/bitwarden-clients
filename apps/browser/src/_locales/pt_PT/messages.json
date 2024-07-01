@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Criar conta"
   },
+  "setAStrongPassword": {
+    "message": "Defina uma palavra-passe forte"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Termine a criação da sua conta definindo uma palavra-passe"
+  },
   "login": {
     "message": "Iniciar sessão"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela."
+  },
+  "masterPassHintText": {
+    "message": "Se se esquecer da sua palavra-passe, a dica da palavra-passe pode ser enviada para o seu e-mail. Máximo de $CURRENT$/$MAXIMUM$ caracteres.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Reintroduza a palavra-passe mestra"
@@ -389,6 +408,15 @@
   "favorite": {
     "message": "Favorito"
   },
+  "unfavorite": {
+    "message": "Remover dos favoritos"
+  },
+  "itemAddedToFavorites": {
+    "message": "Item adicionado aos favoritos"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Item removido dos favoritos"
+  },
   "notes": {
     "message": "Notas"
   },
@@ -409,6 +437,9 @@
   },
   "launch": {
     "message": "Iniciar"
+  },
+  "launchWebsite": {
+    "message": "Iniciar site"
   },
   "website": {
     "message": "Site"
@@ -599,6 +630,9 @@
   "loggedOut": {
     "message": "Sessão terminada"
   },
+  "loggedOutDesc": {
+    "message": "Foi terminada a sessão da sua conta."
+  },
   "loginExpired": {
     "message": "A sua sessão expirou."
   },
@@ -762,6 +796,9 @@
   "notificationUnlock": {
     "message": "Desbloquear"
   },
+  "additionalOptions": {
+    "message": "Opções adicionais"
+  },
   "enableContextMenuItem": {
     "message": "Mostrar opções do menu de contexto"
   },
@@ -799,11 +836,38 @@
     "message": "Solarized (escuro)",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportar de"
+  },
   "exportVault": {
     "message": "Exportar cofre"
   },
   "fileFormat": {
     "message": "Formato do ficheiro"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "A exportação deste ficheiro será protegida por uma palavra-passe e exigirá a palavra-passe do ficheiro para ser desencriptada."
+  },
+  "filePassword": {
+    "message": "Palavra-passe do ficheiro"
+  },
+  "exportPasswordDescription": {
+    "message": "Esta palavra-passe será utilizada para exportar e importar este ficheiro"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Utilize a chave de encriptação da sua conta, derivada do nome de utilizador e da palavra-passe mestra da sua conta, para encriptar a exportação e restringir a importação apenas à conta Bitwarden atual."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Defina uma palavra-passe do ficheiro para encriptar a exportação e importe-a para qualquer conta Bitwarden utilizando a palavra-passe de desencriptação."
+  },
+  "exportTypeHeading": {
+    "message": "Tipo de exportação"
+  },
+  "accountRestricted": {
+    "message": "Conta restringida"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Palavra-passe do ficheiro\" e \"Confirmar palavra-passe do ficheiro\" não correspondem."
   },
   "warning": {
     "message": "AVISO",
@@ -1041,18 +1105,18 @@
   "authenticatorAppTitle": {
     "message": "Aplicação de autenticação"
   },
-  "authenticatorAppDesc": {
-    "message": "Utilize uma aplicação de autenticação (como o Authy ou o Google Authenticator) para gerar códigos de verificação baseados no tempo.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Introduza um código gerado por uma aplicação de autenticação como o Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Chave de segurança YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Chave de segurança Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Utilize uma YubiKey para aceder à sua conta. Funciona com os dispositivos YubiKey 4, 4 Nano, 4C e NEO."
   },
-  "duoDesc": {
-    "message": "Verifique com a Duo Security utilizando a aplicação Duo Mobile, SMS, chamada telefónica ou chave de segurança U2F.",
+  "duoDescV2": {
+    "message": "Introduza um código gerado pelo Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -1068,14 +1132,23 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Os códigos de verificação ser-lhe-ão enviados por e-mail."
+  "emailDescV2": {
+    "message": "Introduza um código enviado para o seu e-mail."
   },
   "selfHostedEnvironment": {
     "message": "Ambiente auto-hospedado"
   },
   "selfHostedEnvironmentFooter": {
     "message": "Especifique o URL de base da sua instalação Bitwarden hospedada no local."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Especifique o URL de base da sua instalação Bitwarden hospedada no local. Exemplo: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Para uma configuração avançada, pode especificar o URL de base de cada serviço de forma independente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Deve adicionar o URL do servidor de base ou pelo menos um ambiente personalizado."
   },
   "customEnvironment": {
     "message": "Ambiente personalizado"
@@ -1309,7 +1382,7 @@
     "message": "Nome próprio"
   },
   "middleName": {
-    "message": "Segundo nome"
+    "message": "Nome do meio"
   },
   "lastName": {
     "message": "Apelido"
@@ -1380,6 +1453,24 @@
   "typeIdentity": {
     "message": "Identidade"
   },
+  "newItemHeader": {
+    "message": "Novo(a) $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Editar $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Histórico de palavras-passe"
   },
@@ -1388,6 +1479,15 @@
   },
   "collections": {
     "message": "Coleções"
+  },
+  "nCollections": {
+    "message": "$COUNT$ coleções",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Favoritos"
@@ -1618,6 +1718,9 @@
   "autoFillAndSave": {
     "message": "Preencher automaticamente e guardar"
   },
+  "fillAndSave": {
+    "message": "Preencher e guardar"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Item preenchido automaticamente e URI guardado"
   },
@@ -1696,6 +1799,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "A sua nova palavra-passe mestra não cumpre os requisitos da política."
   },
+  "receiveMarketingEmails": {
+    "message": "Receba e-mails do Bitwarden com anúncios, conselhos e oportunidades de investigação."
+  },
+  "unsubscribe": {
+    "message": "Anular subscrição"
+  },
+  "atAnyTime": {
+    "message": "a qualquer altura."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ao continuar, concorda com os"
+  },
+  "and": {
+    "message": "e"
+  },
   "acceptPolicies": {
     "message": "Ao marcar esta caixa concorda com o seguinte:"
   },
@@ -1713,6 +1831,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Erro no acesso ao token de atualização"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Não foi encontrado nenhum token de atualização ou chaves API. Por favor, tente terminar a sessão e voltar a iniciá-la."
   },
   "desktopSyncVerificationTitle": {
     "message": "Verificação da sincronização da aplicação para computador"
@@ -2179,6 +2303,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "A exportar o cofre da organização"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Apenas o cofre da organização associado a $ORGANIZATION$ será exportado. Os itens em cofres individuais ou noutras organizações não serão incluídos.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2753,6 +2889,9 @@
     "message": "Desativar o pedido para reintroduzir a palavra-passe mestra para editar este campo",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Ativar/desativar navegação lateral"
+  },
   "skipToContent": {
     "message": "Avançar para o conteúdo"
   },
@@ -2967,6 +3106,9 @@
   },
   "confirmFilePassword": {
     "message": "Confirmar a palavra-passe do ficheiro"
+  },
+  "exportSuccess": {
+    "message": "Dados do cofre exportados"
   },
   "typePasskey": {
     "message": "Chave de acesso"
@@ -3221,9 +3363,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Limpe os filtros ou tente outro termo de pesquisa"
   },
-  "copyInfo": {
-    "message": "Copiar informações, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Copiar informações - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3231,7 +3373,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Copiar nota - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Mais opções, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3240,6 +3392,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Mais opções - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Ver item - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Preencher automaticamente - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Não há valores a copiar"
+  },
+  "assignCollections": {
+    "message": "Atribuir coleções"
+  },
+  "copyEmail": {
+    "message": "Copiar e-mail"
+  },
+  "copyPhone": {
+    "message": "Copiar telefone"
+  },
+  "copyAddress": {
+    "message": "Copiar endereço"
   },
   "adminConsole": {
     "message": "Consola de administração"
@@ -3291,5 +3488,53 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Itens sem pasta"
+  },
+  "organizationIsDeactivated": {
+    "message": "A organização está desativada"
+  },
+  "contactYourOrgAdmin": {
+    "message": "Não é possível aceder aos itens de organizações desativadas. Contacte o proprietário da organização para obter assistência."
+  },
+  "upload": {
+    "message": "Carregar"
+  },
+  "addAttachment": {
+    "message": "Adicionar anexo"
+  },
+  "maxFileSizeSansPunctuation": {
+    "message": "O tamanho máximo do ficheiro é de 500 MB"
+  },
+  "deleteAttachmentName": {
+    "message": "Eliminar o anexo $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Attachment Name"
+      }
+    }
+  },
+  "downloadAttachmentName": {
+    "message": "Transferir $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Attachment Name"
+      }
+    }
+  },
+  "permanentlyDeleteAttachmentConfirmation": {
+    "message": "Tem a certeza de que pretende eliminar permanentemente este anexo?"
+  },
+  "premium": {
+    "message": "Premium"
+  },
+  "freeOrgsCannotUseAttachments": {
+    "message": "As organizações gratuitas não podem utilizar anexos"
+  },
+  "filters": {
+    "message": "Filtros"
   }
 }

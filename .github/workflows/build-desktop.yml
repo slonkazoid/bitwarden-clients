@@ -173,14 +173,14 @@ jobs:
         id: cache
         with:
           path: |
-            apps/desktop/desktop_native/*.node
+            apps/desktop/desktop_native/napi/*.node
             ${{ env.RUNNER_TEMP }}/.cargo/registry
             ${{ env.RUNNER_TEMP }}/.cargo/git
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: apps/desktop/desktop_native
+        working-directory: apps/desktop/desktop_native/napi
         env:
           PKG_CONFIG_ALLOW_CROSS: true
           PKG_CONFIG_ALL_STATIC: true
@@ -301,12 +301,12 @@ jobs:
         uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         id: cache
         with:
-          path: apps/desktop/desktop_native/*.node
+          path: apps/desktop/desktop_native/napi/*.node
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: apps/desktop/desktop_native
+        working-directory: apps/desktop/desktop_native/napi
         run: npm run build:cross-platform
 
       - name: Build & Sign (dev)
@@ -444,10 +444,7 @@ jobs:
 
   macos-build:
     name: MacOS Build
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules
-    runs-on: macos-11
+    runs-on: macos-13
     needs: setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
@@ -466,6 +463,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
+
+      - name: Set up Node-gyp
+        run: python3 -m pip install setuptools
 
       - name: Rust
         shell: pwsh
@@ -584,12 +584,12 @@ jobs:
         uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         id: cache
         with:
-          path: apps/desktop/desktop_native/*.node
+          path: apps/desktop/desktop_native/napi/*.node
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: apps/desktop/desktop_native
+        working-directory: apps/desktop/desktop_native/napi
         run: npm run build:cross-platform
 
       - name: Build application (dev)
@@ -605,10 +605,7 @@ jobs:
 
   macos-package-github:
     name: MacOS Package GitHub Release Assets
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules
-    runs-on: macos-11
+    runs-on: macos-13
     needs:
       - browser-build
       - macos-build
@@ -630,6 +627,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
+
+      - name: Set up Node-gyp
+        run: python3 -m pip install setuptools
 
       - name: Rust
         shell: pwsh
@@ -748,12 +748,12 @@ jobs:
         uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         id: cache
         with:
-          path: apps/desktop/desktop_native/*.node
+          path: apps/desktop/desktop_native/napi/*.node
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: apps/desktop/desktop_native
+        working-directory: apps/desktop/desktop_native/napi
         run: npm run build:cross-platform
 
       - name: Build
@@ -814,10 +814,7 @@ jobs:
 
   macos-package-mas:
     name: MacOS Package Prod Release Asset
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules
-    runs-on: macos-11
+    runs-on: macos-13
     needs:
       - browser-build
       - macos-build
@@ -839,6 +836,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
+
+      - name: Set up Node-gyp
+        run: python3 -m pip install setuptools
 
       - name: Rust
         shell: pwsh
@@ -957,12 +957,12 @@ jobs:
         uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         id: cache
         with:
-          path: apps/desktop/desktop_native/*.node
+          path: apps/desktop/desktop_native/napi/*.node
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: apps/desktop/desktop_native
+        working-directory: apps/desktop/desktop_native/napi
         run: npm run build:cross-platform
 
       - name: Build
@@ -1014,11 +1014,7 @@ jobs:
 
   macos-package-dev:
     name: MacOS Package Dev Release Asset
-    if: false  # We need to look into how code signing works for dev
-    # Note, this workflow is running on macOS 11 to maintain compatibility with macOS 10.15 Catalina, 
-    # as the newer versions will case the native modules to be incompatible with older macOS systems
-    # This version should stay pinned until we drop support for macOS 10.15, or we drop the native modules
-    runs-on: macos-11
+    runs-on: macos-13
     needs:
       - browser-build
       - macos-build
@@ -1040,6 +1036,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
           node-version: ${{ env._NODE_VERSION }}
+
+      - name: Set up Node-gyp
+        run: python3 -m pip install setuptools
 
       - name: Print environment
         run: |
@@ -1153,12 +1152,12 @@ jobs:
         uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         id: cache
         with:
-          path: apps/desktop/desktop_native/*.node
+          path: apps/desktop/desktop_native/napi/*.node
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
-        working-directory: apps/desktop/desktop_native
+        working-directory: apps/desktop/desktop_native/napi
         run: npm run build:cross-platform
 
       - name: Build
@@ -1188,14 +1187,15 @@ jobs:
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
 
       - name: Zip masdev asset
-        working-directory: ./dist/mas-dev-universal
-        run: zip -r Bitwarden-${{ env.PACKAGE_VERSION }}-masdev-universal.zip Bitwarden.app
+        run: |
+          cd dist/mas-dev-universal
+          zip -r Bitwarden-${{ env._PACKAGE_VERSION }}-masdev-universal.zip Bitwarden.app
 
       - name: Upload masdev artifact
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: Bitwarden-${{ env._PACKAGE_VERSION }}-masdev-universal.zip
-          path: apps/desktop/dist/mas-universal/Bitwarden-${{ env._PACKAGE_VERSION }}-masdev-universal.zip
+          path: apps/desktop/dist/mas-dev-universal/Bitwarden-${{ env._PACKAGE_VERSION }}-masdev-universal.zip
           if-no-files-found: error
 
 

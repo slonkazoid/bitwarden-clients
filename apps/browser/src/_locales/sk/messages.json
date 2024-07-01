@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Vytvoriť účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavte silné heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Zdajte heslo na vytvorenie účtu"
+  },
   "login": {
     "message": "Prihlásiť sa"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Nápoveda k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete."
+  },
+  "masterPassHintText": {
+    "message": "Ak zabudnete heslo, na váš e-mail vám môže zaslať pomôcku k heslu. Zadaných $CURRENT$ znakov, limit je $MAXIMUM$.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Znovu zadajte hlavné heslo"
@@ -389,6 +408,15 @@
   "favorite": {
     "message": "Obľúbené"
   },
+  "unfavorite": {
+    "message": "Odstrániť z obľúbených"
+  },
+  "itemAddedToFavorites": {
+    "message": "Položka pridaná medzi obľúbené"
+  },
+  "itemRemovedFromFavorites": {
+    "message": "Položka odobraná z obľúbených"
+  },
   "notes": {
     "message": "Poznámky"
   },
@@ -409,6 +437,9 @@
   },
   "launch": {
     "message": "Spustiť"
+  },
+  "launchWebsite": {
+    "message": "Otvoriť stránku"
   },
   "website": {
     "message": "Webstránka"
@@ -599,6 +630,9 @@
   "loggedOut": {
     "message": "Odhlásený"
   },
+  "loggedOutDesc": {
+    "message": "Boli ste odhlásení zo svojho účtu."
+  },
   "loginExpired": {
     "message": "Vaša relácia vypršala."
   },
@@ -762,6 +796,9 @@
   "notificationUnlock": {
     "message": "Odomknúť"
   },
+  "additionalOptions": {
+    "message": "Ďalšie možnosti"
+  },
   "enableContextMenuItem": {
     "message": "Zobraziť možnosti kontextovej ponuky"
   },
@@ -799,11 +836,38 @@
     "message": "Solarized –⁠ tmavý",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
   },
+  "exportFrom": {
+    "message": "Exportovať z"
+  },
   "exportVault": {
     "message": "Export trezoru"
   },
   "fileFormat": {
     "message": "Formát Súboru"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Tento exportovaný súbor bude chránený heslom a na dešifrovanie bude potrebné heslo súboru."
+  },
+  "filePassword": {
+    "message": "Heslo súboru"
+  },
+  "exportPasswordDescription": {
+    "message": "Toto heslo sa použije na export a import tohto súboru"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Na zašifrovanie exportu a obmedzenie importu len na aktuálny účet Bitwarden použite šifrovací kľúč účtu odvodený z používateľského mena a hlavného hesla účtu."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Nastavte heslo súboru na zašifrovanie exportu a importujte ho do akéhokoľvek účtu Bitwarden pomocou hesla na dešifrovanie."
+  },
+  "exportTypeHeading": {
+    "message": "Typ exportu"
+  },
+  "accountRestricted": {
+    "message": "Obmedzený účet"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Heslo súboru\" a \"Potvrdiť heslo súboru\" sa nezhodujú."
   },
   "warning": {
     "message": "UPOZORNENIE",
@@ -1041,18 +1105,18 @@
   "authenticatorAppTitle": {
     "message": "Overovacia aplikácia"
   },
-  "authenticatorAppDesc": {
-    "message": "Použite overovaciu aplikáciu (napríklad Authy alebo Google Authenticator) na generovanie časovo obmedzených overovacích kódov.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Zadajte kód vygenerovaný overovacou aplikáciou akou je Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP bezpečnostný kľúč"
+  "yubiKeyTitleV2": {
+    "message": "Bezpečnostný kľúč Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Použiť YubiKey pre prístup k vášmu účtu. Pracuje s YubiKey 4, 4 Nano, 4C a s NEO zariadeniami."
   },
-  "duoDesc": {
-    "message": "Overiť s Duo Security použitím Duo Mobile aplikácie, SMS, telefonátu alebo U2F bezpečnostným kľúčom.",
+  "duoDescV2": {
+    "message": "Zadajte kód vygenerovaný aplikáciou Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -1068,14 +1132,23 @@
   "emailTitle": {
     "message": "Email"
   },
-  "emailDesc": {
-    "message": "Verifikačné kódy vám budú zaslané emailom."
+  "emailDescV2": {
+    "message": "Zadajte kód zaslaný na váš e-mail."
   },
   "selfHostedEnvironment": {
     "message": "Sebou hosťované prostredie"
   },
   "selfHostedEnvironmentFooter": {
     "message": "Zadajte základnú URL adresu lokálne hosťovanej inštalácie Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Zadajte základnú URL adresu lokálne hosťovanej inštalácie Bitwarden. Napríklad: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pre rozšírenú konfiguráciu môžete zadať základnú adresu URL každej služby nezávisle."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musíte pridať buď základnú adresu URL servera, alebo aspoň jedno vlastné prostredie."
   },
   "customEnvironment": {
     "message": "Vlastné prostredie"
@@ -1380,6 +1453,24 @@
   "typeIdentity": {
     "message": "Identita"
   },
+  "newItemHeader": {
+    "message": "Nové $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Upraviť $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "História hesla"
   },
@@ -1388,6 +1479,15 @@
   },
   "collections": {
     "message": "Zbierky"
+  },
+  "nCollections": {
+    "message": "$COUNT$ zbierok",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "favorites": {
     "message": "Obľúbené"
@@ -1618,6 +1718,9 @@
   "autoFillAndSave": {
     "message": "Auto-vyplniť a Uložiť"
   },
+  "fillAndSave": {
+    "message": "Vyplniť a uložiť"
+  },
   "autoFillSuccessAndSavedUri": {
     "message": "Automatické vypĺnenie a uloženie úspešné"
   },
@@ -1696,6 +1799,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové heslo nespĺňa pravidlá."
   },
+  "receiveMarketingEmails": {
+    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  },
+  "unsubscribe": {
+    "message": "Odhlásiť sa z odberu"
+  },
+  "atAnyTime": {
+    "message": "môžete kedykoľvek."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračovaním súhlasíte s"
+  },
+  "and": {
+    "message": "a"
+  },
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
@@ -1713,6 +1831,12 @@
   },
   "ok": {
     "message": "Ok"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Chyba obnovenia prístupového tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nenašiel sa žiadny token obnovenia ani kľúče API. Skúste sa odhlásiť a znova prihlásiť."
   },
   "desktopSyncVerificationTitle": {
     "message": "Overenie synchronizácie desktopu"
@@ -2179,6 +2303,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exportovanie trezora organizácie"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Exportované budú iba položky trezora organizácie spojené s $ORGANIZATION$. Položky osobného trezora a položky z iných organizácií nebudú zahrnuté.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2753,6 +2889,9 @@
     "message": "Vypnite výzvu na opätovné zadanie hlavného hesla na úpravu tohto poľa",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Prepnúť bočnú navigáciu"
+  },
   "skipToContent": {
     "message": "Preskočiť na obsah"
   },
@@ -2967,6 +3106,9 @@
   },
   "confirmFilePassword": {
     "message": "Potvrdiť heslo súboru"
+  },
+  "exportSuccess": {
+    "message": "Údaje z trezora boli exportované"
   },
   "typePasskey": {
     "message": "Prístupový kľúč"
@@ -3221,9 +3363,9 @@
   "clearFiltersOrTryAnother": {
     "message": "Vymažte filtre alebo zmeňte vyhľadávaný výraz"
   },
-  "copyInfo": {
-    "message": "Skopírovať info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
+  "copyInfoTitle": {
+    "message": "Skopírovať info - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with options to copy information from an item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3231,7 +3373,17 @@
       }
     }
   },
-  "moreOptions": {
+  "copyNoteTitle": {
+    "message": "Skopírovať poznámku - $ITEMNAME$",
+    "description": "Title for a button copies a note to the clipboard.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Note Item"
+      }
+    }
+  },
+  "moreOptionsLabel": {
     "message": "Ďalšie možnosti, $ITEMNAME$",
     "description": "Aria label for a button that opens a menu with more options for an item.",
     "placeholders": {
@@ -3240,6 +3392,51 @@
         "example": "Secret Item"
       }
     }
+  },
+  "moreOptionsTitle": {
+    "message": "Ďalšie možnosti - $ITEMNAME$",
+    "description": "Title for a button that opens a menu with more options for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "viewItemTitle": {
+    "message": "Zobrazit položku - $ITEMNAME$",
+    "description": "Title for a link that opens a view for an item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "autofillTitle": {
+    "message": "Automatické vyplnenie - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Nie je čo kopírovať"
+  },
+  "assignCollections": {
+    "message": "Prideliť zbierky"
+  },
+  "copyEmail": {
+    "message": "Skopírovať e-mail"
+  },
+  "copyPhone": {
+    "message": "Skopírovať telefón"
+  },
+  "copyAddress": {
+    "message": "Skopírovať adresu"
   },
   "adminConsole": {
     "message": "Správcovská konzola"
@@ -3291,5 +3488,53 @@
         "example": "Work"
       }
     }
+  },
+  "itemsWithNoFolder": {
+    "message": "Položky bez priečinka"
+  },
+  "organizationIsDeactivated": {
+    "message": "Organizácia je vypnutá"
+  },
+  "contactYourOrgAdmin": {
+    "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
+  },
+  "upload": {
+    "message": "Nahrať"
+  },
+  "addAttachment": {
+    "message": "Priložiť prílohu"
+  },
+  "maxFileSizeSansPunctuation": {
+    "message": "Maximálna veľkosť súboru je 500 MB"
+  },
+  "deleteAttachmentName": {
+    "message": "Odstrániť prílohu $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Attachment Name"
+      }
+    }
+  },
+  "downloadAttachmentName": {
+    "message": "Stiahnuť $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Attachment Name"
+      }
+    }
+  },
+  "permanentlyDeleteAttachmentConfirmation": {
+    "message": "Naozaj chcete natrvalo odstrániť túto prílohu?"
+  },
+  "premium": {
+    "message": "Prémium"
+  },
+  "freeOrgsCannotUseAttachments": {
+    "message": "Bezplatné organizácie nemôžu používať prílohy"
+  },
+  "filters": {
+    "message": "Filtre"
   }
 }

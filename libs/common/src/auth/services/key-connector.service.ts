@@ -1,5 +1,7 @@
 import { firstValueFrom } from "rxjs";
 
+import { LogoutReason } from "@bitwarden/auth/common";
+
 import { ApiService } from "../../abstractions/api.service";
 import { OrganizationService } from "../../admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserType } from "../../admin-console/enums";
@@ -27,7 +29,7 @@ import { KeyConnectorUserKeyRequest } from "../models/request/key-connector-user
 import { SetKeyConnectorKeyRequest } from "../models/request/set-key-connector-key.request";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
-export const USES_KEY_CONNECTOR = new UserKeyDefinition<boolean>(
+export const USES_KEY_CONNECTOR = new UserKeyDefinition<boolean | null>(
   KEY_CONNECTOR_DISK,
   "usesKeyConnector",
   {
@@ -36,7 +38,7 @@ export const USES_KEY_CONNECTOR = new UserKeyDefinition<boolean>(
   },
 );
 
-export const CONVERT_ACCOUNT_TO_KEY_CONNECTOR = new UserKeyDefinition<boolean>(
+export const CONVERT_ACCOUNT_TO_KEY_CONNECTOR = new UserKeyDefinition<boolean | null>(
   KEY_CONNECTOR_DISK,
   "convertAccountToKeyConnector",
   {
@@ -57,7 +59,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     private logService: LogService,
     private organizationService: OrganizationService,
     private keyGenerationService: KeyGenerationService,
-    private logoutCallback: (expired: boolean, userId?: string) => Promise<void>,
+    private logoutCallback: (logoutReason: LogoutReason, userId?: string) => Promise<void>,
     private stateProvider: StateProvider,
   ) {
     this.usesKeyConnectorState = this.stateProvider.getActive(USES_KEY_CONNECTOR);
@@ -192,7 +194,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     if (this.logoutCallback != null) {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.logoutCallback(false);
+      this.logoutCallback("keyConnectorError");
     }
     throw new Error("Key Connector error");
   }

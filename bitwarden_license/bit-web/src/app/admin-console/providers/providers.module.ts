@@ -9,13 +9,18 @@ import { OrganizationPlansComponent, TaxInfoComponent } from "@bitwarden/web-vau
 import { PaymentMethodWarningsModule } from "@bitwarden/web-vault/app/billing/shared";
 import { OssModule } from "@bitwarden/web-vault/app/oss.module";
 
-import { ProviderSubscriptionComponent } from "../../billing/providers";
 import {
-  CreateClientOrganizationComponent,
-  ManageClientOrganizationsComponent,
-  ManageClientOrganizationNameComponent,
-  ManageClientOrganizationSubscriptionComponent,
-} from "../../billing/providers/clients";
+  CreateClientDialogComponent,
+  NoClientsComponent,
+  ManageClientNameDialogComponent,
+  ManageClientsComponent,
+  ManageClientSubscriptionDialogComponent,
+  ProviderBillingHistoryComponent,
+  ProviderPaymentMethodComponent,
+  ProviderSelectPaymentMethodDialogComponent,
+  ProviderSubscriptionComponent,
+} from "../../billing/providers";
+import { ProviderSubscriptionStatusComponent } from "../../billing/providers/subscription/provider-subscription-status.component";
 
 import { AddOrganizationComponent } from "./clients/add-organization.component";
 import { ClientsComponent } from "./clients/clients.component";
@@ -61,11 +66,16 @@ import { SetupComponent } from "./setup/setup.component";
     SetupComponent,
     SetupProviderComponent,
     UserAddEditComponent,
-    CreateClientOrganizationComponent,
-    ManageClientOrganizationsComponent,
-    ManageClientOrganizationNameComponent,
-    ManageClientOrganizationSubscriptionComponent,
+    CreateClientDialogComponent,
+    NoClientsComponent,
+    ManageClientsComponent,
+    ManageClientNameDialogComponent,
+    ManageClientSubscriptionDialogComponent,
+    ProviderBillingHistoryComponent,
     ProviderSubscriptionComponent,
+    ProviderSelectPaymentMethodDialogComponent,
+    ProviderPaymentMethodComponent,
+    ProviderSubscriptionStatusComponent,
   ],
   providers: [WebProviderService, ProviderPermissionsGuard],
 })
