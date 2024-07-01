@@ -94,10 +94,6 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   }
 
   submit = async () => {
-    if (!this.keysFormControl.some((key) => key.value.key != null)) {
-      // If there are no keys and a user selects submit verify removing Two-Factor provider
-      return await this.disable();
-    }
     const request = await this.buildRequestModel(UpdateTwoFactorYubikeyOtpRequest);
     request.key1 = this.keysFormControl[0].value.key;
     request.key2 = this.keysFormControl[1].value.key;
