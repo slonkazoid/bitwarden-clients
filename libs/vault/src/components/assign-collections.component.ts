@@ -217,22 +217,20 @@ export class AssignCollectionsComponent implements OnInit {
       );
     }
 
-    if (cipherIds.length === 0) {
-      return;
+    if (cipherIds.length > 0) {
+      const isSingleOrgCipher = cipherIds.length === 1 && this.personalItemsCount === 0;
+
+      // Update assigned collections for single org cipher or bulk update collections for multiple org ciphers
+      await (isSingleOrgCipher
+        ? this.updateAssignedCollections(this.editableItems[0])
+        : this.bulkUpdateCollections(cipherIds));
+
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("successfullyAssignedCollections"),
+      });
     }
-
-    const isSingleOrgCipher = cipherIds.length === 1 && this.personalItemsCount === 0;
-
-    // Update assigned collections for single org cipher or bulk update collections for multiple org ciphers
-    await (isSingleOrgCipher
-      ? this.updateAssignedCollections(this.editableItems[0])
-      : this.bulkUpdateCollections(cipherIds));
-
-    this.toastService.showToast({
-      variant: "success",
-      title: null,
-      message: this.i18nService.t("successfullyAssignedCollections"),
-    });
 
     this.onCollectionAssign.emit(CollectionAssignmentResult.Saved);
   };
