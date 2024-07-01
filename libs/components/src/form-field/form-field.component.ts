@@ -3,11 +3,9 @@ import {
   AfterContentChecked,
   Component,
   ContentChild,
-  ContentChildren,
   HostBinding,
   HostListener,
   Input,
-  QueryList,
   ViewChild,
   signal,
 } from "@angular/core";
@@ -18,8 +16,6 @@ import { inputBorderClasses } from "../input/input.directive";
 
 import { BitErrorComponent } from "./error.component";
 import { BitFormFieldControl } from "./form-field-control";
-import { BitPrefixDirective } from "./prefix.directive";
-import { BitSuffixDirective } from "./suffix.directive";
 
 @Component({
   selector: "bit-form-field",
@@ -31,9 +27,6 @@ export class BitFormFieldComponent implements AfterContentChecked {
   @ContentChild(BitLabel) label: BitLabel;
 
   @ViewChild(BitErrorComponent) error: BitErrorComponent;
-
-  @ContentChildren(BitPrefixDirective) prefixChildren: QueryList<BitPrefixDirective>;
-  @ContentChildren(BitSuffixDirective) suffixChildren: QueryList<BitSuffixDirective>;
 
   private _disableMargin = false;
   @Input() set disableMargin(value: boolean | "") {
@@ -103,24 +96,5 @@ export class BitFormFieldComponent implements AfterContentChecked {
     } else {
       this.input.ariaDescribedBy = undefined;
     }
-
-    this.prefixChildren.forEach((prefix) => {
-      prefix.ariaDescribedBy = this.label.id;
-    });
-
-    this.suffixChildren.forEach((suffix) => {
-      suffix.ariaDescribedBy = this.label.id;
-    });
-  }
-
-  /**
-   * Determine if all the prefix and suffix buttons are disabled sot hat we can properly show either
-   * a partiailly or fully disabled state for the form field
-   */
-  allButtonsDisabled() {
-    const prefixEnabled = this.prefixChildren.filter((prefix) => prefix.isDisabled() === false);
-    const suffixEnabled = this.suffixChildren.filter((suffix) => suffix.isDisabled() === false);
-
-    return prefixEnabled.length === 0 && suffixEnabled.length === 0;
   }
 }

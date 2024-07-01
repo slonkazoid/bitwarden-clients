@@ -132,6 +132,27 @@ export const LabelWithIcon: Story = {
   }),
 };
 
+export const LongLabel: Story = {
+  render: (args) => ({
+    props: {
+      formObj: defaultFormObj,
+      submit: submit,
+      ...args,
+    },
+    template: /*html*/ `
+      <form [formGroup]="formObj" style="width: 200px">
+        <bit-form-field>
+          <bit-label>
+            Hello I am a very long label with lots of very cool helpful information
+          </bit-label>
+          <input bitInput formControlName="name" />
+          <bit-hint>Optional Hint</bit-hint>
+        </bit-form-field>
+      </form>
+    `,
+  }),
+};
+
 export const Required: Story = {
   render: (args) => ({
     props: {

@@ -9,6 +9,14 @@ let nextId = 0;
 export class BitLabel {
   constructor(private elementRef: ElementRef<HTMLInputElement>) {}
 
+  @HostBinding("class") @Input() get classList() {
+    return ["tw-truncate"];
+  }
+
+  @HostBinding("title") get title() {
+    return this.elementRef.nativeElement.textContent;
+  }
+
   get width() {
     return this.elementRef.nativeElement.getBoundingClientRect().width;
   }

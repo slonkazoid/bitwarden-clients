@@ -1,7 +1,7 @@
 <div class="tw-w-full tw-relative tw-group/input tw-min-h-11">
   <div class="tw-absolute tw-w-full tw-h-full">
     <label
-      class="tw-text-sm tw-text-muted tw-absolute tw-translate-x-3 -tw-translate-y-2 tw-px-1 tw-mb-0 tw-z-20 tw-flex tw-gap-1"
+      class="tw-text-sm tw-text-muted tw-absolute -tw-translate-y-2 tw-px-4 tw-mb-0 tw-z-20 tw-flex tw-gap-1 tw-max-w-full"
       [attr.for]="input.labelForId"
     >
       <ng-content select="bit-label"></ng-content>
@@ -36,7 +36,8 @@
     class="tw-flex tw-border tw-border-transparent tw-border-solid tw-min-h-11 [&:not(:has(button:enabled)):has(input:read-only)>*]:tw-bg-secondary-100 [&:not(:has(button:enabled)):has(textarea:read-only)>*]:tw-bg-secondary-100"
   >
     <div
-      *ngIf="prefixChildren.length"
+      #prefixSlot
+      [hidden]="prefixSlot.childElementCount === 0"
       class="tw-z-10 tw-flex tw-items-center tw-gap-1 tw-pl-3 tw-py-2 tw-rounded-l-lg"
     >
       <ng-content select="[bitPrefix]"></ng-content>
@@ -44,14 +45,15 @@
     <div
       class="tw-z-10 tw-w-full tw-relative tw-py-2 has-[bit-select]:tw-p-0 has-[bit-multi-select]:tw-p-0 has-[input:read-only]:tw-bg-secondary-100 has-[textarea:read-only]:tw-bg-secondary-100"
       [ngClass]="[
-        prefixChildren.length === 0 ? 'tw-rounded-l-lg tw-pl-3' : '',
-        suffixChildren.length === 0 ? 'tw-rounded-r-lg tw-pr-3' : ''
+        prefixSlot.childElementCount === 0 ? 'tw-rounded-l-lg tw-pl-3' : '',
+        suffixSlot.childElementCount === 0 ? 'tw-rounded-r-lg tw-pr-3' : ''
       ]"
     >
       <ng-content></ng-content>
     </div>
     <div
-      *ngIf="suffixChildren.length"
+      #suffixSlot
+      [hidden]="suffixSlot.childElementCount === 0"
       class="tw-z-10 tw-flex tw-items-center tw-gap-1 tw-pr-3 tw-py-2 tw-rounded-r-lg"
     >
       <ng-content select="[bitSuffix]"></ng-content>
