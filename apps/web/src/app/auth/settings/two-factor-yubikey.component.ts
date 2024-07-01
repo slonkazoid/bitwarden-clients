@@ -5,7 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
-import { UpdateTwoFactorYubioOtpRequest } from "@bitwarden/common/auth/models/request/update-two-factor-yubio-otp.request";
+import { UpdateTwoFactorYubiOtpRequest } from "@bitwarden/common/auth/models/request/update-two-factor-yubio-otp.request";
 import { TwoFactorYubiKeyResponse } from "@bitwarden/common/auth/models/response/two-factor-yubi-key.response";
 import { AuthResponse } from "@bitwarden/common/auth/types/auth-response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -27,14 +27,25 @@ interface Key {
 export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   @Output() onChangeStatus = new EventEmitter<boolean>();
   type = TwoFactorProviderType.Yubikey;
-  keyValues: Key[];
-  nfc = false;
+  keys: Key[];
+  anyKeyHasNfc = false;
 
   formPromise: Promise<TwoFactorYubiKeyResponse>;
   disablePromise: Promise<unknown>;
 
   override componentName = "app-two-factor-yubikey";
-  formGroup: FormGroup<{ keys: FormArray<FormControl<any>>; nfc: FormControl<boolean> }>;
+  formGroup: FormGroup<{
+    formKeys: FormArray<FormControl<Key>>;
+    anyKeyHasNfc: FormControl<boolean>;
+  }>;
+
+  get keysFormControl() {
+    return this.formGroup.controls.formKeys.controls;
+  }
+
+  get anyKeyHasNfcFormControl() {
+    return this.formGroup.controls.anyKeyHasNfc;
+  }
 
   constructor(
     @Inject(DIALOG_DATA) protected data: AuthResponse<TwoFactorYubiKeyResponse>,
@@ -57,25 +68,21 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     );
   }
 
-  get keyPass() {
-    return this.formGroup.controls.keys.controls;
-  }
-
   ngOnInit() {
     this.auth(this.data);
     this.formGroup = this.formBuilder.group({
-      keys: this.formBuilder.array([]),
-      nfc: this.formBuilder.control(this.nfc),
+      formKeys: this.formBuilder.array([] as Key[]),
+      anyKeyHasNfc: this.formBuilder.control(this.anyKeyHasNfc),
     });
     this.patch();
   }
 
   patch() {
-    const control = <FormArray>this.formGroup.get("keys");
-    this.keyValues.forEach((val) => {
+    const control = <FormArray>this.formGroup.get("formKeys");
+    this.keys.forEach((val) => {
       const fb = this.formBuilder.group({
-        key: [val.key],
-        existingKey: [val.existingKey],
+        key: val.key,
+        existingKey: val.existingKey,
       });
       control.push(fb);
     });
@@ -87,23 +94,25 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
   }
 
   submit = async () => {
-    const keys = this.formGroup.controls.keys.value;
-    const request = await this.buildRequestModel(UpdateTwoFactorYubioOtpRequest);
-    request.key1 = keys != null && keys.length > 0 ? keys[0].key : null;
-    request.key2 = keys != null && keys.length > 1 ? keys[1].key : null;
-    request.key3 = keys != null && keys.length > 2 ? keys[2].key : null;
-    request.key4 = keys != null && keys.length > 3 ? keys[3].key : null;
-    request.key5 = keys != null && keys.length > 4 ? keys[4].key : null;
-    request.nfc = this.formGroup.value.nfc;
-
+    if (!this.keysFormControl.some((key) => key.value.key != null)) {
+      // If there are no keys and a user selects submit verify removing Two-Factor provider
+      return await this.disable();
+    }
+    const request = await this.buildRequestModel(UpdateTwoFactorYubiOtpRequest);
+    request.key1 = this.keysFormControl[0].value.key;
+    request.key2 = this.keysFormControl[1].value.key;
+    request.key3 = this.keysFormControl[2].value.key;
+    request.key4 = this.keysFormControl[3].value.key;
+    request.key5 = this.keysFormControl[4].value.key;
+    request.nfc = this.anyKeyHasNfcFormControl.value;
     return this.submitForm(request);
   };
 
-  private submitForm(request: UpdateTwoFactorYubioOtpRequest) {
+  private submitForm(request: UpdateTwoFactorYubiOtpRequest) {
     return super.enable(async () => {
       this.formPromise = this.apiService.putTwoFactorYubiKey(request);
       const response = await this.formPromise;
-      await this.processResponse(response);
+      this.processResponse(response);
       this.platformUtilsService.showToast("success", null, this.i18nService.t("yubikeysUpdated"));
     });
   }
@@ -120,8 +129,11 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     return super.disable(this.disablePromise);
   }
 
-  remove(control: FormControl<Key>) {
-    control.setValue({
+  remove(pos: number) {
+    this.keys[pos].key = null;
+    this.keys[pos].existingKey = null;
+
+    this.keysFormControl[pos].setValue({
       existingKey: null,
       key: null,
     });
@@ -131,14 +143,14 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     this.enabled = response.enabled;
     this.onChangeStatus.emit(this.enabled);
 
-    this.keyValues = [
+    this.keys = [
       { key: response.key1, existingKey: this.padRight(response.key1) },
       { key: response.key2, existingKey: this.padRight(response.key2) },
       { key: response.key3, existingKey: this.padRight(response.key3) },
       { key: response.key4, existingKey: this.padRight(response.key4) },
       { key: response.key5, existingKey: this.padRight(response.key5) },
     ];
-    this.nfc = response.nfc || !response.enabled;
+    this.anyKeyHasNfc = response.nfc || !response.enabled;
   }
 
   private padRight(str: string, character = "•", size = 44) {

@@ -6,10 +6,10 @@
     </span>
     <ng-container bitDialogContent>
       <app-callout
+        *ngIf="enabled"
         type="success"
         title="{{ 'enabled' | i18n }}"
         icon="bwi bwi-check-circle"
-        *ngIf="enabled"
       >
         {{ "twoStepLoginProviderEnabled" | i18n }}
       </app-callout>
@@ -29,23 +29,20 @@
         <li>{{ "twoFactorYubikeySaveForm" | i18n }}</li>
       </ol>
       <hr />
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4" formArrayName="keys">
-        <div
-          class="tw-col-span-6"
-          *ngFor="let k of formGroup.controls.keys.controls; let i = index"
-        >
+      <div class="tw-grid tw-grid-cols-12 tw-gap-4" formArrayName="formKeys">
+        <div class="tw-col-span-6" *ngFor="let k of keys; let i = index">
           <div [formGroupName]="i">
-            <bit-form-field *ngIf="!k.get('existingKey').value">
-              <bit-label>{{ "yubikeyX" | i18n: i + 1 }}</bit-label>
+            <bit-label>{{ "yubikeyX" | i18n: i + 1 }}</bit-label>
+            <bit-form-field *ngIf="!keys[i].existingKey">
               <input bitInput type="password" formControlName="key" appInputVerbatim />
             </bit-form-field>
-            <div class="tw-flex" *ngIf="k.get('existingKey').value">
-              <span class="tw-mr-2">{{ k.get("existingKey").value }}</span>
+            <div class="tw-flex tw-justify-between" *ngIf="keys[i].existingKey">
+              <span class="tw-mr-2 tw-self-center">{{ keys[i].existingKey }}</span>
               <button
                 bitIconButton="bwi-minus-circle"
                 type="button"
                 buttonType="danger"
-                (click)="remove(k)"
+                (click)="remove(i)"
                 appA11yTitle="{{ 'remove' | i18n }}"
               ></button>
             </div>
@@ -53,9 +50,9 @@
         </div>
       </div>
       <p bitTypography="body1" class="tw-font-bold tw-mb-2">{{ "nfcSupport" | i18n }}</p>
-      <bit-form-control>
+      <bit-form-control [disableMargin]="true">
         <bit-label>{{ "twoFactorYubikeySupportsNfc" | i18n }}</bit-label>
-        <input bitCheckbox type="checkbox" formControlName="nfc" />
+        <input bitCheckbox type="checkbox" formControlName="anyKeyHasNfc" />
         <bit-hint class="tw-text-sm">{{ "twoFactorYubikeySupportsNfcDesc" | i18n }}</bit-hint>
       </bit-form-control>
     </ng-container>
