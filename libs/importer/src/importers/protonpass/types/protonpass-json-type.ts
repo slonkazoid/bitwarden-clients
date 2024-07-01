@@ -60,6 +60,7 @@ export type ProtonPassLoginItemContent = {
   password?: string;
   urls?: string[];
   totpUri?: string;
+  itemUsername?: string;
 };
 
 export type ProtonPassCreditCardItemContent = {
