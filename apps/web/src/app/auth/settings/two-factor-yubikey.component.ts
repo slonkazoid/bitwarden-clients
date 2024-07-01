@@ -5,7 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
-import { UpdateTwoFactorYubiOtpRequest } from "@bitwarden/common/auth/models/request/update-two-factor-yubio-otp.request";
+import { UpdateTwoFactorYubikeyOtpRequest } from "@bitwarden/common/auth/models/request/update-two-factor-yubikey-otp.request";
 import { TwoFactorYubiKeyResponse } from "@bitwarden/common/auth/models/response/two-factor-yubi-key.response";
 import { AuthResponse } from "@bitwarden/common/auth/types/auth-response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -98,7 +98,7 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
       // If there are no keys and a user selects submit verify removing Two-Factor provider
       return await this.disable();
     }
-    const request = await this.buildRequestModel(UpdateTwoFactorYubiOtpRequest);
+    const request = await this.buildRequestModel(UpdateTwoFactorYubikeyOtpRequest);
     request.key1 = this.keysFormControl[0].value.key;
     request.key2 = this.keysFormControl[1].value.key;
     request.key3 = this.keysFormControl[2].value.key;
@@ -108,7 +108,7 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     return this.submitForm(request);
   };
 
-  private submitForm(request: UpdateTwoFactorYubiOtpRequest) {
+  private submitForm(request: UpdateTwoFactorYubikeyOtpRequest) {
     return super.enable(async () => {
       this.formPromise = this.apiService.putTwoFactorYubiKey(request);
       const response = await this.formPromise;
