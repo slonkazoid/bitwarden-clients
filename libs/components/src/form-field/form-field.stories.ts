@@ -241,10 +241,10 @@ export const ButtonInputGroup: Story = {
     template: /*html*/ `
       <bit-form-field>
         <bit-label>Label</bit-label>
-        <button bitPrefix bitIconButton="bwi-star" size="small" aria-label="Favorite"></button>
+        <button bitPrefix bitIconButton="bwi-star" aria-label="Favorite"></button>
         <input bitInput placeholder="Placeholder" />
-        <button bitSuffix bitIconButton="bwi-eye" size="small" aria-label="Hide"></button>
-        <button bitSuffix bitIconButton="bwi-clone" size="small" aria-label="Clone"></button>
+        <button bitSuffix bitIconButton="bwi-eye" aria-label="Hide"></button>
+        <button bitSuffix bitIconButton="bwi-clone" aria-label="Clone"></button>
         <button bitSuffix bitLink>
           Apply
         </button>
@@ -260,10 +260,10 @@ export const DisabledButtonInputGroup: Story = {
     template: /*html*/ `
       <bit-form-field>
         <bit-label>Label</bit-label>
-        <button bitPrefix bitIconButton="bwi-star" size="small" disabled aria-label="Favorite"></button>
+        <button bitPrefix bitIconButton="bwi-star" disabled aria-label="Favorite"></button>
         <input bitInput placeholder="Placeholder" disabled />
-        <button bitSuffix bitIconButton="bwi-eye" size="small" disabled aria-label="Hide"></button>
-        <button bitSuffix bitIconButton="bwi-clone" size="small" disabled aria-label="Clone"></button>
+        <button bitSuffix bitIconButton="bwi-eye" disabled aria-label="Hide"></button>
+        <button bitSuffix bitIconButton="bwi-clone" disabled aria-label="Clone"></button>
         <button bitSuffix bitLink disabled>
           Apply
         </button>
@@ -280,8 +280,8 @@ export const PartiallyDisabledButtonInputGroup: Story = {
       <bit-form-field>
         <bit-label>Label</bit-label>
         <input bitInput placeholder="Placeholder" disabled />
-        <button bitSuffix bitIconButton="bwi-eye" size="small" aria-label="Hide"></button>
-        <button bitSuffix bitIconButton="bwi-clone" size="small" aria-label="Clone"></button>
+        <button bitSuffix bitIconButton="bwi-eye" aria-label="Hide"></button>
+        <button bitSuffix bitIconButton="bwi-clone" aria-label="Clone"></button>
         <button bitSuffix bitLink disabled>
           Apply
         </button>
