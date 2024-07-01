@@ -59,7 +59,6 @@ export class AssignCollections {
     route: ActivatedRoute,
   ) {
     const $cipher: Observable<CipherView> = route.queryParams.pipe(
-      takeUntilDestroyed(),
       switchMap(({ cipherId }) => this.cipherService.get(cipherId)),
       switchMap((cipherDomain) =>
         this.cipherService
