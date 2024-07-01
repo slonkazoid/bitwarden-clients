@@ -49,7 +49,7 @@ export const testData: ProtonPassJsonFile = {
             ],
             type: "login",
             content: {
-              username: "Username",
+              itemEmail: "Username",
               password: "Password",
               urls: ["https://example.com/", "https://example2.com/"],
               totpUri:
@@ -156,7 +156,7 @@ export const testData: ProtonPassJsonFile = {
             extraFields: [],
             type: "login",
             content: {
-              username: "other vault username",
+              itemEmail: "other vault username",
               password: "other vault password",
               urls: [],
               totpUri: "JBSWY3DPEHPK3PXP",

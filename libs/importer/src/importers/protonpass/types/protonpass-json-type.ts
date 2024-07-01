@@ -56,7 +56,7 @@ export type ProtonPassItemExtraFieldData = {
 };
 
 export type ProtonPassLoginItemContent = {
-  username?: string;
+  itemEmail?: string;
   password?: string;
   urls?: string[];
   totpUri?: string;
