@@ -136,8 +136,10 @@ export class AssignCollectionsComponent implements OnInit {
   };
 
   private editableItems: CipherView[] = [];
+  // Get the selected organization ID. If the user has not selected an organization from the form,
+  // fallback to use the organization ID from the params.
   private get selectedOrgId(): OrganizationId {
-    return this.formGroup.value.selectedOrg;
+    return this.formGroup.value.selectedOrg || this.params.organizationId;
   }
   private destroy$ = new Subject<void>();
 
@@ -160,13 +162,13 @@ export class AssignCollectionsComponent implements OnInit {
 
     const onlyPersonalItems = this.params.ciphers.every((c) => c.organizationId == null);
 
-    if (this.params.organizationId === MY_VAULT_ID || onlyPersonalItems) {
+    if (this.selectedOrgId === MY_VAULT_ID || onlyPersonalItems) {
       this.showOrgSelector = true;
     }
 
-    await this.initializeItems(this.params.organizationId, v1FCEnabled, restrictProviderAccess);
+    await this.initializeItems(this.selectedOrgId, v1FCEnabled, restrictProviderAccess);
 
-    if (this.params.organizationId && this.params.organizationId !== MY_VAULT_ID) {
+    if (this.selectedOrgId && this.selectedOrgId !== MY_VAULT_ID) {
       await this.handleOrganizationCiphers();
     }
 
@@ -215,11 +217,16 @@ export class AssignCollectionsComponent implements OnInit {
       );
     }
 
-    if (cipherIds.length > 0) {
-      await (cipherIds.length === 1
-        ? this.updateAssignedCollections(this.editableItems[0])
-        : this.bulkUpdateCollections(cipherIds));
+    if (cipherIds.length === 0) {
+      return;
     }
+
+    const isSingleOrgCipher = cipherIds.length === 1 && this.personalItemsCount === 0;
+
+    // Update assigned collections for single org cipher or bulk update collections for multiple org ciphers
+    await (isSingleOrgCipher
+      ? this.updateAssignedCollections(this.editableItems[0])
+      : this.bulkUpdateCollections(cipherIds));
 
     this.toastService.showToast({
       variant: "success",
