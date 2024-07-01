@@ -1,12 +1,12 @@
-<form #form (ngSubmit)="submit()" [appApiAction]="formPromise" class="tw-min-w-96">
+<form [bitSubmit]="submit" [formGroup]="formGroup" class="tw-min-w-96">
   <bit-form-field>
     <bit-label>{{ "masterPass" | i18n }}</bit-label>
     <input
       type="password"
+      formControlName="masterPassword"
       bitInput
       appAutofocus
       name="masterPassword"
-      [(ngModel)]="masterPassword"
       required
     />
     <button type="button" bitIconButton bitSuffix bitPasswordInputToggle></button>
@@ -16,11 +16,11 @@
   <hr />
 
   <div class="tw-flex tw-gap-2">
-    <button type="submit" bitButton buttonType="primary" block [loading]="form.loading">
+    <button type="submit" bitButton bitFormButton buttonType="primary" block>
       <i class="bwi bwi-unlock" aria-hidden="true"></i>
       {{ "unlock" | i18n }}
     </button>
-    <button type="button" bitButton block (click)="logOut()">
+    <button type="button" bitButton bitFormButton block (click)="logOut()">
       {{ "logOut" | i18n }}
     </button>
   </div>
