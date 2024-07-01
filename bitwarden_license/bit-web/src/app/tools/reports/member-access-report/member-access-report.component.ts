@@ -1,12 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl } from "@angular/forms";
-import { Subject, debounceTime } from "rxjs";
+import { debounceTime } from "rxjs";
 
 import { SearchModule, TableDataSource } from "@bitwarden/components";
-
-import { HeaderModule } from "../../../../../../../apps/web/src/app/layouts/header/header.module";
-import { SharedModule } from "../../../../../../../apps/web/src/app/shared";
+import { HeaderModule } from "@bitwarden/web-vault/app/layouts/header/header.module";
+import { SharedModule } from "@bitwarden/web-vault/app/shared";
 
 import { MemberAccessReportService } from "./member-access-report.service";
 import { MemberAccessReportView } from "./view/member-access-report.view";
@@ -18,7 +17,6 @@ import { MemberAccessReportView } from "./view/member-access-report.view";
   standalone: true,
 })
 export class MemberAccessReportComponent implements OnInit {
-  protected destroy$ = new Subject<void>();
   protected dataSource = new TableDataSource<MemberAccessReportView>();
   protected searchControl = new FormControl("", { nonNullable: true });
 
@@ -31,10 +29,5 @@ export class MemberAccessReportComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.data = this.reportService.getMemberAccessMockData();
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }
