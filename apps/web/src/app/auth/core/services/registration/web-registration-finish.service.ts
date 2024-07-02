@@ -11,7 +11,6 @@ import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/mod
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { RegisterFinishRequest } from "@bitwarden/common/auth/models/request/registration/register-finish.request";
-import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { EncryptedString, EncString } from "@bitwarden/common/platform/models/domain/enc-string";
@@ -72,20 +71,12 @@ export class WebRegistrationFinishService
     encryptedUserKey: EncryptedString,
     userAsymmetricKeys: [string, EncString],
   ): Promise<RegisterFinishRequest> {
-    const userAsymmetricKeysRequest = new KeysRequest(
-      userAsymmetricKeys[0],
-      userAsymmetricKeys[1].encryptedString,
-    );
-
-    const registerRequest = new RegisterFinishRequest(
+    const registerRequest = await super.buildRegisterRequest(
       email,
       emailVerificationToken,
-      passwordInputResult.masterKeyHash,
-      passwordInputResult.hint,
+      passwordInputResult,
       encryptedUserKey,
-      userAsymmetricKeysRequest,
-      passwordInputResult.kdfConfig.kdfType,
-      passwordInputResult.kdfConfig.iterations,
+      userAsymmetricKeys,
     );
 
     // web specific logic
