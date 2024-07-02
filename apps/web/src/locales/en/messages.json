@@ -4780,7 +4780,7 @@
     "message": "Request access to Secrets Manager"
   },
   "youNeedApprovalFromYourAdminToTrySecretsManager": {
-    "message": "You need approval from your admin to try Secrets Manager."
+    "message": "You need approval from your administrator to try Secrets Manager."
   },
   "smAccessRequestEmailSent" : {
     "message": "Access request for secrets manager email sent to admins."

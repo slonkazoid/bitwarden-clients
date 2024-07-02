@@ -40,7 +40,9 @@ export class RequestSMAccessComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.organizations = (await this.organizationService.getAll()).filter((e) => e.enabled);
+    this.organizations = (await this.organizationService.getAll())
+      .filter((e) => e.enabled)
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     if (this.organizations === null || this.organizations.length < 1) {
       await this.navigateToCreateOrganizationPage();
