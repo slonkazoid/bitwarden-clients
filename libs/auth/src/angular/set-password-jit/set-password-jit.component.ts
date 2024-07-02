@@ -100,6 +100,7 @@ export class SetPasswordJitComponent implements OnInit {
       await this.setPasswordJitService.setPassword(
         passwordInputResult,
         this.orgSsoIdentifier,
+        this.orgId,
         this.resetPasswordAutoEnroll,
         this.userId,
       );

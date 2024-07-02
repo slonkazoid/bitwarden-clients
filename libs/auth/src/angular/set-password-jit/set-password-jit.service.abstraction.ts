@@ -6,6 +6,7 @@ export abstract class SetPasswordJitService {
   setPassword: (
     passwordInputResult: PasswordInputResult,
     orgSsoIdentifier: string,
+    orgId: string,
     resetPasswordAutoEnroll: boolean,
     userId: UserId,
   ) => Promise<void>;
