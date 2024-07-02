@@ -128,7 +128,7 @@ class MockCurrentAccountComponent {}
 @Component({
   selector: "mock-search",
   template: `
-    <div class="tw-p-2">
+    <div class="tw-p-4">
       <bit-search placeholder="Search"> </bit-search>
     </div>
   `,
