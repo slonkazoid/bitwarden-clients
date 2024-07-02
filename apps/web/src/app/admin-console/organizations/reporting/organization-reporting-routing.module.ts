@@ -9,9 +9,9 @@ import { InactiveTwoFactorReportComponent } from "../../../admin-console/organiz
 import { ReusedPasswordsReportComponent } from "../../../admin-console/organizations/tools/reused-passwords-report.component";
 import { UnsecuredWebsitesReportComponent } from "../../../admin-console/organizations/tools/unsecured-websites-report.component";
 import { WeakPasswordsReportComponent } from "../../../admin-console/organizations/tools/weak-passwords-report.component";
-import { IsPaidOrgGuard } from "../guards/is-paid-org.guard";
+import { isPaidOrgGuard } from "../guards/is-paid-org.guard";
 import { OrganizationPermissionsGuard } from "../guards/org-permissions.guard";
-import { OrganizationRedirectGuard } from "../guards/org-redirect.guard";
+import { organizationRedirectGuard } from "../guards/org-redirect.guard";
 import { EventsComponent } from "../manage/events.component";
 
 import { ReportsHomeComponent } from "./reports-home.component";
@@ -25,10 +25,7 @@ const routes: Routes = [
       {
         path: "",
         pathMatch: "full",
-        canActivate: [OrganizationRedirectGuard],
-        data: {
-          autoRedirectCallback: getReportRoute,
-        },
+        canActivate: [organizationRedirectGuard(getReportRoute)],
         children: [], // This is required to make the auto redirect work,
       },
       {
@@ -45,7 +42,7 @@ const routes: Routes = [
             data: {
               titleId: "exposedPasswordsReport",
             },
-            canActivate: [IsPaidOrgGuard],
+            canActivate: [isPaidOrgGuard()],
           },
           {
             path: "inactive-two-factor-report",
@@ -53,7 +50,7 @@ const routes: Routes = [
             data: {
               titleId: "inactive2faReport",
             },
-            canActivate: [IsPaidOrgGuard],
+            canActivate: [isPaidOrgGuard()],
           },
           {
             path: "reused-passwords-report",
@@ -61,7 +58,7 @@ const routes: Routes = [
             data: {
               titleId: "reusedPasswordsReport",
             },
-            canActivate: [IsPaidOrgGuard],
+            canActivate: [isPaidOrgGuard()],
           },
           {
             path: "unsecured-websites-report",
@@ -69,7 +66,7 @@ const routes: Routes = [
             data: {
               titleId: "unsecuredWebsitesReport",
             },
-            canActivate: [IsPaidOrgGuard],
+            canActivate: [isPaidOrgGuard()],
           },
           {
             path: "weak-passwords-report",
@@ -77,7 +74,7 @@ const routes: Routes = [
             data: {
               titleId: "weakPasswordsReport",
             },
-            canActivate: [IsPaidOrgGuard],
+            canActivate: [isPaidOrgGuard()],
           },
         ],
       },

@@ -19,6 +19,8 @@ export enum FeatureFlag {
   BulkDeviceApproval = "bulk-device-approval",
   EmailVerification = "email-verification",
   InlineMenuFieldQualification = "inline-menu-field-qualification",
+  MemberAccessReport = "ac-2059-member-access-report",
+  EnableTimeThreshold = "PM-5864-dollar-threshold",
 }
 
 export type AllowedFeatureFlagTypes = boolean | number | string;
@@ -48,6 +50,8 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.BulkDeviceApproval]: FALSE,
   [FeatureFlag.EmailVerification]: FALSE,
   [FeatureFlag.InlineMenuFieldQualification]: FALSE,
+  [FeatureFlag.MemberAccessReport]: FALSE,
+  [FeatureFlag.EnableTimeThreshold]: FALSE,
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
 
 export type DefaultFeatureFlagValueType = typeof DefaultFeatureFlagValue;
