@@ -48,8 +48,9 @@ export class InputPasswordComponent {
   @Output() onPasswordFormSubmit = new EventEmitter<PasswordInputResult>();
 
   @Input({ required: true }) email: string;
-  @Input() protected buttonText: string;
+  @Input() buttonText: string;
   @Input() masterPasswordPolicyOptions: MasterPasswordPolicyOptions | null = null;
+  @Input() loading: boolean = false;
 
   private minHintLength = 0;
   protected maxHintLength = 50;
@@ -158,6 +159,10 @@ export class InputPasswordComponent {
 
     // Create and hash new master key
     const kdfConfig = DEFAULT_KDF_CONFIG;
+
+    if (this.email == null) {
+      throw new Error("Email is required to create master key.");
+    }
 
     const masterKey = await this.cryptoService.makeMasterKey(
       password,

@@ -18,8 +18,14 @@ import {
 } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ModalService as ModalServiceAbstraction } from "@bitwarden/angular/services/modal.service";
+import { SetPasswordJitService } from "@bitwarden/auth/angular";
+import { InternalUserDecryptionOptionsServiceAbstraction } from "@bitwarden/auth/common";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -45,6 +51,8 @@ import {
 import { VaultTimeout, VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 
 import { PolicyListService } from "../admin-console/core/policy-list.service";
+import { WebSetPasswordJitService } from "../auth";
+import { AcceptOrganizationInviteService } from "../auth/organization-invite/accept-organization.service";
 import { HtmlStorageService } from "../core/html-storage.service";
 import { I18nService } from "../core/i18n.service";
 import { WebEnvironmentService } from "../platform/web-environment.service";
@@ -170,6 +178,19 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: CLIENT_TYPE,
     useValue: ClientType.Web,
+  }),
+  safeProvider({
+    provide: SetPasswordJitService,
+    useClass: WebSetPasswordJitService,
+    deps: [
+      ApiService,
+      CryptoService,
+      KdfConfigService,
+      InternalMasterPasswordServiceAbstraction,
+      InternalUserDecryptionOptionsServiceAbstraction,
+      RouterService,
+      AcceptOrganizationInviteService,
+    ],
   }),
 ];
 

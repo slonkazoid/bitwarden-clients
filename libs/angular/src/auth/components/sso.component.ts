@@ -74,14 +74,6 @@ export class SsoComponent {
   ) {}
 
   async ngOnInit() {
-    const emailVerification = await this.configService.getFeatureFlag(
-      FeatureFlag.EmailVerification,
-    );
-
-    if (emailVerification) {
-      this.changePasswordRoute = "set-password-v2";
-    }
-
     // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.code != null && qParams.state != null) {
@@ -328,6 +320,14 @@ export class SsoComponent {
   }
 
   private async handleChangePasswordRequired(orgIdentifier: string) {
+    const emailVerification = await this.configService.getFeatureFlag(
+      FeatureFlag.EmailVerification,
+    );
+
+    if (emailVerification) {
+      this.changePasswordRoute = "set-password-jit";
+    }
+
     await this.navigateViaCallbackOrRoute(
       this.onSuccessfulLoginChangePasswordNavigate,
       [this.changePasswordRoute],

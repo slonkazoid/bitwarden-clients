@@ -1,6 +1,7 @@
 import { ErrorHandler, LOCALE_ID, NgModule } from "@angular/core";
 import { Subject } from "rxjs";
 
+import { SetPasswordJitService, DefaultSetPasswordJitService } from "@bitwarden/auth/angular";
 import {
   AuthRequestServiceAbstraction,
   AuthRequestService,
@@ -1220,6 +1221,17 @@ const safeProviders: SafeProvider[] = [
     provide: StripeServiceAbstraction,
     useClass: StripeService,
     deps: [LogService],
+  }),
+  safeProvider({
+    provide: SetPasswordJitService,
+    useClass: DefaultSetPasswordJitService,
+    deps: [
+      ApiServiceAbstraction,
+      CryptoServiceAbstraction,
+      KdfConfigServiceAbstraction,
+      InternalMasterPasswordServiceAbstraction,
+      InternalUserDecryptionOptionsServiceAbstraction,
+    ],
   }),
 ];
 
