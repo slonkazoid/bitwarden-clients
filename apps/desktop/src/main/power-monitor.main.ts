@@ -2,10 +2,9 @@ import { ipcMain, powerMonitor } from "electron";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessageSender } from "@bitwarden/common/platform/messaging";
-import { powermonitors } from "@bitwarden/desktop-native";
+import { powermonitors } from "@bitwarden/desktop-napi";
 
 import { isSnapStore } from "../utils";
-
 
 // tslint:disable-next-line
 const IdleLockSeconds = 5 * 60; // 5 minutes

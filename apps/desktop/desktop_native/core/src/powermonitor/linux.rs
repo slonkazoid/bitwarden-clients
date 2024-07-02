@@ -1,8 +1,6 @@
 use std::borrow::Cow;
 
-use napi::{threadsafe_function::{ErrorStrategy::CalleeHandled, ThreadsafeFunction}, tokio};
 use zbus::{Connection, MatchRule, export::futures_util::TryStreamExt};
-
 struct ScreenLock {
     interface: Cow<'static, str>,
     path: Cow<'static, str>,
@@ -19,7 +17,7 @@ const SCREEN_LOCK_MONITORS: [ScreenLock; 2] = [
     },
 ];
 
-pub async fn on_lock(callback: ThreadsafeFunction<(), CalleeHandled>) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn on_lock(tx: tokio::sync::mpsc::Sender<()>) -> Result<(), Box<dyn std::error::Error>> {
     let connection = Connection::session().await?;
 
     let proxy = zbus::fdo::DBusProxy::new(&connection).await?;
@@ -34,7 +32,7 @@ pub async fn on_lock(callback: ThreadsafeFunction<(), CalleeHandled>) -> Result<
 
     tokio::spawn(async move {
         while let Ok(Some(_)) = zbus::MessageStream::from(&connection).try_next().await {
-            callback.call(Ok(()), napi::threadsafe_function::ThreadsafeFunctionCallMode::NonBlocking);
+            tx.send(()).await.unwrap();
         }
     });
 
