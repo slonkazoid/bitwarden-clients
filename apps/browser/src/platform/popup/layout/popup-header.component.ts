@@ -44,6 +44,4 @@ export class PopupHeaderComponent {
   backAction: FunctionReturningAwaitable = async () => {
     return this.popupRouterCacheService.back();
   };
-
-  constructor(private location: Location) {}
 }
