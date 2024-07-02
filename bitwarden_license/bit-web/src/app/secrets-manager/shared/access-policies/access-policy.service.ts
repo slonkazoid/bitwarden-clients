@@ -113,7 +113,7 @@ export class AccessPolicyService {
   async putServiceAccountPeopleAccessPolicies(
     serviceAccountId: string,
     peoplePoliciesView: ServiceAccountPeopleAccessPoliciesView,
-  ): Promise<ProjectPeopleAccessPoliciesView> {
+  ): Promise<ServiceAccountPeopleAccessPoliciesView> {
     const request = this.getPeopleAccessPoliciesRequest(peoplePoliciesView);
     const r = await this.apiService.send(
       "PUT",
