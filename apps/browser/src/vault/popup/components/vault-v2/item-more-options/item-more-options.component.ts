@@ -18,7 +18,8 @@ import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { BrowserApi } from "../../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../../platform/popup/browser-popup-utils";
-import { VaultPopupItemsService } from "../../../services/vault-popup-items.service";
+import { VaultPopupAutofillService } from "../../../services/vault-popup-autofill.service";
+import { AddEditQueryParams } from "../add-edit/add-edit-v2.component";
 
 @Component({
   standalone: true,
@@ -39,16 +40,16 @@ export class ItemMoreOptionsComponent {
   @Input({ transform: booleanAttribute })
   hideAutofillOptions: boolean;
 
-  protected autofillAllowed$ = this.vaultPopupItemsService.autofillAllowed$;
+  protected autofillAllowed$ = this.vaultPopupAutofillService.autofillAllowed$;
 
   constructor(
     private cipherService: CipherService,
-    private vaultPopupItemsService: VaultPopupItemsService,
     private passwordRepromptService: PasswordRepromptService,
     private toastService: ToastService,
     private dialogService: DialogService,
     private router: Router,
     private i18nService: I18nService,
+    private vaultPopupAutofillService: VaultPopupAutofillService,
   ) {}
 
   get canEdit() {
@@ -62,8 +63,20 @@ export class ItemMoreOptionsComponent {
     return [CipherType.Login, CipherType.Card, CipherType.Identity].includes(this.cipher.type);
   }
 
+  get isLogin() {
+    return this.cipher.type === CipherType.Login;
+  }
+
   get favoriteText() {
     return this.cipher.favorite ? "unfavorite" : "favorite";
+  }
+
+  async doAutofill() {
+    await this.vaultPopupAutofillService.doAutofill(this.cipher);
+  }
+
+  async doAutofillAndSave() {
+    await this.vaultPopupAutofillService.doAutofillAndSave(this.cipher);
   }
 
   /**
@@ -133,9 +146,10 @@ export class ItemMoreOptionsComponent {
 
     await this.router.navigate(["/clone-cipher"], {
       queryParams: {
-        cloneMode: true,
+        clone: true.toString(),
         cipherId: this.cipher.id,
-      },
+        type: this.cipher.type.toString(),
+      } as AddEditQueryParams,
     });
   }
 }

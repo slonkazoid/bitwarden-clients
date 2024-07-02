@@ -12,13 +12,12 @@ import {
   ManageClientsComponent,
   ProviderSubscriptionComponent,
   hasConsolidatedBilling,
-  ProviderPaymentMethodComponent,
   ProviderBillingHistoryComponent,
 } from "../../billing/providers";
 
 import { ClientsComponent } from "./clients/clients.component";
 import { CreateOrganizationComponent } from "./clients/create-organization.component";
-import { ProviderPermissionsGuard } from "./guards/provider-permissions.guard";
+import { providerPermissionsGuard } from "./guards/provider-permissions.guard";
 import { AcceptProviderComponent } from "./manage/accept-provider.component";
 import { EventsComponent } from "./manage/events.component";
 import { PeopleComponent } from "./manage/people.component";
@@ -77,7 +76,7 @@ const routes: Routes = [
       {
         path: ":providerId",
         component: ProvidersLayoutComponent,
-        canActivate: [ProviderPermissionsGuard],
+        canActivate: [providerPermissionsGuard()],
         children: [
           { path: "", pathMatch: "full", redirectTo: "clients" },
           { path: "clients/create", component: CreateOrganizationComponent },
@@ -99,27 +98,28 @@ const routes: Routes = [
               {
                 path: "people",
                 component: PeopleComponent,
-                canActivate: [ProviderPermissionsGuard],
+                canActivate: [
+                  providerPermissionsGuard((provider: Provider) => provider.canManageUsers),
+                ],
                 data: {
                   titleId: "people",
-                  providerPermissions: (provider: Provider) => provider.canManageUsers,
                 },
               },
               {
                 path: "events",
                 component: EventsComponent,
-                canActivate: [ProviderPermissionsGuard],
+                canActivate: [
+                  providerPermissionsGuard((provider: Provider) => provider.canAccessEventLogs),
+                ],
                 data: {
                   titleId: "eventLogs",
-                  providerPermissions: (provider: Provider) => provider.canAccessEventLogs,
                 },
               },
             ],
           },
           {
             path: "billing",
-            canActivate: [ProviderPermissionsGuard, hasConsolidatedBilling],
-            data: { providerPermissions: (provider: Provider) => provider.isProviderAdmin },
+            canActivate: [hasConsolidatedBilling],
             children: [
               {
                 path: "",
@@ -129,23 +129,15 @@ const routes: Routes = [
               {
                 path: "subscription",
                 component: ProviderSubscriptionComponent,
-                canActivate: [ProviderPermissionsGuard],
+                canActivate: [providerPermissionsGuard()],
                 data: {
                   titleId: "subscription",
                 },
               },
               {
-                path: "payment-method",
-                component: ProviderPaymentMethodComponent,
-                canActivate: [ProviderPermissionsGuard],
-                data: {
-                  titleId: "paymentMethod",
-                },
-              },
-              {
                 path: "history",
                 component: ProviderBillingHistoryComponent,
-                canActivate: [ProviderPermissionsGuard],
+                canActivate: [providerPermissionsGuard()],
                 data: {
                   titleId: "billingHistory",
                 },
@@ -163,10 +155,11 @@ const routes: Routes = [
               {
                 path: "account",
                 component: AccountComponent,
-                canActivate: [ProviderPermissionsGuard],
+                canActivate: [
+                  providerPermissionsGuard((provider: Provider) => provider.isProviderAdmin),
+                ],
                 data: {
                   titleId: "myProvider",
-                  providerPermissions: (provider: Provider) => provider.isProviderAdmin,
                 },
               },
             ],
