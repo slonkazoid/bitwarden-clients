@@ -68,6 +68,15 @@
   "masterPassHint": {
     "message": "Master password hint (optional)"
   },
+  "finishJoiningOrgBySettingMasterPassword": {
+    "message": "Finish joining $ORGANIZATION$ by setting a master password.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "Example Org"
+      }
+    }
+  },
   "tab": {
     "message": "Tab"
   },
@@ -555,6 +564,18 @@
   },
   "security": {
     "message": "Security"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirm master password"
+  },
+  "masterPassword": {
+    "message": "Master password"
+  },
+  "masterPassImportant": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "masterPassHintLabel": {
+    "message": "Master password hint"
   },
   "errorOccurred": {
     "message": "An error has occurred"
