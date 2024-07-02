@@ -24,7 +24,7 @@ pub async fn on_lock(tx: tokio::sync::mpsc::Sender<()>) -> Result<(), Box<dyn st
     for monitor in SCREEN_LOCK_MONITORS.iter() {
         let match_rule = MatchRule::builder()
             .msg_type(zbus::MessageType::Signal)
-            .interface(String::from(monitor.interface.clone()))?
+            .interface(monitor.interface.clone())?
             .member("ActiveChanged")?
             .build();
         proxy.add_match_rule(match_rule).await?;
@@ -41,8 +41,8 @@ pub async fn on_lock(tx: tokio::sync::mpsc::Sender<()>) -> Result<(), Box<dyn st
 
 pub async fn is_lock_monitor_available() -> bool {
     let connection = Connection::session().await.unwrap();
-    for monitor in SCREEN_LOCK_MONITORS.iter() {
-        let res = connection.call_method(Some(String::from(monitor.interface.clone())), String::from(monitor.path.clone()), Some(String::from(monitor.interface.clone())), "GetActive", &()).await;
+    for monitor in SCREEN_LOCK_MONITORS {
+        let res = connection.call_method(Some(monitor.interface.clone()), monitor.path.clone(), Some(monitor.interface.clone()), "GetActive", &()).await;
         if res.is_ok() {
             return true;
         }
