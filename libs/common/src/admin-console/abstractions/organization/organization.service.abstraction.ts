@@ -82,10 +82,6 @@ export function canAccessImport(i18nService: I18nService) {
   );
 }
 
-export function canAccessReports(org: Organization): boolean {
-  return org.canAccessReports;
-}
-
 /**
  * Returns `true` if a user is a member of an organization (rather than only being a ProviderUser)
  * @deprecated Use organizationService.organizations$ with a filter instead
