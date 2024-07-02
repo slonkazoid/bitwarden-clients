@@ -1672,6 +1672,12 @@
   "twoStepAuthenticatorScanCodeV2": {
     "message": "Scan the QR code below with your authenticator app or enter the key."
   },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "QR code did not load correctly, please try again."
+  },
+  "twoStepAuthenticatorOrUseKey": {
+    "message": "Or use the key below."
+  },
   "key": {
     "message": "Key"
   },

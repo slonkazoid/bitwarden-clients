@@ -46,6 +46,7 @@ export class TwoFactorAuthenticatorComponent
   formPromise: Promise<TwoFactorAuthenticatorResponse>;
 
   override componentName = "app-two-factor-authenticator";
+  qrScriptError = false;
   private qrScript: HTMLScriptElement;
 
   formGroup = this.formBuilder.group({
@@ -132,7 +133,7 @@ export class TwoFactorAuthenticatorComponent
     const email = await firstValueFrom(
       this.accountService.activeAccount$.pipe(map((a) => a?.email)),
     );
-    window.setTimeout(() => {
+    const createQRCode = () => {
       new window.QRious({
         element: document.getElementById("qr"),
         value:
@@ -143,7 +144,27 @@ export class TwoFactorAuthenticatorComponent
           "&issuer=Bitwarden",
         size: 160,
       });
-    }, 100);
+    };
+
+    try {
+      await this.loadQRiousScript();
+      createQRCode();
+    } catch (error) {
+      this.logService.error(error);
+      this.qrScriptError = true;
+    }
+  }
+
+  private async loadQRiousScript(): Promise<void> {
+    if (typeof window.QRious !== "undefined") {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      this.qrScript.onload = () => resolve();
+      this.qrScript.onerror = () =>
+        reject(new Error(this.i18nService.t("twoStepAuthenticatorQRCanvasError")));
+    });
   }
 
   close = () => {
