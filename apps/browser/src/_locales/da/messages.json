@@ -16,6 +16,12 @@
   "createAccount": {
     "message": "Opret konto"
   },
+  "setAStrongPassword": {
+    "message": "Indstil en stærk adgangskode"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Afslut kontooprettelsen med at indstille en adgangskode"
+  },
   "login": {
     "message": "Log ind"
   },
@@ -42,6 +48,19 @@
   },
   "masterPassHintDesc": {
     "message": "Et tip til hovedadgangskoden kan hjælpe dig med at huske din adgangskode, hvis du glemmer den."
+  },
+  "masterPassHintText": {
+    "message": "Glemmer du din adgangskode, kan adgangskodetippet sendes til din e-mail. $CURRENT$/$MAXIMUM$ tegns maksimum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "reTypeMasterPass": {
     "message": "Indtast hovedadgangskode igen"
@@ -1086,18 +1105,18 @@
   "authenticatorAppTitle": {
     "message": "Autentificerings-app"
   },
-  "authenticatorAppDesc": {
-    "message": "Brug en autentificerings app (f.eks. Authy eller Google Autentificering) til at generere tidsbaserede bekræftelseskoder.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Angiv en kode genereret af en godkendelses-app såsom Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP sikkerhedsnøgle"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP-sikkerhedsnøgle"
   },
   "yubiKeyDesc": {
     "message": "Brug en YubiKey til at få adgang til din konto. Virker med YubiKey 4, 4 Nano, 4C og NEO enheder."
   },
-  "duoDesc": {
-    "message": "Bekræft med Duo sikkerhed ved hjælp af Duo Mobile app, SMS, telefonopkald eller U2F sikkerhedsnøgle.",
+  "duoDescV2": {
+    "message": "Angiv en kode genereret af Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -1113,8 +1132,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Bekræftelseskoder vil blive e-mailet til dig."
+  "emailDescV2": {
+    "message": "Angiv en kode tilsendt pr. e-mail."
   },
   "selfHostedEnvironment": {
     "message": "Selv-hosted miljø"
@@ -1123,13 +1142,13 @@
     "message": "Angiv grund-URL'en i din lokal-hostede Bitwarden-installation."
   },
   "selfHostedBaseUrlHint": {
-    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+    "message": "Angiv basis-URL'en for den lokalt-hosted Bitwarden-installation. Eks.: https://bitwarden.firma.dk"
   },
   "selfHostedCustomEnvHeader": {
-    "message": "For advanced configuration, you can specify the base URL of each service independently."
+    "message": "Til avancerede brugere. Man kan angive basis-URL'en for hver tjeneste uafhængigt."
   },
   "selfHostedEnvFormInvalid": {
-    "message": "You must add either the base Server URL or at least one custom environment."
+    "message": "Der skal tilføjes enten basis server-URL'en eller mindst ét tilpasset miljø."
   },
   "customEnvironment": {
     "message": "Brugerdefineret miljø"
@@ -1433,6 +1452,24 @@
   },
   "typeIdentity": {
     "message": "Identitet"
+  },
+  "newItemHeader": {
+    "message": "Ny $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "editItemHeader": {
+    "message": "Redigér $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
   },
   "passwordHistory": {
     "message": "Adgangskodehistorik"
@@ -1761,6 +1798,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Din nye hovedadgangskode opfylder ikke politikkravene."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Afmeld"
+  },
+  "atAnyTime": {
+    "message": "til enhver tid."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ved at fortsætte, accepterer du"
+  },
+  "and": {
+    "message": "og"
   },
   "acceptPolicies": {
     "message": "Ved at markere dette felt accepterer du følgende:"
@@ -2837,6 +2889,9 @@
     "message": "Slå anmodning om hovedadgangskode igen fra for at redigere dette felt",
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
+  "toggleSideNavigation": {
+    "message": "Slå sidenavigering til/fra"
+  },
   "skipToContent": {
     "message": "Spring til indhold"
   },
@@ -3051,6 +3106,9 @@
   },
   "confirmFilePassword": {
     "message": "Bekræft filadgangskode"
+  },
+  "exportSuccess": {
+    "message": "Boksdata eksporteret"
   },
   "typePasskey": {
     "message": "Adgangsnøgle"
@@ -3305,16 +3363,6 @@
   "clearFiltersOrTryAnother": {
     "message": "Ryd filtre eller prøv med et andet søgeord"
   },
-  "copyInfoLabel": {
-    "message": "Kopiér info, $ITEMNAME$",
-    "description": "Aria label for a button that opens a menu with options to copy information from an item.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Item"
-      }
-    }
-  },
   "copyInfoTitle": {
     "message": "Kopiér info - $ITEMNAME$",
     "description": "Title for a button that opens a menu with options to copy information from an item.",
@@ -3322,16 +3370,6 @@
       "itemname": {
         "content": "$1",
         "example": "Secret Item"
-      }
-    }
-  },
-  "copyNoteLabel": {
-    "message": "Kopiér notat, $ITEMNAME$",
-    "description": "Aria label for a button copies a note to the clipboard.",
-    "placeholders": {
-      "itemname": {
-        "content": "$1",
-        "example": "Secret Note Item"
       }
     }
   },
@@ -3374,6 +3412,19 @@
         "example": "Secret Item"
       }
     }
+  },
+  "autofillTitle": {
+    "message": "Autoudfyld - $ITEMNAME$",
+    "description": "Title for a button that auto-fills a login item.",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Secret Item"
+      }
+    }
+  },
+  "noValuesToCopy": {
+    "message": "Ingen værdier at kopiere"
   },
   "assignCollections": {
     "message": "Tildel samlinger"
@@ -3446,5 +3497,44 @@
   },
   "contactYourOrgAdmin": {
     "message": "Emner i deaktiverede organisationer kan ikke tilgås. Kontakt organisationsejeren for assistance."
+  },
+  "upload": {
+    "message": "Upload"
+  },
+  "addAttachment": {
+    "message": "Tilføj vedhæftning"
+  },
+  "maxFileSizeSansPunctuation": {
+    "message": "Maks. filstørrelse er 500 MB"
+  },
+  "deleteAttachmentName": {
+    "message": "Slet vedhæftelse $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Attachment Name"
+      }
+    }
+  },
+  "downloadAttachmentName": {
+    "message": "Download $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Attachment Name"
+      }
+    }
+  },
+  "permanentlyDeleteAttachmentConfirmation": {
+    "message": "Sikker på, at denne vedhæftning skal slettes permanent?"
+  },
+  "premium": {
+    "message": "Premium"
+  },
+  "freeOrgsCannotUseAttachments": {
+    "message": "Gratis organisationer kan ikke bruge vedhæftninger"
+  },
+  "filters": {
+    "message": "Filtre"
   }
 }
