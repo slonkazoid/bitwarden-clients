@@ -539,6 +539,27 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Master password"
+  },
+  "masterPassImportant": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirm master password"
+  },
+  "masterPassHintLabel": {
+    "message": "Master password hint"
+  },
+  "finishJoiningOrgBySettingMasterPassword": {
+    "message": "Finish joining $ORGANIZATION$ by setting a master password.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "Example Org"
+      }
+    }
+  },
   "settings": {
     "message": "Settings"
   },

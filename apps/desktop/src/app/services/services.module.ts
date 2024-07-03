@@ -19,17 +19,31 @@ import {
   CLIENT_TYPE,
 } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
+import { SetPasswordJitService } from "@bitwarden/auth/angular";
+import {
+  InternalUserDecryptionOptionsServiceAbstraction,
+  PinServiceAbstraction,
+} from "@bitwarden/auth/common";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { PolicyService as PolicyServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
-import { KdfConfigService as KdfConfigServiceAbstraction } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import {
+  KdfConfigService,
+  KdfConfigService as KdfConfigServiceAbstraction,
+} from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { ClientType } from "@bitwarden/common/enums";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/platform/abstractions/crypto-function.service";
-import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/platform/abstractions/crypto.service";
+import {
+  CryptoService,
+  CryptoService as CryptoServiceAbstraction,
+} from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
@@ -39,7 +53,10 @@ import {
   LogService,
   LogService as LogServiceAbstraction,
 } from "@bitwarden/common/platform/abstractions/log.service";
-import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/platform/abstractions/messaging.service";
+import {
+  MessagingService,
+  MessagingService as MessagingServiceAbstraction,
+} from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService as StateServiceAbstraction } from "@bitwarden/common/platform/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
@@ -61,7 +78,6 @@ import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/vau
 import { DialogService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
-import { PinServiceAbstraction } from "../../../../../libs/auth/src/common/abstractions";
 import { DesktopAutofillSettingsService } from "../../autofill/services/desktop-autofill-settings.service";
 import { Account } from "../../models/account";
 import { DesktopSettingsService } from "../../platform/services/desktop-settings.service";
@@ -84,6 +100,7 @@ import { NativeMessagingService } from "../../services/native-messaging.service"
 import { SearchBarService } from "../layout/search/search-bar.service";
 
 import { DesktopFileDownloadService } from "./desktop-file-download.service";
+import { DesktopSetPasswordJitService } from "./desktop-set-password-jit.service";
 import { InitService } from "./init.service";
 import { NativeMessagingManifestService } from "./native-messaging-manifest.service";
 import { RendererCryptoFunctionService } from "./renderer-crypto-function.service";
@@ -288,6 +305,21 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: CLIENT_TYPE,
     useValue: ClientType.Desktop,
+  }),
+  safeProvider({
+    provide: SetPasswordJitService,
+    useClass: DesktopSetPasswordJitService,
+    deps: [
+      ApiService,
+      CryptoService,
+      I18nServiceAbstraction,
+      KdfConfigService,
+      InternalMasterPasswordServiceAbstraction,
+      OrganizationApiServiceAbstraction,
+      OrganizationUserService,
+      InternalUserDecryptionOptionsServiceAbstraction,
+      MessagingService,
+    ],
   }),
 ];
 
