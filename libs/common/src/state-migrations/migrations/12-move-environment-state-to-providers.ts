@@ -47,12 +47,10 @@ export class MoveEnvironmentStateToProviders extends Migrator<11, 12> {
       }),
     );
 
-    if (legacyGlobal != null) {
-      // Delete legacy global data
-      delete legacyGlobal?.region;
-      delete legacyGlobal?.environmentUrls;
-      await helper.set("global", legacyGlobal);
-    }
+    // Delete legacy global data
+    delete legacyGlobal?.region;
+    delete legacyGlobal?.environmentUrls;
+    await helper.set("global", legacyGlobal);
   }
 
   async rollback(helper: MigrationHelper): Promise<void> {

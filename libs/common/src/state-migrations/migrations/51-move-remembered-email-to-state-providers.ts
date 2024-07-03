@@ -20,10 +20,8 @@ export class RememberedEmailMigrator extends Migrator<50, 51> {
     }
 
     // Delete legacy global data
-    if (legacyGlobal != null) {
-      delete legacyGlobal?.rememberedEmail;
-      await helper.set("global", legacyGlobal);
-    }
+    delete legacyGlobal?.rememberedEmail;
+    await helper.set("global", legacyGlobal);
   }
 
   async rollback(helper: MigrationHelper): Promise<void> {
