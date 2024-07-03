@@ -28,9 +28,7 @@ export class DefaultSingleUserState<T>
   }
 
   protected override async doStorageSave(newState: T, oldState: T): Promise<void> {
-    if (newState != null) {
-      await super.doStorageSave(newState, oldState);
-    }
+    await super.doStorageSave(newState, oldState);
     if (newState != null && oldState == null) {
       await this.stateEventRegistrarService.registerEvents(this.keyDefinition);
     }
