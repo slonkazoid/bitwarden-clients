@@ -3,9 +3,8 @@ import { RouterModule, Routes } from "@angular/router";
 
 import { AuthGuard } from "@bitwarden/angular/auth/guards";
 import { canAccessSettingsTab } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { IsEnterpriseOrgGuard } from "@bitwarden/web-vault/app/admin-console/organizations/guards/is-enterprise-org.guard";
-import { OrganizationPermissionsGuard } from "@bitwarden/web-vault/app/admin-console/organizations/guards/org-permissions.guard";
+import { organizationPermissionsGuard } from "@bitwarden/web-vault/app/admin-console/organizations/guards/org-permissions.guard";
 import { OrganizationLayoutComponent } from "@bitwarden/web-vault/app/admin-console/organizations/layouts/organization-layout.component";
 
 import { SsoComponent } from "../../auth/sso/sso.component";
@@ -17,40 +16,34 @@ const routes: Routes = [
   {
     path: "organizations/:organizationId",
     component: OrganizationLayoutComponent,
-    canActivate: [AuthGuard, OrganizationPermissionsGuard],
+    canActivate: [AuthGuard, organizationPermissionsGuard()],
     children: [
       {
         path: "settings",
-        canActivate: [OrganizationPermissionsGuard],
-        data: {
-          organizationPermissions: canAccessSettingsTab,
-        },
+        canActivate: [organizationPermissionsGuard(canAccessSettingsTab)],
         children: [
           {
             path: "domain-verification",
             component: DomainVerificationComponent,
-            canActivate: [OrganizationPermissionsGuard],
+            canActivate: [organizationPermissionsGuard((org) => org.canManageDomainVerification)],
             data: {
               titleId: "domainVerification",
-              organizationPermissions: (org: Organization) => org.canManageDomainVerification,
             },
           },
           {
             path: "sso",
             component: SsoComponent,
-            canActivate: [OrganizationPermissionsGuard],
+            canActivate: [organizationPermissionsGuard((org) => org.canManageSso)],
             data: {
               titleId: "singleSignOn",
-              organizationPermissions: (org: Organization) => org.canManageSso,
             },
           },
           {
             path: "scim",
             component: ScimComponent,
-            canActivate: [OrganizationPermissionsGuard],
+            canActivate: [organizationPermissionsGuard((org) => org.canManageScim)],
             data: {
               titleId: "scim",
-              organizationPermissions: (org: Organization) => org.canManageScim,
             },
           },
           {
@@ -59,19 +52,16 @@ const routes: Routes = [
               import("./manage/device-approvals/device-approvals.component").then(
                 (mod) => mod.DeviceApprovalsComponent,
               ),
-            canActivate: [OrganizationPermissionsGuard],
+            canActivate: [organizationPermissionsGuard((org) => org.canManageDeviceApprovals)],
             data: {
-              organizationPermissions: (org: Organization) => org.canManageDeviceApprovals,
               titleId: "deviceApprovals",
             },
           },
         ],
       },
-
       {
         path: "reporting/reports",
-        canActivate: [AuthGuard, OrganizationPermissionsGuard],
-        data: { organizationPermissions: (org: Organization) => org.canAccessReports },
+        canActivate: [AuthGuard, organizationPermissionsGuard((org) => org.canAccessReports)],
         children: [
           {
             path: "member-access-report",
