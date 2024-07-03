@@ -145,11 +145,6 @@ export class NativeMessagingService {
           return this.send({ command: "biometricUnlock", response: "not unlocked" }, appId);
         }
 
-        const authStatus = await firstValueFrom(this.authService.authStatusFor$(userId));
-        if (authStatus !== AuthenticationStatus.Unlocked) {
-          return this.send({ command: "biometricUnlock", response: "not unlocked" }, appId);
-        }
-
         const biometricUnlockPromise =
           message.userId == null
             ? firstValueFrom(this.biometricStateService.biometricUnlockEnabled$)
@@ -190,6 +185,22 @@ export class NativeMessagingService {
           await this.send({ command: "biometricUnlock", response: "canceled" }, appId);
         }
 
+        // if no account is unlocked, force a process reload to clear the userkey from renderer memory
+        await firstValueFrom(
+          this.authService.authStatuses$.pipe(
+            map((statuses) =>
+              Object.values(statuses).filter((status) => status == AuthenticationStatus.Unlocked),
+            ),
+            map((accounts) => {
+              if (Object.keys(accounts).length == 0) {
+                this.logService.info(
+                  "Performed browser extension biometric unlock and no account is unlocked, reloading process to clear userkey.",
+                );
+                ipc.platform.reloadProcess();
+              }
+            }),
+          ),
+        );
         break;
       }
       default:
