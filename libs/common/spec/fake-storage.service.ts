@@ -74,9 +74,11 @@ export class FakeStorageService implements AbstractStorageService, ObservableSto
       );
     }
 
-    if (typeof key !== "object" && obj === undefined) {
-      throw new TypeError("Use `delete()` to clear values");
-    }
+    // We don't throw this error because ElectronStorageService automatically detects this case
+    // and calls `delete()` instead of `set()`.
+    // if (typeof key !== "object" && obj === undefined) {
+    //   throw new TypeError("Use `delete()` to clear values");
+    // }
 
     if (this._containsReservedKey(key)) {
       throw new TypeError(
