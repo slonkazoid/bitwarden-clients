@@ -11,6 +11,8 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { CipherReportComponent } from "./cipher-report.component";
+import { cipherData } from "./reports-ciphers.mock";
+
 
 @Component({
   selector: "app-exposed-passwords-report",
@@ -44,7 +46,9 @@ export class ExposedPasswordsReportComponent extends CipherReportComponent imple
   }
 
   async setCiphers() {
-    const allCiphers = await this.getAllCiphers();
+    const allCiphers = cipherData;
+    // const allCiphers = await this.getAllCiphers();
+    this.dataSource.data = allCiphers;
     const exposedPasswordCiphers: CipherView[] = [];
     const promises: Promise<void>[] = [];
     this.filterStatus = [0];
