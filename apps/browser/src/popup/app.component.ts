@@ -8,6 +8,7 @@ import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { AnimationControlService } from "@bitwarden/common/platform/animations/animation-control.service";
 import { MessageListener } from "@bitwarden/common/platform/messaging";
 import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private lastActivity: Date;
   private activeUserId: UserId;
   private recordActivitySubject = new Subject<void>();
+  private routerAnimations = false;
 
   private destroy$ = new Subject<void>();
 
@@ -56,6 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private messageListener: MessageListener,
     private toastService: ToastService,
     private accountService: AccountService,
+    private animationControlService: AnimationControlService,
   ) {}
 
   async ngOnInit() {
@@ -170,6 +173,12 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.animationControlService.routingAnimation$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => {
+        this.routerAnimations = state;
+      });
   }
 
   ngOnDestroy(): void {
@@ -178,7 +187,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   getState(outlet: RouterOutlet) {
-    if (outlet.activatedRouteData.state === "ciphers") {
+    if (!this.routerAnimations) {return;}
+    else if (outlet.activatedRouteData.state === "ciphers") {
       const routeDirection =
         (window as any).routeDirection != null ? (window as any).routeDirection : "";
       return (

@@ -62,6 +62,10 @@ import {
   AbstractStorageService,
   ObservableStorageService,
 } from "@bitwarden/common/platform/abstractions/storage.service";
+import {
+  AnimationControlService,
+  DefaultAnimationControlService,
+} from "@bitwarden/common/platform/animations/animation-control.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateFactory } from "@bitwarden/common/platform/factories/state-factory";
 import { Message, MessageListener, MessageSender } from "@bitwarden/common/platform/messaging";
@@ -600,6 +604,11 @@ const safeProviders: SafeProvider[] = [
     provide: Fido2UserVerificationService,
     useClass: Fido2UserVerificationService,
     deps: [PasswordRepromptService, UserVerificationService, DialogService],
+  }),
+  safeProvider({
+    provide: AnimationControlService,
+    useClass: DefaultAnimationControlService,
+    deps: [GlobalStateProvider],
   }),
 ];
 

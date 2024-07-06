@@ -5,6 +5,7 @@ import { BadgeSettingsServiceAbstraction } from "@bitwarden/common/autofill/serv
 import { DomainSettingsService } from "@bitwarden/common/autofill/services/domain-settings.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { AnimationControlService } from "@bitwarden/common/platform/animations/animation-control.service";
 import { ThemeType } from "@bitwarden/common/platform/enums";
 import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 
@@ -20,6 +21,7 @@ export class AppearanceComponent implements OnInit {
   theme: ThemeType;
   themeOptions: any[];
   accountSwitcherEnabled = false;
+  routingAnimation: boolean;
 
   constructor(
     private messagingService: MessagingService,
@@ -27,6 +29,7 @@ export class AppearanceComponent implements OnInit {
     private badgeSettingsService: BadgeSettingsServiceAbstraction,
     i18nService: I18nService,
     private themeStateService: ThemeStateService,
+    private animationControlService: AnimationControlService,
   ) {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
@@ -40,11 +43,17 @@ export class AppearanceComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.routingAnimation = await firstValueFrom(this.animationControlService.routingAnimation$);
+
     this.enableFavicon = await firstValueFrom(this.domainSettingsService.showFavicons$);
 
     this.enableBadgeCounter = await firstValueFrom(this.badgeSettingsService.enableBadgeCounter$);
 
     this.theme = await firstValueFrom(this.themeStateService.selectedTheme$);
+  }
+
+  async updateRoutingAnimation() {
+    await this.animationControlService.setRoutingAnimation(this.routingAnimation);
   }
 
   async updateFavicon() {

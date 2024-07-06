@@ -3570,5 +3570,10 @@
         "example": "Visa"
       }
     }
+  },
+  "routingAnimation": {
+    "message": "Enable routing animations"
+  },"routingAnimationDesc": {
+    "message": "Enable the sliding animation when you click on entries and such"
   }
 }
