@@ -174,7 +174,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.animationControlService.routingAnimation$
+    this.animationControlService.enableRoutingAnimation$
       .pipe(takeUntil(this.destroy$))
       .subscribe((state) => {
         this.routerAnimations = state;
@@ -187,8 +187,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   getState(outlet: RouterOutlet) {
-    if (!this.routerAnimations) {return;}
-    else if (outlet.activatedRouteData.state === "ciphers") {
+    if (!this.routerAnimations) {
+      return;
+    } else if (outlet.activatedRouteData.state === "ciphers") {
       const routeDirection =
         (window as any).routeDirection != null ? (window as any).routeDirection : "";
       return (

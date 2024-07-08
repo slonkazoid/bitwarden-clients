@@ -6,13 +6,13 @@ export abstract class AnimationControlService {
   /**
    * The routing animation toggle.
    */
-  abstract routingAnimation$: Observable<boolean>;
+  abstract enableRoutingAnimation$: Observable<boolean>;
 
   /**
    * A method for updating the state of the animation toggle.
    * @param theme The new state.
    */
-  abstract setRoutingAnimation(state: boolean): Promise<void>;
+  abstract setEnableRoutingAnimation(state: boolean): Promise<void>;
 }
 
 const ROUTING_ANIMATION = new KeyDefinition<boolean>(ANIMATION_DISK, "routing", {
@@ -20,19 +20,19 @@ const ROUTING_ANIMATION = new KeyDefinition<boolean>(ANIMATION_DISK, "routing", 
 });
 
 export class DefaultAnimationControlService implements AnimationControlService {
-  private readonly routingAnimationState = this.globalStateProvider.get(ROUTING_ANIMATION);
+  private readonly enableRoutingAnimationState = this.globalStateProvider.get(ROUTING_ANIMATION);
 
-  routingAnimation$ = this.routingAnimationState.state$.pipe(
-    map((state) => state ?? this.defaultRoutingAnimation),
+  enableRoutingAnimation$ = this.enableRoutingAnimationState.state$.pipe(
+    map((state) => state ?? this.defaultEnableRoutingAnimation),
   );
 
   constructor(
     private globalStateProvider: GlobalStateProvider,
-    private defaultRoutingAnimation: boolean = true,
+    private defaultEnableRoutingAnimation: boolean = true,
   ) {}
 
-  async setRoutingAnimation(state: boolean): Promise<void> {
-    await this.routingAnimationState.update(() => state, {
+  async setEnableRoutingAnimation(state: boolean): Promise<void> {
+    await this.enableRoutingAnimationState.update(() => state, {
       shouldUpdate: (currentState) => currentState !== state,
     });
   }

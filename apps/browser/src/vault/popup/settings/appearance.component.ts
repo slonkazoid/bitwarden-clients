@@ -21,7 +21,7 @@ export class AppearanceComponent implements OnInit {
   theme: ThemeType;
   themeOptions: any[];
   accountSwitcherEnabled = false;
-  routingAnimation: boolean;
+  enableRoutingAnimation: boolean;
 
   constructor(
     private messagingService: MessagingService,
@@ -43,7 +43,9 @@ export class AppearanceComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.routingAnimation = await firstValueFrom(this.animationControlService.routingAnimation$);
+    this.enableRoutingAnimation = await firstValueFrom(
+      this.animationControlService.enableRoutingAnimation$,
+    );
 
     this.enableFavicon = await firstValueFrom(this.domainSettingsService.showFavicons$);
 
@@ -53,7 +55,7 @@ export class AppearanceComponent implements OnInit {
   }
 
   async updateRoutingAnimation() {
-    await this.animationControlService.setRoutingAnimation(this.routingAnimation);
+    await this.animationControlService.setEnableRoutingAnimation(this.enableRoutingAnimation);
   }
 
   async updateFavicon() {
