@@ -3571,9 +3571,7 @@
       }
     }
   },
-  "enableRoutingAnimation": {
-    "message": "Enable routing animations"
-  },"enableRoutingAnimationDesc": {
-    "message": "Enable the sliding animation when you click on entries and such."
+  "enableAnimations": {
+    "message": "Enable animations"
   }
 }
